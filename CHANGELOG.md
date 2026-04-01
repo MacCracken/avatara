@@ -18,6 +18,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Affinity scoring between archetypes
 - Archetype similarity search
 
+## [1.0.1] — 2026-04-01
+
+### Fixed
+- Benchmark script sed regex updated for Criterion 0.8 output format (was failing to parse `[low unit median unit high unit]`)
+- Release workflow tag trigger changed from `v*` to `[0-9]*` to match unprefixed SemVer tags
+- Release workflow version verification no longer expects `v` prefix
+- Registry benchmarks correctly classified as Tier 3 (cross-tradition) in BENCHMARKS.md
+
 ## [1.0.0] — 2026-03-31
 
 ### Added
