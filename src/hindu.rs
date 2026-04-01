@@ -6,7 +6,9 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::{Archetype, ArchetypeProfile, BreathAffinity, GrowthDirection, ModuleEmphasis, TraitWeights};
+use crate::{
+    Archetype, ArchetypeProfile, BreathAffinity, GrowthDirection, ModuleEmphasis, TraitWeights,
+};
 
 /// The Trimurti — three aspects of the supreme.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -62,16 +64,28 @@ impl Trimurti {
 
 impl Deva {
     pub const ALL: &'static [Self] = &[
-        Self::Indra, Self::Saraswati, Self::Lakshmi, Self::Ganesha,
-        Self::Hanuman, Self::Kali, Self::Durga,
+        Self::Indra,
+        Self::Saraswati,
+        Self::Lakshmi,
+        Self::Ganesha,
+        Self::Hanuman,
+        Self::Kali,
+        Self::Durga,
     ];
 }
 
 impl Avatar {
     pub const ALL: &'static [Self] = &[
-        Self::Matsya, Self::Kurma, Self::Varaha, Self::Narasimha,
-        Self::Vamana, Self::Parashurama, Self::Rama, Self::Krishna,
-        Self::Buddha, Self::Kalki,
+        Self::Matsya,
+        Self::Kurma,
+        Self::Varaha,
+        Self::Narasimha,
+        Self::Vamana,
+        Self::Parashurama,
+        Self::Rama,
+        Self::Krishna,
+        Self::Buddha,
+        Self::Kalki,
     ];
 }
 
@@ -84,7 +98,9 @@ impl Archetype for Trimurti {
         }
     }
 
-    fn tradition(&self) -> &'static str { "Hindu" }
+    fn tradition(&self) -> &'static str {
+        "Hindu"
+    }
 
     fn profile(&self) -> ArchetypeProfile {
         // TODO: Full profiles
@@ -120,7 +136,9 @@ impl Archetype for Deva {
         }
     }
 
-    fn tradition(&self) -> &'static str { "Hindu" }
+    fn tradition(&self) -> &'static str {
+        "Hindu"
+    }
 
     fn profile(&self) -> ArchetypeProfile {
         // TODO: Full profiles
@@ -144,8 +162,14 @@ mod tests {
 
     #[test]
     fn trimurti_breath_mapping() {
-        assert_eq!(Trimurti::Brahma.profile().breath, BreathAffinity::EarlyExhale);
-        assert_eq!(Trimurti::Vishnu.profile().breath, BreathAffinity::LateExhale);
+        assert_eq!(
+            Trimurti::Brahma.profile().breath,
+            BreathAffinity::EarlyExhale
+        );
+        assert_eq!(
+            Trimurti::Vishnu.profile().breath,
+            BreathAffinity::LateExhale
+        );
         assert_eq!(Trimurti::Shiva.profile().breath, BreathAffinity::MidInhale);
     }
 

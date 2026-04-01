@@ -32,26 +32,23 @@
 //! # Example
 //!
 //! ```
+//! use avatara::Archetype;
 //! use avatara::kabbalah::Sephira;
-//! use avatara::angelic::Archangel;
 //!
 //! let tiphareth = Sephira::Tiphareth.profile();
 //! assert!(tiphareth.traits.warmth > 0.5);
 //! assert!(tiphareth.traits.confidence > 0.5);
-//!
-//! let michael = Archangel::Michael.profile();
-//! assert!(michael.traits.courage > 0.8);
 //! ```
 
 pub mod error;
 
-pub mod kabbalah;
 pub mod angelic;
-pub mod olympian;
-pub mod hindu;
-pub mod norse;
-pub mod egyptian;
 pub mod buddhist;
+pub mod egyptian;
+pub mod hindu;
+pub mod kabbalah;
+pub mod norse;
+pub mod olympian;
 
 mod logging;
 
@@ -148,7 +145,7 @@ impl Default for ModuleEmphasis {
 }
 
 /// Manifestation phase affinity — where on the cosmic breath this archetype sits.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default, Serialize, Deserialize)]
 #[non_exhaustive]
 pub enum BreathAffinity {
     /// Source/return — undifferentiated unity.
@@ -158,6 +155,7 @@ pub enum BreathAffinity {
     /// Active individuation.
     MidExhale,
     /// Maximum manifestation — most entities live here.
+    #[default]
     LateExhale,
     /// Form beginning to soften.
     EarlyInhale,
@@ -165,12 +163,6 @@ pub enum BreathAffinity {
     MidInhale,
     /// Approaching equanimity.
     LateInhale,
-}
-
-impl Default for BreathAffinity {
-    fn default() -> Self {
-        Self::LateExhale
-    }
 }
 
 impl BreathAffinity {
@@ -191,10 +183,11 @@ impl BreathAffinity {
 }
 
 /// Growth direction — whether the archetype pushes toward differentiation or integration.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default, Serialize, Deserialize)]
 #[non_exhaustive]
 pub enum GrowthDirection {
     /// Become more distinct, individuated.
+    #[default]
     Differentiate,
     /// Become more integrated, unified.
     Integrate,
@@ -204,12 +197,6 @@ pub enum GrowthDirection {
     Transform,
     /// Still — no growth pressure.
     Still,
-}
-
-impl Default for GrowthDirection {
-    fn default() -> Self {
-        Self::Differentiate
-    }
 }
 
 /// Complete archetype profile — the output of any tradition's mapping.

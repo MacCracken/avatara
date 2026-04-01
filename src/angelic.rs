@@ -6,7 +6,9 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::{Archetype, ArchetypeProfile, BreathAffinity, GrowthDirection, ModuleEmphasis, TraitWeights};
+use crate::{
+    Archetype, ArchetypeProfile, BreathAffinity, GrowthDirection, ModuleEmphasis, TraitWeights,
+};
 
 /// The 7 principal archangels.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -31,8 +33,13 @@ pub enum Archangel {
 impl Archangel {
     /// All archangels.
     pub const ALL: &'static [Self] = &[
-        Self::Michael, Self::Gabriel, Self::Raphael, Self::Uriel,
-        Self::Chamuel, Self::Jophiel, Self::Zadkiel,
+        Self::Michael,
+        Self::Gabriel,
+        Self::Raphael,
+        Self::Uriel,
+        Self::Chamuel,
+        Self::Jophiel,
+        Self::Zadkiel,
     ];
 }
 
@@ -57,9 +64,15 @@ pub enum AngelicOrder {
 impl AngelicOrder {
     /// All orders from highest to lowest.
     pub const ALL: &'static [Self] = &[
-        Self::Seraphim, Self::Cherubim, Self::Thrones,
-        Self::Dominions, Self::Virtues, Self::Powers,
-        Self::Principalities, Self::Archangels, Self::Angels,
+        Self::Seraphim,
+        Self::Cherubim,
+        Self::Thrones,
+        Self::Dominions,
+        Self::Virtues,
+        Self::Powers,
+        Self::Principalities,
+        Self::Archangels,
+        Self::Angels,
     ];
 }
 
@@ -76,7 +89,9 @@ impl Archetype for Archangel {
         }
     }
 
-    fn tradition(&self) -> &'static str { "Angelic" }
+    fn tradition(&self) -> &'static str {
+        "Angelic"
+    }
 
     fn profile(&self) -> ArchetypeProfile {
         // TODO: Full archetype profiles for each archangel
@@ -109,7 +124,9 @@ impl Archetype for AngelicOrder {
         }
     }
 
-    fn tradition(&self) -> &'static str { "Angelic" }
+    fn tradition(&self) -> &'static str {
+        "Angelic"
+    }
 
     fn profile(&self) -> ArchetypeProfile {
         // TODO: Full archetype profiles for each order
