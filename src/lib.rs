@@ -241,9 +241,9 @@ pub struct ArchetypeProfile {
     pub breath: BreathAffinity,
     /// Growth direction this archetype pushes toward.
     pub growth: GrowthDirection,
-    /// Soul-level identity text (maps to bhava IdentityLayer::Soul).
+    /// Soul-level identity text (maps to bhava `IdentityLayer::Soul`).
     pub soul_text: String,
-    /// Spirit-level identity text (maps to bhava IdentityLayer::Spirit).
+    /// Spirit-level identity text (maps to bhava `IdentityLayer::Spirit`).
     pub spirit_text: String,
 }
 

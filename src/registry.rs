@@ -89,6 +89,10 @@ pub fn all_profiles() -> Vec<ArchetypeProfile> {
 ///
 /// Returns the first match across all traditions. Use [`lookup_in`]
 /// to disambiguate if the same name appears in multiple traditions.
+///
+/// # Errors
+///
+/// Returns [`AvataraError::UnknownArchetype`] if no entity matches the name.
 pub fn lookup(name: &str) -> Result<ArchetypeProfile, AvataraError> {
     all_profiles()
         .into_iter()
@@ -97,12 +101,16 @@ pub fn lookup(name: &str) -> Result<ArchetypeProfile, AvataraError> {
 }
 
 /// Look up an archetype profile by tradition and name (both case-sensitive).
+///
+/// # Errors
+///
+/// Returns [`AvataraError::UnknownArchetype`] if no entity matches.
 pub fn lookup_in(tradition: &str, name: &str) -> Result<ArchetypeProfile, AvataraError> {
     all_profiles()
         .into_iter()
         .find(|p| p.tradition == tradition && p.name == name)
         .ok_or_else(|| {
-            AvataraError::UnknownArchetype(format!("{}/{}", tradition, name))
+            AvataraError::UnknownArchetype(format!("{tradition}/{name}"))
         })
 }
 

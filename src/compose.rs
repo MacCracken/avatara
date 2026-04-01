@@ -37,9 +37,13 @@ use crate::{
 /// Weights are normalized internally — `(a, 1.0), (b, 1.0)` is 50/50,
 /// `(a, 2.0), (b, 1.0)` is 2:1 in favor of `a`.
 ///
-/// Returns `AvataraError::InvalidParameter` if the slice is empty or
-/// any weight is negative.
-#[must_use = "compose returns a new profile, it does not modify inputs"]
+/// # Errors
+///
+/// Returns [`AvataraError::InvalidParameter`] if:
+/// - The input slice is empty
+/// - Any weight is negative
+/// - Total weight is zero or negative
+#[allow(clippy::missing_panics_doc)] // expect() on non-empty slice verified above
 pub fn compose(weighted: &[(ArchetypeProfile, f64)]) -> Result<ArchetypeProfile, AvataraError> {
     if weighted.is_empty() {
         return Err(AvataraError::InvalidParameter(
@@ -92,12 +96,14 @@ pub fn compose(weighted: &[(ArchetypeProfile, f64)]) -> Result<ArchetypeProfile,
         if traditions.len() == 1 { "" } else { "s" }
     );
 
-    // Soul/spirit text from highest-weighted contributor
+    // Soul/spirit text from highest-weighted contributor.
+    // Safety: we returned early above if `weighted` is empty, so this
+    // iterator is guaranteed to yield at least one element.
     let dominant = weighted
         .iter()
         .max_by(|a, b| a.1.partial_cmp(&b.1).unwrap_or(std::cmp::Ordering::Equal))
         .map(|(p, _)| p)
-        .unwrap(); // safe: we checked non-empty above
+        .expect("non-empty weighted slice (checked above)");
 
     Ok(ArchetypeProfile {
         name,
@@ -204,15 +210,14 @@ fn blend_breath(weighted: &[(ArchetypeProfile, f64)], total: f64) -> BreathAffin
 }
 
 fn nearest_breath(intensity: f64) -> BreathAffinity {
-    use BreathAffinity::*;
     let candidates = [
-        Unity,
-        EarlyExhale,
-        MidExhale,
-        LateExhale,
-        EarlyInhale,
-        MidInhale,
-        LateInhale,
+        BreathAffinity::Unity,
+        BreathAffinity::EarlyExhale,
+        BreathAffinity::MidExhale,
+        BreathAffinity::LateExhale,
+        BreathAffinity::EarlyInhale,
+        BreathAffinity::MidInhale,
+        BreathAffinity::LateInhale,
     ];
 
     candidates
@@ -222,7 +227,7 @@ fn nearest_breath(intensity: f64) -> BreathAffinity {
             let db = (b.intensity() - intensity).abs();
             da.partial_cmp(&db).unwrap_or(std::cmp::Ordering::Equal)
         })
-        .unwrap_or(LateExhale)
+        .unwrap_or(BreathAffinity::LateExhale)
 }
 
 /// Resolve growth direction by picking the most common among
