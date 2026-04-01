@@ -45,7 +45,7 @@ while IFS=, read -r name timing; do
   case "$name" in
     */single_profile|*/lookup_by_name)
       single_rows="${single_rows}${row}"$'\n' ;;
-    all_traditions/*|compose/*)
+    all_traditions/*|compose/*|registry/*)
       global_rows="${global_rows}${row}"$'\n' ;;
     *)
       group_rows="${group_rows}${row}"$'\n' ;;
