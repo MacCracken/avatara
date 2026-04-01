@@ -4,7 +4,7 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT"
 
 SAMPLES="${BENCH_SAMPLES:-50}"
-VERSION="$(cat VERSION | tr -d '[:space:]')"
+VERSION="$(tr -d '[:space:]' < VERSION)"
 DATE="$(date -u +%Y-%m-%d)"
 CSV="bench-history.csv"
 MD="BENCHMARKS.md"
@@ -15,15 +15,17 @@ MD="BENCHMARKS.md"
 RESULTS="$(mktemp)"
 trap 'rm -f "$RESULTS"' EXIT
 
-# Criterion 0.8 output format:
-#   benchmark/name   time:   [low median high unit]
-# Extract the median value and normalise to nanoseconds.
+# Criterion 0.8 output format (all regular ASCII spaces):
+#   name time:   [61.185 ns 61.523 ns 61.698 ns]
+#                 ^low  unit ^median unit ^high  unit
+# Extract benchmark name, median value, and unit.
 cargo bench --bench benchmarks -- --sample-size "$SAMPLES" --quiet 2>/dev/null | \
   grep -E '^\S.*\btime:\s+\[' | \
-  sed -E 's/^([^ ]+) +time: +\[[^ ]+ ([0-9.]+) (ns|µs|ms|s) .*/\1,\2,\3/' | \
+  sed -E 's/^([^ ]+) +time: +\[[0-9.]+ [a-zµ]+ ([0-9.]+) ([a-zµ]+) .*/\1,\2,\3/' | \
   while IFS=, read -r name val unit; do
+    time_ns="$val"
     case "$unit" in
-      ns) time_ns="$val" ;;
+      ns) ;;
       µs) time_ns="$(echo "$val * 1000" | bc)" ;;
       ms) time_ns="$(echo "$val * 1000000" | bc)" ;;
       s)  time_ns="$(echo "$val * 1000000000" | bc)" ;;
