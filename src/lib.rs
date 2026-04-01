@@ -9,13 +9,22 @@
 //!
 //! # Traditions
 //!
-//! - [`kabbalah`] — Tree of Life: 10 Sephiroth, 22 paths, 4 worlds, angelic orders
-//! - [`olympian`] — Greek pantheon: 12 Olympians, Titans, demigods
-//! - [`hindu`] — Trimurti, Devas, Avatars of Vishnu, Shakti forms
-//! - [`norse`] — Aesir and Vanir: Odin, Thor, Freya, Loki, Norns
-//! - [`egyptian`] — Ennead: Ra, Thoth, Ma'at, Osiris, Isis, Anubis
-//! - [`buddhist`] — Bodhisattvas, Dhyani Buddhas, Dharma protectors
+//! - [`kabbalah`] — Tree of Life: 10 Sephiroth
 //! - [`angelic`] — 9 angelic orders, 7 archangels, celestial hierarchy
+//! - [`hindu`] — Trimurti, 7 Devas, 10 Avatars of Vishnu
+//! - [`olympian`] — Greek pantheon: 12 Olympians
+//! - [`norse`] — Aesir and Vanir: 10 gods
+//! - [`egyptian`] — Ennead: 12 principal deities
+//! - [`buddhist`] — 7 Bodhisattvas, 5 Dhyani Buddhas
+//! - [`mesopotamian`] — Sumerian/Babylonian: 14 deities
+//! - [`celtic`] — Tuatha Dé Danann & Insular Celtic: 14 deities
+//! - [`shinto`] — Japanese Kami: 14 deities
+//! - [`aztec`] — Aztec (Mexica): 14 deities
+//! - [`maya`] — Maya: 12 deities
+//! - [`yoruba`] — Yoruba/Ifá: 14 Orishas
+//! - [`zoroastrian`] — Amesha Spentas and Zoroastrian beings: 14 figures
+//! - [`taoist`] — Eight Immortals and celestial deities: 16 figures
+//! - [`incarnate`] — Incarnate divine figures across traditions: 36 masters
 //!
 //! # Design
 //!
@@ -43,12 +52,21 @@
 pub mod error;
 
 pub mod angelic;
+pub mod aztec;
 pub mod buddhist;
+pub mod celtic;
 pub mod egyptian;
 pub mod hindu;
+pub mod incarnate;
 pub mod kabbalah;
+pub mod maya;
+pub mod mesopotamian;
 pub mod norse;
 pub mod olympian;
+pub mod shinto;
+pub mod taoist;
+pub mod yoruba;
+pub mod zoroastrian;
 
 mod logging;
 
@@ -228,12 +246,15 @@ pub struct ArchetypeProfile {
 /// Trait for any entity that can produce an archetype profile.
 pub trait Archetype {
     /// Generate the full archetype profile for this entity.
+    #[must_use]
     fn profile(&self) -> ArchetypeProfile;
 
     /// Short name for display.
+    #[must_use]
     fn name(&self) -> &'static str;
 
     /// Tradition this entity belongs to.
+    #[must_use]
     fn tradition(&self) -> &'static str;
 }
 
