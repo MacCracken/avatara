@@ -80,6 +80,12 @@ pub mod zoroastrian;
 
 pub mod logging;
 
+#[cfg(feature = "itihas")]
+pub mod history;
+
+#[cfg(feature = "itihas")]
+pub use itihas;
+
 // ── Common types ──────────────────────────────────────────────────────
 
 use serde::{Deserialize, Serialize};

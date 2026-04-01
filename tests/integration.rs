@@ -214,6 +214,112 @@ fn breath_affinity_intensity_monotonic() {
 }
 
 #[test]
+#[cfg(feature = "itihas")]
+fn all_traditions_have_historical_context() {
+    use avatara::history;
+
+    let traditions = avatara::registry::traditions();
+    let mapped = history::mapped_traditions();
+
+    for tradition in &traditions {
+        let ctx = history::context_for_tradition(tradition);
+        assert!(
+            !ctx.civilizations.is_empty() || !mapped.iter().any(|m| m == tradition),
+            "{tradition} has mapping but resolved no civilizations",
+        );
+    }
+}
+
+#[cfg(feature = "itihas")]
+#[test]
+fn historical_context_resolves_for_all_profiles() {
+    use avatara::history;
+
+    for p in all_profiles() {
+        let ctx = history::context_for_profile(&p);
+        // Every mapped tradition should have at least one civilization
+        if !ctx.primary_civilization.is_empty() {
+            assert!(
+                !ctx.civilizations.is_empty(),
+                "{} ({}) has primary_civilization but no resolved civilizations",
+                p.name,
+                p.tradition,
+            );
+        }
+    }
+}
+
+#[cfg(feature = "itihas")]
+#[test]
+fn historical_context_eras_within_tradition_range() {
+    use avatara::history;
+
+    for tradition in history::mapped_traditions() {
+        let ctx = history::context_for_tradition(tradition);
+        for era in &ctx.eras {
+            // Era should overlap with the tradition's temporal range
+            assert!(
+                era.start_year <= ctx.end_year && era.end_year >= ctx.start_year,
+                "{tradition}: era '{}' ({}-{}) does not overlap tradition range ({}-{})",
+                era.name,
+                era.start_year,
+                era.end_year,
+                ctx.start_year,
+                ctx.end_year,
+            );
+        }
+    }
+}
+
+#[cfg(feature = "itihas")]
+#[test]
+fn query_by_civilization_returns_correct_traditions() {
+    use avatara::registry;
+
+    let results = registry::query().civilization("Ancient Greece").collect();
+    assert!(!results.is_empty());
+    for p in &results {
+        assert!(
+            ["Greek", "Incarnate Sage"].contains(&p.tradition.as_str()),
+            "unexpected tradition '{}' for Ancient Greece",
+            p.tradition,
+        );
+    }
+}
+
+#[cfg(feature = "itihas")]
+#[test]
+fn query_by_era_returns_correct_traditions() {
+    use avatara::registry;
+
+    let results = registry::query().era("Vedic Period").collect();
+    assert!(!results.is_empty());
+    for p in &results {
+        assert!(
+            ["Hindu", "Jain", "Incarnate Hindu"].contains(&p.tradition.as_str()),
+            "unexpected tradition '{}' for Vedic Period",
+            p.tradition,
+        );
+    }
+}
+
+#[cfg(feature = "itihas")]
+#[test]
+fn historical_context_serde_roundtrip() {
+    use avatara::history::{self, HistoricalContext};
+
+    let ctx = history::context_for_tradition("Hindu");
+    let json = serde_json::to_string(&ctx).expect("HistoricalContext should serialize");
+    let deser: HistoricalContext =
+        serde_json::from_str(&json).expect("HistoricalContext should deserialize");
+    assert_eq!(ctx.primary_civilization, deser.primary_civilization);
+    assert_eq!(ctx.civilizations.len(), deser.civilizations.len());
+    assert_eq!(ctx.eras.len(), deser.eras.len());
+    assert_eq!(ctx.start_year, deser.start_year);
+    assert_eq!(ctx.end_year, deser.end_year);
+}
+
+#[test]
 fn traditions_cover_expected_set() {
     use std::collections::HashSet;
     let traditions: HashSet<String> = all_profiles().into_iter().map(|p| p.tradition).collect();

@@ -43,6 +43,7 @@ name = "avatara"
 version = "1.0.1"
 dependencies = [
  "criterion",
+ "itihas",
  "serde",
  "serde_json",
  "thiserror",
@@ -226,6 +227,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "413ee7dfc52ee1a4949ceeb7dbc8a33f2d6c088194d9f922fb8318faf1f01186"
 dependencies = [
  "either",
+]
+
+[[package]]
+name = "itihas"
+version = "1.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5adf8b37236555fa8cf4859aef1f980218eea3e9c454df73a5d892f0447df5f4"
+dependencies = [
+ "serde",
+ "thiserror",
+ "tracing",
 ]
 
 [[package]]

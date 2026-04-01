@@ -376,6 +376,61 @@ fn bench_compose(c: &mut Criterion) {
     });
 }
 
+#[cfg(feature = "itihas")]
+fn bench_history(c: &mut Criterion) {
+    use avatara::history;
+
+    let mut group = c.benchmark_group("history");
+    group.bench_function("context_for_tradition", |b| {
+        b.iter(|| black_box(history::context_for_tradition("Hindu")))
+    });
+    group.bench_function("context_all_traditions", |b| {
+        b.iter(|| {
+            for t in history::mapped_traditions() {
+                black_box(history::context_for_tradition(t));
+            }
+        })
+    });
+    group.bench_function("traditions_for_civilization", |b| {
+        b.iter(|| black_box(history::traditions_for_civilization("Indus Valley")))
+    });
+    group.bench_function("traditions_for_era", |b| {
+        b.iter(|| black_box(history::traditions_for_era("Tang Dynasty")))
+    });
+    group.bench_function("traditions_active_at", |b| {
+        b.iter(|| black_box(history::traditions_active_at(-500)))
+    });
+    group.finish();
+}
+
+#[cfg(feature = "itihas")]
+fn bench_registry_itihas(c: &mut Criterion) {
+    use avatara::registry;
+
+    let mut group = c.benchmark_group("registry_itihas");
+    group.bench_function("query_by_civilization", |b| {
+        b.iter(|| black_box(registry::query().civilization("Ancient Greece").collect()))
+    });
+    group.bench_function("query_by_era", |b| {
+        b.iter(|| black_box(registry::query().era("Vedic Period").collect()))
+    });
+    group.bench_function("query_active_at", |b| {
+        b.iter(|| black_box(registry::query().active_at(-500).collect()))
+    });
+    group.bench_function("query_civilization_plus_trait", |b| {
+        b.iter(|| {
+            black_box(
+                registry::query()
+                    .civilization("Indus Valley")
+                    .min_trait(|t| t.empathy, 0.8)
+                    .collect(),
+            )
+        })
+    });
+    group.finish();
+}
+
+#[cfg(not(feature = "itihas"))]
 criterion_group!(
     benches,
     bench_kabbalah,
@@ -402,4 +457,35 @@ criterion_group!(
     bench_registry,
     bench_compose,
 );
+
+#[cfg(feature = "itihas")]
+criterion_group!(
+    benches,
+    bench_kabbalah,
+    bench_angelic,
+    bench_hindu,
+    bench_olympian,
+    bench_norse,
+    bench_egyptian,
+    bench_buddhist,
+    bench_mesopotamian,
+    bench_celtic,
+    bench_shinto,
+    bench_aztec,
+    bench_maya,
+    bench_yoruba,
+    bench_zoroastrian,
+    bench_taoist,
+    bench_incarnate,
+    bench_polynesian,
+    bench_slavic,
+    bench_jain,
+    bench_sikh,
+    bench_all_traditions,
+    bench_registry,
+    bench_compose,
+    bench_history,
+    bench_registry_itihas,
+);
+
 criterion_main!(benches);

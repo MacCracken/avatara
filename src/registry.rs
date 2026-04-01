@@ -298,6 +298,47 @@ impl QueryBuilder {
             .collect()
     }
 
+    /// Filter to traditions associated with a civilization.
+    ///
+    /// Uses the tradition-to-civilization mapping from [`crate::history`].
+    /// Only archetypes whose tradition maps to the given civilization are included.
+    #[cfg(feature = "itihas")]
+    #[must_use]
+    pub fn civilization(mut self, civilization_name: &str) -> Self {
+        let traditions = crate::history::traditions_for_civilization(civilization_name);
+        let owned: Vec<String> = traditions.iter().map(|s| (*s).to_string()).collect();
+        self.filters
+            .push(Box::new(move |p| owned.contains(&p.tradition)));
+        self
+    }
+
+    /// Filter to traditions active during a specific era.
+    ///
+    /// Uses the tradition-to-era mapping from [`crate::history`].
+    /// Only archetypes whose tradition maps to the given era are included.
+    #[cfg(feature = "itihas")]
+    #[must_use]
+    pub fn era(mut self, era_name: &str) -> Self {
+        let traditions = crate::history::traditions_for_era(era_name);
+        let owned: Vec<String> = traditions.iter().map(|s| (*s).to_string()).collect();
+        self.filters
+            .push(Box::new(move |p| owned.contains(&p.tradition)));
+        self
+    }
+
+    /// Filter to traditions active during a given year.
+    ///
+    /// Uses the tradition's formative period from [`crate::history`].
+    #[cfg(feature = "itihas")]
+    #[must_use]
+    pub fn active_at(mut self, year: i32) -> Self {
+        let traditions = crate::history::traditions_active_at(year);
+        let owned: Vec<String> = traditions.iter().map(|s| (*s).to_string()).collect();
+        self.filters
+            .push(Box::new(move |p| owned.contains(&p.tradition)));
+        self
+    }
+
     /// Count matching profiles without allocating.
     #[must_use]
     pub fn count(self) -> usize {
@@ -415,5 +456,65 @@ mod tests {
         let count = query().min_trait(|t| t.warmth, 0.9).count();
         let collected = query().min_trait(|t| t.warmth, 0.9).collect();
         assert_eq!(count, collected.len());
+    }
+
+    #[cfg(feature = "itihas")]
+    #[test]
+    fn query_by_civilization() {
+        let results = query().civilization("Indus Valley").collect();
+        assert!(!results.is_empty());
+        for p in &results {
+            assert!(
+                ["Hindu", "Jain", "Buddhist", "Incarnate Hindu", "Incarnate Buddhist"]
+                    .contains(&p.tradition.as_str()),
+                "unexpected tradition {} for Indus Valley",
+                p.tradition,
+            );
+        }
+    }
+
+    #[cfg(feature = "itihas")]
+    #[test]
+    fn query_by_era() {
+        let results = query().era("Tang Dynasty").collect();
+        assert!(!results.is_empty());
+        for p in &results {
+            assert!(
+                ["Taoist", "Buddhist", "Incarnate Buddhist", "Incarnate Taoist"]
+                    .contains(&p.tradition.as_str()),
+                "unexpected tradition {} for Tang Dynasty",
+                p.tradition,
+            );
+        }
+    }
+
+    #[cfg(feature = "itihas")]
+    #[test]
+    fn query_active_at_year() {
+        let results = query().active_at(1500).collect();
+        assert!(!results.is_empty());
+        // Sikh tradition starts 1469, should be included
+        assert!(
+            results.iter().any(|p| p.tradition == "Sikh"),
+            "Sikh tradition should be active at 1500",
+        );
+        // Mesopotamian ends at -500, should not be included
+        assert!(
+            !results.iter().any(|p| p.tradition == "Mesopotamian"),
+            "Mesopotamian should not be active at 1500",
+        );
+    }
+
+    #[cfg(feature = "itihas")]
+    #[test]
+    fn query_civilization_combined_with_trait() {
+        let results = query()
+            .civilization("Ancient Greece")
+            .min_trait(|t| t.courage, 0.8)
+            .collect();
+        assert!(!results.is_empty());
+        for p in &results {
+            assert!(p.traits.courage >= 0.8);
+        }
     }
 }
