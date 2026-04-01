@@ -655,24 +655,49 @@ mod tests {
     #[test]
     fn manjushri_is_wisdom() {
         let p = Bodhisattva::Manjushri.profile();
-        assert!(p.traits.precision > 0.8, "Manjushri should have high precision");
-        assert!(p.traits.directness > 0.8, "Manjushri should have high directness");
-        assert!(p.traits.pedagogy > 0.8, "Manjushri should have high pedagogy");
+        assert!(
+            p.traits.precision > 0.8,
+            "Manjushri should have high precision"
+        );
+        assert!(
+            p.traits.directness > 0.8,
+            "Manjushri should have high directness"
+        );
+        assert!(
+            p.traits.pedagogy > 0.8,
+            "Manjushri should have high pedagogy"
+        );
     }
 
     #[test]
     fn all_produce_nonempty_text() {
         for b in Bodhisattva::ALL {
             let p = b.profile();
-            assert!(!p.description.is_empty(), "{} has empty description", p.name);
+            assert!(
+                !p.description.is_empty(),
+                "{} has empty description",
+                p.name
+            );
             assert!(!p.soul_text.is_empty(), "{} has empty soul_text", p.name);
-            assert!(!p.spirit_text.is_empty(), "{} has empty spirit_text", p.name);
+            assert!(
+                !p.spirit_text.is_empty(),
+                "{} has empty spirit_text",
+                p.name
+            );
         }
         for d in DhyaniBuddha::ALL {
             let p = d.profile();
-            assert!(!p.description.is_empty(), "{} has empty description", p.name);
+            assert!(
+                !p.description.is_empty(),
+                "{} has empty description",
+                p.name
+            );
             assert!(!p.soul_text.is_empty(), "{} has empty soul_text", p.name);
-            assert!(!p.spirit_text.is_empty(), "{} has empty spirit_text", p.name);
+            assert!(
+                !p.spirit_text.is_empty(),
+                "{} has empty spirit_text",
+                p.name
+            );
         }
     }
 }

@@ -31,7 +31,11 @@ fn all_profiles_have_nonempty_name() {
 #[test]
 fn all_profiles_have_nonempty_tradition() {
     for p in all_profiles() {
-        assert!(!p.tradition.is_empty(), "profile {} has empty tradition", p.name);
+        assert!(
+            !p.tradition.is_empty(),
+            "profile {} has empty tradition",
+            p.name
+        );
     }
 }
 
@@ -164,14 +168,10 @@ fn no_duplicate_names_within_tradition() {
 #[test]
 fn serde_roundtrip_all_profiles() {
     for p in all_profiles() {
-        let json = serde_json::to_string(&p).unwrap_or_else(|e| {
-            panic!("{} ({}) failed to serialize: {}", p.name, p.tradition, e)
-        });
+        let json = serde_json::to_string(&p)
+            .unwrap_or_else(|e| panic!("{} ({}) failed to serialize: {}", p.name, p.tradition, e));
         let deser: ArchetypeProfile = serde_json::from_str(&json).unwrap_or_else(|e| {
-            panic!(
-                "{} ({}) failed to deserialize: {}",
-                p.name, p.tradition, e
-            )
+            panic!("{} ({}) failed to deserialize: {}", p.name, p.tradition, e)
         });
         assert_eq!(p.name, deser.name);
         assert_eq!(p.tradition, deser.tradition);
@@ -219,9 +219,28 @@ fn traditions_cover_expected_set() {
     let traditions: HashSet<String> = all_profiles().into_iter().map(|p| p.tradition).collect();
 
     let expected = [
-        "Kabbalah", "Angelic", "Hindu", "Greek", "Norse", "Egyptian", "Buddhist",
-        "Mesopotamian", "Celtic", "Shinto", "Aztec", "Maya", "Yoruba", "Zoroastrian",
-        "Taoist", "Mystic", "Indigenous", "Polynesian", "Slavic", "Jain", "Sikh", "Vedic",
+        "Kabbalah",
+        "Angelic",
+        "Hindu",
+        "Greek",
+        "Norse",
+        "Egyptian",
+        "Buddhist",
+        "Mesopotamian",
+        "Celtic",
+        "Shinto",
+        "Aztec",
+        "Maya",
+        "Yoruba",
+        "Zoroastrian",
+        "Taoist",
+        "Mystic",
+        "Indigenous",
+        "Polynesian",
+        "Slavic",
+        "Jain",
+        "Sikh",
+        "Vedic",
     ];
     for t in expected {
         assert!(traditions.contains(t), "missing tradition: {}", t);

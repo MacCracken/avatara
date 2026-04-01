@@ -682,7 +682,11 @@ impl Archetype for CelticGod {
                 Self::Epona => Element::Earth,
             },
             polarity: match self {
-                Self::Brigid | Self::Morrigan | Self::Danu | Self::Arianrhod | Self::Rhiannon
+                Self::Brigid
+                | Self::Morrigan
+                | Self::Danu
+                | Self::Arianrhod
+                | Self::Rhiannon
                 | Self::Epona => Polarity::Feminine,
                 _ => Polarity::Masculine,
             },
@@ -725,7 +729,10 @@ mod tests {
         let p = CelticGod::Morrigan.profile();
         assert!(p.traits.courage > 0.9, "The Morrigan does not flinch");
         assert!(p.traits.warmth < 0.3, "The Morrigan is not tender");
-        assert!(p.traits.skepticism > 0.8, "The Morrigan sees through illusion");
+        assert!(
+            p.traits.skepticism > 0.8,
+            "The Morrigan sees through illusion"
+        );
         assert_eq!(p.growth, GrowthDirection::Transform);
         assert_eq!(p.name, "The Morr\u{00ed}gan");
     }
@@ -745,6 +752,9 @@ mod tests {
         let p = CelticGod::Cernunnos.profile();
         assert!(p.traits.autonomy > 0.85, "Cernunnos answers to no court");
         assert!(p.traits.formality < 0.2, "Cernunnos is beyond civilisation");
-        assert!(p.traits.patience > 0.8, "Cernunnos is patient as the forest");
+        assert!(
+            p.traits.patience > 0.8,
+            "Cernunnos is patient as the forest"
+        );
     }
 }

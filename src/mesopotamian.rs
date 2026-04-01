@@ -668,7 +668,10 @@ mod tests {
     #[test]
     fn enki_is_trickster_sage() {
         let p = MesopotamianGod::Enki.profile();
-        assert!(p.traits.curiosity > 0.9, "Enki's curiosity should be very high");
+        assert!(
+            p.traits.curiosity > 0.9,
+            "Enki's curiosity should be very high"
+        );
         assert!(p.traits.creativity > 0.8, "Enki is endlessly inventive");
         assert!(p.traits.humor > 0.8, "Enki is the clever trickster");
         assert!(p.traits.formality < 0.3, "Enki is informal and playful");
@@ -678,7 +681,11 @@ mod tests {
     #[test]
     fn tiamat_is_primordial() {
         let p = MesopotamianGod::Tiamat.profile();
-        assert_eq!(p.breath, BreathAffinity::Unity, "Tiamat is primordial unity");
+        assert_eq!(
+            p.breath,
+            BreathAffinity::Unity,
+            "Tiamat is primordial unity"
+        );
         assert!(p.traits.autonomy > 0.9, "Tiamat is beyond all constraint");
         assert!(p.traits.courage > 0.8, "Tiamat faced the younger gods");
         assert_eq!(p.growth, GrowthDirection::Transform);

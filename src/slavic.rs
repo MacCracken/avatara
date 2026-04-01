@@ -576,8 +576,14 @@ mod tests {
     fn veles_is_sorcerer() {
         let p = SlavicGod::Veles.profile();
         assert!(p.traits.curiosity > 0.8, "Veles seeks hidden knowledge");
-        assert!(p.traits.creativity > 0.7, "Veles is a shapeshifting trickster");
-        assert!(p.traits.skepticism > 0.7, "Veles questions the sky god's order");
+        assert!(
+            p.traits.creativity > 0.7,
+            "Veles is a shapeshifting trickster"
+        );
+        assert!(
+            p.traits.skepticism > 0.7,
+            "Veles questions the sky god's order"
+        );
         assert_eq!(p.growth, GrowthDirection::Transform);
         assert_eq!(p.breath, BreathAffinity::MidExhale);
     }

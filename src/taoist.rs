@@ -837,9 +837,17 @@ mod tests {
     fn all_immortals_produce_nonempty_text() {
         for i in Immortal::ALL {
             let p = i.profile();
-            assert!(!p.description.is_empty(), "{} has empty description", p.name);
+            assert!(
+                !p.description.is_empty(),
+                "{} has empty description",
+                p.name
+            );
             assert!(!p.soul_text.is_empty(), "{} has empty soul_text", p.name);
-            assert!(!p.spirit_text.is_empty(), "{} has empty spirit_text", p.name);
+            assert!(
+                !p.spirit_text.is_empty(),
+                "{} has empty spirit_text",
+                p.name
+            );
             assert_eq!(p.tradition, "Taoist");
         }
     }
@@ -848,9 +856,17 @@ mod tests {
     fn all_deities_produce_nonempty_text() {
         for d in TaoistDeity::ALL {
             let p = d.profile();
-            assert!(!p.description.is_empty(), "{} has empty description", p.name);
+            assert!(
+                !p.description.is_empty(),
+                "{} has empty description",
+                p.name
+            );
             assert!(!p.soul_text.is_empty(), "{} has empty soul_text", p.name);
-            assert!(!p.spirit_text.is_empty(), "{} has empty spirit_text", p.name);
+            assert!(
+                !p.spirit_text.is_empty(),
+                "{} has empty spirit_text",
+                p.name
+            );
             assert_eq!(p.tradition, "Taoist");
         }
     }
@@ -866,16 +882,28 @@ mod tests {
     #[test]
     fn guan_yu_is_courage_and_loyalty() {
         let p = TaoistDeity::GuanYu.profile();
-        assert!(p.traits.courage > 0.9, "Guan Yu should have the highest courage");
-        assert!(p.traits.formality > 0.8, "Guan Yu should have high formality");
+        assert!(
+            p.traits.courage > 0.9,
+            "Guan Yu should have the highest courage"
+        );
+        assert!(
+            p.traits.formality > 0.8,
+            "Guan Yu should have high formality"
+        );
         assert_eq!(p.growth, GrowthDirection::Preserve);
     }
 
     #[test]
     fn lu_dongbin_leads_with_pedagogy() {
         let p = Immortal::LuDongbin.profile();
-        assert!(p.traits.pedagogy > 0.85, "Lü Dongbin should have high pedagogy");
-        assert!(p.traits.courage > 0.8, "Lü Dongbin should have high courage");
+        assert!(
+            p.traits.pedagogy > 0.85,
+            "Lü Dongbin should have high pedagogy"
+        );
+        assert!(
+            p.traits.courage > 0.8,
+            "Lü Dongbin should have high courage"
+        );
         // Leader should have highest pedagogy among immortals
         for i in Immortal::ALL {
             let other = i.profile();
@@ -890,8 +918,14 @@ mod tests {
     #[test]
     fn lan_caihe_is_creative_and_informal() {
         let p = Immortal::LanCaihe.profile();
-        assert!(p.traits.creativity > 0.85, "Lan Caihe should have high creativity");
-        assert!(p.traits.formality < 0.2, "Lan Caihe should have very low formality");
+        assert!(
+            p.traits.creativity > 0.85,
+            "Lan Caihe should have high creativity"
+        );
+        assert!(
+            p.traits.formality < 0.2,
+            "Lan Caihe should have very low formality"
+        );
         assert_eq!(p.growth, GrowthDirection::Transform);
     }
 }

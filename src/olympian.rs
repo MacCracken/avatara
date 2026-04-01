@@ -667,19 +667,10 @@ mod tests {
             p.traits.creativity > 0.9,
             "Dionysus should have very high creativity"
         );
-        assert!(
-            p.traits.formality < 0.2,
-            "Dionysus rejects formality"
-        );
-        assert!(
-            p.traits.precision < 0.3,
-            "Dionysus is not precise"
-        );
+        assert!(p.traits.formality < 0.2, "Dionysus rejects formality");
+        assert!(p.traits.precision < 0.3, "Dionysus is not precise");
         assert_eq!(p.growth, GrowthDirection::Transform);
-        assert!(
-            p.emphasis.flow > 0.8,
-            "Dionysus emphasizes flow/ecstasy"
-        );
+        assert!(p.emphasis.flow > 0.8, "Dionysus emphasizes flow/ecstasy");
     }
 
     #[test]

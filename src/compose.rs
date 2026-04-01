@@ -276,8 +276,8 @@ fn blend_tier(weighted: &[(ArchetypeProfile, f64)]) -> CosmicTier {
 mod tests {
     use super::*;
     use crate::Archetype;
-    use crate::kabbalah::Sephira;
     use crate::hindu::Trimurti;
+    use crate::kabbalah::Sephira;
     use crate::olympian::Olympian;
 
     #[test]
@@ -352,21 +352,13 @@ mod tests {
         let vishnu = Trimurti::Vishnu.profile(); // Preserve
         let tiphareth = Sephira::Tiphareth.profile(); // Preserve
         let shiva = Trimurti::Shiva.profile(); // Transform
-        let composed = compose(&[
-            (vishnu, 1.0),
-            (tiphareth, 1.0),
-            (shiva, 1.0),
-        ])
-        .unwrap();
+        let composed = compose(&[(vishnu, 1.0), (tiphareth, 1.0), (shiva, 1.0)]).unwrap();
         assert_eq!(composed.growth, GrowthDirection::Preserve);
     }
 
     #[test]
     fn compose_traits_stay_in_range() {
-        let profiles: Vec<_> = Sephira::ALL
-            .iter()
-            .map(|s| (s.profile(), 1.0))
-            .collect();
+        let profiles: Vec<_> = Sephira::ALL.iter().map(|s| (s.profile(), 1.0)).collect();
         let composed = compose(&profiles).unwrap();
         assert!(composed.traits.warmth >= 0.0 && composed.traits.warmth <= 1.0);
         assert!(composed.traits.courage >= 0.0 && composed.traits.courage <= 1.0);

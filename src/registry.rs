@@ -39,8 +39,8 @@ pub fn all_profiles() -> Vec<ArchetypeProfile> {
         egyptian::EgyptianGod,
         hindu::{Avatar, Deva, Trimurti},
         incarnate::{
-            IncarnateBuddhist, IncarnateHindu, IncarnateIndigenous, IncarnateMystic,
-            IncarnateSage, IncarnateTaoist,
+            IncarnateBuddhist, IncarnateHindu, IncarnateIndigenous, IncarnateMystic, IncarnateSage,
+            IncarnateTaoist,
         },
         jain::Tirthankara,
         kabbalah::Sephira,
@@ -49,8 +49,8 @@ pub fn all_profiles() -> Vec<ArchetypeProfile> {
         norse::NorseGod,
         olympian::Olympian,
         polynesian::PolynesianGod,
-        sikh::Guru,
         shinto::Kami,
+        sikh::Guru,
         slavic::SlavicGod,
         taoist::{Immortal, TaoistDeity},
         yoruba::Orisha,
@@ -59,37 +59,99 @@ pub fn all_profiles() -> Vec<ArchetypeProfile> {
 
     let mut profiles = Vec::with_capacity(280);
 
-    for s in Sephira::ALL { profiles.push(s.profile()); }
-    for a in Archangel::ALL { profiles.push(a.profile()); }
-    for o in AngelicOrder::ALL { profiles.push(o.profile()); }
-    for t in Trimurti::ALL { profiles.push(t.profile()); }
-    for d in Deva::ALL { profiles.push(d.profile()); }
-    for a in Avatar::ALL { profiles.push(a.profile()); }
-    for o in Olympian::ALL { profiles.push(o.profile()); }
-    for g in NorseGod::ALL { profiles.push(g.profile()); }
-    for g in EgyptianGod::ALL { profiles.push(g.profile()); }
-    for b in Bodhisattva::ALL { profiles.push(b.profile()); }
-    for d in DhyaniBuddha::ALL { profiles.push(d.profile()); }
-    for g in MesopotamianGod::ALL { profiles.push(g.profile()); }
-    for g in CelticGod::ALL { profiles.push(g.profile()); }
-    for k in Kami::ALL { profiles.push(k.profile()); }
-    for g in AztecGod::ALL { profiles.push(g.profile()); }
-    for g in MayanGod::ALL { profiles.push(g.profile()); }
-    for o in Orisha::ALL { profiles.push(o.profile()); }
-    for a in AmeshaSpentas::ALL { profiles.push(a.profile()); }
-    for z in ZoroastrianBeing::ALL { profiles.push(z.profile()); }
-    for i in Immortal::ALL { profiles.push(i.profile()); }
-    for d in TaoistDeity::ALL { profiles.push(d.profile()); }
-    for p in PolynesianGod::ALL { profiles.push(p.profile()); }
-    for s in SlavicGod::ALL { profiles.push(s.profile()); }
-    for t in Tirthankara::ALL { profiles.push(t.profile()); }
-    for g in Guru::ALL { profiles.push(g.profile()); }
-    for i in IncarnateHindu::ALL { profiles.push(i.profile()); }
-    for i in IncarnateBuddhist::ALL { profiles.push(i.profile()); }
-    for i in IncarnateMystic::ALL { profiles.push(i.profile()); }
-    for i in IncarnateTaoist::ALL { profiles.push(i.profile()); }
-    for i in IncarnateIndigenous::ALL { profiles.push(i.profile()); }
-    for i in IncarnateSage::ALL { profiles.push(i.profile()); }
+    for s in Sephira::ALL {
+        profiles.push(s.profile());
+    }
+    for a in Archangel::ALL {
+        profiles.push(a.profile());
+    }
+    for o in AngelicOrder::ALL {
+        profiles.push(o.profile());
+    }
+    for t in Trimurti::ALL {
+        profiles.push(t.profile());
+    }
+    for d in Deva::ALL {
+        profiles.push(d.profile());
+    }
+    for a in Avatar::ALL {
+        profiles.push(a.profile());
+    }
+    for o in Olympian::ALL {
+        profiles.push(o.profile());
+    }
+    for g in NorseGod::ALL {
+        profiles.push(g.profile());
+    }
+    for g in EgyptianGod::ALL {
+        profiles.push(g.profile());
+    }
+    for b in Bodhisattva::ALL {
+        profiles.push(b.profile());
+    }
+    for d in DhyaniBuddha::ALL {
+        profiles.push(d.profile());
+    }
+    for g in MesopotamianGod::ALL {
+        profiles.push(g.profile());
+    }
+    for g in CelticGod::ALL {
+        profiles.push(g.profile());
+    }
+    for k in Kami::ALL {
+        profiles.push(k.profile());
+    }
+    for g in AztecGod::ALL {
+        profiles.push(g.profile());
+    }
+    for g in MayanGod::ALL {
+        profiles.push(g.profile());
+    }
+    for o in Orisha::ALL {
+        profiles.push(o.profile());
+    }
+    for a in AmeshaSpentas::ALL {
+        profiles.push(a.profile());
+    }
+    for z in ZoroastrianBeing::ALL {
+        profiles.push(z.profile());
+    }
+    for i in Immortal::ALL {
+        profiles.push(i.profile());
+    }
+    for d in TaoistDeity::ALL {
+        profiles.push(d.profile());
+    }
+    for p in PolynesianGod::ALL {
+        profiles.push(p.profile());
+    }
+    for s in SlavicGod::ALL {
+        profiles.push(s.profile());
+    }
+    for t in Tirthankara::ALL {
+        profiles.push(t.profile());
+    }
+    for g in Guru::ALL {
+        profiles.push(g.profile());
+    }
+    for i in IncarnateHindu::ALL {
+        profiles.push(i.profile());
+    }
+    for i in IncarnateBuddhist::ALL {
+        profiles.push(i.profile());
+    }
+    for i in IncarnateMystic::ALL {
+        profiles.push(i.profile());
+    }
+    for i in IncarnateTaoist::ALL {
+        profiles.push(i.profile());
+    }
+    for i in IncarnateIndigenous::ALL {
+        profiles.push(i.profile());
+    }
+    for i in IncarnateSage::ALL {
+        profiles.push(i.profile());
+    }
 
     profiles
 }
@@ -118,18 +180,13 @@ pub fn lookup_in(tradition: &str, name: &str) -> Result<ArchetypeProfile, Avatar
     all_profiles()
         .into_iter()
         .find(|p| p.tradition == tradition && p.name == name)
-        .ok_or_else(|| {
-            AvataraError::UnknownArchetype(format!("{tradition}/{name}"))
-        })
+        .ok_or_else(|| AvataraError::UnknownArchetype(format!("{tradition}/{name}")))
 }
 
 /// List all unique tradition names in the library.
 #[must_use]
 pub fn traditions() -> Vec<String> {
-    let mut ts: Vec<String> = all_profiles()
-        .into_iter()
-        .map(|p| p.tradition)
-        .collect();
+    let mut ts: Vec<String> = all_profiles().into_iter().map(|p| p.tradition).collect();
     ts.sort();
     ts.dedup();
     ts
@@ -196,8 +253,7 @@ impl QueryBuilder {
     /// Filter to a specific polarity.
     #[must_use]
     pub fn polarity(mut self, polarity: Polarity) -> Self {
-        self.filters
-            .push(Box::new(move |p| p.polarity == polarity));
+        self.filters.push(Box::new(move |p| p.polarity == polarity));
         self
     }
 
@@ -314,7 +370,12 @@ mod tests {
         let brave = query().min_trait(|t| t.courage, 0.9).collect();
         assert!(!brave.is_empty());
         for p in &brave {
-            assert!(p.traits.courage >= 0.9, "{} has courage {}", p.name, p.traits.courage);
+            assert!(
+                p.traits.courage >= 0.9,
+                "{} has courage {}",
+                p.name,
+                p.traits.courage
+            );
         }
     }
 

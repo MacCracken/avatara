@@ -2660,9 +2660,17 @@ mod tests {
     fn all_incarnate_hindu_produce_nonempty_text() {
         for figure in IncarnateHindu::ALL {
             let p = figure.profile();
-            assert!(!p.description.is_empty(), "{} has empty description", p.name);
+            assert!(
+                !p.description.is_empty(),
+                "{} has empty description",
+                p.name
+            );
             assert!(!p.soul_text.is_empty(), "{} has empty soul_text", p.name);
-            assert!(!p.spirit_text.is_empty(), "{} has empty spirit_text", p.name);
+            assert!(
+                !p.spirit_text.is_empty(),
+                "{} has empty spirit_text",
+                p.name
+            );
             assert_eq!(p.tradition, "Hindu");
         }
     }
@@ -2671,9 +2679,17 @@ mod tests {
     fn all_incarnate_buddhist_produce_nonempty_text() {
         for figure in IncarnateBuddhist::ALL {
             let p = figure.profile();
-            assert!(!p.description.is_empty(), "{} has empty description", p.name);
+            assert!(
+                !p.description.is_empty(),
+                "{} has empty description",
+                p.name
+            );
             assert!(!p.soul_text.is_empty(), "{} has empty soul_text", p.name);
-            assert!(!p.spirit_text.is_empty(), "{} has empty spirit_text", p.name);
+            assert!(
+                !p.spirit_text.is_empty(),
+                "{} has empty spirit_text",
+                p.name
+            );
             assert_eq!(p.tradition, "Buddhist");
         }
     }
@@ -2682,9 +2698,17 @@ mod tests {
     fn all_incarnate_sage_produce_nonempty_text() {
         for figure in IncarnateSage::ALL {
             let p = figure.profile();
-            assert!(!p.description.is_empty(), "{} has empty description", p.name);
+            assert!(
+                !p.description.is_empty(),
+                "{} has empty description",
+                p.name
+            );
             assert!(!p.soul_text.is_empty(), "{} has empty soul_text", p.name);
-            assert!(!p.spirit_text.is_empty(), "{} has empty spirit_text", p.name);
+            assert!(
+                !p.spirit_text.is_empty(),
+                "{} has empty spirit_text",
+                p.name
+            );
             assert_eq!(p.tradition, "Vedic");
         }
     }
@@ -2705,10 +2729,21 @@ mod tests {
         for p in &all_profiles {
             let t = &p.traits;
             let vals = [
-                t.warmth, t.humor, t.empathy, t.patience, t.confidence,
-                t.curiosity, t.creativity, t.directness, t.formality,
-                t.verbosity, t.courage, t.precision, t.skepticism,
-                t.autonomy, t.pedagogy,
+                t.warmth,
+                t.humor,
+                t.empathy,
+                t.patience,
+                t.confidence,
+                t.curiosity,
+                t.creativity,
+                t.directness,
+                t.formality,
+                t.verbosity,
+                t.courage,
+                t.precision,
+                t.skepticism,
+                t.autonomy,
+                t.pedagogy,
             ];
             for &v in &vals {
                 assert!(
@@ -2784,8 +2819,7 @@ mod tests {
 
         for p in &all_profiles {
             assert!(
-                p.breath == BreathAffinity::LateExhale
-                    || p.breath == BreathAffinity::EarlyInhale,
+                p.breath == BreathAffinity::LateExhale || p.breath == BreathAffinity::EarlyInhale,
                 "{} has breath {:?}, expected LateExhale or EarlyInhale",
                 p.name,
                 p.breath

@@ -700,7 +700,10 @@ mod tests {
         let p = Kami::Amaterasu.profile();
         assert!(p.traits.warmth > 0.85, "Amaterasu radiates warmth");
         assert!(p.traits.confidence > 0.85, "Amaterasu is sovereign");
-        assert!(p.traits.formality > 0.8, "Amaterasu embodies imperial dignity");
+        assert!(
+            p.traits.formality > 0.8,
+            "Amaterasu embodies imperial dignity"
+        );
         assert_eq!(p.growth, GrowthDirection::Preserve);
     }
 
@@ -726,9 +729,18 @@ mod tests {
     fn ame_no_uzume_is_joyful_performer() {
         let p = Kami::AmeNoUzume.profile();
         assert_eq!(p.name, "Ame-no-Uzume");
-        assert!(p.traits.creativity > 0.85, "Ame-no-Uzume is supremely creative");
-        assert!(p.traits.humor > 0.85, "Ame-no-Uzume danced the sun out of hiding");
-        assert!(p.traits.courage > 0.8, "Ame-no-Uzume was shameless before the gods");
+        assert!(
+            p.traits.creativity > 0.85,
+            "Ame-no-Uzume is supremely creative"
+        );
+        assert!(
+            p.traits.humor > 0.85,
+            "Ame-no-Uzume danced the sun out of hiding"
+        );
+        assert!(
+            p.traits.courage > 0.8,
+            "Ame-no-Uzume was shameless before the gods"
+        );
         assert_eq!(p.growth, GrowthDirection::Transform);
     }
 }

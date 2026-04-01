@@ -1168,9 +1168,18 @@ mod tests {
     #[test]
     fn mahavira_high_pedagogy_and_confidence() {
         let m = Tirthankara::Mahavira.profile();
-        assert!(m.traits.pedagogy >= 0.85, "Mahavira should have high pedagogy");
-        assert!(m.traits.confidence >= 0.85, "Mahavira should have high confidence");
-        assert!(m.traits.directness > 0.4, "Mahavira should have relatively high directness");
+        assert!(
+            m.traits.pedagogy >= 0.85,
+            "Mahavira should have high pedagogy"
+        );
+        assert!(
+            m.traits.confidence >= 0.85,
+            "Mahavira should have high confidence"
+        );
+        assert!(
+            m.traits.directness > 0.4,
+            "Mahavira should have relatively high directness"
+        );
     }
 
     #[test]

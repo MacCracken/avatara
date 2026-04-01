@@ -20,10 +20,7 @@ pub enum AvataraError {
 
     /// Trait weight out of valid range (0.0–1.0).
     #[error("trait weight out of range in {context}: {value}")]
-    OutOfRange {
-        context: String,
-        value: f64,
-    },
+    OutOfRange { context: String, value: f64 },
 }
 
 /// Convenience Result type.

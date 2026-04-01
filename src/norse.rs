@@ -607,7 +607,10 @@ mod tests {
     #[test]
     fn odin_is_seeker() {
         let p = NorseGod::Odin.profile();
-        assert!(p.traits.curiosity > 0.9, "Odin's curiosity should be very high");
+        assert!(
+            p.traits.curiosity > 0.9,
+            "Odin's curiosity should be very high"
+        );
         assert!(p.traits.skepticism > 0.8, "Odin questions everything");
         assert!(p.traits.courage > 0.8, "Odin sacrificed for knowledge");
         assert_eq!(p.growth, GrowthDirection::Differentiate);

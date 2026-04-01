@@ -354,21 +354,15 @@ fn bench_registry(c: &mut Criterion) {
         b.iter(|| black_box(registry::lookup("Krishna")))
     });
     group.bench_function("query_courage_09", |b| {
-        b.iter(|| {
-            black_box(
-                registry::query()
-                    .min_trait(|t| t.courage, 0.9)
-                    .collect(),
-            )
-        })
+        b.iter(|| black_box(registry::query().min_trait(|t| t.courage, 0.9).collect()))
     });
     group.finish();
 }
 
 fn bench_compose(c: &mut Criterion) {
     use avatara::compose::compose;
-    use avatara::kabbalah::Sephira;
     use avatara::hindu::Trimurti;
+    use avatara::kabbalah::Sephira;
     use avatara::olympian::Olympian;
 
     let profiles = vec![
