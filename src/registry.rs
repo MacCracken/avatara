@@ -40,20 +40,24 @@ pub fn all_profiles() -> Vec<ArchetypeProfile> {
         hindu::{Avatar, Deva, Trimurti},
         incarnate::{
             IncarnateBuddhist, IncarnateHindu, IncarnateIndigenous, IncarnateMystic,
-            IncarnateTaoist,
+            IncarnateSage, IncarnateTaoist,
         },
+        jain::Tirthankara,
         kabbalah::Sephira,
         maya::MayanGod,
         mesopotamian::MesopotamianGod,
         norse::NorseGod,
         olympian::Olympian,
+        polynesian::PolynesianGod,
+        sikh::Guru,
         shinto::Kami,
+        slavic::SlavicGod,
         taoist::{Immortal, TaoistDeity},
         yoruba::Orisha,
         zoroastrian::{AmeshaSpentas, ZoroastrianBeing},
     };
 
-    let mut profiles = Vec::with_capacity(210);
+    let mut profiles = Vec::with_capacity(280);
 
     for s in Sephira::ALL { profiles.push(s.profile()); }
     for a in Archangel::ALL { profiles.push(a.profile()); }
@@ -76,11 +80,16 @@ pub fn all_profiles() -> Vec<ArchetypeProfile> {
     for z in ZoroastrianBeing::ALL { profiles.push(z.profile()); }
     for i in Immortal::ALL { profiles.push(i.profile()); }
     for d in TaoistDeity::ALL { profiles.push(d.profile()); }
+    for p in PolynesianGod::ALL { profiles.push(p.profile()); }
+    for s in SlavicGod::ALL { profiles.push(s.profile()); }
+    for t in Tirthankara::ALL { profiles.push(t.profile()); }
+    for g in Guru::ALL { profiles.push(g.profile()); }
     for i in IncarnateHindu::ALL { profiles.push(i.profile()); }
     for i in IncarnateBuddhist::ALL { profiles.push(i.profile()); }
     for i in IncarnateMystic::ALL { profiles.push(i.profile()); }
     for i in IncarnateTaoist::ALL { profiles.push(i.profile()); }
     for i in IncarnateIndigenous::ALL { profiles.push(i.profile()); }
+    for i in IncarnateSage::ALL { profiles.push(i.profile()); }
 
     profiles
 }
@@ -272,7 +281,7 @@ mod tests {
     #[test]
     fn by_tradition_filters() {
         let norse = by_tradition("Norse");
-        assert_eq!(norse.len(), 10);
+        assert_eq!(norse.len(), 13);
         for p in &norse {
             assert_eq!(p.tradition, "Norse");
         }

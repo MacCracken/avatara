@@ -3,6 +3,12 @@
 //! The Pseudo-Dionysian hierarchy maps orders of celestial beings from
 //! closest to the divine (Seraphim) to closest to humanity (Angels).
 //! Each order corresponds to a manifestation intensity level.
+//!
+//! Note on the archangel list: this follows the composite metaphysical
+//! tradition rather than a single canonical source. Catholic canon
+//! recognizes only Michael, Gabriel, Raphael; Eastern Orthodox lists 7–8
+//! different names; the Book of Enoch names yet another set. Chamuel,
+//! Jophiel, and Zadkiel come from later mystical/angelological traditions.
 
 use serde::{Deserialize, Serialize};
 

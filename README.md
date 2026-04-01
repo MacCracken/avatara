@@ -16,20 +16,24 @@ Maps divine and mythological beings across world traditions to composable person
 |-----------|--------|----------|
 | **Kabbalah** | `kabbalah` | 10 Sephiroth (Kether → Malkuth) |
 | **Angelic** | `angelic` | 7 Archangels, 9 Angelic Orders |
-| **Hindu** | `hindu` | Trimurti, 7 Devas, 10 Avatars of Vishnu |
-| **Greek** | `olympian` | 12 Olympians |
-| **Norse** | `norse` | 10 Aesir/Vanir gods |
-| **Egyptian** | `egyptian` | 12 principal deities |
+| **Hindu** | `hindu` | Trimurti, 11 Devas, 10 Avatars of Vishnu |
+| **Greek** | `olympian` | 15 deities (12 Olympians + Hades, Hestia, Persephone) |
+| **Norse** | `norse` | 13 Aesir/Vanir gods |
+| **Egyptian** | `egyptian` | 16 principal deities |
 | **Buddhist** | `buddhist` | 7 Bodhisattvas, 5 Dhyani Buddhas |
 | **Mesopotamian** | `mesopotamian` | 14 Sumerian/Babylonian deities |
-| **Celtic** | `celtic` | 14 Tuatha Dé Danann & Insular Celtic deities |
-| **Shinto** | `shinto` | 14 Japanese Kami |
+| **Celtic** | `celtic` | 15 Tuatha Dé Danann & Insular Celtic deities |
+| **Shinto** | `shinto` | 15 Japanese Kami |
 | **Aztec** | `aztec` | 14 Aztec (Mexica) deities |
 | **Maya** | `maya` | 12 Maya deities |
 | **Yoruba** | `yoruba` | 14 Orishas |
 | **Zoroastrian** | `zoroastrian` | 7 Amesha Spentas, 7 Zoroastrian beings |
 | **Taoist** | `taoist` | 8 Immortals, 8 celestial deities |
-| **Incarnate** | `incarnate` | 36 incarnate divine figures across 5 traditions |
+| **Polynesian** | `polynesian` | 12 Polynesian/Hawaiian deities |
+| **Slavic** | `slavic` | 12 pre-Christian Slavic deities |
+| **Jain** | `jain` | 24 Tirthankaras |
+| **Sikh** | `sikh` | 10 Sikh Gurus |
+| **Incarnate** | `incarnate` | 44 incarnate divine figures across 5 traditions |
 
 ## Quick Start
 

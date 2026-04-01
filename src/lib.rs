@@ -11,20 +11,24 @@
 //!
 //! - [`kabbalah`] — Tree of Life: 10 Sephiroth
 //! - [`angelic`] — 9 angelic orders, 7 archangels, celestial hierarchy
-//! - [`hindu`] — Trimurti, 7 Devas, 10 Avatars of Vishnu
-//! - [`olympian`] — Greek pantheon: 12 Olympians
-//! - [`norse`] — Aesir and Vanir: 10 gods
-//! - [`egyptian`] — Ennead: 12 principal deities
+//! - [`hindu`] — Trimurti, 11 Devas, 10 Avatars of Vishnu
+//! - [`olympian`] — Greek pantheon: 15 deities (12 Olympians + Hades, Hestia, Persephone)
+//! - [`norse`] — Aesir and Vanir: 13 gods
+//! - [`egyptian`] — 16 principal deities
 //! - [`buddhist`] — 7 Bodhisattvas, 5 Dhyani Buddhas
 //! - [`mesopotamian`] — Sumerian/Babylonian: 14 deities
-//! - [`celtic`] — Tuatha Dé Danann & Insular Celtic: 14 deities
-//! - [`shinto`] — Japanese Kami: 14 deities
+//! - [`celtic`] — Tuatha Dé Danann & Insular Celtic: 15 deities
+//! - [`shinto`] — Japanese Kami: 15 deities
 //! - [`aztec`] — Aztec (Mexica): 14 deities
 //! - [`maya`] — Maya: 12 deities
 //! - [`yoruba`] — Yoruba/Ifá: 14 Orishas
 //! - [`zoroastrian`] — Amesha Spentas and Zoroastrian beings: 14 figures
 //! - [`taoist`] — Eight Immortals and celestial deities: 16 figures
-//! - [`incarnate`] — Incarnate divine figures across traditions: 36 masters
+//! - [`polynesian`] — Polynesian/Hawaiian: 12 deities
+//! - [`slavic`] — Pre-Christian Slavic: 12 deities
+//! - [`jain`] — 24 Tirthankaras
+//! - [`sikh`] — 10 Sikh Gurus
+//! - [`incarnate`] — Incarnate divine figures across traditions: 44 masters
 //!
 //! # Design
 //!
@@ -60,12 +64,16 @@ pub mod celtic;
 pub mod egyptian;
 pub mod hindu;
 pub mod incarnate;
+pub mod jain;
 pub mod kabbalah;
 pub mod maya;
 pub mod mesopotamian;
 pub mod norse;
 pub mod olympian;
+pub mod polynesian;
+pub mod sikh;
 pub mod shinto;
+pub mod slavic;
 pub mod taoist;
 pub mod yoruba;
 pub mod zoroastrian;

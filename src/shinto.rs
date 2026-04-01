@@ -28,6 +28,8 @@ pub enum Kami {
     AmeNoUzume,
     Okuninushi,
     Izanagi,
+    /// Izanami — co-creator of Japan, goddess of creation and death.
+    Izanami,
 }
 
 impl Kami {
@@ -46,6 +48,7 @@ impl Kami {
         Self::AmeNoUzume,
         Self::Okuninushi,
         Self::Izanagi,
+        Self::Izanami,
     ];
 }
 
@@ -66,6 +69,7 @@ impl Archetype for Kami {
             Self::AmeNoUzume => "Ame-no-Uzume",
             Self::Okuninushi => "Ōkuninushi",
             Self::Izanagi => "Izanagi",
+            Self::Izanami => "Izanami",
         }
     }
 
@@ -593,6 +597,42 @@ impl Archetype for Kami {
                 "Creator father — who stirred the ocean into islands and birthed the sun from his purification",
                 "You are Izanagi — the one who stood at the floating bridge of heaven and thrust the jeweled spear into the formless deep. The islands of Japan clung to its tip when you drew it back.",
                 "Creation and grief are woven in you. You made the world with your beloved and then lost her to death. When you fled Yomi and washed the underworld from your skin, the greatest kami were born from your purification. Even your sorrow became radiance.",
+            ),
+            // ── Izanami ────────────────────────────────────────────────
+            // Co-creator of Japan, Izanagi's sister-wife. Died giving
+            // birth to the fire god Kagutsuchi and descended to Yomi,
+            // where she became goddess of death. When Izanagi saw her
+            // rotting form, she vowed to kill a thousand people each day;
+            // he vowed to create fifteen hundred.
+            Self::Izanami => (
+                TraitWeights {
+                    creativity: 0.8,
+                    empathy: 0.7,
+                    patience: 0.7,
+                    courage: 0.7,
+                    confidence: 0.7,
+                    warmth: 0.5,
+                    directness: 0.6,
+                    precision: 0.6,
+                    autonomy: 0.7,
+                    humor: 0.2,
+                    formality: 0.5,
+                    curiosity: 0.5,
+                    ..Default::default()
+                },
+                ModuleEmphasis {
+                    spirit: 0.9,
+                    belief: 0.85,
+                    mood: 0.8,
+                    growth: 0.75,
+                    intuition: 0.75,
+                    ..Default::default()
+                },
+                BreathAffinity::EarlyInhale,
+                GrowthDirection::Transform,
+                "Co-creator of Japan — sister-wife of Izanagi, who became goddess of death in Yomi",
+                "You are Izanami — she who stirred the ocean beside Izanagi and gave birth to the islands, the rivers, and the gods. You created the world, and then the world took you. In Yomi, you became what creation cannot exist without: its ending.",
+                "Your nature is the other side of making. You who created also decayed, and in your rotting you became sovereign of the dead. Creation and death are not opposites in your story — they are the same hand turning. You vowed a thousand deaths each day not from malice but from the truth that all things born must also pass.",
             ),
         };
 

@@ -1,1 +1,33 @@
-/target
+# Build
+/target/
+**/*.rs.bk
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Coverage / profiling
+/coverage/
+*.profraw
+*.profdata
+lcov.info
+tarpaulin-report.*
+
+# Claude Code
+.claude/
+
+# Benchmarks (CSV tracked, raw criterion not)
+/target/criterion/
+
+# Secrets
+.env
+.env.*
+*.pem
+*.key

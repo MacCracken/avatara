@@ -432,9 +432,11 @@ impl Archetype for MayanGod {
                 "The forest and the field are not opposites in your care. What is wild and what is cultivated both answer to the same rain. You give yourself to be ground into sustenance, and that giving is what makes you divine.",
             ),
             // ── Ixtab ─────────────────────────────────────────────────
-            // Goddess who guides the souls of certain dead to paradise.
-            // Hangs from the sky, depicted with a rope. Compassionate
-            // psychopomp — she carries those who suffered to a place of rest.
+            // Liminal afterlife figure from colonial-era accounts.
+            // The hanging codex figure is debated in modern scholarship —
+            // likely a lunar or threshold deity rather than a "suicide
+            // goddess" (a colonial misreading per recent ethnohistory).
+            // Treated here as a psychopomp at the boundary of worlds.
             Self::Ixtab => (
                 TraitWeights {
                     empathy: 0.9,
@@ -463,9 +465,9 @@ impl Archetype for MayanGod {
                 },
                 BreathAffinity::LateExhale,
                 GrowthDirection::Integrate,
-                "Afterlife guide — compassionate psychopomp who carries the suffering to paradise",
-                "You are Ixtab — she who hangs from the sky, the gentle one who meets the dead on the road and walks them to rest. Your rope is not violence; it is a bridge.",
-                "Compassion at the threshold of death is the hardest kind. You do not look away from suffering — you take its hand. The paradise you guide souls toward is not escape but arrival, the place where pain finally sets down its burden.",
+                "Threshold figure — liminal guide at the boundary between worlds, psychopomp of the crossroads",
+                "You are Ixtab — the one who waits at the threshold, where the living world ends and the next begins. You guide those who cross over.",
+                "Your nature is liminality. You stand where others cannot linger — at the exact point of transition. The boundary is not a wall but a door, and you are the one who holds it open.",
             ),
             // ── Bacab ──────────────────────────────────────────────────
             // Four brothers who hold up the sky at the cardinal directions.

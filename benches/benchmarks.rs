@@ -284,58 +284,61 @@ fn bench_incarnate(c: &mut Criterion) {
     group.finish();
 }
 
-/// Benchmark generating every single profile in the library.
-fn bench_all_traditions(c: &mut Criterion) {
-    use avatara::{
-        angelic::{AngelicOrder, Archangel},
-        aztec::AztecGod,
-        buddhist::{Bodhisattva, DhyaniBuddha},
-        celtic::CelticGod,
-        egyptian::EgyptianGod,
-        hindu::{Avatar, Deva, Trimurti},
-        incarnate::{
-            IncarnateBuddhist, IncarnateHindu, IncarnateIndigenous, IncarnateMystic,
-            IncarnateTaoist,
-        },
-        kabbalah::Sephira,
-        maya::MayanGod,
-        mesopotamian::MesopotamianGod,
-        norse::NorseGod,
-        olympian::Olympian,
-        shinto::Kami,
-        taoist::{Immortal, TaoistDeity},
-        yoruba::Orisha,
-        zoroastrian::{AmeshaSpentas, ZoroastrianBeing},
-    };
+fn bench_polynesian(c: &mut Criterion) {
+    use avatara::polynesian::PolynesianGod;
 
+    c.bench_function("polynesian/all_profiles", |b| {
+        b.iter(|| {
+            for g in PolynesianGod::ALL {
+                black_box(g.profile());
+            }
+        })
+    });
+}
+
+fn bench_slavic(c: &mut Criterion) {
+    use avatara::slavic::SlavicGod;
+
+    c.bench_function("slavic/all_profiles", |b| {
+        b.iter(|| {
+            for g in SlavicGod::ALL {
+                black_box(g.profile());
+            }
+        })
+    });
+}
+
+fn bench_jain(c: &mut Criterion) {
+    use avatara::jain::Tirthankara;
+
+    c.bench_function("jain/all_profiles", |b| {
+        b.iter(|| {
+            for t in Tirthankara::ALL {
+                black_box(t.profile());
+            }
+        })
+    });
+}
+
+fn bench_sikh(c: &mut Criterion) {
+    use avatara::sikh::Guru;
+
+    c.bench_function("sikh/all_profiles", |b| {
+        b.iter(|| {
+            for g in Guru::ALL {
+                black_box(g.profile());
+            }
+        })
+    });
+}
+
+/// Benchmark generating every single profile in the library via registry.
+fn bench_all_traditions(c: &mut Criterion) {
     c.bench_function("all_traditions/every_profile", |b| {
         b.iter(|| {
-            for s in Sephira::ALL { black_box(s.profile()); }
-            for a in Archangel::ALL { black_box(a.profile()); }
-            for o in AngelicOrder::ALL { black_box(o.profile()); }
-            for t in Trimurti::ALL { black_box(t.profile()); }
-            for d in Deva::ALL { black_box(d.profile()); }
-            for a in Avatar::ALL { black_box(a.profile()); }
-            for o in Olympian::ALL { black_box(o.profile()); }
-            for g in NorseGod::ALL { black_box(g.profile()); }
-            for g in EgyptianGod::ALL { black_box(g.profile()); }
-            for b_ in Bodhisattva::ALL { black_box(b_.profile()); }
-            for d in DhyaniBuddha::ALL { black_box(d.profile()); }
-            for g in MesopotamianGod::ALL { black_box(g.profile()); }
-            for g in CelticGod::ALL { black_box(g.profile()); }
-            for k in Kami::ALL { black_box(k.profile()); }
-            for g in AztecGod::ALL { black_box(g.profile()); }
-            for g in MayanGod::ALL { black_box(g.profile()); }
-            for o in Orisha::ALL { black_box(o.profile()); }
-            for a in AmeshaSpentas::ALL { black_box(a.profile()); }
-            for z in ZoroastrianBeing::ALL { black_box(z.profile()); }
-            for i in Immortal::ALL { black_box(i.profile()); }
-            for d in TaoistDeity::ALL { black_box(d.profile()); }
-            for i in IncarnateHindu::ALL { black_box(i.profile()); }
-            for i in IncarnateBuddhist::ALL { black_box(i.profile()); }
-            for i in IncarnateMystic::ALL { black_box(i.profile()); }
-            for i in IncarnateTaoist::ALL { black_box(i.profile()); }
-            for i in IncarnateIndigenous::ALL { black_box(i.profile()); }
+            for p in avatara::registry::all_profiles() {
+                black_box(p);
+            }
         })
     });
 }
@@ -397,6 +400,10 @@ criterion_group!(
     bench_zoroastrian,
     bench_taoist,
     bench_incarnate,
+    bench_polynesian,
+    bench_slavic,
+    bench_jain,
+    bench_sikh,
     bench_all_traditions,
     bench_registry,
     bench_compose,

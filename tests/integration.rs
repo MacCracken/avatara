@@ -1,71 +1,18 @@
 //! Integration tests for avatara — cross-tradition invariants.
 
-use avatara::Archetype;
 use avatara::ArchetypeProfile;
 
 /// Collect every profile in the library.
 fn all_profiles() -> Vec<ArchetypeProfile> {
-    use avatara::{
-        angelic::{AngelicOrder, Archangel},
-        aztec::AztecGod,
-        buddhist::{Bodhisattva, DhyaniBuddha},
-        celtic::CelticGod,
-        egyptian::EgyptianGod,
-        hindu::{Avatar, Deva, Trimurti},
-        incarnate::{
-            IncarnateBuddhist, IncarnateHindu, IncarnateIndigenous, IncarnateMystic,
-            IncarnateTaoist,
-        },
-        kabbalah::Sephira,
-        maya::MayanGod,
-        mesopotamian::MesopotamianGod,
-        norse::NorseGod,
-        olympian::Olympian,
-        shinto::Kami,
-        taoist::{Immortal, TaoistDeity},
-        yoruba::Orisha,
-        zoroastrian::{AmeshaSpentas, ZoroastrianBeing},
-    };
-
-    let mut profiles = Vec::new();
-    for s in Sephira::ALL { profiles.push(s.profile()); }
-    for a in Archangel::ALL { profiles.push(a.profile()); }
-    for o in AngelicOrder::ALL { profiles.push(o.profile()); }
-    for t in Trimurti::ALL { profiles.push(t.profile()); }
-    for d in Deva::ALL { profiles.push(d.profile()); }
-    for a in Avatar::ALL { profiles.push(a.profile()); }
-    for o in Olympian::ALL { profiles.push(o.profile()); }
-    for g in NorseGod::ALL { profiles.push(g.profile()); }
-    for g in EgyptianGod::ALL { profiles.push(g.profile()); }
-    for b in Bodhisattva::ALL { profiles.push(b.profile()); }
-    for d in DhyaniBuddha::ALL { profiles.push(d.profile()); }
-    for g in MesopotamianGod::ALL { profiles.push(g.profile()); }
-    for g in CelticGod::ALL { profiles.push(g.profile()); }
-    for k in Kami::ALL { profiles.push(k.profile()); }
-    for g in AztecGod::ALL { profiles.push(g.profile()); }
-    for g in MayanGod::ALL { profiles.push(g.profile()); }
-    for o in Orisha::ALL { profiles.push(o.profile()); }
-    for a in AmeshaSpentas::ALL { profiles.push(a.profile()); }
-    for z in ZoroastrianBeing::ALL { profiles.push(z.profile()); }
-    for i in Immortal::ALL { profiles.push(i.profile()); }
-    for d in TaoistDeity::ALL { profiles.push(d.profile()); }
-    for i in IncarnateHindu::ALL { profiles.push(i.profile()); }
-    for i in IncarnateBuddhist::ALL { profiles.push(i.profile()); }
-    for i in IncarnateMystic::ALL { profiles.push(i.profile()); }
-    for i in IncarnateTaoist::ALL { profiles.push(i.profile()); }
-    for i in IncarnateIndigenous::ALL { profiles.push(i.profile()); }
-    profiles
+    avatara::registry::all_profiles()
 }
 
 #[test]
 fn total_entity_count() {
     let profiles = all_profiles();
-    // 10 + 7 + 9 + 3 + 7 + 10 + 12 + 10 + 12 + 7 + 5
-    // + 14 + 14 + 14 + 14 + 12 + 14 + 7 + 7 + 8 + 8
-    // + 10 + 8 + 10 + 4 + 4 = 206 (approx, assert >= 200)
     assert!(
-        profiles.len() >= 200,
-        "expected at least 200 entities, got {}",
+        profiles.len() >= 250,
+        "expected at least 250 entities, got {}",
         profiles.len()
     );
 }
@@ -148,7 +95,7 @@ fn all_trait_weights_in_range() {
         for (field, val) in fields {
             assert!(
                 (0.0..=1.0).contains(&val),
-                "{} ({}) has {} = {} (out of 0.0–1.0)",
+                "{} ({}) has {} = {} (out of 0.0-1.0)",
                 p.name,
                 p.tradition,
                 field,
@@ -181,7 +128,7 @@ fn all_module_emphasis_in_range() {
         for (field, val) in fields {
             assert!(
                 (0.0..=1.0).contains(&val),
-                "{} ({}) has emphasis.{} = {} (out of 0.0–1.0)",
+                "{} ({}) has emphasis.{} = {} (out of 0.0-1.0)",
                 p.name,
                 p.tradition,
                 field,
@@ -274,7 +221,7 @@ fn traditions_cover_expected_set() {
     let expected = [
         "Kabbalah", "Angelic", "Hindu", "Greek", "Norse", "Egyptian", "Buddhist",
         "Mesopotamian", "Celtic", "Shinto", "Aztec", "Maya", "Yoruba", "Zoroastrian",
-        "Taoist", "Mystic", "Indigenous",
+        "Taoist", "Mystic", "Indigenous", "Polynesian", "Slavic", "Jain", "Sikh", "Vedic",
     ];
     for t in expected {
         assert!(traditions.contains(t), "missing tradition: {}", t);
