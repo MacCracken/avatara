@@ -55,7 +55,7 @@ done < "$RESULTS"
 cat > "$MD" <<EOF
 # Benchmarks
 
-> v${VERSION} — ${DATE} — ${SAMPLES} samples
+> ${VERSION} — ${DATE} — ${SAMPLES} samples
 
 ## Tier 1: Single Profile
 
@@ -74,4 +74,4 @@ ${group_rows}
 ${global_rows}
 EOF
 
-echo "Benchmarks recorded for v${VERSION} (${DATE})"
+echo "Benchmarks recorded for ${VERSION} (${DATE})"

@@ -2,7 +2,7 @@ name: Release
 
 on:
   push:
-    tags: ['v*']
+    tags: ['[0-9]*']
 
 env:
   CARGO_TERM_COLOR: always
@@ -23,9 +23,9 @@ jobs:
       - name: Verify version
         run: |
           VERSION=$(cat VERSION | tr -d '[:space:]')
-          TAG="${GITHUB_REF#refs/tags/v}"
+          TAG="${GITHUB_REF#refs/tags/}"
           if [ "$VERSION" != "$TAG" ]; then
-            echo "VERSION ($VERSION) does not match tag (v$TAG)"
+            echo "VERSION ($VERSION) does not match tag ($TAG)"
             exit 1
           fi
       - name: Publish
