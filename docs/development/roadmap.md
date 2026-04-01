@@ -4,15 +4,12 @@
 
 ## Planned
 
-### v1.1.0 — Composition Intelligence
+### v1.2.0 — Composition Intelligence & Tradition Expansion
 
 - [ ] Conflict detection (`AvataraError::Incompatible` — currently reserved)
 - [ ] Affinity scoring between archetypes
 - [ ] Archetype similarity search ("find entities most like this profile")
 - [ ] Weighted composition with shadow dynamics
-
-### v1.2.0 — Tradition Expansion
-
 - [ ] Finnish/Sami tradition (Kalevala: Ukko, Tapio, Ilmarinen, Louhi)
 - [ ] Vodou Lwa (Papa Legba, Baron Samedi, Erzulie — distinct from Yoruba)
 - [ ] Expand Incarnate: Desert Fathers, Gregory Palamas, Thomas Merton, Attar, Al-Ghazali
@@ -35,6 +32,7 @@
 
 | Consumer | Status | Bridge |
 |----------|--------|--------|
+| itihas (world history) | **v1.1.0** | `history` module — tradition ↔ civilization/era mapping |
 | bhava (emotion/personality) | Post-v2.0 | `ArchetypeProfile` → `PersonalityProfile` |
 | joshua (NPC archetypes) | Planned | Direct `ArchetypeProfile` consumption |
 | kiran (game entities) | Planned | Via joshua |

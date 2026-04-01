@@ -12,11 +12,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Vodou Lwa (distinct from Yoruba)
 - Expand Incarnate: Desert Fathers, Gregory Palamas, Thomas Merton, Attar, Al-Ghazali
 - Cross-tradition affinity mapping (Shango ~ Thor ~ Indra ~ Perun)
-
-### v1.1.0 roadmap
 - Conflict detection (`AvataraError::Incompatible`)
 - Affinity scoring between archetypes
 - Archetype similarity search
+
+## [1.1.0] — 2026-04-01
+
+### Added
+
+#### Historical Context Integration (`history`) — feature-gated behind `itihas`
+- `HistoricalContext` struct — civilizations, eras, temporal range, and historical notes for each tradition
+- `context_for_tradition()` / `context_for_profile()` — resolve any tradition or archetype profile to its civilizational and temporal context via itihas data
+- `traditions_for_civilization()` — reverse lookup: which traditions belong to a given civilization
+- `traditions_for_era()` — which traditions were active in a given era
+- `traditions_active_at(year)` — which traditions existed at a point in time
+- `mapped_traditions()` — list all traditions with historical mappings
+- 26 tradition-to-history mappings with scholarly historical notes
+
+#### Registry Query Bridge (`registry`) — feature-gated behind `itihas`
+- `QueryBuilder::civilization()` — filter archetypes by associated civilization
+- `QueryBuilder::era()` — filter archetypes by associated era
+- `QueryBuilder::active_at()` — filter archetypes by year of tradition activity
+- All composable with existing filters (`.min_trait()`, `.element()`, `.tradition()`, etc.)
+
+#### Dependencies
+- `itihas` v1 as optional dependency (feature-gated)
+
+#### Tests & Benchmarks
+- 15 new unit tests in `history` module (context resolution, reverse lookups, temporal validation)
+- 4 new registry query tests for civilization/era/year filters
+- 6 new integration tests (context resolution, era overlap, query correctness, serde roundtrip)
+- 9 new criterion benchmarks across `history` and `registry_itihas` groups
+
+### Changed
+- `deny.toml` — removed 7 unused license allowances (BSD-2-Clause, BSD-3-Clause, ISC, OpenSSL, Unicode-DFS-2016, Zlib, Apache-2.0 WITH LLVM-exception)
 
 ## [1.0.1] — 2026-04-01
 
