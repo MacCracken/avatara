@@ -7,7 +7,8 @@
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    Archetype, ArchetypeProfile, BreathAffinity, GrowthDirection, ModuleEmphasis, TraitWeights,
+    Archetype, ArchetypeProfile, BreathAffinity, CosmicTier, Element, GrowthDirection,
+    ModuleEmphasis, Polarity, TraitWeights,
 };
 
 /// The Trimurti — three aspects of the supreme.
@@ -224,6 +225,17 @@ impl Archetype for Trimurti {
             emphasis,
             breath,
             growth,
+            element: match self {
+                Self::Brahma => Element::Aether,
+                Self::Vishnu => Element::Water,
+                Self::Shiva => Element::Fire,
+            },
+            polarity: match self {
+                Self::Brahma => Polarity::Masculine,
+                Self::Vishnu => Polarity::Masculine,
+                Self::Shiva => Polarity::Androgynous,
+            },
+            tier: CosmicTier::Cosmic,
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }
@@ -562,6 +574,33 @@ impl Archetype for Deva {
             emphasis,
             breath,
             growth,
+            element: match self {
+                Self::Indra => Element::Storm,
+                Self::Saraswati => Element::Water,
+                Self::Lakshmi => Element::Light,
+                Self::Ganesha => Element::Earth,
+                Self::Hanuman => Element::Air,
+                Self::Kali => Element::Darkness,
+                Self::Durga => Element::Fire,
+                Self::Parvati => Element::Earth,
+                Self::Kartikeya => Element::Fire,
+                Self::Surya => Element::Light,
+                Self::Agni => Element::Fire,
+            },
+            polarity: match self {
+                Self::Indra => Polarity::Masculine,
+                Self::Saraswati => Polarity::Feminine,
+                Self::Lakshmi => Polarity::Feminine,
+                Self::Ganesha => Polarity::Masculine,
+                Self::Hanuman => Polarity::Masculine,
+                Self::Kali => Polarity::Feminine,
+                Self::Durga => Polarity::Feminine,
+                Self::Parvati => Polarity::Feminine,
+                Self::Kartikeya => Polarity::Masculine,
+                Self::Surya => Polarity::Masculine,
+                Self::Agni => Polarity::Masculine,
+            },
+            tier: CosmicTier::Greater,
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }
@@ -868,6 +907,23 @@ impl Archetype for Avatar {
             emphasis,
             breath,
             growth,
+            element: match self {
+                Self::Matsya => Element::Water,
+                Self::Kurma => Element::Earth,
+                Self::Varaha => Element::Earth,
+                Self::Narasimha => Element::Fire,
+                Self::Vamana => Element::Aether,
+                Self::Parashurama => Element::Fire,
+                Self::Rama => Element::Light,
+                Self::Krishna => Element::Mixed,
+                Self::Buddha => Element::Light,
+                Self::Kalki => Element::Fire,
+            },
+            polarity: match self {
+                Self::Krishna => Polarity::Androgynous,
+                _ => Polarity::Masculine,
+            },
+            tier: CosmicTier::Cosmic,
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }

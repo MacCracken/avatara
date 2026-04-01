@@ -7,7 +7,8 @@
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    Archetype, ArchetypeProfile, BreathAffinity, GrowthDirection, ModuleEmphasis, TraitWeights,
+    Archetype, ArchetypeProfile, BreathAffinity, CosmicTier, Element, GrowthDirection,
+    ModuleEmphasis, Polarity, TraitWeights,
 };
 
 /// The 10 Sephiroth of the Kabbalistic Tree of Life.
@@ -328,6 +329,31 @@ impl Archetype for Sephira {
             emphasis,
             breath,
             growth,
+            element: match self {
+                Self::Kether => Element::Aether,
+                Self::Chokmah => Element::Fire,
+                Self::Binah => Element::Water,
+                Self::Chesed => Element::Water,
+                Self::Gevurah => Element::Fire,
+                Self::Tiphareth => Element::Light,
+                Self::Netzach => Element::Fire,
+                Self::Hod => Element::Water,
+                Self::Yesod => Element::Air,
+                Self::Malkuth => Element::Earth,
+            },
+            polarity: match self {
+                Self::Kether => Polarity::Transcendent,
+                Self::Chokmah => Polarity::Masculine,
+                Self::Binah => Polarity::Feminine,
+                Self::Chesed => Polarity::Masculine,
+                Self::Gevurah => Polarity::Masculine,
+                Self::Tiphareth => Polarity::Androgynous,
+                Self::Netzach => Polarity::Masculine,
+                Self::Hod => Polarity::Masculine,
+                Self::Yesod => Polarity::Androgynous,
+                Self::Malkuth => Polarity::Feminine,
+            },
+            tier: CosmicTier::Cosmic,
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }

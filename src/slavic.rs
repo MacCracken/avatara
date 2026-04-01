@@ -7,7 +7,8 @@
 //! the dark months.
 
 use crate::{
-    Archetype, ArchetypeProfile, BreathAffinity, GrowthDirection, ModuleEmphasis, TraitWeights,
+    Archetype, ArchetypeProfile, BreathAffinity, CosmicTier, Element, GrowthDirection,
+    ModuleEmphasis, Polarity, TraitWeights,
 };
 use serde::{Deserialize, Serialize};
 
@@ -514,6 +515,21 @@ impl Archetype for SlavicGod {
             ),
         };
 
+        let (element, polarity, tier) = match self {
+            Self::Perun => (Element::Storm, Polarity::Masculine, CosmicTier::Cosmic),
+            Self::Veles => (Element::Water, Polarity::Masculine, CosmicTier::Cosmic),
+            Self::Mokosh => (Element::Earth, Polarity::Feminine, CosmicTier::Greater),
+            Self::Svarog => (Element::Fire, Polarity::Masculine, CosmicTier::Primordial),
+            Self::Dazhbog => (Element::Light, Polarity::Masculine, CosmicTier::Greater),
+            Self::Stribog => (Element::Air, Polarity::Masculine, CosmicTier::Greater),
+            Self::Marzanna => (Element::Darkness, Polarity::Feminine, CosmicTier::Greater),
+            Self::Jarilo => (Element::Earth, Polarity::Masculine, CosmicTier::Greater),
+            Self::Lada => (Element::Light, Polarity::Feminine, CosmicTier::Greater),
+            Self::Rod => (Element::Aether, Polarity::Masculine, CosmicTier::Primordial),
+            Self::Svarozhich => (Element::Fire, Polarity::Masculine, CosmicTier::Lesser),
+            Self::Morana => (Element::Darkness, Polarity::Feminine, CosmicTier::Greater),
+        };
+
         ArchetypeProfile {
             name: self.name().to_string(),
             tradition: self.tradition().to_string(),
@@ -522,6 +538,9 @@ impl Archetype for SlavicGod {
             emphasis,
             breath,
             growth,
+            element,
+            polarity,
+            tier,
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }

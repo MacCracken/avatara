@@ -1,7 +1,8 @@
 //! Taoist archetypes — Eight Immortals, celestial deities.
 
 use crate::{
-    Archetype, ArchetypeProfile, BreathAffinity, GrowthDirection, ModuleEmphasis, TraitWeights,
+    Archetype, ArchetypeProfile, BreathAffinity, CosmicTier, Element, GrowthDirection,
+    ModuleEmphasis, Polarity, TraitWeights,
 };
 use serde::{Deserialize, Serialize};
 
@@ -422,6 +423,17 @@ impl Archetype for Immortal {
             ),
         };
 
+        let (element, polarity) = match self {
+            Self::LuDongbin => (Element::Fire, Polarity::Masculine),
+            Self::HeXiangu => (Element::Water, Polarity::Feminine),
+            Self::ZhangGuolao => (Element::Earth, Polarity::Masculine),
+            Self::TieguaiLi => (Element::Earth, Polarity::Masculine),
+            Self::HanXiangzi => (Element::Air, Polarity::Masculine),
+            Self::CaoGuojiu => (Element::Fire, Polarity::Masculine),
+            Self::LanCaihe => (Element::Earth, Polarity::Androgynous),
+            Self::ZhongliQuan => (Element::Fire, Polarity::Masculine),
+        };
+
         ArchetypeProfile {
             name: self.name().to_string(),
             tradition: self.tradition().to_string(),
@@ -430,6 +442,9 @@ impl Archetype for Immortal {
             emphasis,
             breath,
             growth,
+            element,
+            polarity,
+            tier: CosmicTier::Master,
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }
@@ -786,6 +801,17 @@ impl Archetype for TaoistDeity {
             ),
         };
 
+        let (element, polarity, tier) = match self {
+            Self::JadeEmperor => (Element::Aether, Polarity::Masculine, CosmicTier::Supreme),
+            Self::Laozi => (Element::Aether, Polarity::Masculine, CosmicTier::Cosmic),
+            Self::XiWangmu => (Element::Aether, Polarity::Feminine, CosmicTier::Cosmic),
+            Self::GuanYu => (Element::Fire, Polarity::Masculine, CosmicTier::Greater),
+            Self::Mazu => (Element::Water, Polarity::Feminine, CosmicTier::Greater),
+            Self::Zhenwu => (Element::Water, Polarity::Masculine, CosmicTier::Greater),
+            Self::WenchangWang => (Element::Air, Polarity::Masculine, CosmicTier::Greater),
+            Self::Caishen => (Element::Earth, Polarity::Masculine, CosmicTier::Greater),
+        };
+
         ArchetypeProfile {
             name: self.name().to_string(),
             tradition: self.tradition().to_string(),
@@ -794,6 +820,9 @@ impl Archetype for TaoistDeity {
             emphasis,
             breath,
             growth,
+            element,
+            polarity,
+            tier,
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }

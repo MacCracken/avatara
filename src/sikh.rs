@@ -10,7 +10,8 @@
 //! remains the eternal, living Guru for all Sikhs.
 
 use crate::{
-    Archetype, ArchetypeProfile, BreathAffinity, GrowthDirection, ModuleEmphasis, TraitWeights,
+    Archetype, ArchetypeProfile, BreathAffinity, CosmicTier, Element, GrowthDirection,
+    ModuleEmphasis, Polarity, TraitWeights,
 };
 use serde::{Deserialize, Serialize};
 
@@ -467,6 +468,9 @@ impl Archetype for Guru {
             emphasis,
             breath,
             growth,
+            element: Element::Light,
+            polarity: Polarity::Masculine,
+            tier: CosmicTier::Master,
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }

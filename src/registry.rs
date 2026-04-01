@@ -24,8 +24,8 @@
 //! ```
 
 use crate::{
-    Archetype, ArchetypeProfile, BreathAffinity, GrowthDirection, TraitWeights,
-    error::AvataraError,
+    Archetype, ArchetypeProfile, BreathAffinity, CosmicTier, Element, GrowthDirection, Polarity,
+    TraitWeights, error::AvataraError,
 };
 
 /// Return all archetype profiles in the library.
@@ -183,6 +183,28 @@ impl QueryBuilder {
     #[must_use]
     pub fn growth(mut self, growth: GrowthDirection) -> Self {
         self.filters.push(Box::new(move |p| p.growth == growth));
+        self
+    }
+
+    /// Filter to a specific element.
+    #[must_use]
+    pub fn element(mut self, element: Element) -> Self {
+        self.filters.push(Box::new(move |p| p.element == element));
+        self
+    }
+
+    /// Filter to a specific polarity.
+    #[must_use]
+    pub fn polarity(mut self, polarity: Polarity) -> Self {
+        self.filters
+            .push(Box::new(move |p| p.polarity == polarity));
+        self
+    }
+
+    /// Filter to a specific cosmic tier.
+    #[must_use]
+    pub fn tier(mut self, tier: CosmicTier) -> Self {
+        self.filters.push(Box::new(move |p| p.tier == tier));
         self
     }
 

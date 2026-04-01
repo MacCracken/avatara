@@ -6,7 +6,8 @@
 //! gratitude, and right relation with nature stand at the tradition's heart.
 
 use crate::{
-    Archetype, ArchetypeProfile, BreathAffinity, GrowthDirection, ModuleEmphasis, TraitWeights,
+    Archetype, ArchetypeProfile, BreathAffinity, CosmicTier, Element, GrowthDirection,
+    ModuleEmphasis, Polarity, TraitWeights,
 };
 use serde::{Deserialize, Serialize};
 
@@ -644,6 +645,35 @@ impl Archetype for Kami {
             emphasis,
             breath,
             growth,
+            element: match self {
+                Self::Amaterasu => Element::Light,
+                Self::Susanoo => Element::Storm,
+                Self::Tsukuyomi => Element::Darkness,
+                Self::Inari => Element::Earth,
+                Self::Raijin => Element::Storm,
+                Self::Fujin => Element::Air,
+                Self::Hachiman => Element::Fire,
+                Self::Benzaiten => Element::Water,
+                Self::Ebisu => Element::Water,
+                Self::Daikokuten => Element::Earth,
+                Self::Bishamonten => Element::Fire,
+                Self::AmeNoUzume => Element::Light,
+                Self::Okuninushi => Element::Earth,
+                Self::Izanagi => Element::Mixed,
+                Self::Izanami => Element::Mixed,
+            },
+            polarity: match self {
+                Self::Amaterasu | Self::Benzaiten | Self::AmeNoUzume | Self::Izanami => {
+                    Polarity::Feminine
+                }
+                Self::Inari => Polarity::Androgynous,
+                _ => Polarity::Masculine,
+            },
+            tier: match self {
+                Self::Amaterasu => CosmicTier::Cosmic,
+                Self::Izanagi | Self::Izanami => CosmicTier::Primordial,
+                _ => CosmicTier::Greater,
+            },
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }

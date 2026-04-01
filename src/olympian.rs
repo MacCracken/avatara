@@ -1,7 +1,8 @@
 //! Greek pantheon — 12 Olympians, Titans, demigods.
 
 use crate::{
-    Archetype, ArchetypeProfile, BreathAffinity, GrowthDirection, ModuleEmphasis, TraitWeights,
+    Archetype, ArchetypeProfile, BreathAffinity, CosmicTier, Element, GrowthDirection,
+    ModuleEmphasis, Polarity, TraitWeights,
 };
 use serde::{Deserialize, Serialize};
 
@@ -574,6 +575,41 @@ impl Archetype for Olympian {
             emphasis,
             breath,
             growth,
+            element: match self {
+                Self::Zeus => Element::Storm,
+                Self::Hera => Element::Air,
+                Self::Poseidon => Element::Water,
+                Self::Demeter => Element::Earth,
+                Self::Athena => Element::Air,
+                Self::Apollo => Element::Light,
+                Self::Artemis => Element::Earth,
+                Self::Ares => Element::Fire,
+                Self::Aphrodite => Element::Water,
+                Self::Hephaestus => Element::Fire,
+                Self::Hermes => Element::Air,
+                Self::Dionysus => Element::Earth,
+                Self::Hades => Element::Darkness,
+                Self::Hestia => Element::Fire,
+                Self::Persephone => Element::Earth,
+            },
+            polarity: match self {
+                Self::Zeus => Polarity::Masculine,
+                Self::Hera => Polarity::Feminine,
+                Self::Poseidon => Polarity::Masculine,
+                Self::Demeter => Polarity::Feminine,
+                Self::Athena => Polarity::Feminine,
+                Self::Apollo => Polarity::Masculine,
+                Self::Artemis => Polarity::Feminine,
+                Self::Ares => Polarity::Masculine,
+                Self::Aphrodite => Polarity::Feminine,
+                Self::Hephaestus => Polarity::Masculine,
+                Self::Hermes => Polarity::Masculine,
+                Self::Dionysus => Polarity::Androgynous,
+                Self::Hades => Polarity::Masculine,
+                Self::Hestia => Polarity::Feminine,
+                Self::Persephone => Polarity::Feminine,
+            },
+            tier: CosmicTier::Greater,
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }

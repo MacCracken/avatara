@@ -1,7 +1,8 @@
 //! Zoroastrian archetypes — Amesha Spentas, Yazatas, and cosmic beings.
 
 use crate::{
-    Archetype, ArchetypeProfile, BreathAffinity, GrowthDirection, ModuleEmphasis, TraitWeights,
+    Archetype, ArchetypeProfile, BreathAffinity, CosmicTier, Element, GrowthDirection,
+    ModuleEmphasis, Polarity, TraitWeights,
 };
 use serde::{Deserialize, Serialize};
 
@@ -90,7 +91,7 @@ impl Archetype for AmeshaSpentas {
     }
 
     fn profile(&self) -> ArchetypeProfile {
-        let (traits, emphasis, breath, growth, desc, soul, spirit) = match self {
+        let (traits, emphasis, breath, growth, element, polarity, tier, desc, soul, spirit) = match self {
             Self::AhuraMazda => (
                 TraitWeights {
                     confidence: 0.95,
@@ -120,6 +121,9 @@ impl Archetype for AmeshaSpentas {
                 },
                 BreathAffinity::EarlyExhale,
                 GrowthDirection::Still,
+                Element::Light,
+                Polarity::Transcendent,
+                CosmicTier::Supreme,
                 "Supreme creator — Ahura Mazda, the Wise Lord, source of Asha (truth) \
                  and all that is good, the uncreated light from which all emanations proceed",
                 "You are Ahura Mazda — the Wise Lord, uncreated and eternal. \
@@ -159,6 +163,9 @@ impl Archetype for AmeshaSpentas {
                 },
                 BreathAffinity::LateInhale,
                 GrowthDirection::Preserve,
+                Element::Fire,
+                Polarity::Masculine,
+                CosmicTier::Cosmic,
                 "Best truth — Asha Vahishta, guardian of fire and righteousness, \
                  the divine order that underpins all creation and burns away falsehood",
                 "You are Asha Vahishta — best righteousness, the truth that burns. \
@@ -197,6 +204,9 @@ impl Archetype for AmeshaSpentas {
                 },
                 BreathAffinity::EarlyInhale,
                 GrowthDirection::Integrate,
+                Element::Air,
+                Polarity::Masculine,
+                CosmicTier::Cosmic,
                 "Good mind — Vohu Manah, the first of the Amesha Spentas to greet \
                  Zoroaster, guardian of animals and embodiment of right thinking",
                 "You are Vohu Manah — the Good Mind, the first divine presence \
@@ -237,6 +247,9 @@ impl Archetype for AmeshaSpentas {
                 },
                 BreathAffinity::LateExhale,
                 GrowthDirection::Preserve,
+                Element::Earth,
+                Polarity::Masculine,
+                CosmicTier::Cosmic,
                 "Desirable dominion — Khshathra Vairya, guardian of metals and the sky, \
                  embodiment of righteous power and the kingdom that Asha builds",
                 "You are Khshathra Vairya — the desirable dominion, the kingdom \
@@ -277,6 +290,9 @@ impl Archetype for AmeshaSpentas {
                 },
                 BreathAffinity::EarlyInhale,
                 GrowthDirection::Integrate,
+                Element::Earth,
+                Polarity::Feminine,
+                CosmicTier::Cosmic,
                 "Holy devotion — Spenta Armaiti, guardian of the earth, \
                  embodiment of piety, faithful service, and the sacred ground \
                  that sustains all life",
@@ -318,6 +334,9 @@ impl Archetype for AmeshaSpentas {
                 },
                 BreathAffinity::EarlyInhale,
                 GrowthDirection::Preserve,
+                Element::Water,
+                Polarity::Feminine,
+                CosmicTier::Cosmic,
                 "Wholeness — Haurvatat, guardian of water, embodiment of health, \
                  completeness, and the perfection that Asha promises to the faithful",
                 "You are Haurvatat — wholeness itself, the completeness that is \
@@ -358,6 +377,9 @@ impl Archetype for AmeshaSpentas {
                 },
                 BreathAffinity::LateInhale,
                 GrowthDirection::Preserve,
+                Element::Earth,
+                Polarity::Feminine,
+                CosmicTier::Cosmic,
                 "Immortality — Ameretat, guardian of plants, embodiment of \
                  deathlessness and the eternal life that awaits the righteous \
                  at the Frashokereti (renovation of the world)",
@@ -380,6 +402,9 @@ impl Archetype for AmeshaSpentas {
             emphasis,
             breath,
             growth,
+            element,
+            polarity,
+            tier,
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }
@@ -404,7 +429,7 @@ impl Archetype for ZoroastrianBeing {
     }
 
     fn profile(&self) -> ArchetypeProfile {
-        let (traits, emphasis, breath, growth, desc, soul, spirit) = match self {
+        let (traits, emphasis, breath, growth, element, polarity, tier, desc, soul, spirit) = match self {
             Self::SpentaMainyu => (
                 TraitWeights {
                     creativity: 0.9,
@@ -434,6 +459,9 @@ impl Archetype for ZoroastrianBeing {
                 },
                 BreathAffinity::EarlyExhale,
                 GrowthDirection::Differentiate,
+                Element::Light,
+                Polarity::Transcendent,
+                CosmicTier::Cosmic,
                 "Holy spirit — Spenta Mainyu, the creative emanation of Ahura Mazda, \
                  the active principle of good that chose truth over falsehood \
                  at the dawn of creation",
@@ -475,6 +503,9 @@ impl Archetype for ZoroastrianBeing {
                 },
                 BreathAffinity::LateExhale,
                 GrowthDirection::Preserve,
+                Element::Light,
+                Polarity::Masculine,
+                CosmicTier::Greater,
                 "Covenant and light — Mithra, Yazata of oaths, contracts, and the \
                  rising sun, who watches over all agreements and punishes oath-breakers",
                 "You are Mithra — lord of the wide pastures, the eye that sees \
@@ -515,6 +546,9 @@ impl Archetype for ZoroastrianBeing {
                 },
                 BreathAffinity::EarlyInhale,
                 GrowthDirection::Integrate,
+                Element::Water,
+                Polarity::Feminine,
+                CosmicTier::Greater,
                 "Waters and wisdom — Anahita, the immaculate one, Yazata of \
                  all the waters upon earth, of fertility, and of feminine wisdom",
                 "You are Anahita — Aredvi Sura Anahita, the mighty, immaculate one. \
@@ -555,6 +589,9 @@ impl Archetype for ZoroastrianBeing {
                 },
                 BreathAffinity::LateInhale,
                 GrowthDirection::Preserve,
+                Element::Fire,
+                Polarity::Masculine,
+                CosmicTier::Greater,
                 "Obedience and prayer — Sraosha, the hearkening one, Yazata of \
                  conscience and religious observance, guardian of souls \
                  during the three nights after death",
@@ -597,6 +634,9 @@ impl Archetype for ZoroastrianBeing {
                 },
                 BreathAffinity::LateExhale,
                 GrowthDirection::Preserve,
+                Element::Aether,
+                Polarity::Masculine,
+                CosmicTier::Greater,
                 "Justice absolute — Rashnu, the righteous one who weighs souls \
                  at the Chinvat Bridge with scales that cannot be deceived, \
                  bribed, or swayed by sentiment",
@@ -639,6 +679,9 @@ impl Archetype for ZoroastrianBeing {
                 },
                 BreathAffinity::EarlyExhale,
                 GrowthDirection::Differentiate,
+                Element::Mixed,
+                Polarity::Masculine,
+                CosmicTier::Greater,
                 "Victory in ten forms — Verethragna, Yazata of triumph, who assumes \
                  the shapes of wind, bull, horse, camel, boar, youth, raven, ram, \
                  buck, and warrior to smash the forces of evil",
@@ -681,6 +724,9 @@ impl Archetype for ZoroastrianBeing {
                 },
                 BreathAffinity::LateExhale,
                 GrowthDirection::Transform,
+                Element::Darkness,
+                Polarity::Transcendent,
+                CosmicTier::Cosmic,
                 "Destructive spirit — Angra Mainyu, the adversary who chose \
                  the Lie (Druj) over Truth (Asha) at the beginning, source of \
                  all corruption, disease, and death in the world",
@@ -704,6 +750,9 @@ impl Archetype for ZoroastrianBeing {
             emphasis,
             breath,
             growth,
+            element,
+            polarity,
+            tier,
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }

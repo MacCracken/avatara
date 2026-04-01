@@ -9,7 +9,8 @@
 //! (right perception).
 
 use crate::{
-    Archetype, ArchetypeProfile, BreathAffinity, GrowthDirection, ModuleEmphasis, TraitWeights,
+    Archetype, ArchetypeProfile, BreathAffinity, CosmicTier, Element, GrowthDirection,
+    ModuleEmphasis, Polarity, TraitWeights,
 };
 use serde::{Deserialize, Serialize};
 
@@ -1095,6 +1096,11 @@ impl Archetype for Tirthankara {
             ),
         };
 
+        let polarity = match self {
+            Self::Mallinatha => Polarity::Androgynous,
+            _ => Polarity::Masculine,
+        };
+
         ArchetypeProfile {
             name: self.name().to_string(),
             tradition: self.tradition().to_string(),
@@ -1103,6 +1109,9 @@ impl Archetype for Tirthankara {
             emphasis,
             breath,
             growth,
+            element: Element::Aether,
+            polarity,
+            tier: CosmicTier::Master,
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }

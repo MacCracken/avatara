@@ -5,7 +5,8 @@
 //! greatness lies precisely in acting with courage despite that knowledge.
 
 use crate::{
-    Archetype, ArchetypeProfile, BreathAffinity, GrowthDirection, ModuleEmphasis, TraitWeights,
+    Archetype, ArchetypeProfile, BreathAffinity, CosmicTier, Element, GrowthDirection,
+    ModuleEmphasis, Polarity, TraitWeights,
 };
 use serde::{Deserialize, Serialize};
 
@@ -548,6 +549,40 @@ impl Archetype for NorseGod {
             emphasis,
             breath,
             growth,
+            element: match self {
+                Self::Odin => Element::Air,
+                Self::Thor => Element::Storm,
+                Self::Freya => Element::Fire,
+                Self::Loki => Element::Fire,
+                Self::Tyr => Element::Earth,
+                Self::Baldur => Element::Light,
+                Self::Heimdall => Element::Light,
+                Self::Frigg => Element::Air,
+                Self::Njord => Element::Water,
+                Self::Freyr => Element::Earth,
+                Self::Hel => Element::Darkness,
+                Self::Skadi => Element::Earth,
+                Self::Idun => Element::Earth,
+            },
+            polarity: match self {
+                Self::Odin => Polarity::Masculine,
+                Self::Thor => Polarity::Masculine,
+                Self::Freya => Polarity::Feminine,
+                Self::Loki => Polarity::Androgynous,
+                Self::Tyr => Polarity::Masculine,
+                Self::Baldur => Polarity::Masculine,
+                Self::Heimdall => Polarity::Masculine,
+                Self::Frigg => Polarity::Feminine,
+                Self::Njord => Polarity::Masculine,
+                Self::Freyr => Polarity::Masculine,
+                Self::Hel => Polarity::Feminine,
+                Self::Skadi => Polarity::Feminine,
+                Self::Idun => Polarity::Feminine,
+            },
+            tier: match self {
+                Self::Odin => CosmicTier::Cosmic,
+                _ => CosmicTier::Greater,
+            },
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }

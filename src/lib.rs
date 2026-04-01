@@ -229,6 +229,58 @@ pub enum GrowthDirection {
     Still,
 }
 
+/// Classical element association.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub enum Element {
+    Fire,
+    Water,
+    Earth,
+    Air,
+    /// Spirit, void, space, quintessence.
+    Aether,
+    Light,
+    Darkness,
+    Storm,
+    /// Multiple or unclassifiable elemental associations.
+    #[default]
+    Mixed,
+}
+
+/// Masculine/feminine/androgynous polarity of the archetype.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub enum Polarity {
+    Masculine,
+    Feminine,
+    /// Both masculine and feminine aspects.
+    Androgynous,
+    /// Beyond gender — cosmic principles, abstract forces.
+    #[default]
+    Transcendent,
+}
+
+/// Position in the cosmic hierarchy.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub enum CosmicTier {
+    /// Supreme being, source of all (Olodumare, Ahura Mazda, Brahman).
+    Supreme,
+    /// Primordial forces, pre-creation (Tiamat, Papatuanuku, Nut).
+    Primordial,
+    /// Cosmic-level gods, shapers of reality (Trimurti, Amesha Spentas).
+    Cosmic,
+    /// Major deities, fully manifest divine beings (Olympians, Aesir).
+    #[default]
+    Greater,
+    /// Minor deities, nature spirits, specialized roles.
+    Lesser,
+    /// Semi-divine heroes, offspring of gods and mortals.
+    Demigod,
+    /// Enlightened humans — saints, gurus, mystics, sages.
+    Master,
+}
+
 /// Complete archetype profile — the output of any tradition's mapping.
 ///
 /// This is what bhava's bridge module consumes. All fields are plain
@@ -249,6 +301,12 @@ pub struct ArchetypeProfile {
     pub breath: BreathAffinity,
     /// Growth direction this archetype pushes toward.
     pub growth: GrowthDirection,
+    /// Classical element association.
+    pub element: Element,
+    /// Masculine/feminine/androgynous polarity.
+    pub polarity: Polarity,
+    /// Position in the cosmic hierarchy.
+    pub tier: CosmicTier,
     /// Soul-level identity text (maps to bhava `IdentityLayer::Soul`).
     pub soul_text: String,
     /// Spirit-level identity text (maps to bhava `IdentityLayer::Spirit`).

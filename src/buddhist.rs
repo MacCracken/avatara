@@ -1,7 +1,8 @@
 //! Buddhist archetypes — Bodhisattvas, Dhyani Buddhas, Dharma protectors.
 
 use crate::{
-    Archetype, ArchetypeProfile, BreathAffinity, GrowthDirection, ModuleEmphasis, TraitWeights,
+    Archetype, ArchetypeProfile, BreathAffinity, CosmicTier, Element, GrowthDirection,
+    ModuleEmphasis, Polarity, TraitWeights,
 };
 use serde::{Deserialize, Serialize};
 
@@ -358,6 +359,17 @@ impl Archetype for Bodhisattva {
             emphasis,
             breath,
             growth,
+            element: match self {
+                Self::Avalokiteshvara => Element::Water,
+                Self::Manjushri => Element::Fire,
+                Self::Vajrapani => Element::Storm,
+                Self::Kshitigarbha => Element::Earth,
+                Self::Samantabhadra => Element::Aether,
+                Self::Tara => Element::Water,
+                Self::Maitreya => Element::Light,
+            },
+            polarity: Polarity::Transcendent,
+            tier: CosmicTier::Cosmic,
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }
@@ -582,6 +594,15 @@ impl Archetype for DhyaniBuddha {
             emphasis,
             breath,
             growth,
+            element: match self {
+                Self::Vairochana => Element::Aether,
+                Self::Akshobhya => Element::Water,
+                Self::Ratnasambhava => Element::Earth,
+                Self::Amitabha => Element::Fire,
+                Self::Amoghasiddhi => Element::Air,
+            },
+            polarity: Polarity::Transcendent,
+            tier: CosmicTier::Cosmic,
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }

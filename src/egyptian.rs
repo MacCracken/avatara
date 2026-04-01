@@ -6,7 +6,8 @@
 //! historical Egyptian theology and iconography.
 
 use crate::{
-    Archetype, ArchetypeProfile, BreathAffinity, GrowthDirection, ModuleEmphasis, TraitWeights,
+    Archetype, ArchetypeProfile, BreathAffinity, CosmicTier, Element, GrowthDirection,
+    ModuleEmphasis, Polarity, TraitWeights,
 };
 use serde::{Deserialize, Serialize};
 
@@ -647,6 +648,47 @@ impl Archetype for EgyptianGod {
             emphasis,
             breath,
             growth,
+            element: match self {
+                Self::Ra => Element::Light,
+                Self::Thoth => Element::Air,
+                Self::Maat => Element::Aether,
+                Self::Osiris => Element::Earth,
+                Self::Isis => Element::Mixed,
+                Self::Anubis => Element::Darkness,
+                Self::Horus => Element::Light,
+                Self::Set => Element::Storm,
+                Self::Hathor => Element::Light,
+                Self::Ptah => Element::Earth,
+                Self::Sekhmet => Element::Fire,
+                Self::Bastet => Element::Fire,
+                Self::Nephthys => Element::Darkness,
+                Self::Nut => Element::Aether,
+                Self::Geb => Element::Earth,
+                Self::Sobek => Element::Water,
+            },
+            polarity: match self {
+                Self::Ra => Polarity::Masculine,
+                Self::Thoth => Polarity::Masculine,
+                Self::Maat => Polarity::Feminine,
+                Self::Osiris => Polarity::Masculine,
+                Self::Isis => Polarity::Feminine,
+                Self::Anubis => Polarity::Masculine,
+                Self::Horus => Polarity::Masculine,
+                Self::Set => Polarity::Masculine,
+                Self::Hathor => Polarity::Feminine,
+                Self::Ptah => Polarity::Masculine,
+                Self::Sekhmet => Polarity::Feminine,
+                Self::Bastet => Polarity::Feminine,
+                Self::Nephthys => Polarity::Feminine,
+                Self::Nut => Polarity::Feminine,
+                Self::Geb => Polarity::Masculine,
+                Self::Sobek => Polarity::Masculine,
+            },
+            tier: match self {
+                Self::Ra => CosmicTier::Cosmic,
+                Self::Nut | Self::Geb => CosmicTier::Primordial,
+                _ => CosmicTier::Greater,
+            },
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }

@@ -7,7 +7,8 @@
 //! grounded in deep relationship with land, ocean, and ancestry.
 
 use crate::{
-    Archetype, ArchetypeProfile, BreathAffinity, GrowthDirection, ModuleEmphasis, TraitWeights,
+    Archetype, ArchetypeProfile, BreathAffinity, CosmicTier, Element, GrowthDirection,
+    ModuleEmphasis, Polarity, TraitWeights,
 };
 use serde::{Deserialize, Serialize};
 
@@ -508,6 +509,21 @@ impl Archetype for PolynesianGod {
             ),
         };
 
+        let (element, polarity, tier) = match self {
+            Self::Kane => (Element::Water, Polarity::Masculine, CosmicTier::Supreme),
+            Self::Ku => (Element::Fire, Polarity::Masculine, CosmicTier::Cosmic),
+            Self::Lono => (Element::Earth, Polarity::Masculine, CosmicTier::Cosmic),
+            Self::Kanaloa => (Element::Water, Polarity::Masculine, CosmicTier::Cosmic),
+            Self::Pele => (Element::Fire, Polarity::Feminine, CosmicTier::Greater),
+            Self::Maui => (Element::Mixed, Polarity::Masculine, CosmicTier::Demigod),
+            Self::Hina => (Element::Light, Polarity::Feminine, CosmicTier::Greater),
+            Self::Tangaroa => (Element::Water, Polarity::Masculine, CosmicTier::Cosmic),
+            Self::Tane => (Element::Air, Polarity::Masculine, CosmicTier::Cosmic),
+            Self::Tu => (Element::Fire, Polarity::Masculine, CosmicTier::Greater),
+            Self::Rongo => (Element::Earth, Polarity::Masculine, CosmicTier::Greater),
+            Self::Papatuanuku => (Element::Earth, Polarity::Feminine, CosmicTier::Primordial),
+        };
+
         ArchetypeProfile {
             name: self.name().to_string(),
             tradition: self.tradition().to_string(),
@@ -516,6 +532,9 @@ impl Archetype for PolynesianGod {
             emphasis,
             breath,
             growth,
+            element,
+            polarity,
+            tier,
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }

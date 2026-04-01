@@ -2,7 +2,8 @@
 //! enlightened masters, or living saints across traditions.
 
 use crate::{
-    Archetype, ArchetypeProfile, BreathAffinity, GrowthDirection, ModuleEmphasis, TraitWeights,
+    Archetype, ArchetypeProfile, BreathAffinity, CosmicTier, Element, GrowthDirection,
+    ModuleEmphasis, Polarity, TraitWeights,
 };
 use serde::{Deserialize, Serialize};
 
@@ -808,6 +809,22 @@ impl Archetype for IncarnateHindu {
             ),
         };
 
+        let (element, polarity) = match self {
+            Self::Ramakrishna => (Element::Fire, Polarity::Masculine),
+            Self::RamanaMaharshi => (Element::Aether, Polarity::Masculine),
+            Self::AnandamayiMa => (Element::Light, Polarity::Feminine),
+            Self::Yogananda => (Element::Light, Polarity::Masculine),
+            Self::MotherMeera => (Element::Light, Polarity::Feminine),
+            Self::Amma => (Element::Water, Polarity::Feminine),
+            Self::SathyaSaiBaba => (Element::Mixed, Polarity::Masculine),
+            Self::Vivekananda => (Element::Fire, Polarity::Masculine),
+            Self::Mirabai => (Element::Water, Polarity::Feminine),
+            Self::Kabir => (Element::Air, Polarity::Masculine),
+            Self::Shankaracharya => (Element::Aether, Polarity::Masculine),
+            Self::ShirdiSaiBaba => (Element::Mixed, Polarity::Masculine),
+            Self::NeemKaroliBaba => (Element::Light, Polarity::Masculine),
+        };
+
         ArchetypeProfile {
             name: self.name().to_string(),
             tradition: self.tradition().to_string(),
@@ -816,6 +833,9 @@ impl Archetype for IncarnateHindu {
             emphasis,
             breath,
             growth,
+            element,
+            polarity,
+            tier: CosmicTier::Master,
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }
@@ -1248,6 +1268,19 @@ impl Archetype for IncarnateBuddhist {
             ),
         };
 
+        let (element, polarity) = match self {
+            Self::DalaiLama => (Element::Light, Polarity::Masculine),
+            Self::Karmapa => (Element::Aether, Polarity::Masculine),
+            Self::Padmasambhava => (Element::Fire, Polarity::Masculine),
+            Self::Milarepa => (Element::Air, Polarity::Masculine),
+            Self::ThichNhatHanh => (Element::Water, Polarity::Masculine),
+            Self::Dogen => (Element::Earth, Polarity::Masculine),
+            Self::Bodhidharma => (Element::Fire, Polarity::Masculine),
+            Self::MachigLabdron => (Element::Aether, Polarity::Feminine),
+            Self::Nagarjuna => (Element::Aether, Polarity::Masculine),
+            Self::Tsongkhapa => (Element::Light, Polarity::Masculine),
+        };
+
         ArchetypeProfile {
             name: self.name().to_string(),
             tradition: self.tradition().to_string(),
@@ -1256,6 +1289,9 @@ impl Archetype for IncarnateBuddhist {
             emphasis,
             breath,
             growth,
+            element,
+            polarity,
+            tier: CosmicTier::Master,
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }
@@ -1789,6 +1825,21 @@ impl Archetype for IncarnateMystic {
             ),
         };
 
+        let (element, polarity) = match self {
+            Self::Rumi => (Element::Fire, Polarity::Masculine),
+            Self::MeisterEckhart => (Element::Aether, Polarity::Masculine),
+            Self::Hildegard => (Element::Earth, Polarity::Feminine),
+            Self::TeresaOfAvila => (Element::Fire, Polarity::Feminine),
+            Self::FrancisOfAssisi => (Element::Earth, Polarity::Masculine),
+            Self::JohnOfTheCross => (Element::Darkness, Polarity::Masculine),
+            Self::Hallaj => (Element::Fire, Polarity::Masculine),
+            Self::Rabia => (Element::Light, Polarity::Feminine),
+            Self::IsaacLuria => (Element::Light, Polarity::Masculine),
+            Self::BaalShemTov => (Element::Light, Polarity::Masculine),
+            Self::IbnArabi => (Element::Aether, Polarity::Masculine),
+            Self::JulianOfNorwich => (Element::Light, Polarity::Feminine),
+        };
+
         ArchetypeProfile {
             name: self.name().to_string(),
             tradition: self.tradition().to_string(),
@@ -1797,6 +1848,9 @@ impl Archetype for IncarnateMystic {
             emphasis,
             breath,
             growth,
+            element,
+            polarity,
+            tier: CosmicTier::Master,
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }
@@ -2030,6 +2084,14 @@ impl Archetype for IncarnateTaoist {
             ),
         };
 
+        let (element, polarity) = match self {
+            Self::ZhangDaoling => (Element::Fire, Polarity::Masculine),
+            Self::GeHong => (Element::Earth, Polarity::Masculine),
+            Self::WangChongyang => (Element::Air, Polarity::Masculine),
+            Self::SunBuer => (Element::Water, Polarity::Feminine),
+            Self::Zhuangzi => (Element::Air, Polarity::Masculine),
+        };
+
         ArchetypeProfile {
             name: self.name().to_string(),
             tradition: self.tradition().to_string(),
@@ -2038,6 +2100,9 @@ impl Archetype for IncarnateTaoist {
             emphasis,
             breath,
             growth,
+            element,
+            polarity,
+            tier: CosmicTier::Master,
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }
@@ -2229,6 +2294,13 @@ impl Archetype for IncarnateIndigenous {
             ),
         };
 
+        let (element, polarity) = match self {
+            Self::WhiteBuffaloCalfWoman => (Element::Earth, Polarity::Feminine),
+            Self::QuanahParker => (Element::Earth, Polarity::Masculine),
+            Self::Deganawidah => (Element::Air, Polarity::Masculine),
+            Self::Wovoka => (Element::Light, Polarity::Masculine),
+        };
+
         ArchetypeProfile {
             name: self.name().to_string(),
             tradition: self.tradition().to_string(),
@@ -2237,6 +2309,9 @@ impl Archetype for IncarnateIndigenous {
             emphasis,
             breath,
             growth,
+            element,
+            polarity,
+            tier: CosmicTier::Master,
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }
@@ -2548,6 +2623,16 @@ impl Archetype for IncarnateSage {
             ),
         };
 
+        let element = match self {
+            Self::Kashyapa => Element::Aether,
+            Self::Atri => Element::Fire,
+            Self::Vashishtha => Element::Water,
+            Self::Vishvamitra => Element::Fire,
+            Self::Gautama => Element::Air,
+            Self::Jamadagni => Element::Fire,
+            Self::Bharadvaja => Element::Air,
+        };
+
         ArchetypeProfile {
             name: self.name().to_string(),
             tradition: self.tradition().to_string(),
@@ -2556,6 +2641,9 @@ impl Archetype for IncarnateSage {
             emphasis,
             breath,
             growth,
+            element,
+            polarity: Polarity::Masculine,
+            tier: CosmicTier::Master,
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }

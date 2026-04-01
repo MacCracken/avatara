@@ -13,7 +13,8 @@
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    Archetype, ArchetypeProfile, BreathAffinity, GrowthDirection, ModuleEmphasis, TraitWeights,
+    Archetype, ArchetypeProfile, BreathAffinity, CosmicTier, Element, GrowthDirection,
+    ModuleEmphasis, Polarity, TraitWeights,
 };
 
 /// The 7 principal archangels.
@@ -342,6 +343,25 @@ impl Archetype for Archangel {
             emphasis,
             breath,
             growth,
+            element: match self {
+                Self::Michael => Element::Fire,
+                Self::Gabriel => Element::Water,
+                Self::Raphael => Element::Air,
+                Self::Uriel => Element::Earth,
+                Self::Chamuel => Element::Light,
+                Self::Jophiel => Element::Light,
+                Self::Zadkiel => Element::Aether,
+            },
+            polarity: match self {
+                Self::Michael => Polarity::Masculine,
+                Self::Gabriel => Polarity::Androgynous,
+                Self::Raphael => Polarity::Masculine,
+                Self::Uriel => Polarity::Masculine,
+                Self::Chamuel => Polarity::Androgynous,
+                Self::Jophiel => Polarity::Androgynous,
+                Self::Zadkiel => Polarity::Masculine,
+            },
+            tier: CosmicTier::Greater,
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }
@@ -676,6 +696,27 @@ impl Archetype for AngelicOrder {
             emphasis,
             breath,
             growth,
+            element: match self {
+                Self::Seraphim => Element::Fire,
+                Self::Cherubim => Element::Light,
+                Self::Thrones => Element::Earth,
+                Self::Dominions => Element::Aether,
+                Self::Virtues => Element::Light,
+                Self::Powers => Element::Fire,
+                Self::Principalities => Element::Air,
+                Self::Archangels => Element::Mixed,
+                Self::Angels => Element::Light,
+            },
+            polarity: Polarity::Transcendent,
+            tier: match self {
+                Self::Seraphim | Self::Cherubim | Self::Thrones => CosmicTier::Cosmic,
+                Self::Dominions
+                | Self::Virtues
+                | Self::Powers
+                | Self::Principalities
+                | Self::Archangels
+                | Self::Angels => CosmicTier::Greater,
+            },
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }

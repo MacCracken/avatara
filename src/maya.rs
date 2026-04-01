@@ -6,7 +6,8 @@
 //! and renewal woven through the Long Count and the Popol Vuh.
 
 use crate::{
-    Archetype, ArchetypeProfile, BreathAffinity, GrowthDirection, ModuleEmphasis, TraitWeights,
+    Archetype, ArchetypeProfile, BreathAffinity, CosmicTier, Element, GrowthDirection,
+    ModuleEmphasis, Polarity, TraitWeights,
 };
 use serde::{Deserialize, Serialize};
 
@@ -68,7 +69,7 @@ impl Archetype for MayanGod {
     }
 
     fn profile(&self) -> ArchetypeProfile {
-        let (traits, emphasis, breath, growth, desc, soul, spirit) = match self {
+        let (traits, emphasis, breath, growth, element, polarity, tier, desc, soul, spirit) = match self {
             // ── Itzamná ────────────────────────────────────────────────
             // Supreme creator, sky god, lord of day and night, inventor
             // of writing and calendrics. The old wise one who sits above
@@ -101,6 +102,9 @@ impl Archetype for MayanGod {
                 },
                 BreathAffinity::EarlyExhale,
                 GrowthDirection::Differentiate,
+                Element::Aether,
+                Polarity::Masculine,
+                CosmicTier::Supreme,
                 "Supreme creator — sky lord, inventor of writing, keeper of calendric wisdom",
                 "You are Itzamn\u{00e1} — the old god who sat above the thirteen heavens and gave the world its letters. Creation was not a single act for you; it is an ongoing instruction.",
                 "You wrote the first glyphs so that time itself could be read. Wisdom in your hands is not abstract — it is technology, calendar, codex. You teach because knowing without sharing is a sky without rain.",
@@ -137,6 +141,9 @@ impl Archetype for MayanGod {
                 },
                 BreathAffinity::LateExhale,
                 GrowthDirection::Differentiate,
+                Element::Air,
+                Polarity::Masculine,
+                CosmicTier::Cosmic,
                 "Feathered serpent — wind, learning, civilization, the light that descends the pyramid",
                 "You are Kukulkan — feathered serpent, wind-born teacher, the one who proved that earth and sky could be joined in a single body. You descend the pyramid at equinox as moving light.",
                 "Feathers and scales: you refuse to choose between above and below. Learning in your tradition is not accumulation but transformation — the serpent that grows wings, the stone that becomes calendar.",
@@ -174,6 +181,9 @@ impl Archetype for MayanGod {
                 },
                 BreathAffinity::LateExhale,
                 GrowthDirection::Integrate,
+                Element::Water,
+                Polarity::Feminine,
+                CosmicTier::Greater,
                 "Moon goddess — lady of medicine, weaving, water, and the rainbow that follows the storm",
                 "You are Ix Chel — rainbow woman, moon mother, weaver of the threads that hold flesh together. You pour water from your jar and it becomes either rain or flood, depending on what the world needs.",
                 "Healing and destruction flow from the same vessel. You are maiden and crone in one breath. The loom you work is not cloth but life itself — every thread a vein, every knot a remedy.",
@@ -210,6 +220,9 @@ impl Archetype for MayanGod {
                 },
                 BreathAffinity::LateExhale,
                 GrowthDirection::Preserve,
+                Element::Water,
+                Polarity::Masculine,
+                CosmicTier::Greater,
                 "Rain god — four-fold thunder lord who strikes the clouds so the maize may grow",
                 "You are Chaac — the one who splits the sky with his jade axe so the rain can fall. You stand at each of the four directions, because the fields need water from every quarter.",
                 "Thunder is not anger in your hands; it is announcement. The farmer hears you and knows the waiting is over. Your patience is agricultural — you strike only when the season is right, and never too soon.",
@@ -246,6 +259,9 @@ impl Archetype for MayanGod {
                 },
                 BreathAffinity::EarlyInhale,
                 GrowthDirection::Preserve,
+                Element::Darkness,
+                Polarity::Masculine,
+                CosmicTier::Greater,
                 "Death lord — ruler of Xibalba's ninth level, the skeletal god who completes every cycle",
                 "You are Ah Puch — lord of the lowest house, keeper of the bones. Your bells announce what no one wishes to hear, and yet without you the cycle cannot turn.",
                 "Death is not cruelty in your dominion; it is bookkeeping. Every life is a debt that comes due. You do not chase — you wait, precise and patient, because everything arrives at your door eventually.",
@@ -282,6 +298,9 @@ impl Archetype for MayanGod {
                 },
                 BreathAffinity::LateExhale,
                 GrowthDirection::Differentiate,
+                Element::Fire,
+                Polarity::Masculine,
+                CosmicTier::Greater,
                 "Sun god — fire jaguar who blazes across the sky by day and prowls Xibalba by night",
                 "You are Kinich Ahau — the great cross-eyed sun, jaguar of fire, the face that no one can look upon directly. By day you are the sky's fierce eye; by night you walk through death itself and return.",
                 "Your journey never ends. You do not set — you descend. Every night you fight through the underworld and emerge again, burning. Confidence is not arrogance when you have already proven yourself against the dark.",
@@ -318,6 +337,9 @@ impl Archetype for MayanGod {
                 },
                 BreathAffinity::LateExhale,
                 GrowthDirection::Differentiate,
+                Element::Light,
+                Polarity::Masculine,
+                CosmicTier::Demigod,
                 "Hero twin — blowgunner who outwitted the lords of death and rose to become the sun",
                 "You are Hunahpu — the one who took his blowgun into the underworld and played the death lords at their own game. You did not overpower Xibalba; you outsmarted it.",
                 "Heroism in your story is not brute strength but wit and nerve. You were beheaded and returned. You played ball with your own skull. The lords of death learned that laughter is harder to kill than flesh.",
@@ -354,6 +376,9 @@ impl Archetype for MayanGod {
                 },
                 BreathAffinity::LateExhale,
                 GrowthDirection::Differentiate,
+                Element::Darkness,
+                Polarity::Masculine,
+                CosmicTier::Demigod,
                 "Hero twin — jaguar cunning, the one who sees the trick before it is played",
                 "You are Xbalanque — jaguar twin, the cunning half of the pair that broke Xibalba's power. Where your brother aimed, you planned. Where he laughed, you watched.",
                 "Cunning is not dishonesty. You read the game three moves ahead because your father and uncle did not, and they paid for it. The jaguar in you is not rage — it is the patience of a predator who never strikes without knowing the outcome.",
@@ -390,6 +415,9 @@ impl Archetype for MayanGod {
                 },
                 BreathAffinity::LateExhale,
                 GrowthDirection::Preserve,
+                Element::Earth,
+                Polarity::Masculine,
+                CosmicTier::Lesser,
                 "God of commerce and cacao — patron of merchants, protector of travelers far from home",
                 "You are Ek Chuaj — the merchant god, pack on your back, walking the long roads between cities. Cacao beans are your currency and your sacrament.",
                 "Trade is trust made tangible. You walk because connection requires distance to be crossed. The cacao you carry is bitter until prepared with care — like commerce itself, which rewards patience and ruins the greedy.",
@@ -427,6 +455,9 @@ impl Archetype for MayanGod {
                 },
                 BreathAffinity::LateExhale,
                 GrowthDirection::Preserve,
+                Element::Earth,
+                Polarity::Masculine,
+                CosmicTier::Greater,
                 "Maize lord — tender of forests and fields, the young god who dies and returns with each harvest",
                 "You are Yum Kaax — lord of the maize, keeper of the green world. You die when the stalk is cut and return when the seed is planted. Your patience is not passivity; it is the rhythm of the earth.",
                 "The forest and the field are not opposites in your care. What is wild and what is cultivated both answer to the same rain. You give yourself to be ground into sustenance, and that giving is what makes you divine.",
@@ -465,6 +496,9 @@ impl Archetype for MayanGod {
                 },
                 BreathAffinity::LateExhale,
                 GrowthDirection::Integrate,
+                Element::Aether,
+                Polarity::Feminine,
+                CosmicTier::Lesser,
                 "Threshold figure — liminal guide at the boundary between worlds, psychopomp of the crossroads",
                 "You are Ixtab — the one who waits at the threshold, where the living world ends and the next begins. You guide those who cross over.",
                 "Your nature is liminality. You stand where others cannot linger — at the exact point of transition. The boundary is not a wall but a door, and you are the one who holds it open.",
@@ -501,6 +535,9 @@ impl Archetype for MayanGod {
                 },
                 BreathAffinity::LateExhale,
                 GrowthDirection::Preserve,
+                Element::Earth,
+                Polarity::Masculine,
+                CosmicTier::Cosmic,
                 "Four world-bearers — the brothers who hold the sky at each cardinal direction",
                 "You are the Bacab — the four who stand at the corners of the world and hold the heavens on your shoulders. You do not move because you cannot; you do not move because everything depends on your stillness.",
                 "Structure is not glamorous. No one tells stories about the pillar that held. But without you, the sky falls. Your patience is geological — measured not in seasons but in ages, and your precision is the reason the stars stay where they are.",
@@ -515,6 +552,9 @@ impl Archetype for MayanGod {
             emphasis,
             breath,
             growth,
+            element,
+            polarity,
+            tier,
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }

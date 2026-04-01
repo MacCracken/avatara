@@ -27,7 +27,7 @@
 //! ```
 
 use crate::{
-    ArchetypeProfile, BreathAffinity, GrowthDirection, ModuleEmphasis, TraitWeights,
+    ArchetypeProfile, BreathAffinity, CosmicTier, GrowthDirection, ModuleEmphasis, TraitWeights,
     error::AvataraError,
 };
 
@@ -105,6 +105,11 @@ pub fn compose(weighted: &[(ArchetypeProfile, f64)]) -> Result<ArchetypeProfile,
         .map(|(p, _)| p)
         .expect("non-empty weighted slice (checked above)");
 
+    // Element, polarity, tier from dominant contributor
+    let element = dominant.element;
+    let polarity = dominant.polarity;
+    let tier = blend_tier(weighted);
+
     Ok(ArchetypeProfile {
         name,
         tradition,
@@ -113,6 +118,9 @@ pub fn compose(weighted: &[(ArchetypeProfile, f64)]) -> Result<ArchetypeProfile,
         emphasis,
         breath,
         growth,
+        element,
+        polarity,
+        tier,
         soul_text: dominant.soul_text.clone(),
         spirit_text: dominant.spirit_text.clone(),
     })
@@ -244,6 +252,23 @@ fn blend_growth(weighted: &[(ArchetypeProfile, f64)]) -> GrowthDirection {
         .into_iter()
         .max_by(|a, b| a.1.partial_cmp(&b.1).unwrap_or(std::cmp::Ordering::Equal))
         .map(|(g, _)| g)
+        .unwrap_or_default()
+}
+
+/// Resolve cosmic tier by picking the highest tier among contributors
+/// (composing a Supreme + Greater = Supreme).
+fn blend_tier(weighted: &[(ArchetypeProfile, f64)]) -> CosmicTier {
+    use std::collections::HashMap;
+    let mut scores: HashMap<CosmicTier, f64> = HashMap::new();
+
+    for (p, w) in weighted {
+        *scores.entry(p.tier).or_default() += w;
+    }
+
+    scores
+        .into_iter()
+        .max_by(|a, b| a.1.partial_cmp(&b.1).unwrap_or(std::cmp::Ordering::Equal))
+        .map(|(t, _)| t)
         .unwrap_or_default()
 }
 

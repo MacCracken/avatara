@@ -6,7 +6,8 @@
 //! stories of divine order, descent, and return.
 
 use crate::{
-    Archetype, ArchetypeProfile, BreathAffinity, GrowthDirection, ModuleEmphasis, TraitWeights,
+    Archetype, ArchetypeProfile, BreathAffinity, CosmicTier, Element, GrowthDirection,
+    ModuleEmphasis, Polarity, TraitWeights,
 };
 use serde::{Deserialize, Serialize};
 
@@ -616,6 +617,33 @@ impl Archetype for MesopotamianGod {
             emphasis,
             breath,
             growth,
+            element: match self {
+                Self::Anu => Element::Aether,
+                Self::Enlil => Element::Storm,
+                Self::Enki => Element::Water,
+                Self::Inanna => Element::Mixed,
+                Self::Marduk => Element::Storm,
+                Self::Tiamat => Element::Water,
+                Self::Shamash => Element::Light,
+                Self::Sin => Element::Light,
+                Self::Ereshkigal => Element::Darkness,
+                Self::Nergal => Element::Fire,
+                Self::Nabu => Element::Air,
+                Self::Ninurta => Element::Earth,
+                Self::Dumuzid => Element::Earth,
+                Self::Ninhursag => Element::Earth,
+            },
+            polarity: match self {
+                Self::Inanna | Self::Tiamat | Self::Ereshkigal | Self::Ninhursag => {
+                    Polarity::Feminine
+                }
+                _ => Polarity::Masculine,
+            },
+            tier: match self {
+                Self::Anu | Self::Enlil | Self::Enki => CosmicTier::Cosmic,
+                Self::Tiamat | Self::Ninhursag => CosmicTier::Primordial,
+                _ => CosmicTier::Greater,
+            },
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }

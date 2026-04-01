@@ -8,7 +8,8 @@
 //! Insular Celtic cosmology of fate, sovereignty, and transformation.
 
 use crate::{
-    Archetype, ArchetypeProfile, BreathAffinity, GrowthDirection, ModuleEmphasis, TraitWeights,
+    Archetype, ArchetypeProfile, BreathAffinity, CosmicTier, Element, GrowthDirection,
+    ModuleEmphasis, Polarity, TraitWeights,
 };
 use serde::{Deserialize, Serialize};
 
@@ -663,6 +664,32 @@ impl Archetype for CelticGod {
             emphasis,
             breath,
             growth,
+            element: match self {
+                Self::Lugh => Element::Light,
+                Self::Brigid => Element::Fire,
+                Self::Dagda => Element::Earth,
+                Self::Morrigan => Element::Darkness,
+                Self::Manannan => Element::Water,
+                Self::Danu => Element::Water,
+                Self::Nuada => Element::Air,
+                Self::Aengus => Element::Air,
+                Self::Ogma => Element::Fire,
+                Self::Cernunnos => Element::Earth,
+                Self::Arianrhod => Element::Light,
+                Self::Rhiannon => Element::Earth,
+                Self::Goibniu => Element::Fire,
+                Self::DianCecht => Element::Water,
+                Self::Epona => Element::Earth,
+            },
+            polarity: match self {
+                Self::Brigid | Self::Morrigan | Self::Danu | Self::Arianrhod | Self::Rhiannon
+                | Self::Epona => Polarity::Feminine,
+                _ => Polarity::Masculine,
+            },
+            tier: match self {
+                Self::Danu => CosmicTier::Primordial,
+                _ => CosmicTier::Greater,
+            },
             soul_text: soul.to_string(),
             spirit_text: spirit.to_string(),
         }
