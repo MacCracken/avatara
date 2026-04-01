@@ -1,18 +1,41 @@
-//! Structured logging for avatara.
+//! Optional logging initialisation.
 //!
-//! Set `AVATARA_LOG=debug` (or `trace`, `info`, `warn`, `error`) to enable.
-//! Requires the `logging` feature.
+//! Activated by the `logging` feature. Uses `AVATARA_LOG` env var.
 
-/// Initialize the tracing subscriber for development.
-///
-/// Set `AVATARA_LOG=debug` (or `trace`, `info`, `warn`, `error`) to control
-/// the log level. Defaults to `warn` if the environment variable is unset.
-///
-/// This is a no-op if the subscriber has already been initialized.
-/// Requires the `logging` feature.
+/// Initialise logging with default level `info`.
 #[cfg(feature = "logging")]
-pub fn try_init() {
+pub fn init() {
+    init_with_level("info");
+}
+
+/// Initialise logging with a custom default level.
+#[cfg(feature = "logging")]
+pub fn init_with_level(default_level: &str) {
     use tracing_subscriber::EnvFilter;
-    let filter = EnvFilter::try_from_env("AVATARA_LOG").unwrap_or_else(|_| EnvFilter::new("warn"));
-    let _ = tracing_subscriber::fmt().with_env_filter(filter).try_init();
+    use tracing_subscriber::fmt;
+    use tracing_subscriber::prelude::*;
+
+    let filter = EnvFilter::try_from_env("AVATARA_LOG")
+        .unwrap_or_else(|_| EnvFilter::new(default_level));
+
+    let _ = tracing_subscriber::registry()
+        .with(fmt::layer().with_target(true).with_thread_ids(true))
+        .with(filter)
+        .try_init();
+}
+
+#[cfg(test)]
+#[cfg(feature = "logging")]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_init() {
+        init();
+    }
+
+    #[test]
+    fn test_init_with_level() {
+        init_with_level("warn");
+    }
 }
