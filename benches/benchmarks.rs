@@ -340,6 +340,45 @@ fn bench_all_traditions(c: &mut Criterion) {
     });
 }
 
+fn bench_registry(c: &mut Criterion) {
+    use avatara::registry;
+
+    let mut group = c.benchmark_group("registry");
+    group.bench_function("all_profiles", |b| {
+        b.iter(|| black_box(registry::all_profiles()))
+    });
+    group.bench_function("lookup_by_name", |b| {
+        b.iter(|| black_box(registry::lookup("Krishna")))
+    });
+    group.bench_function("query_courage_09", |b| {
+        b.iter(|| {
+            black_box(
+                registry::query()
+                    .min_trait(|t| t.courage, 0.9)
+                    .collect(),
+            )
+        })
+    });
+    group.finish();
+}
+
+fn bench_compose(c: &mut Criterion) {
+    use avatara::compose::compose;
+    use avatara::kabbalah::Sephira;
+    use avatara::hindu::Trimurti;
+    use avatara::olympian::Olympian;
+
+    let profiles = vec![
+        (Sephira::Tiphareth.profile(), 1.0),
+        (Trimurti::Vishnu.profile(), 0.8),
+        (Olympian::Athena.profile(), 0.6),
+    ];
+
+    c.bench_function("compose/three_traditions", |b| {
+        b.iter(|| black_box(compose(&profiles)))
+    });
+}
+
 criterion_group!(
     benches,
     bench_kabbalah,
@@ -359,5 +398,7 @@ criterion_group!(
     bench_taoist,
     bench_incarnate,
     bench_all_traditions,
+    bench_registry,
+    bench_compose,
 );
 criterion_main!(benches);

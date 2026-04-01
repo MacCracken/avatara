@@ -49,7 +49,9 @@
 //! assert!(tiphareth.traits.confidence > 0.5);
 //! ```
 
+pub mod compose;
 pub mod error;
+pub mod registry;
 
 pub mod angelic;
 pub mod aztec;
@@ -68,7 +70,7 @@ pub mod taoist;
 pub mod yoruba;
 pub mod zoroastrian;
 
-mod logging;
+pub mod logging;
 
 // ── Common types ──────────────────────────────────────────────────────
 
@@ -98,6 +100,7 @@ pub struct TraitWeights {
 }
 
 impl Default for TraitWeights {
+    /// All traits at neutral midpoint (0.5).
     fn default() -> Self {
         Self {
             warmth: 0.5,
@@ -142,6 +145,7 @@ pub struct ModuleEmphasis {
 }
 
 impl Default for ModuleEmphasis {
+    /// All modules at neutral midpoint (0.5).
     fn default() -> Self {
         Self {
             mood: 0.5,
