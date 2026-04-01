@@ -1,0 +1,33 @@
+[package]
+name = "avatara"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.89"
+license = "GPL-3.0-only"
+description = "Avatara — divine archetype engine: theological and mythological personality mapping across traditions"
+homepage = "https://github.com/MacCracken/avatara"
+repository = "https://github.com/MacCracken/avatara"
+readme = "README.md"
+documentation = "https://docs.rs/avatara"
+keywords = ["archetype", "mythology", "theology", "personality", "divinity"]
+categories = ["science", "simulation"]
+publish = false
+exclude = [".claude/", ".github/", "docs/", "scripts/"]
+
+[features]
+default = []
+logging = ["dep:tracing-subscriber"]
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+thiserror = "2"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"], optional = true }
+
+[dev-dependencies]
+criterion = { version = "0.8", features = ["html_reports"] }
+serde_json = "1"
+
+[[bench]]
+name = "benchmarks"
+harness = false
