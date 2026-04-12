@@ -1,0 +1,87 @@
+# compose.cyr -- Compose archetypes from multiple traditions
+#
+# Blends Kabbalistic harmony + Hindu preservation + Greek wisdom
+# and prints the resulting composite profile.
+
+include "lib/string.cyr"
+include "lib/fmt.cyr"
+include "lib/alloc.cyr"
+include "lib/vec.cyr"
+include "lib/str.cyr"
+include "lib/math.cyr"
+include "lib/syscalls.cyr"
+include "lib/sakshi.cyr"
+
+include "src/types.cyr"
+include "src/error.cyr"
+include "src/kabbalah.cyr"
+include "src/angelic.cyr"
+include "src/hindu.cyr"
+include "src/olympian.cyr"
+include "src/norse.cyr"
+include "src/egyptian.cyr"
+include "src/buddhist.cyr"
+include "src/mesopotamian.cyr"
+include "src/celtic.cyr"
+include "src/shinto.cyr"
+include "src/aztec.cyr"
+include "src/maya.cyr"
+include "src/yoruba.cyr"
+include "src/zoroastrian.cyr"
+include "src/taoist.cyr"
+include "src/polynesian.cyr"
+include "src/slavic.cyr"
+include "src/jain.cyr"
+include "src/sikh.cyr"
+include "src/incarnate.cyr"
+include "src/compose.cyr"
+include "src/history.cyr"
+include "src/registry.cyr"
+include "src/logging.cyr"
+
+fn prints(s) { syscall(SYS_WRITE, 1, s, strlen(s)); return 0; }
+
+alloc_init();
+
+# Blend three traditions: Kabbalistic harmony + Hindu preservation + Greek wisdom
+var w = vec_new();
+vec_push(w, weighted_new(kabbalah_tiphareth(), 1.0));
+vec_push(w, weighted_new(hindu_vishnu(), 0.8));
+vec_push(w, weighted_new(olympian_athena(), 0.6));
+
+var profile = compose(w);
+
+prints("Composite: ");
+println(prof_name(profile));
+prints("Traditions: ");
+println(prof_tradition(profile));
+println("");
+
+println("Blended traits:");
+prints("  warmth=");
+fmt_float(prof_warmth(profile), 2);
+prints("    confidence=");
+fmt_float(prof_confidence(profile), 2);
+println("");
+prints("  empathy=");
+fmt_float(prof_empathy(profile), 2);
+prints("   patience=");
+fmt_float(prof_patience(profile), 2);
+println("");
+prints("  precision=");
+fmt_float(prof_precision(profile), 2);
+prints(" courage=");
+fmt_float(prof_courage(profile), 2);
+println("");
+println("");
+
+prints("Breath: intensity ");
+fmt_float(breath_intensity(prof_breath(profile)), 2);
+println("");
+
+println("");
+println("Soul text (from dominant):");
+prints("  ");
+println(prof_soul(profile));
+
+syscall(SYS_EXIT, 0);

@@ -11,12 +11,12 @@
 
 ## Consumers
 
-bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine archetypes), kiran (game entities), agnosai (agent personalities with theological depth), hadara (archetype-to-culture context — blocked on this port)
+bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine archetypes), kiran (game entities), agnosai (agent personalities with theological depth), hadara (archetype-to-culture context — ready for integration)
 
 ## Architecture
 
 - `src/lib.cyr` — public API: includes all modules
-- `src/main.cyr` — test harness (~50 assertions)
+- `src/main.cyr` — test harness (~80 assertions)
 - `src/types.cyr` — ArchetypeProfile layout (312 bytes), TraitWeights (15 f64), ModuleEmphasis (14 f64), enums (BreathAffinity, GrowthDirection, Element, Polarity, CosmicTier)
 - `src/error.cyr` — AvataraError enum codes, validation
 - `src/compose.cyr` — archetype composition: weighted blending of multiple profiles
@@ -41,8 +41,12 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/slavic.cyr` — 12 pre-Christian Slavic deities
 - `src/jain.cyr` — 24 Tirthankaras
 - `src/sikh.cyr` — 10 Sikh Gurus
-- `src/incarnate.cyr` — 44+ incarnate divine figures (Hindu, Buddhist, Mystic, Taoist, Indigenous, Sage)
+- `src/incarnate.cyr` — 51 incarnate divine figures (Hindu, Buddhist, Mystic, Taoist, Indigenous, Sage)
 - `src/logging.cyr` — sakshi logging init
+- `tests/avatara.tcyr` — integration test suite
+- `tests/avatara.bcyr` — benchmarks
+- `programs/traditions.cyr` — example: explore archetypes
+- `programs/compose.cyr` — example: blend traditions
 - `rust-old/` — original Rust source for reference
 
 ## Type System
@@ -54,6 +58,7 @@ All values are i64. f64 trait/emphasis weights stored as IEEE 754 bit patterns. 
 - Each tradition module: entity functions (e.g. `kabbalah_kether()`) + lazy-init `all_*()` collection + `*_count()`
 - Registry: `all_profiles()`, `lookup(name)`, `lookup_in(tradition, name)`, `by_tradition()`, `query_*()` filters
 - Compose: `compose(weighted_vec)` — weighted blending with f64 arithmetic
+- History: `context_for_tradition()`, `traditions_for_civilization()`, `traditions_active_at()`, `traditions_for_era()`
 
 ## Key Principles
 

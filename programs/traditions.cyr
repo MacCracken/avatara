@@ -1,0 +1,109 @@
+# traditions.cyr -- Explore archetypes across traditions
+#
+# Prints a single profile, cosmic breath positions, courage query,
+# and tradition entity counts.
+
+include "lib/string.cyr"
+include "lib/fmt.cyr"
+include "lib/alloc.cyr"
+include "lib/vec.cyr"
+include "lib/str.cyr"
+include "lib/math.cyr"
+include "lib/syscalls.cyr"
+include "lib/sakshi.cyr"
+
+include "src/types.cyr"
+include "src/error.cyr"
+include "src/kabbalah.cyr"
+include "src/angelic.cyr"
+include "src/hindu.cyr"
+include "src/olympian.cyr"
+include "src/norse.cyr"
+include "src/egyptian.cyr"
+include "src/buddhist.cyr"
+include "src/mesopotamian.cyr"
+include "src/celtic.cyr"
+include "src/shinto.cyr"
+include "src/aztec.cyr"
+include "src/maya.cyr"
+include "src/yoruba.cyr"
+include "src/zoroastrian.cyr"
+include "src/taoist.cyr"
+include "src/polynesian.cyr"
+include "src/slavic.cyr"
+include "src/jain.cyr"
+include "src/sikh.cyr"
+include "src/incarnate.cyr"
+include "src/compose.cyr"
+include "src/history.cyr"
+include "src/registry.cyr"
+include "src/logging.cyr"
+
+fn prints(s) { syscall(SYS_WRITE, 1, s, strlen(s)); return 0; }
+
+alloc_init();
+
+# --- Single archetype profile ---
+var tip = kabbalah_tiphareth();
+prints(prof_name(tip));
+prints(" (");
+prints(prof_tradition(tip));
+println(")");
+prints("  ");
+println(prof_desc(tip));
+prints("  warmth=");
+fmt_float(prof_warmth(tip), 1);
+prints(" confidence=");
+fmt_float(prof_confidence(tip), 1);
+prints(" courage=");
+fmt_float(prof_courage(tip), 1);
+println("");
+println("");
+
+# --- Cosmic breath across Trimurti ---
+println("Cosmic breath positions:");
+var tri = all_trimurti();
+for (var i = 0; i < vec_len(tri); i = i + 1) {
+    var p = vec_get(tri, i);
+    prints("  ");
+    prints(prof_name(p));
+    prints(" -- intensity ");
+    fmt_float(breath_intensity(prof_breath(p)), 2);
+    println("");
+}
+println("");
+
+# --- Courage query ---
+var brave = query_min_trait(PROF_COURAGE, 0.9);
+print_num(vec_len(brave));
+println(" entities with courage >= 0.9:");
+for (var i = 0; i < vec_len(brave); i = i + 1) {
+    var p = vec_get(brave, i);
+    prints("  ");
+    prints(prof_name(p));
+    prints(" (");
+    prints(prof_tradition(p));
+    prints(") -- courage=");
+    fmt_float(prof_courage(p), 2);
+    println("");
+}
+println("");
+
+# --- All traditions with counts ---
+var trads = all_traditions();
+var total = vec_len(all_profiles());
+print_num(total);
+prints(" entities across ");
+print_num(vec_len(trads));
+println(" traditions:");
+for (var i = 0; i < vec_len(trads); i = i + 1) {
+    var t = vec_get(trads, i);
+    var tprofs = by_tradition(t);
+    prints("  ");
+    prints(t);
+    prints(": ");
+    print_num(vec_len(tprofs));
+    println("");
+}
+
+syscall(SYS_EXIT, 0);

@@ -1,0 +1,226 @@
+# avatara.tcyr -- Integration tests for avatara
+#
+# Cross-tradition invariants, registry completeness, compose correctness,
+# history module, breath monotonicity, duplicate detection.
+
+include "lib/string.cyr"
+include "lib/alloc.cyr"
+include "lib/fmt.cyr"
+include "lib/assert.cyr"
+include "lib/math.cyr"
+include "lib/vec.cyr"
+include "lib/str.cyr"
+include "lib/syscalls.cyr"
+
+include "src/types.cyr"
+include "src/error.cyr"
+include "src/kabbalah.cyr"
+include "src/angelic.cyr"
+include "src/hindu.cyr"
+include "src/olympian.cyr"
+include "src/norse.cyr"
+include "src/egyptian.cyr"
+include "src/buddhist.cyr"
+include "src/mesopotamian.cyr"
+include "src/celtic.cyr"
+include "src/shinto.cyr"
+include "src/aztec.cyr"
+include "src/maya.cyr"
+include "src/yoruba.cyr"
+include "src/zoroastrian.cyr"
+include "src/taoist.cyr"
+include "src/polynesian.cyr"
+include "src/slavic.cyr"
+include "src/jain.cyr"
+include "src/sikh.cyr"
+include "src/incarnate.cyr"
+include "src/compose.cyr"
+include "src/history.cyr"
+include "src/registry.cyr"
+include "src/logging.cyr"
+
+fn main() {
+    alloc_init();
+
+    # ================================================================
+    # Total entity count
+    # ================================================================
+    var profiles = all_profiles();
+    var count = vec_len(profiles);
+    assert_ge(count, 250, "total entity count >= 250");
+
+    # ================================================================
+    # All profiles have non-empty name, tradition, description, soul, spirit
+    # ================================================================
+    var text_ok = 1;
+    for (var i = 0; i < count; i = i + 1) {
+        var p = vec_get(profiles, i);
+        if (prof_name(p) == 0) { text_ok = 0; }
+        if (prof_tradition(p) == 0) { text_ok = 0; }
+        if (prof_desc(p) == 0) { text_ok = 0; }
+        if (prof_soul(p) == 0) { text_ok = 0; }
+        if (prof_spirit(p) == 0) { text_ok = 0; }
+    }
+    assert_eq(text_ok, 1, "all profiles have name/tradition/desc/soul/spirit");
+
+    # ================================================================
+    # All trait weights in 0.0-1.0
+    # ================================================================
+    var traits_ok = 1;
+    for (var i = 0; i < count; i = i + 1) {
+        var p = vec_get(profiles, i);
+        var off = TW_FIRST;
+        while (off <= TW_LAST) {
+            var v = load64(p + off);
+            if (f64_lt(v, 0.0) == 1) { traits_ok = 0; }
+            if (f64_gt(v, 1.0) == 1) { traits_ok = 0; }
+            off = off + 8;
+        }
+    }
+    assert_eq(traits_ok, 1, "all trait weights in 0.0-1.0");
+
+    # ================================================================
+    # All module emphases in 0.0-1.0
+    # ================================================================
+    var emph_ok = 1;
+    for (var i = 0; i < count; i = i + 1) {
+        var p = vec_get(profiles, i);
+        var off = ME_FIRST;
+        while (off <= ME_LAST) {
+            var v = load64(p + off);
+            if (f64_lt(v, 0.0) == 1) { emph_ok = 0; }
+            if (f64_gt(v, 1.0) == 1) { emph_ok = 0; }
+            off = off + 8;
+        }
+    }
+    assert_eq(emph_ok, 1, "all module emphases in 0.0-1.0");
+
+    # ================================================================
+    # No duplicate names within a tradition
+    # ================================================================
+    var dup_ok = 1;
+    for (var i = 0; i < count; i = i + 1) {
+        var p1 = vec_get(profiles, i);
+        for (var j = i + 1; j < count; j = j + 1) {
+            var p2 = vec_get(profiles, j);
+            if (streq(prof_tradition(p1), prof_tradition(p2)) == 1) {
+                if (streq(prof_name(p1), prof_name(p2)) == 1) {
+                    dup_ok = 0;
+                }
+            }
+        }
+    }
+    assert_eq(dup_ok, 1, "no duplicate names within tradition");
+
+    # ================================================================
+    # Breath intensity monotonic: exhale increases, inhale decreases
+    # ================================================================
+    assert_eq(f64_lt(breath_intensity(BREATH_UNITY), breath_intensity(BREATH_EARLY_EXHALE)), 1, "unity < early_exhale");
+    assert_eq(f64_lt(breath_intensity(BREATH_EARLY_EXHALE), breath_intensity(BREATH_MID_EXHALE)), 1, "early_exhale < mid_exhale");
+    assert_eq(f64_lt(breath_intensity(BREATH_MID_EXHALE), breath_intensity(BREATH_LATE_EXHALE)), 1, "mid_exhale < late_exhale");
+    assert_eq(f64_gt(breath_intensity(BREATH_LATE_EXHALE), breath_intensity(BREATH_EARLY_INHALE)), 1, "late_exhale > early_inhale");
+    assert_eq(f64_gt(breath_intensity(BREATH_EARLY_INHALE), breath_intensity(BREATH_MID_INHALE)), 1, "early_inhale > mid_inhale");
+    assert_eq(f64_gt(breath_intensity(BREATH_MID_INHALE), breath_intensity(BREATH_LATE_INHALE)), 1, "mid_inhale > late_inhale");
+
+    # ================================================================
+    # Traditions cover expected set
+    # ================================================================
+    var trads = all_traditions();
+    var found_kabbalah = 0;
+    var found_hindu = 0;
+    var found_norse = 0;
+    var found_greek = 0;
+    var found_aztec = 0;
+    var found_jain = 0;
+    var found_sikh = 0;
+    var found_polynesian = 0;
+    var found_slavic = 0;
+    for (var i = 0; i < vec_len(trads); i = i + 1) {
+        var t = vec_get(trads, i);
+        if (streq(t, "Kabbalah") == 1) { found_kabbalah = 1; }
+        if (streq(t, "Hindu") == 1) { found_hindu = 1; }
+        if (streq(t, "Norse") == 1) { found_norse = 1; }
+        if (streq(t, "Greek") == 1) { found_greek = 1; }
+        if (streq(t, "Aztec") == 1) { found_aztec = 1; }
+        if (streq(t, "Jain") == 1) { found_jain = 1; }
+        if (streq(t, "Sikh") == 1) { found_sikh = 1; }
+        if (streq(t, "Polynesian") == 1) { found_polynesian = 1; }
+        if (streq(t, "Slavic") == 1) { found_slavic = 1; }
+    }
+    assert_eq(found_kabbalah, 1, "has Kabbalah");
+    assert_eq(found_hindu, 1, "has Hindu");
+    assert_eq(found_norse, 1, "has Norse");
+    assert_eq(found_greek, 1, "has Greek");
+    assert_eq(found_aztec, 1, "has Aztec");
+    assert_eq(found_jain, 1, "has Jain");
+    assert_eq(found_sikh, 1, "has Sikh");
+    assert_eq(found_polynesian, 1, "has Polynesian");
+    assert_eq(found_slavic, 1, "has Slavic");
+
+    # ================================================================
+    # Compose: single profile is identity
+    # ================================================================
+    var tip = kabbalah_tiphareth();
+    var single = vec_new();
+    vec_push(single, weighted_new(tip, 1.0));
+    var comp = compose(single);
+    assert_ne(comp, 0, "compose single not null");
+    assert_eq(streq(prof_name(comp), "Tiphareth"), 1, "compose single name");
+    assert_eq(prof_breath(comp), prof_breath(tip), "compose single breath");
+    assert_eq(prof_growth_dir(comp), prof_growth_dir(tip), "compose single growth");
+
+    # ================================================================
+    # Compose: empty is error
+    # ================================================================
+    var empty = vec_new();
+    assert_eq(compose(empty), 0, "compose empty returns 0");
+
+    # ================================================================
+    # Compose: traits stay in range after blend
+    # ================================================================
+    var blend = vec_new();
+    vec_push(blend, weighted_new(kabbalah_gevurah(), 1.0));
+    vec_push(blend, weighted_new(kabbalah_chesed(), 1.0));
+    var blended = compose(blend);
+    var blend_ok = 1;
+    var off = TW_FIRST;
+    while (off <= TW_LAST) {
+        var v = load64(blended + off);
+        if (f64_lt(v, 0.0) == 1) { blend_ok = 0; }
+        if (f64_gt(v, 1.0) == 1) { blend_ok = 0; }
+        off = off + 8;
+    }
+    assert_eq(blend_ok, 1, "compose blend traits in range");
+
+    # ================================================================
+    # History: mapped traditions count
+    # ================================================================
+    assert_eq(mapping_count(), 26, "26 history mappings");
+
+    # ================================================================
+    # History: all mapped traditions resolve
+    # ================================================================
+    var mt = mapped_traditions();
+    var hist_ok = 1;
+    for (var i = 0; i < vec_len(mt); i = i + 1) {
+        var ctx = context_for_tradition(vec_get(mt, i));
+        if (ctx == 0) { hist_ok = 0; }
+    }
+    assert_eq(hist_ok, 1, "all mapped traditions resolve context");
+
+    # ================================================================
+    # History: query_civilization returns profiles
+    # ================================================================
+    var greece_profiles = query_civilization("Ancient Greece");
+    assert_gt(vec_len(greece_profiles), 0, "Ancient Greece has profiles");
+
+    # ================================================================
+    # History: query_era returns profiles
+    # ================================================================
+    var vedic_profiles = query_era("Vedic Period");
+    assert_gt(vec_len(vedic_profiles), 0, "Vedic Period has profiles");
+
+    assert_summary();
+}
+
+main();

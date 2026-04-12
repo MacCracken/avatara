@@ -1,0 +1,182 @@
+# avatara.bcyr -- Benchmarks for avatara
+#
+# Covers: per-tradition profile generation, registry, compose, history
+
+include "lib/string.cyr"
+include "lib/fmt.cyr"
+include "lib/alloc.cyr"
+include "lib/vec.cyr"
+include "lib/str.cyr"
+include "lib/math.cyr"
+include "lib/syscalls.cyr"
+include "lib/bench.cyr"
+include "lib/sakshi.cyr"
+
+include "src/types.cyr"
+include "src/error.cyr"
+include "src/kabbalah.cyr"
+include "src/angelic.cyr"
+include "src/hindu.cyr"
+include "src/olympian.cyr"
+include "src/norse.cyr"
+include "src/egyptian.cyr"
+include "src/buddhist.cyr"
+include "src/mesopotamian.cyr"
+include "src/celtic.cyr"
+include "src/shinto.cyr"
+include "src/aztec.cyr"
+include "src/maya.cyr"
+include "src/yoruba.cyr"
+include "src/zoroastrian.cyr"
+include "src/taoist.cyr"
+include "src/polynesian.cyr"
+include "src/slavic.cyr"
+include "src/jain.cyr"
+include "src/sikh.cyr"
+include "src/incarnate.cyr"
+include "src/compose.cyr"
+include "src/history.cyr"
+include "src/registry.cyr"
+include "src/logging.cyr"
+
+var ITERS = 1000;
+
+alloc_init();
+println("=== avatara benchmarks ===");
+println("");
+
+# --- Per-tradition profile generation ---
+
+var b = bench_new("kabbalah/single_profile");
+bench_batch_start(b);
+for (var i = 0; i < ITERS; i = i + 1) { kabbalah_tiphareth(); }
+bench_batch_stop(b, ITERS);
+bench_report(b);
+
+b = bench_new("kabbalah/all_10");
+bench_batch_start(b);
+for (var i = 0; i < ITERS; i = i + 1) { all_kabbalah(); }
+bench_batch_stop(b, ITERS);
+bench_report(b);
+
+b = bench_new("norse/all_13");
+bench_batch_start(b);
+for (var i = 0; i < ITERS; i = i + 1) { all_norse(); }
+bench_batch_stop(b, ITERS);
+bench_report(b);
+
+b = bench_new("hindu/all_24");
+bench_batch_start(b);
+for (var i = 0; i < ITERS; i = i + 1) { all_hindu(); }
+bench_batch_stop(b, ITERS);
+bench_report(b);
+
+b = bench_new("egyptian/all_16");
+bench_batch_start(b);
+for (var i = 0; i < ITERS; i = i + 1) { all_egyptian(); }
+bench_batch_stop(b, ITERS);
+bench_report(b);
+
+b = bench_new("buddhist/all_12");
+bench_batch_start(b);
+for (var i = 0; i < ITERS; i = i + 1) { all_buddhist(); }
+bench_batch_stop(b, ITERS);
+bench_report(b);
+
+b = bench_new("olympian/all_15");
+bench_batch_start(b);
+for (var i = 0; i < ITERS; i = i + 1) { all_olympians(); }
+bench_batch_stop(b, ITERS);
+bench_report(b);
+
+b = bench_new("jain/all_24");
+bench_batch_start(b);
+for (var i = 0; i < ITERS; i = i + 1) { all_jain(); }
+bench_batch_stop(b, ITERS);
+bench_report(b);
+
+b = bench_new("incarnate/all_51");
+bench_batch_start(b);
+for (var i = 0; i < ITERS; i = i + 1) { all_incarnate(); }
+bench_batch_stop(b, ITERS);
+bench_report(b);
+
+println("");
+
+# --- Registry ---
+
+b = bench_new("registry/all_profiles");
+bench_batch_start(b);
+for (var i = 0; i < ITERS; i = i + 1) { all_profiles(); }
+bench_batch_stop(b, ITERS);
+bench_report(b);
+
+b = bench_new("registry/lookup_Krishna");
+bench_batch_start(b);
+for (var i = 0; i < ITERS; i = i + 1) { lookup("Krishna"); }
+bench_batch_stop(b, ITERS);
+bench_report(b);
+
+b = bench_new("registry/query_courage_0.9");
+bench_batch_start(b);
+for (var i = 0; i < ITERS; i = i + 1) { query_min_trait(PROF_COURAGE, 0.9); }
+bench_batch_stop(b, ITERS);
+bench_report(b);
+
+b = bench_new("registry/by_tradition_Norse");
+bench_batch_start(b);
+for (var i = 0; i < ITERS; i = i + 1) { by_tradition("Norse"); }
+bench_batch_stop(b, ITERS);
+bench_report(b);
+
+println("");
+
+# --- Compose ---
+
+var tip = kabbalah_tiphareth();
+var vish = hindu_vishnu();
+var ath = olympian_athena();
+
+b = bench_new("compose/three_traditions");
+bench_batch_start(b);
+for (var i = 0; i < ITERS; i = i + 1) {
+    var w = vec_new();
+    vec_push(w, weighted_new(tip, 1.0));
+    vec_push(w, weighted_new(vish, 0.8));
+    vec_push(w, weighted_new(ath, 0.6));
+    compose(w);
+}
+bench_batch_stop(b, ITERS);
+bench_report(b);
+
+println("");
+
+# --- History ---
+
+b = bench_new("history/context_for_tradition");
+bench_batch_start(b);
+for (var i = 0; i < ITERS; i = i + 1) { context_for_tradition("Hindu"); }
+bench_batch_stop(b, ITERS);
+bench_report(b);
+
+b = bench_new("history/traditions_for_civ");
+bench_batch_start(b);
+for (var i = 0; i < ITERS; i = i + 1) { traditions_for_civilization("Indus Valley"); }
+bench_batch_stop(b, ITERS);
+bench_report(b);
+
+b = bench_new("history/traditions_active_at");
+bench_batch_start(b);
+for (var i = 0; i < ITERS; i = i + 1) { traditions_active_at((0-500)); }
+bench_batch_stop(b, ITERS);
+bench_report(b);
+
+b = bench_new("history/query_civilization");
+bench_batch_start(b);
+for (var i = 0; i < ITERS; i = i + 1) { query_civilization("Ancient Greece"); }
+bench_batch_stop(b, ITERS);
+bench_report(b);
+
+println("");
+println("=== done ===");
+syscall(SYS_EXIT, 0);
