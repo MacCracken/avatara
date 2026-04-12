@@ -1,0 +1,306 @@
+# history.cyr -- Historical context integration
+#
+# Maps avatara traditions to their civilizational and temporal context,
+# grounding divine archetypes in the historical reality where they emerged.
+# Each tradition maps to one or more civilizations, eras, and a temporal
+# range — the period during which the tradition's theology was actively forming.
+#
+# 26 tradition-to-history mappings with scholarly historical notes.
+
+# --- TraditionMapping layout ---
+# Each mapping: tradition name, primary civ, civ names (vec), era names (vec),
+# start year, end year, historical note.
+enum MapLayout {
+    MAP_TRADITION = 0;
+    MAP_PRIMARY_CIV = 8;
+    MAP_CIV_NAMES = 16;
+    MAP_ERA_NAMES = 24;
+    MAP_START_YEAR = 32;
+    MAP_END_YEAR = 40;
+    MAP_NOTE = 48;
+    MAP_SIZE = 56;
+}
+
+# i32::MAX equivalent for "living tradition"
+enum HistConst { LIVING = 2147483647; }
+
+fn map_new(tradition, primary_civ, civs, eras, start, end, note) {
+    var m = alloc(MAP_SIZE);
+    store64(m + MAP_TRADITION, tradition);
+    store64(m + MAP_PRIMARY_CIV, primary_civ);
+    store64(m + MAP_CIV_NAMES, civs);
+    store64(m + MAP_ERA_NAMES, eras);
+    store64(m + MAP_START_YEAR, start);
+    store64(m + MAP_END_YEAR, end);
+    store64(m + MAP_NOTE, note);
+    return m;
+}
+
+fn map_tradition(m)   { return load64(m + MAP_TRADITION); }
+fn map_primary(m)     { return load64(m + MAP_PRIMARY_CIV); }
+fn map_civs(m)        { return load64(m + MAP_CIV_NAMES); }
+fn map_eras(m)        { return load64(m + MAP_ERA_NAMES); }
+fn map_start(m)       { return load64(m + MAP_START_YEAR); }
+fn map_end(m)         { return load64(m + MAP_END_YEAR); }
+fn map_note(m)        { return load64(m + MAP_NOTE); }
+
+# --- HistoricalContext layout ---
+enum CtxLayout {
+    CTX_PRIMARY_CIV = 0;
+    CTX_CIV_NAMES = 8;
+    CTX_ERA_NAMES = 16;
+    CTX_START_YEAR = 24;
+    CTX_END_YEAR = 32;
+    CTX_NOTE = 40;
+    CTX_SIZE = 48;
+}
+
+fn ctx_primary(c)     { return load64(c + CTX_PRIMARY_CIV); }
+fn ctx_civs(c)        { return load64(c + CTX_CIV_NAMES); }
+fn ctx_eras(c)        { return load64(c + CTX_ERA_NAMES); }
+fn ctx_start(c)       { return load64(c + CTX_START_YEAR); }
+fn ctx_end(c)         { return load64(c + CTX_END_YEAR); }
+fn ctx_note(c)        { return load64(c + CTX_NOTE); }
+
+# --- Helper: build a vec of strings ---
+fn svec1(a) { var v = vec_new(); vec_push(v, a); return v; }
+fn svec2(a, b) { var v = vec_new(); vec_push(v, a); vec_push(v, b); return v; }
+fn svec3(a, b, c) { var v = vec_new(); vec_push(v, a); vec_push(v, b); vec_push(v, c); return v; }
+fn svec4(a, b, c, d) { var v = vec_new(); vec_push(v, a); vec_push(v, b); vec_push(v, c); vec_push(v, d); return v; }
+fn svec5(a, b, c, d, e) { var v = vec_new(); vec_push(v, a); vec_push(v, b); vec_push(v, c); vec_push(v, d); vec_push(v, e); return v; }
+
+# --- Build all 26 mappings ---
+
+var history_vec = 0;
+var history_init_done = 0;
+
+fn all_mappings() {
+    if (history_init_done == 0) {
+        history_vec = vec_new();
+
+        vec_push(history_vec, map_new("Kabbalah", "Phoenicia",
+            svec1("Phoenicia"), svec2("Middle Ages", "Renaissance"),
+            100, LIVING,
+            "Rooted in Jewish mysticism from the 1st century CE, flourishing in medieval Provence and Spain (Zohar, 13th c.), with continued development through Lurianic Kabbalah in 16th c. Safed"));
+
+        vec_push(history_vec, map_new("Angelic", "Phoenicia",
+            svec2("Phoenicia", "Byzantine Empire"), svec2("Classical Antiquity", "Middle Ages"),
+            (0-600), LIVING,
+            "Angelology developed across Jewish, Christian, and Islamic traditions; systematized by Pseudo-Dionysius (5th c.) and elaborated through medieval scholasticism"));
+
+        vec_push(history_vec, map_new("Hindu", "Indus Valley",
+            svec3("Indus Valley", "Vijayanagara Empire", "Maratha Empire"), svec4("Vedic Period", "Maurya Period", "Gupta Period", "Mughal Period"),
+            (0-1500), LIVING,
+            "From Vedic hymns (c. 1500 BCE) through the epics and Puranas, with theological elaboration across Maurya, Gupta, and medieval kingdoms; living tradition with over a billion practitioners"));
+
+        vec_push(history_vec, map_new("Greek", "Ancient Greece",
+            svec2("Ancient Greece", "Roman Empire"), svec1("Classical Antiquity"),
+            (0-800), 400,
+            "Olympian religion shaped by Homeric epics (8th c. BCE), formalized in city-state cult practice, absorbed into Roman syncretism, and declined with Christianization of the empire"));
+
+        vec_push(history_vec, map_new("Norse", "Viking/Norse",
+            svec1("Viking/Norse"), svec1("Middle Ages"),
+            200, 1100,
+            "Germanic-Norse mythology recorded in the Eddas (13th c.) but reflecting traditions from the Migration Period through the Viking Age; displaced by Christianization of Scandinavia"));
+
+        vec_push(history_vec, map_new("Egyptian", "Ancient Egypt",
+            svec1("Ancient Egypt"), svec3("Bronze Age", "Iron Age", "Classical Antiquity"),
+            (0-3100), 400,
+            "Among the longest-lived religious traditions -- from predynastic nomes through the Ptolemaic period, with theology evolving across Old, Middle, and New Kingdoms over three millennia"));
+
+        vec_push(history_vec, map_new("Buddhist", "Indus Valley",
+            svec3("Indus Valley", "Ancient China", "Khmer Empire"), svec4("Maurya Period", "Gupta Period", "Han Dynasty", "Tang Dynasty"),
+            (0-500), LIVING,
+            "Founded by Siddhartha Gautama (5th c. BCE) in the Gangetic plain, spread under Ashoka's Maurya Empire, diversified into Mahayana and Vajrayana across East and Southeast Asia"));
+
+        vec_push(history_vec, map_new("Mesopotamian", "Mesopotamia",
+            svec2("Mesopotamia", "Assyrian Empire"), svec2("Bronze Age", "Iron Age"),
+            (0-3500), (0-500),
+            "Sumerian, Akkadian, and Babylonian religion -- among humanity's earliest recorded theologies, from Uruk-period temples through the Neo-Babylonian Empire; displaced by Persian and Hellenistic religions"));
+
+        vec_push(history_vec, map_new("Celtic", "Kingdom of France",
+            svec1("Kingdom of France"), svec3("Iron Age", "Classical Antiquity", "Middle Ages"),
+            (0-800), 1200,
+            "Continental and Insular Celtic religion, from Hallstatt culture through La Tene and Irish/Welsh medieval literary traditions; Tuatha De Danann preserved in the Lebor Gabala Erenn"));
+
+        vec_push(history_vec, map_new("Shinto", "Tokugawa Shogunate",
+            svec1("Tokugawa Shogunate"), svec2("Classical Antiquity", "Middle Ages"),
+            (0-300), LIVING,
+            "Indigenous Japanese spirituality formalized in the Kojiki (712 CE) and Nihon Shoki (720 CE); coexists with Buddhism through shinbutsu-shugo; living tradition integral to Japanese culture"));
+
+        vec_push(history_vec, map_new("Aztec", "Aztec Empire",
+            svec2("Aztec Empire", "Olmec"), svec1("Mesoamerican Postclassic"),
+            1300, 1521,
+            "Mexica theology synthesizing Toltec heritage with original cosmology, centered on Tenochtitlan; destroyed by Spanish conquest but with roots in earlier Mesoamerican traditions"));
+
+        vec_push(history_vec, map_new("Maya", "Maya",
+            svec1("Maya"), svec3("Mesoamerican Preclassic", "Mesoamerican Classic", "Mesoamerican Postclassic"),
+            (0-2000), 1500,
+            "One of the longest-lived Mesoamerican traditions, from Preclassic origins through Classic period city-states (Tikal, Palenque, Copan) to Postclassic Yucatan; Popol Vuh recorded in the colonial period"));
+
+        vec_push(history_vec, map_new("Yoruba", "Ghana Empire",
+            svec2("Ghana Empire", "Songhai Empire"), svec1("Middle Ages"),
+            (0-500), LIVING,
+            "Ifa theology originating in Ile-Ife (present-day Nigeria), with oral tradition stretching back millennia; diaspora traditions (Candomble, Santeria, Vodun) carry it worldwide"));
+
+        vec_push(history_vec, map_new("Zoroastrian", "Persian Empire",
+            svec3("Persian Empire", "Sassanid Empire", "Parthian Empire"), svec3("Iron Age", "Classical Antiquity", "Middle Ages"),
+            (0-1500), LIVING,
+            "Founded by Zarathustra, state religion of three Persian empires (Achaemenid, Parthian, Sassanid); profoundly influenced Judaism, Christianity, and Islam; living tradition in Iran and India (Parsis)"));
+
+        vec_push(history_vec, map_new("Taoist", "Ancient China",
+            svec1("Ancient China"), svec5("Zhou Dynasty", "Han Dynasty", "Tang Dynasty", "Song Dynasty", "Ming Dynasty"),
+            (0-600), LIVING,
+            "From Laozi and Zhuangzi (6th-4th c. BCE) through Celestial Masters and alchemical traditions, deeply woven into Chinese civilization across every dynasty; living tradition"));
+
+        vec_push(history_vec, map_new("Polynesian", "Tonga Empire",
+            svec2("Tonga Empire", "Hawaiian Kingdom"), svec1("Middle Ages"),
+            (0-1000), LIVING,
+            "Austronesian spiritual tradition spanning the Pacific triangle -- Hawaii, Aotearoa, Rapa Nui -- with shared cosmology diverging through centuries of island isolation; oral tradition preserved by tohunga"));
+
+        vec_push(history_vec, map_new("Slavic", "Byzantine Empire",
+            svec1("Byzantine Empire"), svec1("Middle Ages"),
+            300, 1200,
+            "Pre-Christian Slavic religion reconstructed from chronicles, place names, and folklore; Perun, Veles, and Mokosh displaced by Christianization beginning with Kievan Rus' (988 CE)"));
+
+        vec_push(history_vec, map_new("Jain", "Indus Valley",
+            svec2("Indus Valley", "Vijayanagara Empire"), svec3("Vedic Period", "Maurya Period", "Gupta Period"),
+            (0-800), LIVING,
+            "Ancient Indian tradition tracing to Rishabhadeva; historically attested from Parshvanatha (8th c. BCE) and Mahavira (6th c. BCE); major influence on Indian philosophy, art, and non-violence ethics"));
+
+        vec_push(history_vec, map_new("Sikh", "Sikh Empire",
+            svec1("Sikh Empire"), svec1("Mughal Period"),
+            1469, LIVING,
+            "Founded by Guru Nanak (1469) in the Punjab during Mughal rule; ten Gurus shaped theology, scripture (Guru Granth Sahib), and martial tradition (Khalsa, 1699); living tradition with 30 million adherents"));
+
+        vec_push(history_vec, map_new("Incarnate Hindu", "Indus Valley",
+            svec2("Indus Valley", "Maratha Empire"), svec3("Vedic Period", "Gupta Period", "Mughal Period"),
+            (0-500), LIVING,
+            "Hindu saints, yogis, and reformers -- incarnate masters who shaped living Hinduism from Adi Shankara through Ramakrishna and Vivekananda"));
+
+        vec_push(history_vec, map_new("Incarnate Buddhist", "Indus Valley",
+            svec2("Indus Valley", "Ancient China"), svec2("Maurya Period", "Tang Dynasty"),
+            (0-300), LIVING,
+            "Buddhist masters who transmitted dharma across Asia -- Nagarjuna, Bodhidharma, Padmasambhava, Milarepa -- bridging Indian origins with Chinese, Tibetan, and Japanese forms"));
+
+        vec_push(history_vec, map_new("Incarnate Mystic", "Persian Empire",
+            svec2("Persian Empire", "Ottoman Empire"), svec1("Middle Ages"),
+            800, LIVING,
+            "Sufi and cross-tradition mystics -- Rumi, Ibn Arabi, Kabir, Meister Eckhart -- who transcended sectarian boundaries to articulate direct experiential union with the divine"));
+
+        vec_push(history_vec, map_new("Incarnate Taoist", "Ancient China",
+            svec1("Ancient China"), svec3("Han Dynasty", "Tang Dynasty", "Song Dynasty"),
+            (0-400), LIVING,
+            "Taoist sages and alchemists -- Zhang Daoling, Ge Hong, Sun Simiao -- who developed inner alchemy, medicine, and monastic traditions"));
+
+        vec_push(history_vec, map_new("Incarnate Indigenous", "Tonga Empire",
+            svec2("Tonga Empire", "Hawaiian Kingdom"), svec1("Middle Ages"),
+            (0-500), LIVING,
+            "Indigenous spiritual leaders and wisdom keepers across traditions -- carriers of oral tradition, ceremony, and land-based spirituality"));
+
+        vec_push(history_vec, map_new("Incarnate Sage", "Ancient Greece",
+            svec2("Ancient Greece", "Ancient China"), svec2("Classical Antiquity", "Zhou Dynasty"),
+            (0-600), LIVING,
+            "Philosopher-sages of the Axial Age and beyond -- Pythagoras, Socrates, Confucius -- who laid the foundations of rational and ethical inquiry"));
+
+        history_init_done = 1;
+    }
+    return history_vec;
+}
+
+fn mapping_count() { return vec_len(all_mappings()); }
+
+# --- Query functions ---
+
+# Find the mapping for a tradition name. Returns mapping ptr or 0.
+fn find_mapping(tradition) {
+    var v = all_mappings();
+    var n = vec_len(v);
+    for (var i = 0; i < n; i = i + 1) {
+        var m = vec_get(v, i);
+        if (streq(map_tradition(m), tradition) == 1) { return m; }
+    }
+    return 0;
+}
+
+# Get historical context for a tradition. Returns HistoricalContext ptr or 0.
+fn context_for_tradition(tradition) {
+    var m = find_mapping(tradition);
+    if (m == 0) { return 0; }
+    var c = alloc(CTX_SIZE);
+    store64(c + CTX_PRIMARY_CIV, map_primary(m));
+    store64(c + CTX_CIV_NAMES, map_civs(m));
+    store64(c + CTX_ERA_NAMES, map_eras(m));
+    store64(c + CTX_START_YEAR, map_start(m));
+    store64(c + CTX_END_YEAR, map_end(m));
+    store64(c + CTX_NOTE, map_note(m));
+    return c;
+}
+
+# Get historical context for a profile (by its tradition field).
+fn context_for_profile(profile) {
+    return context_for_tradition(prof_tradition(profile));
+}
+
+# List all tradition names that have historical mappings.
+fn mapped_traditions() {
+    var result = vec_new();
+    var v = all_mappings();
+    var n = vec_len(v);
+    for (var i = 0; i < n; i = i + 1) {
+        vec_push(result, map_tradition(vec_get(v, i)));
+    }
+    return result;
+}
+
+# Find all traditions associated with a given civilization name.
+fn traditions_for_civilization(civ_name) {
+    var result = vec_new();
+    var v = all_mappings();
+    var n = vec_len(v);
+    for (var i = 0; i < n; i = i + 1) {
+        var m = vec_get(v, i);
+        var civs = map_civs(m);
+        var cn = vec_len(civs);
+        for (var j = 0; j < cn; j = j + 1) {
+            if (streq(vec_get(civs, j), civ_name) == 1) {
+                vec_push(result, map_tradition(m));
+            }
+        }
+    }
+    return result;
+}
+
+# Find all traditions active during a given year.
+fn traditions_active_at(year) {
+    var result = vec_new();
+    var v = all_mappings();
+    var n = vec_len(v);
+    for (var i = 0; i < n; i = i + 1) {
+        var m = vec_get(v, i);
+        if (map_start(m) <= year) {
+            if (year <= map_end(m)) {
+                vec_push(result, map_tradition(m));
+            }
+        }
+    }
+    return result;
+}
+
+# Find all traditions associated with a given era name.
+fn traditions_for_era(era_name) {
+    var result = vec_new();
+    var v = all_mappings();
+    var n = vec_len(v);
+    for (var i = 0; i < n; i = i + 1) {
+        var m = vec_get(v, i);
+        var eras = map_eras(m);
+        var en = vec_len(eras);
+        for (var j = 0; j < en; j = j + 1) {
+            if (streq(vec_get(eras, j), era_name) == 1) {
+                vec_push(result, map_tradition(m));
+            }
+        }
+    }
+    return result;
+}

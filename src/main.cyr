@@ -32,6 +32,7 @@ include "src/jain.cyr"
 include "src/sikh.cyr"
 include "src/incarnate.cyr"
 include "src/compose.cyr"
+include "src/history.cyr"
 include "src/registry.cyr"
 include "src/logging.cyr"
 
@@ -300,6 +301,102 @@ for (var i = 0; i < an; i = i + 1) {
     }
 }
 ok(valid, "all profiles have name/tradition/soul/spirit and traits in 0-1");
+
+# ---------------------------------------------------------------
+# History module
+# ---------------------------------------------------------------
+println("--- history ---");
+check(mapping_count(), 26, "mapping_count=26");
+
+var hindu_ctx = context_for_tradition("Hindu");
+ok(hindu_ctx, "context Hindu exists");
+ok(streq(ctx_primary(hindu_ctx), "Indus Valley") == 1, "Hindu primary=Indus Valley");
+check(ctx_start(hindu_ctx), (0-1500), "Hindu start=-1500");
+check(ctx_end(hindu_ctx), LIVING, "Hindu end=LIVING");
+
+var norse_ctx = context_for_tradition("Norse");
+ok(norse_ctx, "context Norse exists");
+ok(streq(ctx_primary(norse_ctx), "Viking/Norse") == 1, "Norse primary=Viking/Norse");
+check(ctx_start(norse_ctx), 200, "Norse start=200");
+check(ctx_end(norse_ctx), 1100, "Norse end=1100");
+
+var egypt_ctx = context_for_tradition("Egyptian");
+ok(ctx_start(egypt_ctx) <= (0-3000), "Egyptian start<=-3000");
+ok(ctx_end(egypt_ctx) >= 300, "Egyptian end>=300");
+
+zero(context_for_tradition("Nonexistent"), "unknown tradition=0");
+
+# traditions_for_civilization
+var indus = traditions_for_civilization("Indus Valley");
+ok(vec_len(indus) > 0, "Indus Valley has traditions");
+var found_hindu_civ = 0;
+var found_jain_civ = 0;
+var found_buddhist_civ = 0;
+for (var i = 0; i < vec_len(indus); i = i + 1) {
+    if (streq(vec_get(indus, i), "Hindu") == 1) { found_hindu_civ = 1; }
+    if (streq(vec_get(indus, i), "Jain") == 1) { found_jain_civ = 1; }
+    if (streq(vec_get(indus, i), "Buddhist") == 1) { found_buddhist_civ = 1; }
+}
+ok(found_hindu_civ, "Indus Valley has Hindu");
+ok(found_jain_civ, "Indus Valley has Jain");
+ok(found_buddhist_civ, "Indus Valley has Buddhist");
+
+# traditions_active_at
+var at_500bce = traditions_active_at((0-500));
+ok(vec_len(at_500bce) > 0, "traditions at -500 BCE");
+var found_hindu_yr = 0;
+var found_sikh_yr = 0;
+for (var i = 0; i < vec_len(at_500bce); i = i + 1) {
+    if (streq(vec_get(at_500bce, i), "Hindu") == 1) { found_hindu_yr = 1; }
+    if (streq(vec_get(at_500bce, i), "Sikh") == 1) { found_sikh_yr = 1; }
+}
+ok(found_hindu_yr, "Hindu active at -500 BCE");
+zero(found_sikh_yr, "Sikh not active at -500 BCE");
+
+# traditions_for_era
+var tang = traditions_for_era("Tang Dynasty");
+ok(vec_len(tang) > 0, "Tang Dynasty has traditions");
+var found_taoist_era = 0;
+var found_buddhist_era = 0;
+for (var i = 0; i < vec_len(tang); i = i + 1) {
+    if (streq(vec_get(tang, i), "Taoist") == 1) { found_taoist_era = 1; }
+    if (streq(vec_get(tang, i), "Buddhist") == 1) { found_buddhist_era = 1; }
+}
+ok(found_taoist_era, "Tang has Taoist");
+ok(found_buddhist_era, "Tang has Buddhist");
+
+# context_for_profile
+var krishna_hist = context_for_profile(krishna);
+ok(krishna_hist, "context for Krishna");
+ok(streq(ctx_primary(krishna_hist), "Indus Valley") == 1, "Krishna primary=Indus Valley");
+
+# living traditions
+var living_ok = 1;
+var living_trads = svec1("Hindu");
+vec_push(living_trads, "Buddhist");
+vec_push(living_trads, "Sikh");
+vec_push(living_trads, "Jain");
+vec_push(living_trads, "Shinto");
+vec_push(living_trads, "Zoroastrian");
+for (var i = 0; i < vec_len(living_trads); i = i + 1) {
+    var lctx = context_for_tradition(vec_get(living_trads, i));
+    if (lctx == 0) { living_ok = 0; }
+    elif (ctx_end(lctx) != LIVING) { living_ok = 0; }
+}
+ok(living_ok, "living traditions end=LIVING");
+
+# registry query: civilization
+var indus_profiles = query_civilization("Indus Valley");
+ok(vec_len(indus_profiles) > 0, "query_civilization Indus Valley");
+
+# registry query: active_at
+var at_1500 = query_active_at(1500);
+ok(vec_len(at_1500) > 0, "query_active_at 1500");
+var found_sikh_1500 = 0;
+for (var i = 0; i < vec_len(at_1500); i = i + 1) {
+    if (streq(prof_tradition(vec_get(at_1500, i)), "Sikh") == 1) { found_sikh_1500 = 1; }
+}
+ok(found_sikh_1500, "Sikh active at 1500");
 
 # Logging init (verify no crash)
 avatara_log_init();
