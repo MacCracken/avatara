@@ -1,0 +1,6 @@
+name = "avatara"
+version = "2.0.0"
+license = "GPL-3.0-only"
+entry = "src/main.cyr"
+output = "avatara"
+description = "Avatara — divine archetype engine: theological and mythological personality mapping across traditions"

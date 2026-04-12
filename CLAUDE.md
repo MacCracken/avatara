@@ -4,51 +4,62 @@
 
 **Avatara** (Sanskrit: अवतार — descent of the divine) — Divine archetype engine: theological and mythological personality mapping across traditions
 
-- **Type**: Flat library crate
+- **Language**: Cyrius (ported from Rust in v2.0)
 - **License**: GPL-3.0-only
-- **MSRV**: 1.89
-- **Version**: SemVer 1.0.0
+- **Version**: SemVer 2.0.0
+- **Compiler**: cc3 >= 3.6.3
 
 ## Consumers
 
-bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine archetypes), kiran (game entities), agnosai (agent personalities with theological depth)
+bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine archetypes), kiran (game entities), agnosai (agent personalities with theological depth), hadara (archetype-to-culture context — blocked on this port)
 
 ## Architecture
 
-- `src/lib.rs` — common types: `TraitWeights`, `ModuleEmphasis`, `BreathAffinity`, `GrowthDirection`, `ArchetypeProfile`, `Archetype` trait
-- `src/compose.rs` — archetype composition: weighted blending of multiple profiles
-- `src/registry.rs` — lookup by name, enumeration, query/filter API
-- `src/kabbalah.rs` — Tree of Life: 10 Sephiroth
-- `src/angelic.rs` — 9 angelic orders, 7 archangels
-- `src/hindu.rs` — Trimurti, 11 Devas, 10 Avatars of Vishnu
-- `src/olympian.rs` — 15 Greek deities (12 Olympians + Hades, Hestia, Persephone)
-- `src/norse.rs` — 13 Aesir/Vanir gods
-- `src/egyptian.rs` — 16 principal deities
-- `src/buddhist.rs` — 7 Bodhisattvas, 5 Dhyani Buddhas
-- `src/mesopotamian.rs` — 14 Sumerian/Babylonian deities
-- `src/celtic.rs` — 15 Tuatha Dé Danann & Insular Celtic deities
-- `src/shinto.rs` — 15 Japanese Kami
-- `src/aztec.rs` — 14 Aztec (Mexica) deities
-- `src/maya.rs` — 12 Maya deities
-- `src/yoruba.rs` — 14 Yoruba/Ifá Orishas
-- `src/zoroastrian.rs` — 7 Amesha Spentas, 7 Zoroastrian beings
-- `src/taoist.rs` — 8 Immortals, 8 celestial deities
-- `src/polynesian.rs` — 12 Polynesian/Hawaiian deities
-- `src/slavic.rs` — 12 pre-Christian Slavic deities
-- `src/jain.rs` — 24 Tirthankaras
-- `src/sikh.rs` — 10 Sikh Gurus
-- `src/incarnate.rs` — 44 incarnate divine figures (Hindu, Buddhist, Mystic, Taoist, Indigenous)
-- `src/error.rs` — `AvataraError` enum
-- `src/logging.rs` — tracing-subscriber init (feature-gated)
+- `src/lib.cyr` — public API: includes all modules
+- `src/main.cyr` — test harness (~50 assertions)
+- `src/types.cyr` — ArchetypeProfile layout (312 bytes), TraitWeights (15 f64), ModuleEmphasis (14 f64), enums (BreathAffinity, GrowthDirection, Element, Polarity, CosmicTier)
+- `src/error.cyr` — AvataraError enum codes, validation
+- `src/compose.cyr` — archetype composition: weighted blending of multiple profiles
+- `src/registry.cyr` — lookup by name, enumeration, query/filter API
+- `src/kabbalah.cyr` — Tree of Life: 10 Sephiroth
+- `src/angelic.cyr` — 9 angelic orders, 7 archangels
+- `src/hindu.cyr` — Trimurti, 11 Devas, 10 Avatars of Vishnu
+- `src/olympian.cyr` — 15 Greek deities (12 Olympians + Hades, Hestia, Persephone)
+- `src/norse.cyr` — 13 Aesir/Vanir gods
+- `src/egyptian.cyr` — 16 principal deities
+- `src/buddhist.cyr` — 7 Bodhisattvas, 5 Dhyani Buddhas
+- `src/mesopotamian.cyr` — 14 Sumerian/Babylonian deities
+- `src/celtic.cyr` — 15 Tuatha De Danann & Insular Celtic deities
+- `src/shinto.cyr` — 15 Japanese Kami
+- `src/aztec.cyr` — 14 Aztec (Mexica) deities
+- `src/maya.cyr` — 12 Maya deities
+- `src/yoruba.cyr` — 14 Yoruba/Ifa Orishas
+- `src/zoroastrian.cyr` — 7 Amesha Spentas, 7 Zoroastrian beings
+- `src/taoist.cyr` — 8 Immortals, 8 celestial deities
+- `src/polynesian.cyr` — 12 Polynesian/Hawaiian deities
+- `src/slavic.cyr` — 12 pre-Christian Slavic deities
+- `src/jain.cyr` — 24 Tirthankaras
+- `src/sikh.cyr` — 10 Sikh Gurus
+- `src/incarnate.cyr` — 44+ incarnate divine figures (Hindu, Buddhist, Mystic, Taoist, Indigenous, Sage)
+- `src/logging.cyr` — sakshi logging init
+- `rust-old/` — original Rust source for reference
+
+## Type System
+
+All values are i64. f64 trait/emphasis weights stored as IEEE 754 bit patterns. Use f64_* builtins for arithmetic and comparison.
+
+- `ArchetypeProfile` — 312 bytes, inline TraitWeights + ModuleEmphasis + enum fields + string pointers
+- `profile_new()` — allocates with defaults (traits=0.5, emphasis=0.5, breath=LATE_EXHALE, growth=DIFFERENTIATE)
+- Each tradition module: entity functions (e.g. `kabbalah_kether()`) + lazy-init `all_*()` collection + `*_count()`
+- Registry: `all_profiles()`, `lookup(name)`, `lookup_in(tradition, name)`, `by_tradition()`, `query_*()` filters
+- Compose: `compose(weighted_vec)` — weighted blending with f64 arithmetic
 
 ## Key Principles
 
-- All traditions map to the same `ArchetypeProfile` output — composable across cultures
+- All traditions map to the same ArchetypeProfile output — composable across cultures
 - Plain f64/enum outputs only — no bhava types leak into avatara
-- `#[non_exhaustive]` on ALL public enums
-- `#[must_use]` on all pure functions
-- Every type must be Serialize + Deserialize (serde)
-- Zero unwrap/panic in library code
+- Zero external dependencies except sakshi (logging)
+- f64 values in 0.0-1.0 range for all traits and emphases
 - Historically and theologically accurate — real traditions, real correspondences
 - Respectful representation — these are living traditions for billions of people
 

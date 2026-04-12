@@ -1,0 +1,214 @@
+# compose.cyr -- Archetype composition: weighted blending of multiple profiles
+#
+# The core promise of avatara: archetypes are composable across traditions.
+# A character can carry Kabbalistic + Hindu + Greek archetypes simultaneously.
+#
+# compose(weighted_vec) takes a vec of {profile_ptr, weight_f64} pairs
+# and returns a new blended ArchetypeProfile.
+
+# Weighted entry layout: profile pointer + f64 weight
+enum WeightedLayout {
+    WE_PROFILE = 0;
+    WE_WEIGHT = 8;
+    WE_SIZE = 16;
+}
+
+fn weighted_new(profile, weight) {
+    var w = alloc(WE_SIZE);
+    store64(w + WE_PROFILE, profile);
+    store64(w + WE_WEIGHT, weight);
+    return w;
+}
+
+fn weighted_profile(w) { return load64(w + WE_PROFILE); }
+fn weighted_weight(w)  { return load64(w + WE_WEIGHT); }
+
+# Compose multiple archetype profiles into a single blended profile.
+#
+# weighted: vec of weighted_new(profile, weight) entries
+# Returns: new ArchetypeProfile pointer, or 0 on error
+#
+# Errors (returns 0):
+#   - empty vec
+#   - any negative weight
+#   - total weight <= 0
+fn compose(weighted) {
+    var n = vec_len(weighted);
+    if (n == 0) { return 0; }
+
+    # Sum weights and check for negatives
+    var total = 0.0;
+    for (var i = 0; i < n; i = i + 1) {
+        var w = weighted_weight(vec_get(weighted, i));
+        if (f64_lt(w, 0.0) == 1) { return 0; }
+        total = f64_add(total, w);
+    }
+    if (f64_le(total, 0.0) == 1) { return 0; }
+
+    var result = profile_new();
+
+    # Zero out all traits and emphases before blending (defaults are 0.5, we want 0.0 base)
+    var off = TW_FIRST;
+    while (off <= TW_LAST) {
+        store64(result + off, 0.0);
+        off = off + 8;
+    }
+    off = ME_FIRST;
+    while (off <= ME_LAST) {
+        store64(result + off, 0.0);
+        off = off + 8;
+    }
+
+    # Blend traits and emphases: weighted average
+    for (var i = 0; i < n; i = i + 1) {
+        var entry = vec_get(weighted, i);
+        var p = weighted_profile(entry);
+        var w = weighted_weight(entry);
+        var f = f64_div(w, total);
+
+        # Traits
+        off = TW_FIRST;
+        while (off <= TW_LAST) {
+            var cur = load64(result + off);
+            var src = load64(p + off);
+            store64(result + off, f64_add(cur, f64_mul(src, f)));
+            off = off + 8;
+        }
+        # Emphases
+        off = ME_FIRST;
+        while (off <= ME_LAST) {
+            var cur = load64(result + off);
+            var src = load64(p + off);
+            store64(result + off, f64_add(cur, f64_mul(src, f)));
+            off = off + 8;
+        }
+    }
+
+    # Blend breath: weighted average of intensities, snap to nearest
+    var avg_intensity = 0.0;
+    for (var i = 0; i < n; i = i + 1) {
+        var entry = vec_get(weighted, i);
+        var p = weighted_profile(entry);
+        var w = weighted_weight(entry);
+        var f = f64_div(w, total);
+        var bi = breath_intensity(prof_breath(p));
+        avg_intensity = f64_add(avg_intensity, f64_mul(bi, f));
+    }
+    store64(result + PROF_BREATH, nearest_breath(avg_intensity));
+
+    # Blend growth: highest weighted direction wins
+    var best_growth = GROWTH_DIFFERENTIATE;
+    var best_growth_w = 0.0;
+    # Score each direction
+    var dir = 0;
+    while (dir <= 4) {
+        var score = 0.0;
+        for (var i = 0; i < n; i = i + 1) {
+            var entry = vec_get(weighted, i);
+            if (prof_growth_dir(weighted_profile(entry)) == dir) {
+                score = f64_add(score, weighted_weight(entry));
+            }
+        }
+        if (f64_gt(score, best_growth_w) == 1) {
+            best_growth = dir;
+            best_growth_w = score;
+        }
+        dir = dir + 1;
+    }
+    store64(result + PROF_GROWTH_DIR, best_growth);
+
+    # Blend tier: highest weighted tier wins
+    var best_tier = TIER_GREATER;
+    var best_tier_w = 0.0;
+    var tier = 0;
+    while (tier <= 6) {
+        var score = 0.0;
+        for (var i = 0; i < n; i = i + 1) {
+            var entry = vec_get(weighted, i);
+            if (prof_tier(weighted_profile(entry)) == tier) {
+                score = f64_add(score, weighted_weight(entry));
+            }
+        }
+        if (f64_gt(score, best_tier_w) == 1) {
+            best_tier = tier;
+            best_tier_w = score;
+        }
+        tier = tier + 1;
+    }
+    store64(result + PROF_TIER, best_tier);
+
+    # Find dominant (highest weight) for name, element, polarity, soul, spirit
+    var dom_idx = 0;
+    var dom_w = 0.0;
+    for (var i = 0; i < n; i = i + 1) {
+        var w = weighted_weight(vec_get(weighted, i));
+        if (f64_ge(w, dom_w) == 1) {
+            dom_idx = i;
+            dom_w = w;
+        }
+    }
+    var dom = weighted_profile(vec_get(weighted, dom_idx));
+    store64(result + PROF_ELEMENT, prof_element(dom));
+    store64(result + PROF_POLARITY, prof_polarity(dom));
+    store64(result + PROF_SOUL, prof_soul(dom));
+    store64(result + PROF_SPIRIT, prof_spirit(dom));
+
+    # Build composite name: "A + B + C" (skip zero-weight entries)
+    var name_buf = alloc(512);
+    var name_pos = 0;
+    var first = 1;
+    for (var i = 0; i < n; i = i + 1) {
+        var entry = vec_get(weighted, i);
+        var w = weighted_weight(entry);
+        if (f64_gt(w, 0.0) == 1) {
+            if (first == 0) {
+                store8(name_buf + name_pos, 32); name_pos = name_pos + 1;
+                store8(name_buf + name_pos, 43); name_pos = name_pos + 1;
+                store8(name_buf + name_pos, 32); name_pos = name_pos + 1;
+            }
+            var nm = prof_name(weighted_profile(entry));
+            var nmlen = strlen(nm);
+            memcpy(name_buf + name_pos, nm, nmlen);
+            name_pos = name_pos + nmlen;
+            first = 0;
+        }
+    }
+    store8(name_buf + name_pos, 0);
+    store64(result + PROF_NAME, name_buf);
+
+    # Build composite tradition: "A + B + C" (deduped)
+    var trad_buf = alloc(256);
+    var trad_pos = 0;
+    var seen_trads = vec_new();
+    first = 1;
+    for (var i = 0; i < n; i = i + 1) {
+        var entry = vec_get(weighted, i);
+        var w = weighted_weight(entry);
+        if (f64_gt(w, 0.0) == 1) {
+            var t = prof_tradition(weighted_profile(entry));
+            # Check if already seen
+            var dup = 0;
+            for (var j = 0; j < vec_len(seen_trads); j = j + 1) {
+                if (streq(vec_get(seen_trads, j), t) == 1) { dup = 1; }
+            }
+            if (dup == 0) {
+                vec_push(seen_trads, t);
+                if (first == 0) {
+                    store8(trad_buf + trad_pos, 32); trad_pos = trad_pos + 1;
+                    store8(trad_buf + trad_pos, 43); trad_pos = trad_pos + 1;
+                    store8(trad_buf + trad_pos, 32); trad_pos = trad_pos + 1;
+                }
+                var tlen = strlen(t);
+                memcpy(trad_buf + trad_pos, t, tlen);
+                trad_pos = trad_pos + tlen;
+                first = 0;
+            }
+        }
+    }
+    store8(trad_buf + trad_pos, 0);
+    store64(result + PROF_TRADITION, trad_buf);
+
+    store64(result + PROF_DESC, "Composite archetype");
+
+    return result;
+}

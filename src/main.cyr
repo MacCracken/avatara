@@ -1,0 +1,327 @@
+# avatara — Divine Archetype Engine v2.0.0
+# 19 traditions, ~206 archetypes, ported from 18804 lines of Rust
+
+include "lib/string.cyr"
+include "lib/fmt.cyr"
+include "lib/alloc.cyr"
+include "lib/vec.cyr"
+include "lib/str.cyr"
+include "lib/math.cyr"
+include "lib/syscalls.cyr"
+
+include "src/types.cyr"
+include "src/error.cyr"
+include "src/kabbalah.cyr"
+include "src/angelic.cyr"
+include "src/hindu.cyr"
+include "src/olympian.cyr"
+include "src/norse.cyr"
+include "src/egyptian.cyr"
+include "src/buddhist.cyr"
+include "src/mesopotamian.cyr"
+include "src/celtic.cyr"
+include "src/shinto.cyr"
+include "src/aztec.cyr"
+include "src/maya.cyr"
+include "src/yoruba.cyr"
+include "src/zoroastrian.cyr"
+include "src/taoist.cyr"
+include "src/polynesian.cyr"
+include "src/slavic.cyr"
+include "src/jain.cyr"
+include "src/sikh.cyr"
+include "src/incarnate.cyr"
+include "src/compose.cyr"
+include "src/registry.cyr"
+include "src/logging.cyr"
+
+var tp = 0;
+var tf = 0;
+
+fn check(val, expected, name) {
+    if (val == expected) { tp = tp + 1; }
+    else {
+        tf = tf + 1;
+        syscall(SYS_WRITE, 2, "FAIL: ", 6);
+        syscall(SYS_WRITE, 2, name, strlen(name));
+        syscall(SYS_WRITE, 2, " expected=", 10);
+        print_num(expected);
+        syscall(SYS_WRITE, 2, " got=", 5);
+        print_num(val);
+        syscall(SYS_WRITE, 2, "\n", 1);
+    }
+    return 0;
+}
+
+fn ok(val, name) {
+    if (val != 0) { tp = tp + 1; }
+    else {
+        tf = tf + 1;
+        syscall(SYS_WRITE, 2, "FAIL: ", 6);
+        syscall(SYS_WRITE, 2, name, strlen(name));
+        syscall(SYS_WRITE, 2, "\n", 1);
+    }
+    return 0;
+}
+
+fn zero(val, name) {
+    if (val == 0) { tp = tp + 1; }
+    else {
+        tf = tf + 1;
+        syscall(SYS_WRITE, 2, "FAIL (expected 0): ", 19);
+        syscall(SYS_WRITE, 2, name, strlen(name));
+        syscall(SYS_WRITE, 2, "\n", 1);
+    }
+    return 0;
+}
+
+# f64 comparison helpers for tests
+fn f64_check_gt(val, threshold, name) {
+    if (f64_gt(val, threshold) == 1) { tp = tp + 1; }
+    else {
+        tf = tf + 1;
+        syscall(SYS_WRITE, 2, "FAIL (f64>): ", 13);
+        syscall(SYS_WRITE, 2, name, strlen(name));
+        syscall(SYS_WRITE, 2, "\n", 1);
+    }
+    return 0;
+}
+
+fn f64_check_lt(val, threshold, name) {
+    if (f64_lt(val, threshold) == 1) { tp = tp + 1; }
+    else {
+        tf = tf + 1;
+        syscall(SYS_WRITE, 2, "FAIL (f64<): ", 13);
+        syscall(SYS_WRITE, 2, name, strlen(name));
+        syscall(SYS_WRITE, 2, "\n", 1);
+    }
+    return 0;
+}
+
+fn f64_check_ge(val, threshold, name) {
+    if (f64_ge(val, threshold) == 1) { tp = tp + 1; }
+    else {
+        tf = tf + 1;
+        syscall(SYS_WRITE, 2, "FAIL (f64>=): ", 14);
+        syscall(SYS_WRITE, 2, name, strlen(name));
+        syscall(SYS_WRITE, 2, "\n", 1);
+    }
+    return 0;
+}
+
+alloc_init();
+println("=== avatara v2.0.0 test suite ===");
+
+# ---------------------------------------------------------------
+# Tradition counts
+# ---------------------------------------------------------------
+println("--- counts ---");
+check(kabbalah_count(), 10, "kabbalah=10");
+check(norse_count(), 13, "norse=13");
+check(egyptian_count(), 16, "egyptian=16");
+check(olympian_count(), 15, "olympian=15");
+check(mesopotamian_count(), 14, "mesopotamian=14");
+check(celtic_count(), 15, "celtic=15");
+check(shinto_count(), 15, "shinto=15");
+check(aztec_count(), 14, "aztec=14");
+check(maya_count(), 12, "maya=12");
+check(yoruba_count(), 14, "yoruba=14");
+check(polynesian_count(), 12, "polynesian=12");
+check(slavic_count(), 12, "slavic=12");
+check(jain_count(), 24, "jain=24");
+check(sikh_count(), 10, "sikh=10");
+
+# ---------------------------------------------------------------
+# Kabbalah profiles
+# ---------------------------------------------------------------
+println("--- kabbalah ---");
+var kether = kabbalah_kether();
+ok(kether, "kether exists");
+check(prof_breath(kether), BREATH_UNITY, "kether breath=unity");
+check(prof_growth_dir(kether), GROWTH_STILL, "kether growth=still");
+f64_check_gt(prof_patience(kether), 0.9, "kether patience>0.9");
+
+var tiphareth = kabbalah_tiphareth();
+ok(tiphareth, "tiphareth exists");
+f64_check_gt(prof_warmth(tiphareth), 0.5, "tiphareth warmth>0.5");
+f64_check_gt(prof_confidence(tiphareth), 0.5, "tiphareth confidence>0.5");
+check(prof_breath(tiphareth), BREATH_LATE_EXHALE, "tiphareth breath=late_exhale");
+check(prof_growth_dir(tiphareth), GROWTH_PRESERVE, "tiphareth growth=preserve");
+
+var malkuth = kabbalah_malkuth();
+f64_check_gt(prof_energy(malkuth), 0.8, "malkuth energy>0.8");
+
+var gevurah = kabbalah_gevurah();
+f64_check_gt(prof_directness(gevurah), 0.8, "gevurah directness>0.8");
+f64_check_gt(prof_courage(gevurah), 0.8, "gevurah courage>0.8");
+f64_check_lt(prof_warmth(gevurah), 0.5, "gevurah warmth<0.5");
+
+# ---------------------------------------------------------------
+# Norse profiles
+# ---------------------------------------------------------------
+println("--- norse ---");
+var odin = norse_odin();
+ok(odin, "odin exists");
+f64_check_gt(prof_curiosity(odin), 0.9, "odin curiosity>0.9");
+f64_check_gt(prof_courage(odin), 0.8, "odin courage>0.8");
+f64_check_gt(prof_skepticism(odin), 0.8, "odin skepticism>0.8");
+
+var thor = norse_thor();
+f64_check_gt(prof_courage(thor), 0.9, "thor courage>0.9");
+f64_check_gt(prof_directness(thor), 0.8, "thor directness>0.8");
+f64_check_lt(prof_creativity(thor), 0.5, "thor creativity<0.5");
+
+var loki = norse_loki();
+f64_check_gt(prof_humor(loki), 0.9, "loki humor>0.9");
+f64_check_gt(prof_creativity(loki), 0.8, "loki creativity>0.8");
+f64_check_lt(prof_formality(loki), 0.2, "loki formality<0.2");
+check(prof_growth_dir(loki), GROWTH_TRANSFORM, "loki growth=transform");
+
+var baldur = norse_baldur();
+check(prof_breath(baldur), BREATH_EARLY_INHALE, "baldur breath=early_inhale");
+f64_check_gt(prof_warmth(baldur), 0.9, "baldur warmth>0.9");
+
+# ---------------------------------------------------------------
+# Registry lookups
+# ---------------------------------------------------------------
+println("--- registry ---");
+var all = all_profiles();
+ok(vec_len(all) >= 200, "total profiles >= 200");
+
+var krishna = lookup("Krishna");
+ok(krishna, "lookup Krishna");
+ok(streq(prof_tradition(krishna), "Hindu") == 1, "krishna tradition=Hindu");
+
+var unknown = lookup("NonexistentGod");
+zero(unknown, "lookup NonexistentGod=0");
+
+var norse_odin_p = lookup_in("Norse", "Odin");
+ok(norse_odin_p, "lookup_in Norse/Odin");
+f64_check_gt(prof_curiosity(norse_odin_p), 0.8, "lookup_in odin curiosity>0.8");
+
+var wrong = lookup_in("Greek", "Odin");
+zero(wrong, "lookup_in Greek/Odin=0");
+
+var norse_profs = by_tradition("Norse");
+check(vec_len(norse_profs), 13, "by_tradition Norse=13");
+
+var trads = all_traditions();
+ok(vec_len(trads) >= 19, "traditions >= 19");
+
+# ---------------------------------------------------------------
+# Query filters
+# ---------------------------------------------------------------
+println("--- query ---");
+var brave = query_min_trait(PROF_COURAGE, 0.9);
+ok(vec_len(brave) > 5, "courage>=0.9 count>5");
+
+var transformers = query_growth(GROWTH_TRANSFORM);
+ok(vec_len(transformers) > 0, "transform growth count>0");
+
+var unity_profiles = query_breath(BREATH_UNITY);
+ok(vec_len(unity_profiles) > 0, "unity breath count>0");
+
+# Combined: Hindu + courage >= 0.8
+var hindu_brave = filter_min_trait(by_tradition("Hindu"), PROF_COURAGE, 0.8);
+ok(vec_len(hindu_brave) > 0, "Hindu courage>=0.8 count>0");
+
+# ---------------------------------------------------------------
+# Composition
+# ---------------------------------------------------------------
+println("--- compose ---");
+
+# Single profile = identity
+var single = vec_new();
+vec_push(single, weighted_new(tiphareth, 1.0));
+var comp1 = compose(single);
+ok(comp1, "compose single");
+ok(streq(prof_name(comp1), "Tiphareth") == 1, "compose single name=Tiphareth");
+
+# Cross-tradition blend
+var blend = vec_new();
+vec_push(blend, weighted_new(tiphareth, 1.0));
+var vishnu = lookup("Vishnu");
+vec_push(blend, weighted_new(vishnu, 0.8));
+var athena = lookup("Athena");
+vec_push(blend, weighted_new(athena, 0.6));
+var comp2 = compose(blend);
+ok(comp2, "compose cross-tradition");
+
+# All traits in 0-1 range
+var all_ok = 1;
+var off = TW_FIRST;
+while (off <= TW_LAST) {
+    var v = load64(comp2 + off);
+    if (f64_lt(v, 0.0) == 1) { all_ok = 0; }
+    if (f64_gt(v, 1.0) == 1) { all_ok = 0; }
+    off = off + 8;
+}
+ok(all_ok, "compose traits in 0-1 range");
+
+# Breath blend: Unity + LateExhale @ 50/50 = MidExhale
+var breath_blend = vec_new();
+vec_push(breath_blend, weighted_new(kether, 1.0));
+vec_push(breath_blend, weighted_new(malkuth, 1.0));
+var comp3 = compose(breath_blend);
+check(prof_breath(comp3), BREATH_MID_EXHALE, "breath blend unity+late=mid");
+
+# Empty = error (returns 0)
+var empty = vec_new();
+zero(compose(empty), "compose empty=0");
+
+# ---------------------------------------------------------------
+# Error module
+# ---------------------------------------------------------------
+println("--- error ---");
+check(require_unit_range(0.5), ERR_NONE, "unit_range 0.5=ok");
+check(require_unit_range(0.0), ERR_NONE, "unit_range 0.0=ok");
+check(require_unit_range(1.0), ERR_NONE, "unit_range 1.0=ok");
+
+# ---------------------------------------------------------------
+# All traditions produce valid profiles
+# ---------------------------------------------------------------
+println("--- validation ---");
+var valid = 1;
+var ap = all_profiles();
+var an = vec_len(ap);
+for (var i = 0; i < an; i = i + 1) {
+    var p = vec_get(ap, i);
+    if (prof_name(p) == 0) { valid = 0; }
+    if (prof_tradition(p) == 0) { valid = 0; }
+    if (prof_soul(p) == 0) { valid = 0; }
+    if (prof_spirit(p) == 0) { valid = 0; }
+    # All traits in 0-1
+    var toff = TW_FIRST;
+    while (toff <= TW_LAST) {
+        var tv = load64(p + toff);
+        if (f64_lt(tv, 0.0) == 1) { valid = 0; }
+        if (f64_gt(tv, 1.0) == 1) { valid = 0; }
+        toff = toff + 8;
+    }
+}
+ok(valid, "all profiles have name/tradition/soul/spirit and traits in 0-1");
+
+# Logging init (verify no crash)
+avatara_log_init();
+tp = tp + 1;
+
+# ---------------------------------------------------------------
+# Summary
+# ---------------------------------------------------------------
+println("");
+syscall(SYS_WRITE, 1, "profiles: ", 10);
+print_num(an);
+println("");
+syscall(SYS_WRITE, 1, "traditions: ", 12);
+print_num(vec_len(trads));
+println("");
+syscall(SYS_WRITE, 1, "passed: ", 8);
+print_num(tp);
+println("");
+syscall(SYS_WRITE, 1, "failed: ", 8);
+print_num(tf);
+println("");
+
+if (tf > 0) { syscall(SYS_EXIT, 1); }
+println("=== all tests passed ===");
+syscall(SYS_EXIT, 0);

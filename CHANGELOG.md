@@ -7,14 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### v1.2.0 roadmap
+### v2.1.0 roadmap
 - Finnish/Sami tradition (Kalevala figures)
 - Vodou Lwa (distinct from Yoruba)
 - Expand Incarnate: Desert Fathers, Gregory Palamas, Thomas Merton, Attar, Al-Ghazali
 - Cross-tradition affinity mapping (Shango ~ Thor ~ Indra ~ Perun)
-- Conflict detection (`AvataraError::Incompatible`)
-- Affinity scoring between archetypes
-- Archetype similarity search
+- hadara integration (archetype-to-culture context)
+- itihas integration (historical context queries)
+
+## [2.0.0] — 2026-04-12
+
+### Changed
+- **Complete rewrite from Rust to Cyrius** — ported 18,804 lines of Rust to ~3,500 lines of Cyrius
+- All types now use manual memory layout (312-byte ArchetypeProfile with inline TraitWeights + ModuleEmphasis)
+- f64 trait/emphasis weights stored as IEEE 754 bit patterns, using f64_* builtins
+- QueryBuilder fluent API replaced with procedural query_* filter functions
+- Archetype trait replaced with per-entity constructor functions (e.g. `kabbalah_kether()`)
+- Lazy-init `all_*()` collection functions with global cache pattern
+- Build system: Cargo.toml replaced with cyrius.toml (cc3 compiler)
+
+### Removed
+- serde Serialize/Deserialize (Cyrius does not have serde equivalent yet)
+- thiserror dependency (replaced with integer error codes)
+- tracing dependency (replaced with sakshi logging)
+- Criterion benchmarks (to be replaced with Cyrius bench framework)
+- itihas feature gate (to be re-added as Cyrius include)
+
+### Preserved
+- All ~206 archetypes across 19 traditions with identical trait values
+- Composition system (weighted blending)
+- Registry lookup and query API
+- All soul text and spirit text verbatim
+- Rust source preserved in rust-old/ for reference
 
 ## [1.1.0] — 2026-04-01
 

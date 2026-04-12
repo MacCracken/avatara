@@ -1,0 +1,16 @@
+# error.cyr -- Error codes for avatara
+
+enum AvataraError {
+    ERR_NONE = 0;
+    ERR_INVALID_PARAMETER = 1;
+    ERR_UNKNOWN_ARCHETYPE = 2;
+    ERR_INCOMPATIBLE = 3;
+    ERR_OUT_OF_RANGE = 4;
+}
+
+# Validate f64 is in 0.0-1.0 range. Returns 0 on success, ERR_OUT_OF_RANGE on failure.
+fn require_unit_range(val) {
+    if (f64_lt(val, 0.0) == 1) { return ERR_OUT_OF_RANGE; }
+    if (f64_gt(val, 1.0) == 1) { return ERR_OUT_OF_RANGE; }
+    return ERR_NONE;
+}

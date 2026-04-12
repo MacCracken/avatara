@@ -1,0 +1,309 @@
+# types.cyr -- Core types for avatara
+#
+# All traditions map to the same ArchetypeProfile output.
+# TraitWeights (15 f64), ModuleEmphasis (14 f64), plus enum
+# classifications and identity text.
+#
+# f64 values stored as IEEE 754 bit patterns. Use f64_* builtins
+# for arithmetic and comparison.
+
+# --- BreathAffinity ---
+# Manifestation phase: where on the cosmic breath this archetype sits.
+# intensity() values in parentheses.
+enum BreathAffinity {
+    BREATH_UNITY = 0;          # (0.0) undifferentiated unity
+    BREATH_EARLY_EXHALE = 1;   # (0.15) consciousness differentiating
+    BREATH_MID_EXHALE = 2;     # (0.5) active individuation
+    BREATH_LATE_EXHALE = 3;    # (1.0) maximum manifestation [default]
+    BREATH_EARLY_INHALE = 4;   # (0.8) form softening
+    BREATH_MID_INHALE = 5;     # (0.4) active dissolution
+    BREATH_LATE_INHALE = 6;    # (0.1) approaching equanimity
+}
+
+fn breath_intensity(b) {
+    if (b == BREATH_UNITY)        { return 0.0; }
+    if (b == BREATH_EARLY_EXHALE) { return 0.15; }
+    if (b == BREATH_MID_EXHALE)   { return 0.5; }
+    if (b == BREATH_LATE_EXHALE)  { return 1.0; }
+    if (b == BREATH_EARLY_INHALE) { return 0.8; }
+    if (b == BREATH_MID_INHALE)   { return 0.4; }
+    if (b == BREATH_LATE_INHALE)  { return 0.1; }
+    return 1.0;
+}
+
+fn nearest_breath(intensity) {
+    # Find the BreathAffinity variant closest to the given intensity
+    var best = BREATH_LATE_EXHALE;
+    var best_dist = f64_abs(f64_sub(1.0, intensity));
+
+    var d = f64_abs(f64_sub(0.0, intensity));
+    if (f64_lt(d, best_dist) == 1) { best = BREATH_UNITY; best_dist = d; }
+
+    d = f64_abs(f64_sub(0.15, intensity));
+    if (f64_lt(d, best_dist) == 1) { best = BREATH_EARLY_EXHALE; best_dist = d; }
+
+    d = f64_abs(f64_sub(0.5, intensity));
+    if (f64_lt(d, best_dist) == 1) { best = BREATH_MID_EXHALE; best_dist = d; }
+
+    d = f64_abs(f64_sub(0.8, intensity));
+    if (f64_lt(d, best_dist) == 1) { best = BREATH_EARLY_INHALE; best_dist = d; }
+
+    d = f64_abs(f64_sub(0.4, intensity));
+    if (f64_lt(d, best_dist) == 1) { best = BREATH_MID_INHALE; best_dist = d; }
+
+    d = f64_abs(f64_sub(0.1, intensity));
+    if (f64_lt(d, best_dist) == 1) { best = BREATH_LATE_INHALE; best_dist = d; }
+
+    return best;
+}
+
+# --- GrowthDirection ---
+enum GrowthDirection {
+    GROWTH_DIFFERENTIATE = 0;  # become more distinct [default]
+    GROWTH_INTEGRATE = 1;      # become more unified
+    GROWTH_PRESERVE = 2;       # stability
+    GROWTH_TRANSFORM = 3;      # destruction of form
+    GROWTH_STILL = 4;          # no growth pressure
+}
+
+# --- Element ---
+enum Element {
+    ELEM_FIRE = 0;
+    ELEM_WATER = 1;
+    ELEM_EARTH = 2;
+    ELEM_AIR = 3;
+    ELEM_AETHER = 4;
+    ELEM_LIGHT = 5;
+    ELEM_DARKNESS = 6;
+    ELEM_STORM = 7;
+    ELEM_MIXED = 8;            # [default]
+}
+
+# --- Polarity ---
+enum Polarity {
+    POL_MASCULINE = 0;
+    POL_FEMININE = 1;
+    POL_ANDROGYNOUS = 2;
+    POL_TRANSCENDENT = 3;      # [default]
+}
+
+# --- CosmicTier ---
+enum CosmicTier {
+    TIER_SUPREME = 0;
+    TIER_PRIMORDIAL = 1;
+    TIER_COSMIC = 2;
+    TIER_GREATER = 3;          # [default]
+    TIER_LESSER = 4;
+    TIER_DEMIGOD = 5;
+    TIER_MASTER = 6;
+}
+
+# --- ArchetypeProfile layout ---
+#
+# All fields inline. TraitWeights (15 f64) and ModuleEmphasis (14 f64)
+# are embedded directly rather than pointer-indirected.
+#
+# Offset  Field              Type
+# 0       name               ptr (C string)
+# 8       tradition          ptr (C string)
+# 16      description        ptr (C string)
+# --- TraitWeights (15 x f64 = 120 bytes) ---
+# 24      warmth             f64
+# 32      humor              f64
+# 40      empathy            f64
+# 48      patience           f64
+# 56      confidence         f64
+# 64      curiosity          f64
+# 72      creativity         f64
+# 80      directness         f64
+# 88      formality          f64
+# 96      verbosity          f64
+# 104     courage            f64
+# 112     precision          f64
+# 120     skepticism         f64
+# 128     autonomy           f64
+# 136     pedagogy           f64
+# --- ModuleEmphasis (14 x f64 = 112 bytes) ---
+# 144     mood               f64
+# 152     energy             f64
+# 160     stress             f64
+# 168     growth             f64
+# 176     spirit             f64
+# 184     reasoning          f64
+# 192     regulation         f64
+# 200     relationship       f64
+# 208     flow               f64
+# 216     belief             f64
+# 224     intuition          f64
+# 232     salience           f64
+# 240     appraisal          f64
+# 248     eq                 f64
+# --- Enums ---
+# 256     breath             i64 (BreathAffinity)
+# 264     growth_dir         i64 (GrowthDirection)
+# 272     element            i64 (Element)
+# 280     polarity           i64 (Polarity)
+# 288     tier               i64 (CosmicTier)
+# --- Text ---
+# 296     soul_text          ptr (C string)
+# 304     spirit_text        ptr (C string)
+
+enum ProfLayout {
+    PROF_NAME = 0;
+    PROF_TRADITION = 8;
+    PROF_DESC = 16;
+    # TraitWeights
+    PROF_WARMTH = 24;
+    PROF_HUMOR = 32;
+    PROF_EMPATHY = 40;
+    PROF_PATIENCE = 48;
+    PROF_CONFIDENCE = 56;
+    PROF_CURIOSITY = 64;
+    PROF_CREATIVITY = 72;
+    PROF_DIRECTNESS = 80;
+    PROF_FORMALITY = 88;
+    PROF_VERBOSITY = 96;
+    PROF_COURAGE = 104;
+    PROF_PRECISION = 112;
+    PROF_SKEPTICISM = 120;
+    PROF_AUTONOMY = 128;
+    PROF_PEDAGOGY = 136;
+    # ModuleEmphasis
+    PROF_MOOD = 144;
+    PROF_ENERGY = 152;
+    PROF_STRESS = 160;
+    PROF_GROWTH = 168;
+    PROF_SPIRIT = 176;
+    PROF_REASONING = 184;
+    PROF_REGULATION = 192;
+    PROF_RELATIONSHIP = 200;
+    PROF_FLOW = 208;
+    PROF_BELIEF = 216;
+    PROF_INTUITION = 224;
+    PROF_SALIENCE = 232;
+    PROF_APPRAISAL = 240;
+    PROF_EQ = 248;
+    # Enums
+    PROF_BREATH = 256;
+    PROF_GROWTH_DIR = 264;
+    PROF_ELEMENT = 272;
+    PROF_POLARITY = 280;
+    PROF_TIER = 288;
+    # Text
+    PROF_SOUL = 296;
+    PROF_SPIRIT = 304;
+    PROF_SIZE = 312;
+}
+
+# First TraitWeights offset and count for iteration
+enum TraitRange {
+    TW_FIRST = 24;
+    TW_COUNT = 15;
+    TW_LAST = 136;
+}
+
+# First ModuleEmphasis offset and count
+enum EmphRange {
+    ME_FIRST = 144;
+    ME_COUNT = 14;
+    ME_LAST = 248;
+}
+
+# --- Constructors ---
+
+# Allocate a profile with all defaults:
+#   traits = 0.5, emphasis = 0.5
+#   breath = LATE_EXHALE, growth = DIFFERENTIATE
+#   element = MIXED, polarity = TRANSCENDENT, tier = GREATER
+fn profile_new() {
+    var p = alloc(PROF_SIZE);
+    store64(p + PROF_NAME, 0);
+    store64(p + PROF_TRADITION, 0);
+    store64(p + PROF_DESC, 0);
+    # All 15 trait weights default to 0.5
+    store64(p + PROF_WARMTH, 0.5);
+    store64(p + PROF_HUMOR, 0.5);
+    store64(p + PROF_EMPATHY, 0.5);
+    store64(p + PROF_PATIENCE, 0.5);
+    store64(p + PROF_CONFIDENCE, 0.5);
+    store64(p + PROF_CURIOSITY, 0.5);
+    store64(p + PROF_CREATIVITY, 0.5);
+    store64(p + PROF_DIRECTNESS, 0.5);
+    store64(p + PROF_FORMALITY, 0.5);
+    store64(p + PROF_VERBOSITY, 0.5);
+    store64(p + PROF_COURAGE, 0.5);
+    store64(p + PROF_PRECISION, 0.5);
+    store64(p + PROF_SKEPTICISM, 0.5);
+    store64(p + PROF_AUTONOMY, 0.5);
+    store64(p + PROF_PEDAGOGY, 0.5);
+    # All 14 module emphases default to 0.5
+    store64(p + PROF_MOOD, 0.5);
+    store64(p + PROF_ENERGY, 0.5);
+    store64(p + PROF_STRESS, 0.5);
+    store64(p + PROF_GROWTH, 0.5);
+    store64(p + PROF_SPIRIT, 0.5);
+    store64(p + PROF_REASONING, 0.5);
+    store64(p + PROF_REGULATION, 0.5);
+    store64(p + PROF_RELATIONSHIP, 0.5);
+    store64(p + PROF_FLOW, 0.5);
+    store64(p + PROF_BELIEF, 0.5);
+    store64(p + PROF_INTUITION, 0.5);
+    store64(p + PROF_SALIENCE, 0.5);
+    store64(p + PROF_APPRAISAL, 0.5);
+    store64(p + PROF_EQ, 0.5);
+    # Default enums
+    store64(p + PROF_BREATH, BREATH_LATE_EXHALE);
+    store64(p + PROF_GROWTH_DIR, GROWTH_DIFFERENTIATE);
+    store64(p + PROF_ELEMENT, ELEM_MIXED);
+    store64(p + PROF_POLARITY, POL_TRANSCENDENT);
+    store64(p + PROF_TIER, TIER_GREATER);
+    store64(p + PROF_SOUL, 0);
+    store64(p + PROF_SPIRIT, 0);
+    return p;
+}
+
+# --- Accessors ---
+
+fn prof_name(p)         { return load64(p + PROF_NAME); }
+fn prof_tradition(p)    { return load64(p + PROF_TRADITION); }
+fn prof_desc(p)         { return load64(p + PROF_DESC); }
+fn prof_breath(p)       { return load64(p + PROF_BREATH); }
+fn prof_growth_dir(p)   { return load64(p + PROF_GROWTH_DIR); }
+fn prof_element(p)      { return load64(p + PROF_ELEMENT); }
+fn prof_polarity(p)     { return load64(p + PROF_POLARITY); }
+fn prof_tier(p)         { return load64(p + PROF_TIER); }
+fn prof_soul(p)         { return load64(p + PROF_SOUL); }
+fn prof_spirit(p)       { return load64(p + PROF_SPIRIT); }
+
+# Trait accessors (return f64 bit pattern)
+fn prof_warmth(p)       { return load64(p + PROF_WARMTH); }
+fn prof_humor(p)        { return load64(p + PROF_HUMOR); }
+fn prof_empathy(p)      { return load64(p + PROF_EMPATHY); }
+fn prof_patience(p)     { return load64(p + PROF_PATIENCE); }
+fn prof_confidence(p)   { return load64(p + PROF_CONFIDENCE); }
+fn prof_curiosity(p)    { return load64(p + PROF_CURIOSITY); }
+fn prof_creativity(p)   { return load64(p + PROF_CREATIVITY); }
+fn prof_directness(p)   { return load64(p + PROF_DIRECTNESS); }
+fn prof_formality(p)    { return load64(p + PROF_FORMALITY); }
+fn prof_verbosity(p)    { return load64(p + PROF_VERBOSITY); }
+fn prof_courage(p)      { return load64(p + PROF_COURAGE); }
+fn prof_precision(p)    { return load64(p + PROF_PRECISION); }
+fn prof_skepticism(p)   { return load64(p + PROF_SKEPTICISM); }
+fn prof_autonomy(p)     { return load64(p + PROF_AUTONOMY); }
+fn prof_pedagogy(p)     { return load64(p + PROF_PEDAGOGY); }
+
+# Emphasis accessors (return f64 bit pattern)
+fn prof_mood(p)         { return load64(p + PROF_MOOD); }
+fn prof_energy(p)       { return load64(p + PROF_ENERGY); }
+fn prof_stress(p)       { return load64(p + PROF_STRESS); }
+fn prof_growth_emph(p)  { return load64(p + PROF_GROWTH); }
+fn prof_spirit_emph(p)  { return load64(p + PROF_SPIRIT); }
+fn prof_reasoning(p)    { return load64(p + PROF_REASONING); }
+fn prof_regulation(p)   { return load64(p + PROF_REGULATION); }
+fn prof_relationship(p) { return load64(p + PROF_RELATIONSHIP); }
+fn prof_flow(p)         { return load64(p + PROF_FLOW); }
+fn prof_belief(p)       { return load64(p + PROF_BELIEF); }
+fn prof_intuition(p)    { return load64(p + PROF_INTUITION); }
+fn prof_salience(p)     { return load64(p + PROF_SALIENCE); }
+fn prof_appraisal(p)    { return load64(p + PROF_APPRAISAL); }
+fn prof_eq(p)           { return load64(p + PROF_EQ); }

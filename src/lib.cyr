@@ -1,0 +1,64 @@
+# lib.cyr -- Avatara library public API
+# Usage: include "avatara/src/lib.cyr"
+#
+# Avatara (Sanskrit: अवतार — descent of the divine)
+# Divine archetype engine: theological and mythological personality
+# mapping across traditions. All traditions map to the same
+# ArchetypeProfile output — composable across cultures.
+#
+# ~206 archetypes across 19 traditions.
+#
+# Modules:
+#   types      - TraitWeights, ModuleEmphasis, ArchetypeProfile, enums
+#   error      - AvataraError codes, validation
+#   kabbalah   - 10 Sephiroth (Tree of Life)
+#   angelic    - 7 Archangels, 9 Angelic Orders
+#   hindu      - 3 Trimurti, 11 Devas, 10 Avatars of Vishnu
+#   olympian   - 15 Greek deities
+#   norse      - 13 Aesir/Vanir gods
+#   egyptian   - 16 principal deities
+#   buddhist   - 7 Bodhisattvas, 5 Dhyani Buddhas
+#   mesopotamian - 14 Sumerian/Babylonian deities
+#   celtic     - 15 Tuatha De Danann
+#   shinto     - 15 Japanese Kami
+#   aztec      - 14 Aztec (Mexica) deities
+#   maya       - 12 Maya deities
+#   yoruba     - 14 Yoruba/Ifa Orishas
+#   zoroastrian - 7 Amesha Spentas, 7 Zoroastrian beings
+#   taoist     - 8 Immortals, 8 celestial deities
+#   polynesian - 12 Polynesian/Hawaiian deities
+#   slavic     - 12 pre-Christian Slavic deities
+#   jain       - 24 Tirthankaras
+#   sikh       - 10 Sikh Gurus
+#   incarnate  - 44+ incarnate divine figures
+#   compose    - weighted blending of profiles
+#   registry   - lookup, enumeration, query filters
+#   logging    - sakshi logging init
+
+include "lib/sakshi.cyr"
+
+include "src/types.cyr"
+include "src/error.cyr"
+include "src/kabbalah.cyr"
+include "src/angelic.cyr"
+include "src/hindu.cyr"
+include "src/olympian.cyr"
+include "src/norse.cyr"
+include "src/egyptian.cyr"
+include "src/buddhist.cyr"
+include "src/mesopotamian.cyr"
+include "src/celtic.cyr"
+include "src/shinto.cyr"
+include "src/aztec.cyr"
+include "src/maya.cyr"
+include "src/yoruba.cyr"
+include "src/zoroastrian.cyr"
+include "src/taoist.cyr"
+include "src/polynesian.cyr"
+include "src/slavic.cyr"
+include "src/jain.cyr"
+include "src/sikh.cyr"
+include "src/incarnate.cyr"
+include "src/compose.cyr"
+include "src/registry.cyr"
+include "src/logging.cyr"
