@@ -7,11 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### v2.2.0 roadmap
-- Finnish/Sami tradition (Kalevala figures)
-- Vodou Lwa (distinct from Yoruba)
-- Expand Incarnate: Desert Fathers, Gregory Palamas, Thomas Merton, Attar, Al-Ghazali
+### v2.3.0 roadmap
 - Cross-tradition affinity mapping (Shango ~ Thor ~ Indra ~ Perun)
+- Affinity scoring between archetypes
+- Archetype similarity search
+- Conflict detection
+
+## [2.2.0] — 2026-04-12
+
+### Added
+- **Finnish/Sami tradition** (`finnish`) — 14 entities: Kalevala figures (Vainamoinen, Ilmarinen, Lemminkainen, Louhi, Joukahainen, Kullervo, Marjatta) and Finnish/Sami gods (Ukko, Tapio, Mielikki, Ahti, Tuoni, Loviatar, Madderakka)
+- **Vodou Lwa tradition** (`vodou`) — 14 entities across three nachon: Rada (Papa Legba, Damballa Wedo, Ayida Wedo, Agwe, Erzulie Freda, Loko), Petwo (Erzulie Dantor, Simbi, Marinette), Ghede (Baron Samedi, Maman Brigitte, Baron Kriminel), plus Ogou Feray and Marasa
+- **5 new Incarnate Mystics** — Desert Fathers, Gregory Palamas, Thomas Merton, Attar, Al-Ghazali (incarnate mystic count: 12 to 17)
+- History mappings for Finnish and Vodou traditions
+- ADR-006: Cyrius port decision record
+- Tests for all new entities (190 total assertions)
+
+### Changed
+- Total archetypes: 329 to 362 (+33)
+- Total traditions: 22 to 24 (+2)
+- README rewritten for Cyrius (examples, build instructions, updated tradition table)
+- Architecture overview updated for Cyrius data flow
+- Roadmap updated (completed items removed, v2.3.0 planned)
+- Scripts updated for Cyrius (bench-history.sh, version-bump.sh)
 
 ## [2.1.0] — 2026-04-12
 

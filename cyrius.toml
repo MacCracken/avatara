@@ -1,6 +1,14 @@
+[package]
 name = "avatara"
 version = "2.2.0"
+description = "Avatara — divine archetype engine: theological and mythological personality mapping across traditions"
 license = "GPL-3.0-only"
+language = "cyrius"
+cyrius = "3.10.0"
+
+[build]
 entry = "src/main.cyr"
 output = "avatara"
-description = "Avatara — divine archetype engine: theological and mythological personality mapping across traditions"
+
+[deps]
+stdlib = ["string", "fmt", "alloc", "vec", "str", "math", "syscalls", "sakshi", "io", "args", "assert", "bench", "hashmap", "json", "tagged", "fnptr"]

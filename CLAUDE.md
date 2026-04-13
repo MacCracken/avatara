@@ -41,7 +41,9 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/slavic.cyr` — 12 pre-Christian Slavic deities
 - `src/jain.cyr` — 24 Tirthankaras
 - `src/sikh.cyr` — 10 Sikh Gurus
-- `src/incarnate.cyr` — 51 incarnate divine figures (Hindu, Buddhist, Mystic, Taoist, Indigenous, Sage)
+- `src/finnish.cyr` — 14 Kalevala figures & Sami spirits
+- `src/vodou.cyr` — 14 Vodou Lwa (Rada, Petwo, Ghede)
+- `src/incarnate.cyr` — 56 incarnate divine figures (Hindu, Buddhist, Mystic, Taoist, Indigenous, Sage)
 - `src/logging.cyr` — sakshi logging init
 - `tests/avatara.tcyr` — integration test suite
 - `tests/avatara.bcyr` — benchmarks

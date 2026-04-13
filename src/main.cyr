@@ -1,14 +1,7 @@
 # avatara — Divine Archetype Engine v2.0.0
 # 19 traditions, ~206 archetypes, ported from 18804 lines of Rust
 
-include "lib/string.cyr"
-include "lib/fmt.cyr"
-include "lib/alloc.cyr"
-include "lib/vec.cyr"
-include "lib/str.cyr"
-include "lib/math.cyr"
-include "lib/syscalls.cyr"
-include "lib/sakshi.cyr"
+# Stdlib auto-included via cyrius.toml
 
 include "src/types.cyr"
 include "src/error.cyr"
