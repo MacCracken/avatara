@@ -247,6 +247,17 @@ fn query_tier(tier) {
     return result;
 }
 
+# Count profiles matching a min trait threshold (without allocating a result vec).
+fn query_count_min_trait(offset, min_val) {
+    var c = 0;
+    var v = all_profiles();
+    var n = vec_len(v);
+    for (var i = 0; i < n; i = i + 1) {
+        if (f64_ge(load64(vec_get(v, i) + offset), min_val) == 1) { c = c + 1; }
+    }
+    return c;
+}
+
 # Filter a vec by tradition (for chaining).
 fn filter_tradition(src, tradition) {
     var result = vec_new();

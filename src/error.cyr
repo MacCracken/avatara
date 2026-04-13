@@ -14,3 +14,15 @@ fn require_unit_range(val) {
     if (f64_gt(val, 1.0) == 1) { return ERR_OUT_OF_RANGE; }
     return ERR_NONE;
 }
+
+# Validate all f64 values in a profile's trait range are in 0.0-1.0.
+# p: profile pointer, first: first offset, last: last offset
+fn require_all_unit_range(p, first, last) {
+    var off = first;
+    while (off <= last) {
+        var r = require_unit_range(load64(p + off));
+        if (r != ERR_NONE) { return r; }
+        off = off + 8;
+    }
+    return ERR_NONE;
+}
