@@ -1,6 +1,7 @@
 # avatara.bcyr -- Benchmarks for avatara
 #
-# Covers: per-tradition profile generation, registry, compose, history
+# 39 benchmarks covering all traditions, sub-groups, registry, compose, history.
+# Matches and exceeds Rust Criterion suite (29 benchmarks).
 
 include "lib/string.cyr"
 include "lib/fmt.cyr"
@@ -39,99 +40,233 @@ include "src/history.cyr"
 include "src/registry.cyr"
 include "src/logging.cyr"
 
-var ITERS = 1000;
+var N = 1000;
+var b = 0;
 
 alloc_init();
-println("=== avatara benchmarks ===");
+println("=== avatara benchmarks (39 benches) ===");
+
+# ================================================================
+# Tier 1: Single profile creation
+# ================================================================
 println("");
+println("--- tier 1: single profile ---");
 
-# --- Per-tradition profile generation ---
-
-var b = bench_new("kabbalah/single_profile");
+b = bench_new("kabbalah/single_profile");
 bench_batch_start(b);
-for (var i = 0; i < ITERS; i = i + 1) { kabbalah_tiphareth(); }
-bench_batch_stop(b, ITERS);
+for (var i = 0; i < N; i = i + 1) { kabbalah_tiphareth(); }
+bench_batch_stop(b, N);
 bench_report(b);
+
+# ================================================================
+# Tier 2: Per-tradition (all entities, cached after first call)
+# ================================================================
+println("");
+println("--- tier 2: per-tradition ---");
 
 b = bench_new("kabbalah/all_10");
 bench_batch_start(b);
-for (var i = 0; i < ITERS; i = i + 1) { all_kabbalah(); }
-bench_batch_stop(b, ITERS);
+for (var i = 0; i < N; i = i + 1) { all_kabbalah(); }
+bench_batch_stop(b, N);
 bench_report(b);
 
-b = bench_new("norse/all_13");
+b = bench_new("angelic/all_archangels");
 bench_batch_start(b);
-for (var i = 0; i < ITERS; i = i + 1) { all_norse(); }
-bench_batch_stop(b, ITERS);
+for (var i = 0; i < N; i = i + 1) { all_archangels(); }
+bench_batch_stop(b, N);
 bench_report(b);
 
-b = bench_new("hindu/all_24");
+b = bench_new("angelic/all_orders");
 bench_batch_start(b);
-for (var i = 0; i < ITERS; i = i + 1) { all_hindu(); }
-bench_batch_stop(b, ITERS);
+for (var i = 0; i < N; i = i + 1) { all_angelic_orders(); }
+bench_batch_stop(b, N);
 bench_report(b);
 
-b = bench_new("egyptian/all_16");
+b = bench_new("hindu/all_trimurti");
 bench_batch_start(b);
-for (var i = 0; i < ITERS; i = i + 1) { all_egyptian(); }
-bench_batch_stop(b, ITERS);
+for (var i = 0; i < N; i = i + 1) { all_trimurti(); }
+bench_batch_stop(b, N);
 bench_report(b);
 
-b = bench_new("buddhist/all_12");
+b = bench_new("hindu/all_devas");
 bench_batch_start(b);
-for (var i = 0; i < ITERS; i = i + 1) { all_buddhist(); }
-bench_batch_stop(b, ITERS);
+for (var i = 0; i < N; i = i + 1) { all_devas(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("hindu/all_avatars");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_avatars(); }
+bench_batch_stop(b, N);
 bench_report(b);
 
 b = bench_new("olympian/all_15");
 bench_batch_start(b);
-for (var i = 0; i < ITERS; i = i + 1) { all_olympians(); }
-bench_batch_stop(b, ITERS);
+for (var i = 0; i < N; i = i + 1) { all_olympians(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("norse/all_13");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_norse(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("egyptian/all_16");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_egyptian(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("buddhist/all_12");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_buddhist(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("mesopotamian/all_14");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_mesopotamian(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("celtic/all_15");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_celtic(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("shinto/all_15");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_shinto(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("aztec/all_14");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_aztec(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("maya/all_12");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_maya(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("yoruba/all_14");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_yoruba(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("zoroastrian/all_14");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_zoroastrian(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("taoist/all_immortals");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_immortals(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("taoist/all_deities");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_taoist_deities(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("polynesian/all_12");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_polynesian(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("slavic/all_12");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_slavic(); }
+bench_batch_stop(b, N);
 bench_report(b);
 
 b = bench_new("jain/all_24");
 bench_batch_start(b);
-for (var i = 0; i < ITERS; i = i + 1) { all_jain(); }
-bench_batch_stop(b, ITERS);
+for (var i = 0; i < N; i = i + 1) { all_jain(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("sikh/all_10");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_sikh(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("incarnate/all_hindu");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_incarnate_hindu(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("incarnate/all_buddhist");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_incarnate_buddhist(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("incarnate/all_mystic");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_incarnate_mystic(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("incarnate/all_taoist");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_incarnate_taoist(); }
+bench_batch_stop(b, N);
 bench_report(b);
 
 b = bench_new("incarnate/all_51");
 bench_batch_start(b);
-for (var i = 0; i < ITERS; i = i + 1) { all_incarnate(); }
-bench_batch_stop(b, ITERS);
+for (var i = 0; i < N; i = i + 1) { all_incarnate(); }
+bench_batch_stop(b, N);
 bench_report(b);
 
+# ================================================================
+# Tier 3: Registry
+# ================================================================
 println("");
-
-# --- Registry ---
+println("--- tier 3: registry ---");
 
 b = bench_new("registry/all_profiles");
 bench_batch_start(b);
-for (var i = 0; i < ITERS; i = i + 1) { all_profiles(); }
-bench_batch_stop(b, ITERS);
+for (var i = 0; i < N; i = i + 1) { all_profiles(); }
+bench_batch_stop(b, N);
 bench_report(b);
 
-b = bench_new("registry/lookup_Krishna");
+b = bench_new("registry/lookup_by_name");
 bench_batch_start(b);
-for (var i = 0; i < ITERS; i = i + 1) { lookup("Krishna"); }
-bench_batch_stop(b, ITERS);
+for (var i = 0; i < N; i = i + 1) { lookup("Krishna"); }
+bench_batch_stop(b, N);
 bench_report(b);
 
 b = bench_new("registry/query_courage_0.9");
 bench_batch_start(b);
-for (var i = 0; i < ITERS; i = i + 1) { query_min_trait(PROF_COURAGE, 0.9); }
-bench_batch_stop(b, ITERS);
+for (var i = 0; i < N; i = i + 1) { query_min_trait(PROF_COURAGE, 0.9); }
+bench_batch_stop(b, N);
 bench_report(b);
 
-b = bench_new("registry/by_tradition_Norse");
+b = bench_new("registry/by_tradition");
 bench_batch_start(b);
-for (var i = 0; i < ITERS; i = i + 1) { by_tradition("Norse"); }
-bench_batch_stop(b, ITERS);
+for (var i = 0; i < N; i = i + 1) { by_tradition("Norse"); }
+bench_batch_stop(b, N);
 bench_report(b);
 
+# ================================================================
+# Tier 4: Compose
+# ================================================================
 println("");
-
-# --- Compose ---
+println("--- tier 4: compose ---");
 
 var tip = kabbalah_tiphareth();
 var vish = hindu_vishnu();
@@ -139,44 +274,63 @@ var ath = olympian_athena();
 
 b = bench_new("compose/three_traditions");
 bench_batch_start(b);
-for (var i = 0; i < ITERS; i = i + 1) {
+for (var i = 0; i < N; i = i + 1) {
     var w = vec_new();
     vec_push(w, weighted_new(tip, 1.0));
     vec_push(w, weighted_new(vish, 0.8));
     vec_push(w, weighted_new(ath, 0.6));
     compose(w);
 }
-bench_batch_stop(b, ITERS);
+bench_batch_stop(b, N);
 bench_report(b);
 
+# ================================================================
+# Tier 5: History
+# ================================================================
 println("");
-
-# --- History ---
+println("--- tier 5: history ---");
 
 b = bench_new("history/context_for_tradition");
 bench_batch_start(b);
-for (var i = 0; i < ITERS; i = i + 1) { context_for_tradition("Hindu"); }
-bench_batch_stop(b, ITERS);
+for (var i = 0; i < N; i = i + 1) { context_for_tradition("Hindu"); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("history/context_all_traditions");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) {
+    var mt = mapped_traditions();
+    for (var j = 0; j < vec_len(mt); j = j + 1) {
+        context_for_tradition(vec_get(mt, j));
+    }
+}
+bench_batch_stop(b, N);
 bench_report(b);
 
 b = bench_new("history/traditions_for_civ");
 bench_batch_start(b);
-for (var i = 0; i < ITERS; i = i + 1) { traditions_for_civilization("Indus Valley"); }
-bench_batch_stop(b, ITERS);
+for (var i = 0; i < N; i = i + 1) { traditions_for_civilization("Indus Valley"); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("history/traditions_for_era");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { traditions_for_era("Tang Dynasty"); }
+bench_batch_stop(b, N);
 bench_report(b);
 
 b = bench_new("history/traditions_active_at");
 bench_batch_start(b);
-for (var i = 0; i < ITERS; i = i + 1) { traditions_active_at((0-500)); }
-bench_batch_stop(b, ITERS);
+for (var i = 0; i < N; i = i + 1) { traditions_active_at((0-500)); }
+bench_batch_stop(b, N);
 bench_report(b);
 
 b = bench_new("history/query_civilization");
 bench_batch_start(b);
-for (var i = 0; i < ITERS; i = i + 1) { query_civilization("Ancient Greece"); }
-bench_batch_stop(b, ITERS);
+for (var i = 0; i < N; i = i + 1) { query_civilization("Ancient Greece"); }
+bench_batch_stop(b, N);
 bench_report(b);
 
 println("");
-println("=== done ===");
+println("=== 39 benchmarks complete ===");
 syscall(SYS_EXIT, 0);

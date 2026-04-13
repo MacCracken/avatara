@@ -184,6 +184,197 @@ check(prof_breath(baldur), BREATH_EARLY_INHALE, "baldur breath=early_inhale");
 f64_check_gt(prof_warmth(baldur), 0.9, "baldur warmth>0.9");
 
 # ---------------------------------------------------------------
+# Angelic
+# ---------------------------------------------------------------
+println("--- angelic ---");
+var michael = lookup("Michael");
+ok(michael, "Michael exists");
+ok(streq(prof_tradition(michael), "Angelic") == 1, "Michael tradition=Angelic");
+f64_check_gt(prof_courage(michael), 0.9, "Michael courage>0.9");
+check(prof_element(michael), ELEM_FIRE, "Michael element=fire");
+var seraphim = lookup("Seraphim");
+ok(seraphim, "Seraphim exists");
+f64_check_gt(prof_belief(seraphim), 0.9, "Seraphim belief>0.9");
+
+# ---------------------------------------------------------------
+# Hindu
+# ---------------------------------------------------------------
+println("--- hindu ---");
+var krishna_h = hindu_krishna();
+f64_check_gt(prof_warmth(krishna_h), 0.8, "krishna warmth>0.8");
+f64_check_gt(prof_creativity(krishna_h), 0.8, "krishna creativity>0.8");
+var shiva = lookup("Shiva");
+ok(shiva, "Shiva exists");
+check(prof_growth_dir(shiva), GROWTH_TRANSFORM, "shiva growth=transform");
+check(prof_breath(shiva), BREATH_MID_INHALE, "shiva breath=mid_inhale");
+var brahma = lookup("Brahma");
+check(prof_breath(brahma), BREATH_EARLY_EXHALE, "brahma breath=early_exhale");
+
+# ---------------------------------------------------------------
+# Olympian
+# ---------------------------------------------------------------
+println("--- olympian ---");
+var athena = lookup("Athena");
+ok(athena, "Athena exists");
+f64_check_gt(prof_precision(athena), 0.9, "athena precision>0.9");
+f64_check_gt(prof_confidence(athena), 0.8, "athena confidence>0.8");
+check(prof_growth_dir(athena), GROWTH_PRESERVE, "athena growth=preserve");
+var zeus = lookup("Zeus");
+ok(zeus, "Zeus exists");
+f64_check_gt(prof_confidence(zeus), 0.9, "zeus confidence>0.9");
+
+# ---------------------------------------------------------------
+# Egyptian
+# ---------------------------------------------------------------
+println("--- egyptian ---");
+var ra = lookup("Ra");
+ok(ra, "Ra exists");
+check(prof_tier(ra), TIER_COSMIC, "ra tier=cosmic");
+check(prof_element(ra), ELEM_LIGHT, "ra element=light");
+var anubis = lookup("Anubis");
+ok(anubis, "Anubis exists");
+check(prof_element(anubis), ELEM_DARKNESS, "anubis element=darkness");
+
+# ---------------------------------------------------------------
+# Buddhist
+# ---------------------------------------------------------------
+println("--- buddhist ---");
+var avalok = lookup("Avalokiteshvara");
+ok(avalok, "Avalokiteshvara exists");
+f64_check_gt(prof_empathy(avalok), 0.9, "avalokiteshvara empathy>0.9");
+check(prof_growth_dir(avalok), GROWTH_INTEGRATE, "avalokiteshvara growth=integrate");
+var vairochana = lookup("Vairochana");
+ok(vairochana, "Vairochana exists");
+check(prof_breath(vairochana), BREATH_LATE_INHALE, "vairochana breath=late_inhale");
+
+# ---------------------------------------------------------------
+# Mesopotamian
+# ---------------------------------------------------------------
+println("--- mesopotamian ---");
+var marduk = lookup("Marduk");
+ok(marduk, "Marduk exists");
+f64_check_gt(prof_confidence(marduk), 0.8, "marduk confidence>0.8");
+check(prof_element(marduk), ELEM_STORM, "marduk element=storm");
+
+# ---------------------------------------------------------------
+# Celtic
+# ---------------------------------------------------------------
+println("--- celtic ---");
+var lugh = lookup("Lugh");
+ok(lugh, "Lugh exists");
+f64_check_gt(prof_creativity(lugh), 0.8, "lugh creativity>0.8");
+var morrigan = lookup("The Morrigan");
+ok(morrigan, "Morrigan exists");
+check(prof_growth_dir(morrigan), GROWTH_TRANSFORM, "morrigan growth=transform");
+
+# ---------------------------------------------------------------
+# Shinto
+# ---------------------------------------------------------------
+println("--- shinto ---");
+var amaterasu = lookup("Amaterasu");
+ok(amaterasu, "Amaterasu exists");
+check(prof_tier(amaterasu), TIER_COSMIC, "amaterasu tier=cosmic");
+check(prof_element(amaterasu), ELEM_LIGHT, "amaterasu element=light");
+check(prof_polarity(amaterasu), POL_FEMININE, "amaterasu polarity=feminine");
+
+# ---------------------------------------------------------------
+# Aztec
+# ---------------------------------------------------------------
+println("--- aztec ---");
+var quetz = lookup("Quetzalcoatl");
+ok(quetz, "Quetzalcoatl exists");
+f64_check_gt(prof_creativity(quetz), 0.8, "quetzalcoatl creativity>0.8");
+
+# ---------------------------------------------------------------
+# Maya
+# ---------------------------------------------------------------
+println("--- maya ---");
+var itzamna = lookup("Itzamna");
+ok(itzamna, "Itzamna exists");
+check(prof_tier(itzamna), TIER_SUPREME, "itzamna tier=supreme");
+
+# ---------------------------------------------------------------
+# Yoruba
+# ---------------------------------------------------------------
+println("--- yoruba ---");
+var ogun = lookup("Ogun");
+ok(ogun, "Ogun exists");
+f64_check_gt(prof_courage(ogun), 0.9, "ogun courage>0.9");
+check(prof_element(ogun), ELEM_FIRE, "ogun element=fire");
+
+# ---------------------------------------------------------------
+# Zoroastrian
+# ---------------------------------------------------------------
+println("--- zoroastrian ---");
+var ahura = lookup("Ahura Mazda");
+ok(ahura, "Ahura Mazda exists");
+check(prof_tier(ahura), TIER_SUPREME, "ahura mazda tier=supreme");
+f64_check_gt(prof_confidence(ahura), 0.9, "ahura mazda confidence>0.9");
+
+# ---------------------------------------------------------------
+# Taoist
+# ---------------------------------------------------------------
+println("--- taoist ---");
+var laozi = lookup("Laozi");
+ok(laozi, "Laozi exists");
+f64_check_gt(prof_patience(laozi), 0.9, "laozi patience>0.9");
+var jade = lookup("Jade Emperor");
+ok(jade, "Jade Emperor exists");
+
+# ---------------------------------------------------------------
+# Polynesian
+# ---------------------------------------------------------------
+println("--- polynesian ---");
+var pele = lookup("Pele");
+ok(pele, "Pele exists");
+f64_check_gt(prof_courage(pele), 0.9, "pele courage>0.9");
+check(prof_element(pele), ELEM_FIRE, "pele element=fire");
+check(prof_growth_dir(pele), GROWTH_TRANSFORM, "pele growth=transform");
+
+# ---------------------------------------------------------------
+# Slavic
+# ---------------------------------------------------------------
+println("--- slavic ---");
+var perun = lookup("Perun");
+ok(perun, "Perun exists");
+f64_check_gt(prof_courage(perun), 0.9, "perun courage>0.9");
+check(prof_element(perun), ELEM_STORM, "perun element=storm");
+
+# ---------------------------------------------------------------
+# Jain
+# ---------------------------------------------------------------
+println("--- jain ---");
+var mahavira = lookup("Mahavira");
+ok(mahavira, "Mahavira exists");
+f64_check_gt(prof_patience(mahavira), 0.9, "mahavira patience>0.9");
+check(prof_tier(mahavira), TIER_MASTER, "mahavira tier=master");
+check(prof_growth_dir(mahavira), GROWTH_INTEGRATE, "mahavira growth=integrate");
+
+# ---------------------------------------------------------------
+# Sikh
+# ---------------------------------------------------------------
+println("--- sikh ---");
+var nanak = lookup("Guru Nanak");
+ok(nanak, "Guru Nanak exists");
+f64_check_gt(prof_warmth(nanak), 0.8, "nanak warmth>0.8");
+check(prof_tier(nanak), TIER_MASTER, "nanak tier=master");
+
+# ---------------------------------------------------------------
+# Incarnate
+# ---------------------------------------------------------------
+println("--- incarnate ---");
+var rumi = lookup("Rumi");
+ok(rumi, "Rumi exists");
+f64_check_gt(prof_creativity(rumi), 0.9, "rumi creativity>0.9");
+check(prof_tier(rumi), TIER_MASTER, "rumi tier=master");
+var ramakrishna = lookup("Ramakrishna");
+ok(ramakrishna, "Ramakrishna exists");
+f64_check_gt(prof_empathy(ramakrishna), 0.8, "ramakrishna empathy>0.8");
+var dalai_lama = lookup("Dalai Lama");
+ok(dalai_lama, "Dalai Lama exists");
+f64_check_gt(prof_empathy(dalai_lama), 0.8, "dalai_lama empathy>0.8");
+
+# ---------------------------------------------------------------
 # Registry lookups
 # ---------------------------------------------------------------
 println("--- registry ---");
