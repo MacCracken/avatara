@@ -102,11 +102,17 @@ avatara produces plain f64/enum outputs. It does not depend on bhava — bhava c
 Requires cc3 3.7.0+ (Cyrius compiler).
 
 ```sh
-# Run tests
-cat src/main.cyr | cc3 > build/avatara_test && chmod +x build/avatara_test && ./build/avatara_test
+# Resolve dependencies
+cyrius deps
+
+# Build and run tests
+cyrius build src/main.cyr build/avatara && ./build/avatara
+
+# Run integration tests
+cyrius test tests/avatara.tcyr
 
 # Run benchmarks
-cat tests/avatara.bcyr | cc3 > build/avatara_bench && chmod +x build/avatara_bench && ./build/avatara_bench
+cyrius test tests/avatara.bcyr
 ```
 
 ## License

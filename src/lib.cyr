@@ -6,7 +6,7 @@
 # mapping across traditions. All traditions map to the same
 # ArchetypeProfile output — composable across cultures.
 #
-# ~206 archetypes across 19 traditions.
+# 362 archetypes across 24 traditions.
 #
 # Modules:
 #   types      - TraitWeights, ModuleEmphasis, ArchetypeProfile, enums
@@ -35,7 +35,7 @@
 #   registry   - lookup, enumeration, query filters
 #   logging    - sakshi logging init
 
-include "lib/sakshi.cyr"
+# Stdlib auto-included via cyrius.toml
 
 include "src/types.cyr"
 include "src/error.cyr"

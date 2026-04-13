@@ -3,15 +3,7 @@
 # Cross-tradition invariants, registry completeness, compose correctness,
 # history module, breath monotonicity, duplicate detection.
 
-include "lib/string.cyr"
-include "lib/alloc.cyr"
-include "lib/fmt.cyr"
-include "lib/assert.cyr"
-include "lib/math.cyr"
-include "lib/vec.cyr"
-include "lib/str.cyr"
-include "lib/syscalls.cyr"
-include "lib/sakshi.cyr"
+# Stdlib auto-included via cyrius.toml
 
 include "src/types.cyr"
 include "src/error.cyr"
@@ -35,6 +27,8 @@ include "src/slavic.cyr"
 include "src/jain.cyr"
 include "src/sikh.cyr"
 include "src/incarnate.cyr"
+include "src/finnish.cyr"
+include "src/vodou.cyr"
 include "src/compose.cyr"
 include "src/history.cyr"
 include "src/registry.cyr"
@@ -196,7 +190,7 @@ fn main() {
     # ================================================================
     # History: mapped traditions count
     # ================================================================
-    assert_eq(mapping_count(), 25, "25 history mappings");
+    assert_eq(mapping_count(), 27, "27 history mappings");
 
     # ================================================================
     # History: all mapped traditions resolve

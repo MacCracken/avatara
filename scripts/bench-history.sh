@@ -10,8 +10,8 @@ CSV="bench-history.csv"
 [ ! -f "$CSV" ] && echo "date,version,benchmark,time_ns" > "$CSV"
 
 echo "Building benchmarks..."
-cat tests/avatara.bcyr | cc3 > /tmp/avatara_bench 2>/dev/null
-chmod +x /tmp/avatara_bench
+cyrius deps 2>/dev/null
+cyrius build tests/avatara.bcyr /tmp/avatara_bench
 
 echo "Running benchmarks..."
 /tmp/avatara_bench 2>&1 | grep -E '^\s+\S+:' | while read -r line; do

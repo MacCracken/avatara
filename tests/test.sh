@@ -1,6 +1,9 @@
 #!/bin/sh
-CC="${1:-./build/cc3}"
 echo "=== avatara tests ==="
-cat src/main.cyr | "$CC" > /tmp/avatara_test && chmod +x /tmp/avatara_test && /tmp/avatara_test
+cyrius deps 2>/dev/null
+cyrius build src/main.cyr build/avatara_test && ./build/avatara_test
 echo "exit: $?"
-rm -f /tmp/avatara_test
+echo ""
+echo "=== integration tests ==="
+cyrius test tests/avatara.tcyr
+echo "exit: $?"

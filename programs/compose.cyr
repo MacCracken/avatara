@@ -3,14 +3,7 @@
 # Blends Kabbalistic harmony + Hindu preservation + Greek wisdom
 # and prints the resulting composite profile.
 
-include "lib/string.cyr"
-include "lib/fmt.cyr"
-include "lib/alloc.cyr"
-include "lib/vec.cyr"
-include "lib/str.cyr"
-include "lib/math.cyr"
-include "lib/syscalls.cyr"
-include "lib/sakshi.cyr"
+# Stdlib auto-included via cyrius.toml
 
 include "src/types.cyr"
 include "src/error.cyr"
@@ -34,6 +27,8 @@ include "src/slavic.cyr"
 include "src/jain.cyr"
 include "src/sikh.cyr"
 include "src/incarnate.cyr"
+include "src/finnish.cyr"
+include "src/vodou.cyr"
 include "src/compose.cyr"
 include "src/history.cyr"
 include "src/registry.cyr"

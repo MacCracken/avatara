@@ -1,17 +1,9 @@
 # avatara.bcyr -- Benchmarks for avatara
 #
-# 39 benchmarks covering all traditions, sub-groups, registry, compose, history.
+# 41 benchmarks covering all traditions, sub-groups, registry, compose, history.
 # Matches and exceeds Rust Criterion suite (29 benchmarks).
 
-include "lib/string.cyr"
-include "lib/fmt.cyr"
-include "lib/alloc.cyr"
-include "lib/vec.cyr"
-include "lib/str.cyr"
-include "lib/math.cyr"
-include "lib/syscalls.cyr"
-include "lib/bench.cyr"
-include "lib/sakshi.cyr"
+# Stdlib auto-included via cyrius.toml
 
 include "src/types.cyr"
 include "src/error.cyr"
@@ -35,6 +27,8 @@ include "src/slavic.cyr"
 include "src/jain.cyr"
 include "src/sikh.cyr"
 include "src/incarnate.cyr"
+include "src/finnish.cyr"
+include "src/vodou.cyr"
 include "src/compose.cyr"
 include "src/history.cyr"
 include "src/registry.cyr"
@@ -232,6 +226,18 @@ for (var i = 0; i < N; i = i + 1) { all_incarnate(); }
 bench_batch_stop(b, N);
 bench_report(b);
 
+b = bench_new("finnish/all_14");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_finnish(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("vodou/all_14");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_vodou(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
 # ================================================================
 # Tier 3: Registry
 # ================================================================
@@ -332,5 +338,5 @@ bench_batch_stop(b, N);
 bench_report(b);
 
 println("");
-println("=== 39 benchmarks complete ===");
+println("=== 41 benchmarks complete ===");
 syscall(SYS_EXIT, 0);
