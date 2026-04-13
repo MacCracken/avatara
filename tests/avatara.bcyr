@@ -1,6 +1,6 @@
 # avatara.bcyr -- Benchmarks for avatara
 #
-# 41 benchmarks covering all traditions, sub-groups, registry, compose, history.
+# 45 benchmarks covering all traditions, sub-groups, registry, compose, history.
 # Matches and exceeds Rust Criterion suite (29 benchmarks).
 
 # Stdlib auto-included via cyrius.toml
@@ -32,6 +32,7 @@ include "src/vodou.cyr"
 include "src/compose.cyr"
 include "src/history.cyr"
 include "src/registry.cyr"
+include "src/affinity.cyr"
 include "src/logging.cyr"
 
 var N = 1000;
@@ -337,6 +338,39 @@ for (var i = 0; i < N; i = i + 1) { query_civilization("Ancient Greece"); }
 bench_batch_stop(b, N);
 bench_report(b);
 
+# ================================================================
+# Tier 6: Affinity
+# ================================================================
 println("");
-println("=== 41 benchmarks complete ===");
+println("--- tier 6: affinity ---");
+
+var aff_a = kabbalah_tiphareth();
+var aff_b = norse_thor();
+
+b = bench_new("affinity/score_pair");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { affinity(aff_a, aff_b); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("affinity/similar_to_5");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { similar_to(aff_a, 5); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("affinity/cross_tradition_match");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { cross_tradition_match(aff_b); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("affinity/detect_conflicts");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { detect_conflicts(kabbalah_gevurah(), kabbalah_chesed()); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+println("");
+println("=== 45 benchmarks complete ===");
 syscall(SYS_EXIT, 0);

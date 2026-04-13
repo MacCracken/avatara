@@ -32,6 +32,7 @@ include "src/vodou.cyr"
 include "src/compose.cyr"
 include "src/history.cyr"
 include "src/registry.cyr"
+include "src/affinity.cyr"
 include "src/logging.cyr"
 
 fn prints(s) { syscall(SYS_WRITE, 1, s, strlen(s)); return 0; }

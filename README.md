@@ -10,7 +10,7 @@
 
 Maps divine and mythological beings across world traditions to composable personality configurations. Not religion simulation — psychometric archetype mapping backed by trait math. Each entity produces an `ArchetypeProfile` (312 bytes) with trait weights, module emphasis, breath phase affinity, and growth direction.
 
-**362 archetypes across 24 traditions.** Written in Cyrius, compiled by cc3 3.7.0+.
+**362 archetypes across 24 traditions.** Written in Cyrius, compiled by cc3 3.10.0+.
 
 ## Traditions
 
@@ -83,6 +83,24 @@ All traditions map to the same `ArchetypeProfile` output:
 
 Archetypes are composable across traditions. A character can carry Kabbalistic Tiphareth + Hindu Vishnu + Greek Athena — reinforcing archetypes amplify, conflicting archetypes create productive internal tension.
 
+## Affinity & Composition Intelligence (v2.3.0)
+
+```cyrius
+# How similar are two archetypes? (0.0 to 1.0)
+var score = affinity(norse_thor(), olympian_ares());
+
+# Find Thor's closest match across all other traditions
+var match = cross_tradition_match(norse_thor());
+# Returns the most similar archetype from a different tradition
+
+# Top 5 most similar archetypes to any entity
+var top5 = similar_to(norse_thor(), 5);
+
+# Detect conflicting traits (delta > 0.4)
+var conflicts = detect_conflicts(kabbalah_gevurah(), kabbalah_chesed());
+# Returns: warmth (0.3 vs 0.9), patience (0.3 vs 0.8), humor (0.2 vs 0.6)...
+```
+
 ## Relationship to AGNOS
 
 ```
@@ -99,7 +117,7 @@ avatara produces plain f64/enum outputs. It does not depend on bhava — bhava c
 
 ## Build
 
-Requires cc3 3.7.0+ (Cyrius compiler).
+Requires cc3 3.10.0+ (Cyrius compiler).
 
 ```sh
 # Resolve dependencies

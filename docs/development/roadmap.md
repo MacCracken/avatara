@@ -4,17 +4,10 @@
 
 ## Planned
 
-### v2.3.0 — Composition Intelligence
-
-- [ ] Cross-tradition affinity mapping (Shango ~ Thor ~ Indra ~ Perun)
-- [ ] Affinity scoring between archetypes
-- [ ] Archetype similarity search ("find entities most like this profile")
-- [ ] Conflict detection (`AvataraError::Incompatible`)
-
 ### v2.4.0 — Structural Enrichment
 
 - [ ] `domain` field (War, Love, Death, Creation, Knowledge, etc.)
-- [ ] Cross-tradition affinity graph (related archetypes across traditions)
+- [ ] Cross-tradition affinity graph (pre-computed, stored)
 - [ ] Shadow aspect support (dark/inverted form of each archetype)
 
 ## Future (demand-gated)

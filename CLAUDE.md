@@ -7,7 +7,7 @@
 - **Language**: Cyrius (ported from Rust in v2.0)
 - **License**: GPL-3.0-only
 - **Version**: SemVer 2.3.0
-- **Compiler**: cc3 >= 3.6.3
+- **Compiler**: cc3 >= 3.10.0
 
 ## Consumers
 
@@ -22,6 +22,7 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/compose.cyr` — archetype composition: weighted blending of multiple profiles
 - `src/history.cyr` — 25 tradition-to-history mappings (civilization, era, temporal range, notes)
 - `src/registry.cyr` — lookup by name, enumeration, query/filter API (includes history-based queries)
+- `src/affinity.cyr` — affinity scoring, similarity search, cross-tradition matching, conflict detection
 - `src/kabbalah.cyr` — Tree of Life: 10 Sephiroth
 - `src/angelic.cyr` — 9 angelic orders, 7 archangels
 - `src/hindu.cyr` — Trimurti, 11 Devas, 10 Avatars of Vishnu
@@ -60,6 +61,7 @@ All values are i64. f64 trait/emphasis weights stored as IEEE 754 bit patterns. 
 - Registry: `all_profiles()`, `lookup(name)`, `lookup_in(tradition, name)`, `by_tradition()`, `query_*()` filters
 - Compose: `compose(weighted_vec)` — weighted blending with f64 arithmetic
 - History: `context_for_tradition()`, `traditions_for_civilization()`, `traditions_active_at()`, `traditions_for_era()`
+- Affinity: `affinity()`, `similar_to()`, `cross_tradition_match()`, `cross_tradition_matches()`, `detect_conflicts()`, `is_incompatible()`
 
 ## Key Principles
 

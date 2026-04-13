@@ -7,11 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### v2.3.0 roadmap
-- Cross-tradition affinity mapping (Shango ~ Thor ~ Indra ~ Perun)
-- Affinity scoring between archetypes
-- Archetype similarity search
-- Conflict detection
+### v2.4.0 roadmap
+- `domain` field (War, Love, Death, Creation, Knowledge, etc.)
+- Cross-tradition affinity graph (pre-computed, stored)
+- Shadow aspect support (dark/inverted form of each archetype)
+
+## [2.3.0] — 2026-04-13
+
+### Added
+- **Affinity module** (`affinity.cyr`) — composition intelligence system:
+  - `affinity(a, b)` — similarity score (0.0 to 1.0) across all 15 traits + 14 emphases
+  - `trait_affinity(a, b)` — trait-only similarity (ignores emphasis)
+  - `similar_to(profile, max)` — find N most similar archetypes, sorted by score
+  - `cross_tradition_match(profile)` — best match from a different tradition
+  - `cross_tradition_matches(profile, max)` — best match per foreign tradition
+  - `detect_conflicts(a, b)` — traits with >0.4 absolute difference, sorted by delta
+  - `is_incompatible(a, b)` — true if 5+ conflicting traits
+- 9 new test assertions for affinity, similarity, cross-tradition, and conflict detection (39 total integration tests)
+
+### Changed
+- `src/main.cyr` split into slim smoke test (builds fast) + `tests/avatara.tcyr` (full test suite)
+- Smoke test prints "all systems nominal" on success
 
 ## [2.2.0] — 2026-04-12
 

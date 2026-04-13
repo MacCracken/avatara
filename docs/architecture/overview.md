@@ -28,11 +28,11 @@
                     |  |  + tier + soul/spirit text               |  |
                     |  +-------------------+--------------------+  |
                     |                      |                       |
-                    |  +--------+----------+--+  +-----------+    |
-                    |  | compose |  history    |  | registry  |    |
-                    |  | blend   |  25 mappings|  | lookup    |    |
-                    |  | weight  |  civ/era/yr |  | query     |    |
-                    |  +---------+------------+  +-----------+    |
+                    |  +--------+------+------+  +-----------+    |
+                    |  | compose | hist | affi |  | registry  |    |
+                    |  | blend   | 27   | nity |  | lookup    |    |
+                    |  | weight  | maps | sim  |  | query     |    |
+                    |  +---------+------+------+  +-----------+    |
                     +---------------------+------------------------+
                                           |
                     +---------------------v------------------------+
@@ -60,7 +60,8 @@ Avatara produces plain f64/enum outputs. It does not depend on bhava — bhava c
 4. `compose()` blends multiple profiles with weighted averaging
 5. `registry::all_profiles()` aggregates all traditions into a single cached vec
 6. `query_*()` functions filter profiles by trait, breath, growth, element, polarity, tier, civilization, era, year
-7. Consumer (bhava, joshua, etc.) receives plain f64/enum output via profile accessors
+7. `affinity()` scores similarity between profiles; `similar_to()` finds nearest neighbors; `cross_tradition_match()` maps across traditions; `detect_conflicts()` identifies trait tensions
+8. Consumer (bhava, joshua, etc.) receives plain f64/enum output via profile accessors
 
 ## Type System
 

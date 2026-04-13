@@ -32,6 +32,7 @@ include "src/vodou.cyr"
 include "src/compose.cyr"
 include "src/history.cyr"
 include "src/registry.cyr"
+include "src/affinity.cyr"
 include "src/logging.cyr"
 
 fn prints(s) { syscall(SYS_WRITE, 1, s, strlen(s)); return 0; }
@@ -98,6 +99,24 @@ for (var i = 0; i < vec_len(trads); i = i + 1) {
     prints(t);
     prints(": ");
     print_num(vec_len(tprofs));
+    println("");
+}
+
+println("");
+
+# --- Cross-tradition affinity ---
+println("Cross-tradition matches for Thor:");
+var thor = norse_thor();
+var xt = cross_tradition_matches(thor, 10);
+for (var i = 0; i < vec_len(xt); i = i + 1) {
+    var entry = vec_get(xt, i);
+    var mp = sim_profile(entry);
+    prints("  ");
+    prints(prof_name(mp));
+    prints(" (");
+    prints(prof_tradition(mp));
+    prints(") -- affinity=");
+    fmt_float(sim_score(entry), 3);
     println("");
 }
 
