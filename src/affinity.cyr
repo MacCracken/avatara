@@ -1,0 +1,290 @@
+# affinity.cyr -- Cross-tradition affinity: scoring, similarity, conflict detection
+#
+# Measures how similar two archetypes are across all trait dimensions.
+# Enables cross-tradition mapping (Shango ~ Thor ~ Indra ~ Perun)
+# and conflict detection for composition.
+#
+# Affinity score: 1.0 = identical traits, 0.0 = maximally opposite.
+# Computed as 1 - (mean absolute difference across all 15 traits + 14 emphases).
+
+# --- Affinity scoring ---
+
+# Compute affinity between two profiles (0.0 to 1.0).
+# Considers all 15 traits and 14 emphases equally weighted.
+fn affinity(a, b) {
+    var total_diff = 0.0;
+    var count = 0;
+
+    # Traits (15 fields)
+    var off = TW_FIRST;
+    while (off <= TW_LAST) {
+        var diff = f64_abs(f64_sub(load64(a + off), load64(b + off)));
+        total_diff = f64_add(total_diff, diff);
+        count = count + 1;
+        off = off + 8;
+    }
+
+    # Emphases (14 fields)
+    off = ME_FIRST;
+    while (off <= ME_LAST) {
+        var diff = f64_abs(f64_sub(load64(a + off), load64(b + off)));
+        total_diff = f64_add(total_diff, diff);
+        count = count + 1;
+        off = off + 8;
+    }
+
+    # Mean absolute difference, inverted to similarity
+    var mean_diff = f64_div(total_diff, f64_from(count));
+    return f64_sub(1.0, mean_diff);
+}
+
+# Compute trait-only affinity (ignores emphasis, just the 15 personality traits).
+fn trait_affinity(a, b) {
+    var total_diff = 0.0;
+    var count = 0;
+    var off = TW_FIRST;
+    while (off <= TW_LAST) {
+        var diff = f64_abs(f64_sub(load64(a + off), load64(b + off)));
+        total_diff = f64_add(total_diff, diff);
+        count = count + 1;
+        off = off + 8;
+    }
+    var mean_diff = f64_div(total_diff, f64_from(count));
+    return f64_sub(1.0, mean_diff);
+}
+
+# --- Similarity search ---
+
+# Result entry: profile pointer + affinity score
+enum SimLayout {
+    SIM_PROFILE = 0;
+    SIM_SCORE = 8;
+    SIM_SIZE = 16;
+}
+
+fn sim_new(profile, score) {
+    var s = alloc(SIM_SIZE);
+    store64(s + SIM_PROFILE, profile);
+    store64(s + SIM_SCORE, score);
+    return s;
+}
+
+fn sim_profile(s) { return load64(s + SIM_PROFILE); }
+fn sim_score(s)   { return load64(s + SIM_SCORE); }
+
+# Find the N most similar archetypes to the given profile.
+# Returns a vec of sim entries sorted by descending affinity.
+# Excludes the source profile itself (by name match).
+fn similar_to(source, max_results) {
+    var results = vec_new();
+    var profiles = all_profiles();
+    var n = vec_len(profiles);
+    var src_name = prof_name(source);
+
+    for (var i = 0; i < n; i = i + 1) {
+        var p = vec_get(profiles, i);
+        # Skip self
+        if (streq(prof_name(p), src_name) == 1) {
+            if (streq(prof_tradition(p), prof_tradition(source)) == 1) {
+                continue;
+            }
+        }
+        var score = affinity(source, p);
+        vec_push(results, sim_new(p, score));
+    }
+
+    # Sort by score descending (simple insertion sort — N is small)
+    var rn = vec_len(results);
+    for (var i = 1; i < rn; i = i + 1) {
+        var key = vec_get(results, i);
+        var key_score = sim_score(key);
+        var j = i - 1;
+        while (j >= 0) {
+            var jentry = vec_get(results, j);
+            if (f64_gt(sim_score(jentry), key_score) == 1) {
+                break;
+            }
+            # Shift jentry right (swap j and j+1)
+            vec_set(results, j + 1, jentry);
+            j = j - 1;
+        }
+        vec_set(results, j + 1, key);
+    }
+
+    # Trim to max_results
+    if (max_results > 0) {
+        if (rn > max_results) {
+            var trimmed = vec_new();
+            for (var i = 0; i < max_results; i = i + 1) {
+                vec_push(trimmed, vec_get(results, i));
+            }
+            return trimmed;
+        }
+    }
+    return results;
+}
+
+# Find the most similar archetype across a different tradition.
+# Useful for cross-tradition mapping (e.g. "who is the Norse Thor?")
+fn cross_tradition_match(source) {
+    var best = 0;
+    var best_score = 0.0;
+    var profiles = all_profiles();
+    var n = vec_len(profiles);
+    var src_trad = prof_tradition(source);
+
+    for (var i = 0; i < n; i = i + 1) {
+        var p = vec_get(profiles, i);
+        # Must be different tradition
+        if (streq(prof_tradition(p), src_trad) == 1) { continue; }
+        var score = affinity(source, p);
+        if (f64_gt(score, best_score) == 1) {
+            best = p;
+            best_score = score;
+        }
+    }
+    return best;
+}
+
+# Find all cross-tradition matches for a profile (one per tradition).
+# Returns vec of sim entries, one per foreign tradition, sorted by affinity.
+fn cross_tradition_matches(source, max_results) {
+    var src_trad = prof_tradition(source);
+    var trads = all_traditions();
+    var results = vec_new();
+
+    for (var i = 0; i < vec_len(trads); i = i + 1) {
+        var t = vec_get(trads, i);
+        if (streq(t, src_trad) == 1) { continue; }
+
+        # Find best match in this tradition
+        var tprofs = by_tradition(t);
+        var best = 0;
+        var best_score = 0.0;
+        for (var j = 0; j < vec_len(tprofs); j = j + 1) {
+            var p = vec_get(tprofs, j);
+            var score = affinity(source, p);
+            if (f64_gt(score, best_score) == 1) {
+                best = p;
+                best_score = score;
+            }
+        }
+        if (best != 0) {
+            vec_push(results, sim_new(best, best_score));
+        }
+    }
+
+    # Sort by score descending
+    var rn = vec_len(results);
+    for (var i = 1; i < rn; i = i + 1) {
+        var key = vec_get(results, i);
+        var key_score = sim_score(key);
+        var j = i - 1;
+        while (j >= 0) {
+            if (f64_gt(sim_score(vec_get(results, j)), key_score) == 1) { break; }
+            vec_set(results, j + 1, vec_get(results, j));
+            j = j - 1;
+        }
+        vec_set(results, j + 1, key);
+    }
+
+    if (max_results > 0) {
+        if (rn > max_results) {
+            var trimmed = vec_new();
+            for (var i = 0; i < max_results; i = i + 1) {
+                vec_push(trimmed, vec_get(results, i));
+            }
+            return trimmed;
+        }
+    }
+    return results;
+}
+
+# --- Conflict detection ---
+
+# Conflict entry: field offset + trait name + values from each profile + delta
+enum ConflictLayout {
+    CONF_OFFSET = 0;
+    CONF_NAME = 8;
+    CONF_VAL_A = 16;
+    CONF_VAL_B = 24;
+    CONF_DELTA = 32;
+    CONF_SIZE = 40;
+}
+
+fn conf_offset(c) { return load64(c + CONF_OFFSET); }
+fn conf_name(c)   { return load64(c + CONF_NAME); }
+fn conf_val_a(c)  { return load64(c + CONF_VAL_A); }
+fn conf_val_b(c)  { return load64(c + CONF_VAL_B); }
+fn conf_delta(c)  { return load64(c + CONF_DELTA); }
+
+# Trait names for conflict reporting
+fn trait_name_for_offset(off) {
+    if (off == PROF_WARMTH) { return "warmth"; }
+    if (off == PROF_HUMOR) { return "humor"; }
+    if (off == PROF_EMPATHY) { return "empathy"; }
+    if (off == PROF_PATIENCE) { return "patience"; }
+    if (off == PROF_CONFIDENCE) { return "confidence"; }
+    if (off == PROF_CURIOSITY) { return "curiosity"; }
+    if (off == PROF_CREATIVITY) { return "creativity"; }
+    if (off == PROF_DIRECTNESS) { return "directness"; }
+    if (off == PROF_FORMALITY) { return "formality"; }
+    if (off == PROF_VERBOSITY) { return "verbosity"; }
+    if (off == PROF_COURAGE) { return "courage"; }
+    if (off == PROF_PRECISION) { return "precision"; }
+    if (off == PROF_SKEPTICISM) { return "skepticism"; }
+    if (off == PROF_AUTONOMY) { return "autonomy"; }
+    if (off == PROF_PEDAGOGY) { return "pedagogy"; }
+    return "unknown";
+}
+
+# Detect conflicts between two profiles.
+# A conflict is any trait where the absolute difference exceeds the threshold.
+# Default threshold: 0.4 (e.g. warmth 0.9 vs warmth 0.3 = conflict).
+# Returns vec of conflict entries sorted by largest delta first.
+fn conflicts(a, b, threshold) {
+    var result = vec_new();
+    var off = TW_FIRST;
+    while (off <= TW_LAST) {
+        var va = load64(a + off);
+        var vb = load64(b + off);
+        var delta = f64_abs(f64_sub(va, vb));
+        if (f64_gt(delta, threshold) == 1) {
+            var c = alloc(CONF_SIZE);
+            store64(c + CONF_OFFSET, off);
+            store64(c + CONF_NAME, trait_name_for_offset(off));
+            store64(c + CONF_VAL_A, va);
+            store64(c + CONF_VAL_B, vb);
+            store64(c + CONF_DELTA, delta);
+            vec_push(result, c);
+        }
+        off = off + 8;
+    }
+
+    # Sort by delta descending
+    var rn = vec_len(result);
+    for (var i = 1; i < rn; i = i + 1) {
+        var key = vec_get(result, i);
+        var key_d = conf_delta(key);
+        var j = i - 1;
+        while (j >= 0) {
+            if (f64_gt(conf_delta(vec_get(result, j)), key_d) == 1) { break; }
+            vec_set(result, j + 1, vec_get(result, j));
+            j = j - 1;
+        }
+        vec_set(result, j + 1, key);
+    }
+    return result;
+}
+
+# Convenience: conflicts with default threshold (0.4)
+fn detect_conflicts(a, b) {
+    return conflicts(a, b, 0.4);
+}
+
+# Check if two profiles are incompatible (>= 5 conflicting traits at 0.4 threshold).
+fn is_incompatible(a, b) {
+    var c = detect_conflicts(a, b);
+    if (vec_len(c) >= 5) { return 1; }
+    return 0;
+}

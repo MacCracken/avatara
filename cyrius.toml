@@ -1,6 +1,6 @@
 [package]
 name = "avatara"
-version = "2.2.0"
+version = "2.3.0"
 description = "Avatara — divine archetype engine: theological and mythological personality mapping across traditions"
 license = "GPL-3.0-only"
 language = "cyrius"

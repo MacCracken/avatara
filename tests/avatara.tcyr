@@ -32,6 +32,7 @@ include "src/vodou.cyr"
 include "src/compose.cyr"
 include "src/history.cyr"
 include "src/registry.cyr"
+include "src/affinity.cyr"
 include "src/logging.cyr"
 
 fn main() {
@@ -214,6 +215,42 @@ fn main() {
     # ================================================================
     var vedic_profiles = query_era("Vedic Period");
     assert_gt(vec_len(vedic_profiles), 0, "Vedic Period has profiles");
+
+    # ================================================================
+    # Affinity: self-affinity is ~1.0
+    # ================================================================
+    var tip2 = kabbalah_tiphareth();
+    var self_aff = affinity(tip2, tip2);
+    assert_eq(f64_ge(self_aff, 0.99), 1, "self affinity >= 0.99");
+
+    # ================================================================
+    # Affinity: different archetypes < 1.0
+    # ================================================================
+    var cross_aff = affinity(kabbalah_tiphareth(), kabbalah_gevurah());
+    assert_eq(f64_lt(cross_aff, 1.0), 1, "tiphareth-gevurah < 1.0");
+    assert_eq(f64_gt(cross_aff, 0.0), 1, "tiphareth-gevurah > 0.0");
+
+    # ================================================================
+    # Similarity: returns results, sorted descending
+    # ================================================================
+    var sim = similar_to(norse_thor(), 5);
+    assert_eq(vec_len(sim), 5, "similar_to returns 5");
+    assert_eq(f64_ge(sim_score(vec_get(sim, 0)), sim_score(vec_get(sim, 4))), 1, "sim sorted desc");
+
+    # ================================================================
+    # Cross-tradition match: different tradition
+    # ================================================================
+    var xt = cross_tradition_match(norse_thor());
+    assert_neq(xt, 0, "thor has cross-tradition match");
+    assert_eq(streq(prof_tradition(xt), "Norse") != 1, 1, "match is not Norse");
+
+    # ================================================================
+    # Conflicts: self has zero, opposites have some
+    # ================================================================
+    var self_conf = detect_conflicts(tip2, tip2);
+    assert_eq(vec_len(self_conf), 0, "self conflicts = 0");
+    var gev_ches = detect_conflicts(kabbalah_gevurah(), kabbalah_chesed());
+    assert_gt(vec_len(gev_ches), 0, "gevurah-chesed has conflicts");
 
     return assert_summary();
 }
