@@ -203,6 +203,16 @@ fn all_mappings() {
         (0-600), LIVING,
         "Philosopher-sages of the Axial Age and beyond -- Pythagoras, Socrates, Confucius -- who laid the foundations of rational and ethical inquiry"));
 
+        vec_push(history_vec, map_new("Finnish", "Viking/Norse",
+        svec1("Viking/Norse"), svec2("Iron Age", "Middle Ages"),
+        (0-1000), LIVING,
+        "Finnish and Sami spiritual traditions preserved in the Kalevala (compiled 1835 by Elias Lonnrot from oral tradition) and Sami shamanic practice; Vainamoinen, Ukko, and Tapio reflect Uralic cosmology distinct from but parallel to Norse mythology"));
+
+        vec_push(history_vec, map_new("Vodou", "Ghana Empire",
+        svec2("Ghana Empire", "Songhai Empire"), svec1("Middle Ages"),
+        1600, LIVING,
+        "Haitian Vodou synthesized West African (primarily Fon and Yoruba) spiritual traditions with Taino and Catholic elements during the colonial period; a living religion of the African diaspora, central to the Haitian Revolution (1791-1804) and Haitian national identity"));
+
         history_init_done = 1;
     }
     return history_vec;

@@ -6,7 +6,7 @@
 
 - **Language**: Cyrius (ported from Rust in v2.0)
 - **License**: GPL-3.0-only
-- **Version**: SemVer 2.1.0
+- **Version**: SemVer 2.2.0
 - **Compiler**: cc3 >= 3.6.3
 
 ## Consumers

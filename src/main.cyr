@@ -32,6 +32,8 @@ include "src/slavic.cyr"
 include "src/jain.cyr"
 include "src/sikh.cyr"
 include "src/incarnate.cyr"
+include "src/finnish.cyr"
+include "src/vodou.cyr"
 include "src/compose.cyr"
 include "src/history.cyr"
 include "src/registry.cyr"
@@ -112,7 +114,7 @@ fn f64_check_ge(val, threshold, name) {
 }
 
 alloc_init();
-println("=== avatara v2.1.0 test suite ===");
+println("=== avatara v2.2.0 test suite ===");
 
 # ---------------------------------------------------------------
 # Tradition counts
@@ -373,6 +375,52 @@ f64_check_gt(prof_empathy(ramakrishna), 0.8, "ramakrishna empathy>0.8");
 var dalai_lama = lookup("Dalai Lama");
 ok(dalai_lama, "Dalai Lama exists");
 f64_check_gt(prof_empathy(dalai_lama), 0.8, "dalai_lama empathy>0.8");
+var merton = lookup("Thomas Merton");
+ok(merton, "Thomas Merton exists");
+f64_check_gt(prof_creativity(merton), 0.8, "merton creativity>0.8");
+var ghazali = lookup("Al-Ghazali");
+ok(ghazali, "Al-Ghazali exists");
+f64_check_gt(prof_precision(ghazali), 0.9, "ghazali precision>0.9");
+var attar_p = lookup("Attar");
+ok(attar_p, "Attar exists");
+f64_check_gt(prof_creativity(attar_p), 0.9, "attar creativity>0.9");
+
+# ---------------------------------------------------------------
+# Finnish/Sami
+# ---------------------------------------------------------------
+println("--- finnish ---");
+var finn_v = finnish_vainamoinen();
+ok(finn_v, "Vainamoinen exists");
+ok(streq(prof_tradition(finn_v), "Finnish") == 1, "vainamoinen tradition=Finnish");
+f64_check_gt(prof_creativity(finn_v), 0.8, "vainamoinen creativity>0.8");
+f64_check_gt(prof_patience(finn_v), 0.8, "vainamoinen patience>0.8");
+var finn_i = finnish_ilmarinen();
+ok(finn_i, "Ilmarinen exists");
+f64_check_gt(prof_precision(finn_i), 0.8, "ilmarinen precision>0.8");
+var finn_l = finnish_louhi();
+ok(finn_l, "Louhi exists");
+check(prof_polarity(finn_l), POL_FEMININE, "louhi polarity=feminine");
+var finn_u = finnish_ukko();
+ok(finn_u, "Ukko exists");
+check(prof_element(finn_u), ELEM_STORM, "ukko element=storm");
+check(finnish_count(), 14, "finnish=14");
+
+# ---------------------------------------------------------------
+# Vodou
+# ---------------------------------------------------------------
+println("--- vodou ---");
+var legba = vodou_legba();
+ok(legba, "Papa Legba exists");
+ok(streq(prof_tradition(legba), "Vodou") == 1, "legba tradition=Vodou");
+var baron = vodou_baron_samedi();
+ok(baron, "Baron Samedi exists");
+f64_check_gt(prof_humor(baron), 0.8, "baron humor>0.8");
+var erzulie = vodou_erzulie_freda();
+ok(erzulie, "Erzulie Freda exists");
+check(prof_polarity(erzulie), POL_FEMININE, "erzulie polarity=feminine");
+var damballa = vodou_damballa();
+ok(damballa, "Damballa exists");
+check(vodou_count(), 14, "vodou=14");
 
 # ---------------------------------------------------------------
 # Registry lookups
@@ -498,7 +546,7 @@ ok(valid, "all profiles have name/tradition/soul/spirit and traits in 0-1");
 # History module
 # ---------------------------------------------------------------
 println("--- history ---");
-check(mapping_count(), 25, "mapping_count=25");
+check(mapping_count(), 27, "mapping_count=27");
 
 var hindu_ctx = context_for_tradition("Hindu");
 ok(hindu_ctx, "context Hindu exists");

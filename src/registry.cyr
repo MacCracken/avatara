@@ -90,6 +90,14 @@ fn all_profiles() {
         v = all_incarnate();
         for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
 
+        # Finnish (Kalevala + Sami)
+        v = all_finnish();
+        for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
+
+        # Vodou (Lwa)
+        v = all_vodou();
+        for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
+
         registry_init_done = 1;
     }
     return registry_vec;
