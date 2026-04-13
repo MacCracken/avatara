@@ -1,7 +1,6 @@
 # Build
 /target/
 /build/
-rust-old/target/
 **/*.rs.bk
 
 # IDE

@@ -6,7 +6,7 @@
 
 - **Language**: Cyrius (ported from Rust in v2.0)
 - **License**: GPL-3.0-only
-- **Version**: SemVer 2.0.0
+- **Version**: SemVer 2.0.1
 - **Compiler**: cc3 >= 3.6.3
 
 ## Consumers
@@ -47,7 +47,6 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `tests/avatara.bcyr` — benchmarks
 - `programs/traditions.cyr` — example: explore archetypes
 - `programs/compose.cyr` — example: blend traditions
-- `rust-old/` — original Rust source for reference
 
 ## Type System
 

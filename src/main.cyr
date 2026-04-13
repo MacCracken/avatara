@@ -112,7 +112,7 @@ fn f64_check_ge(val, threshold, name) {
 }
 
 alloc_init();
-println("=== avatara v2.0.0 test suite ===");
+println("=== avatara v2.0.1 test suite ===");
 
 # ---------------------------------------------------------------
 # Tradition counts

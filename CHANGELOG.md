@@ -15,6 +15,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Expand Incarnate: Desert Fathers, Gregory Palamas, Thomas Merton, Attar, Al-Ghazali
 - Cross-tradition affinity mapping (Shango ~ Thor ~ Indra ~ Perun)
 
+## [2.0.1] — 2026-04-12
+
+### Fixed
+- `f64_le` and `f64_ge` defined as helpers (not cc3 builtins)
+- `sakshi.cyr` include missing from main.cyr
+- `history.cyr` formatting (cyrfmt compliance)
+- Integration test (`avatara.tcyr`) — corrected assert function names (`assert_neq`, `assert_gte`), added proper exit syscall
+- Mapping count corrected to 25 (was incorrectly 26)
+- Stray binary artifact removed from repo
+
+### Added
+- `require_all_unit_range()` — validates all f64 values in a profile range
+- `query_count_min_trait()` — count matching profiles without allocating
+- `benchmarks-rust-v-cyrius.md` — Rust v1.0.0 baseline for comparison
+- CI/release workflows rewritten for Cyrius (cc3 3.7.0)
+
 ## [2.0.0] — 2026-04-12
 
 Complete rewrite from Rust to Cyrius. All ~206 archetypes across 19 traditions preserved with identical trait values, soul text, and spirit text.
@@ -51,12 +67,12 @@ Complete rewrite from Rust to Cyrius. All ~206 archetypes across 19 traditions p
 - Registry lookup and query API
 - All soul text and spirit text verbatim
 - 25 tradition-to-history mappings with scholarly notes
-- Rust source in `rust-old/` for reference
+- Rust source removed (port complete)
 
 ## [1.1.0] — 2026-04-01 (Rust)
 
-Historical context integration via itihas. See `rust-old/` for details.
+Historical context integration via itihas. Rust era (source removed in v2.0.1).
 
 ## [1.0.0] — 2026-03-31 (Rust)
 
-Initial release. 19 traditions, ~206 archetypes, composition API, registry, query builder. See `rust-old/` for details.
+Initial release. 19 traditions, ~206 archetypes, composition API, registry, query builder. Rust era (source removed in v2.0.1).
