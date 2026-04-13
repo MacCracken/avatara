@@ -7,13 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### v2.1.0 roadmap
-- hadara integration (archetype-to-culture context)
-- itihas object resolution (resolve civ/era names to full itihas objects)
+### v2.2.0 roadmap
 - Finnish/Sami tradition (Kalevala figures)
 - Vodou Lwa (distinct from Yoruba)
 - Expand Incarnate: Desert Fathers, Gregory Palamas, Thomas Merton, Attar, Al-Ghazali
 - Cross-tradition affinity mapping (Shango ~ Thor ~ Indra ~ Perun)
+
+## [2.1.0] — 2026-04-12
+
+### Added
+- Rust source removed from repo (preserved in git history at v2.0.0)
+- `benchmarks-rust-v-cyrius.md` — full Rust v1.1.0 vs Cyrius v2.0.1 comparison with code metrics, binary size, and all benchmark numbers
+- 39 benchmarks (up from 19), matching and exceeding Rust Criterion suite (29)
+- 195 test assertions (up from 122), covering all 19 traditions with per-entity spot checks
+- Per-tradition tests: angelic, hindu, olympian, egyptian, buddhist, mesopotamian, celtic, shinto, aztec, maya, yoruba, zoroastrian, taoist, polynesian, slavic, jain, sikh, incarnate
 
 ## [2.0.1] — 2026-04-12
 
