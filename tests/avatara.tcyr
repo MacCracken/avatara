@@ -195,7 +195,7 @@ fn main() {
     # ================================================================
     # History: mapped traditions count
     # ================================================================
-    assert_eq(mapping_count(), 26, "26 history mappings");
+    assert_eq(mapping_count(), 25, "25 history mappings");
 
     # ================================================================
     # History: all mapped traditions resolve

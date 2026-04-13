@@ -5,7 +5,7 @@
 # Each tradition maps to one or more civilizations, eras, and a temporal
 # range — the period during which the tradition's theology was actively forming.
 #
-# 26 tradition-to-history mappings with scholarly historical notes.
+# 25 tradition-to-history mappings with scholarly historical notes.
 
 # --- TraditionMapping layout ---
 # Each mapping: tradition name, primary civ, civ names (vec), era names (vec),

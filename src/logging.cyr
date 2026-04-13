@@ -1,6 +1,6 @@
 # logging.cyr -- Logging init for avatara
 
 fn avatara_log_init() {
-    sakshi_init("avatara", SAKSHI_INFO);
+    sakshi_set_level(SK_INFO);
     return 0;
 }

@@ -21,7 +21,7 @@ Complete rewrite from Rust to Cyrius. All ~206 archetypes across 19 traditions p
 
 ### Added
 - `src/types.cyr` — 312-byte ArchetypeProfile with inline TraitWeights (15 f64) and ModuleEmphasis (14 f64); 5 enums (BreathAffinity, GrowthDirection, Element, Polarity, CosmicTier); `profile_new()` constructor with 0.5 defaults
-- `src/history.cyr` — 26 tradition-to-history mappings with civilization names, era names, temporal ranges, and scholarly notes; `context_for_tradition()`, `traditions_for_civilization()`, `traditions_active_at()`, `traditions_for_era()`
+- `src/history.cyr` — 25 tradition-to-history mappings with civilization names, era names, temporal ranges, and scholarly notes; `context_for_tradition()`, `traditions_for_civilization()`, `traditions_active_at()`, `traditions_for_era()`
 - `src/registry.cyr` — `query_civilization()`, `query_era()`, `query_active_at()` history-based filters
 - `tests/avatara.tcyr` — integration test suite (entity counts, range validation, duplicate detection, breath monotonicity, compose invariants, history queries)
 - `tests/avatara.bcyr` — benchmarks for all traditions, registry, compose, and history
@@ -50,7 +50,7 @@ Complete rewrite from Rust to Cyrius. All ~206 archetypes across 19 traditions p
 - Composition system (weighted blending with breath intensity averaging, growth/tier voting)
 - Registry lookup and query API
 - All soul text and spirit text verbatim
-- 26 tradition-to-history mappings with scholarly notes
+- 25 tradition-to-history mappings with scholarly notes
 - Rust source in `rust-old/` for reference
 
 ## [1.1.0] — 2026-04-01 (Rust)

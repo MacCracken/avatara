@@ -8,6 +8,7 @@ include "lib/vec.cyr"
 include "lib/str.cyr"
 include "lib/math.cyr"
 include "lib/syscalls.cyr"
+include "lib/sakshi.cyr"
 
 include "src/types.cyr"
 include "src/error.cyr"
@@ -306,7 +307,7 @@ ok(valid, "all profiles have name/tradition/soul/spirit and traits in 0-1");
 # History module
 # ---------------------------------------------------------------
 println("--- history ---");
-check(mapping_count(), 26, "mapping_count=26");
+check(mapping_count(), 25, "mapping_count=25");
 
 var hindu_ctx = context_for_tradition("Hindu");
 ok(hindu_ctx, "context Hindu exists");

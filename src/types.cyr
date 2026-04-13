@@ -7,6 +7,12 @@
 # f64 values stored as IEEE 754 bit patterns. Use f64_* builtins
 # for arithmetic and comparison.
 
+# --- f64 comparison helpers ---
+# f64_lt, f64_gt, f64_eq are cc3 builtins.
+# f64_le and f64_ge are not — define them here.
+fn f64_le(a, b) { if (f64_lt(a, b) == 1) { return 1; } if (f64_eq(a, b) == 1) { return 1; } return 0; }
+fn f64_ge(a, b) { if (f64_gt(a, b) == 1) { return 1; } if (f64_eq(a, b) == 1) { return 1; } return 0; }
+
 # --- BreathAffinity ---
 # Manifestation phase: where on the cosmic breath this archetype sits.
 # intensity() values in parentheses.

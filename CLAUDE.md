@@ -20,7 +20,7 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/types.cyr` — ArchetypeProfile layout (312 bytes), TraitWeights (15 f64), ModuleEmphasis (14 f64), enums (BreathAffinity, GrowthDirection, Element, Polarity, CosmicTier)
 - `src/error.cyr` — AvataraError enum codes, validation
 - `src/compose.cyr` — archetype composition: weighted blending of multiple profiles
-- `src/history.cyr` — 26 tradition-to-history mappings (civilization, era, temporal range, notes)
+- `src/history.cyr` — 25 tradition-to-history mappings (civilization, era, temporal range, notes)
 - `src/registry.cyr` — lookup by name, enumeration, query/filter API (includes history-based queries)
 - `src/kabbalah.cyr` — Tree of Life: 10 Sephiroth
 - `src/angelic.cyr` — 9 angelic orders, 7 archangels
