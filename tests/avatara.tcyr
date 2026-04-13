@@ -11,6 +11,7 @@ include "lib/math.cyr"
 include "lib/vec.cyr"
 include "lib/str.cyr"
 include "lib/syscalls.cyr"
+include "lib/sakshi.cyr"
 
 include "src/types.cyr"
 include "src/error.cyr"
@@ -47,7 +48,7 @@ fn main() {
     # ================================================================
     var profiles = all_profiles();
     var count = vec_len(profiles);
-    assert_ge(count, 250, "total entity count >= 250");
+    assert_gte(count, 250, "total entity count >= 250");
 
     # ================================================================
     # All profiles have non-empty name, tradition, description, soul, spirit
@@ -164,7 +165,7 @@ fn main() {
     var single = vec_new();
     vec_push(single, weighted_new(tip, 1.0));
     var comp = compose(single);
-    assert_ne(comp, 0, "compose single not null");
+    assert_neq(comp, 0, "compose single not null");
     assert_eq(streq(prof_name(comp), "Tiphareth"), 1, "compose single name");
     assert_eq(prof_breath(comp), prof_breath(tip), "compose single breath");
     assert_eq(prof_growth_dir(comp), prof_growth_dir(tip), "compose single growth");
@@ -220,7 +221,8 @@ fn main() {
     var vedic_profiles = query_era("Vedic Period");
     assert_gt(vec_len(vedic_profiles), 0, "Vedic Period has profiles");
 
-    assert_summary();
+    return assert_summary();
 }
 
-main();
+var rc = main();
+syscall(60, rc);
