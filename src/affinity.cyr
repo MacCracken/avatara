@@ -7,49 +7,44 @@
 # Affinity score: 1.0 = identical traits, 0.0 = maximally opposite.
 # Computed as 1 - (mean absolute difference across all 15 traits + 14 emphases).
 
+# --- Affinity tuning parameters ---
+# Trait delta above which two profiles are said to "conflict" on that trait.
+fn conflict_threshold() { return 0.4; }
+# Number of conflicting traits at which two profiles are deemed incompatible.
+enum AffinityParams { INCOMPAT_MIN_CONFLICTS = 5; }
+
 # --- Affinity scoring ---
+
+# Sum of absolute f64 differences between two profiles over the field range
+# [first, last] (8-aligned offsets). Shared by affinity / trait_affinity.
+fn sum_abs_diff(a, b, first, last) {
+    var total = 0.0;
+    var off = first;
+    while (off <= last) {
+        total = f64_add(total, f64_abs(f64_sub(load64(a + off), load64(b + off))));
+        off = off + 8;
+    }
+    return total;
+}
 
 # Compute affinity between two profiles (0.0 to 1.0).
 # Considers all 15 traits and 14 emphases equally weighted.
+# Returns 0.0 if either profile is NULL (e.g. an unresolved lookup).
 fn affinity(a, b) {
-    var total_diff = 0.0;
-    var count = 0;
-
-    # Traits (15 fields)
-    var off = TW_FIRST;
-    while (off <= TW_LAST) {
-        var diff = f64_abs(f64_sub(load64(a + off), load64(b + off)));
-        total_diff = f64_add(total_diff, diff);
-        count = count + 1;
-        off = off + 8;
-    }
-
-    # Emphases (14 fields)
-    off = ME_FIRST;
-    while (off <= ME_LAST) {
-        var diff = f64_abs(f64_sub(load64(a + off), load64(b + off)));
-        total_diff = f64_add(total_diff, diff);
-        count = count + 1;
-        off = off + 8;
-    }
-
-    # Mean absolute difference, inverted to similarity
-    var mean_diff = f64_div(total_diff, f64_from(count));
+    if (a == 0) { return 0; }
+    if (b == 0) { return 0; }
+    var total_diff = f64_add(sum_abs_diff(a, b, TW_FIRST, TW_LAST),
+                             sum_abs_diff(a, b, ME_FIRST, ME_LAST));
+    var mean_diff = f64_div(total_diff, f64_from(TW_COUNT + ME_COUNT));
     return f64_sub(1.0, mean_diff);
 }
 
 # Compute trait-only affinity (ignores emphasis, just the 15 personality traits).
+# Returns 0.0 if either profile is NULL.
 fn trait_affinity(a, b) {
-    var total_diff = 0.0;
-    var count = 0;
-    var off = TW_FIRST;
-    while (off <= TW_LAST) {
-        var diff = f64_abs(f64_sub(load64(a + off), load64(b + off)));
-        total_diff = f64_add(total_diff, diff);
-        count = count + 1;
-        off = off + 8;
-    }
-    var mean_diff = f64_div(total_diff, f64_from(count));
+    if (a == 0) { return 0; }
+    if (b == 0) { return 0; }
+    var mean_diff = f64_div(sum_abs_diff(a, b, TW_FIRST, TW_LAST), f64_from(TW_COUNT));
     return f64_sub(1.0, mean_diff);
 }
 
@@ -75,8 +70,10 @@ fn sim_score(s)   { return load64(s + SIM_SCORE); }
 # Find the N most similar archetypes to the given profile.
 # Returns a vec of sim entries sorted by descending affinity.
 # Excludes the source profile itself (by name match).
+# max_results <= 0 means "unlimited" (return all, sorted). NULL source -> empty.
 fn similar_to(source, max_results) {
     var results = vec_new();
+    if (source == 0) { return results; }
     var profiles = all_profiles();
     var n = vec_len(profiles);
     var src_name = prof_name(source);
@@ -128,6 +125,7 @@ fn similar_to(source, max_results) {
 # Useful for cross-tradition mapping (e.g. "who is the Norse Thor?")
 fn cross_tradition_match(source) {
     var best = 0;
+    if (source == 0) { return best; }
     var best_score = 0.0;
     var profiles = all_profiles();
     var n = vec_len(profiles);
@@ -149,9 +147,10 @@ fn cross_tradition_match(source) {
 # Find all cross-tradition matches for a profile (one per tradition).
 # Returns vec of sim entries, one per foreign tradition, sorted by affinity.
 fn cross_tradition_matches(source, max_results) {
+    var results = vec_new();
+    if (source == 0) { return results; }
     var src_trad = prof_tradition(source);
     var trads = all_traditions();
-    var results = vec_new();
 
     for (var i = 0; i < vec_len(trads); i = i + 1) {
         var t = vec_get(trads, i);
@@ -244,6 +243,8 @@ fn trait_name_for_offset(off) {
 # Returns vec of conflict entries sorted by largest delta first.
 fn conflicts(a, b, threshold) {
     var result = vec_new();
+    if (a == 0) { return result; }
+    if (b == 0) { return result; }
     var off = TW_FIRST;
     while (off <= TW_LAST) {
         var va = load64(a + off);
@@ -277,14 +278,14 @@ fn conflicts(a, b, threshold) {
     return result;
 }
 
-# Convenience: conflicts with default threshold (0.4)
+# Convenience: conflicts with default threshold.
 fn detect_conflicts(a, b) {
-    return conflicts(a, b, 0.4);
+    return conflicts(a, b, conflict_threshold());
 }
 
-# Check if two profiles are incompatible (>= 5 conflicting traits at 0.4 threshold).
+# Check if two profiles are incompatible (too many conflicting traits).
 fn is_incompatible(a, b) {
     var c = detect_conflicts(a, b);
-    if (vec_len(c) >= 5) { return 1; }
+    if (vec_len(c) >= INCOMPAT_MIN_CONFLICTS) { return 1; }
     return 0;
 }

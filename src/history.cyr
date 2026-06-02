@@ -5,7 +5,7 @@
 # Each tradition maps to one or more civilizations, eras, and a temporal
 # range — the period during which the tradition's theology was actively forming.
 #
-# 25 tradition-to-history mappings with scholarly historical notes.
+# 27 tradition-to-history mappings with scholarly historical notes.
 
 # --- TraditionMapping layout ---
 # Each mapping: tradition name, primary civ, civ names (vec), era names (vec),
@@ -69,7 +69,7 @@ fn svec3(a, b, c) { var v = vec_new(); vec_push(v, a); vec_push(v, b); vec_push(
 fn svec4(a, b, c, d) { var v = vec_new(); vec_push(v, a); vec_push(v, b); vec_push(v, c); vec_push(v, d); return v; }
 fn svec5(a, b, c, d, e) { var v = vec_new(); vec_push(v, a); vec_push(v, b); vec_push(v, c); vec_push(v, d); vec_push(v, e); return v; }
 
-# --- Build all 26 mappings ---
+# --- Build all 27 mappings ---
 
 var history_vec = 0;
 var history_init_done = 0;

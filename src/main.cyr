@@ -1,5 +1,5 @@
-# avatara — Divine Archetype Engine v2.3.0
-# 24 traditions, 362 archetypes
+# avatara — Divine Archetype Engine
+# 24 traditions, 362 archetypes (see VERSION for release)
 
 # Stdlib auto-included via cyrius.cyml
 
@@ -42,7 +42,7 @@ var profiles = all_profiles();
 var count = vec_len(profiles);
 var trads = all_traditions();
 
-prints("avatara v2.3.0 — ");
+prints("avatara — ");
 print_num(count);
 prints(" profiles, ");
 print_num(vec_len(trads));

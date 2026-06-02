@@ -26,3 +26,21 @@ fn require_all_unit_range(p, first, last) {
     }
     return ERR_NONE;
 }
+
+# Validate a whole profile: all 15 traits and 14 emphases must be in 0.0-1.0.
+# Returns ERR_NONE, ERR_INVALID_PARAMETER (NULL profile), or ERR_OUT_OF_RANGE.
+# Public entry point for consumers that build profiles from external data.
+fn validate_profile(p) {
+    if (p == 0) { return ERR_INVALID_PARAMETER; }
+    return require_all_unit_range(p, TW_FIRST, ME_LAST);
+}
+
+# True (1) if `offset` names an in-range f64 trait/emphasis field of a profile
+# (TW_FIRST..ME_LAST, 8-aligned). Used to bounds-check caller-supplied offsets
+# before load64(p + offset) in the public query/filter API.
+fn is_f64_field_offset(offset) {
+    if (offset < TW_FIRST) { return 0; }
+    if (offset > ME_LAST) { return 0; }
+    if (((offset - TW_FIRST) % 8) != 0) { return 0; }
+    return 1;
+}

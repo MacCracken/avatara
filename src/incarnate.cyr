@@ -2424,71 +2424,26 @@ fn all_incarnate_sage() {
 var incarnate_all_vec = 0;
 var incarnate_all_init_done = 0;
 
+# Append every element of src onto dst (shares profile pointers, no re-alloc).
+fn incarnate_append(dst, src) {
+    var n = vec_len(src);
+    for (var i = 0; i < n; i = i + 1) {
+        vec_push(dst, vec_get(src, i));
+    }
+}
+
+# All 56 incarnate figures: the six subgroup collections concatenated.
+# Reuses the subgroup vecs (built once, cached) rather than re-constructing
+# every profile a second time.
 fn all_incarnate() {
     if (incarnate_all_init_done == 0) {
         incarnate_all_vec = vec_new();
-        # Hindu (13)
-        vec_push(incarnate_all_vec, incarnate_hindu_ramakrishna());
-        vec_push(incarnate_all_vec, incarnate_hindu_ramana_maharshi());
-        vec_push(incarnate_all_vec, incarnate_hindu_anandamayi_ma());
-        vec_push(incarnate_all_vec, incarnate_hindu_yogananda());
-        vec_push(incarnate_all_vec, incarnate_hindu_mother_meera());
-        vec_push(incarnate_all_vec, incarnate_hindu_amma());
-        vec_push(incarnate_all_vec, incarnate_hindu_sathya_sai_baba());
-        vec_push(incarnate_all_vec, incarnate_hindu_vivekananda());
-        vec_push(incarnate_all_vec, incarnate_hindu_mirabai());
-        vec_push(incarnate_all_vec, incarnate_hindu_kabir());
-        vec_push(incarnate_all_vec, incarnate_hindu_shankaracharya());
-        vec_push(incarnate_all_vec, incarnate_hindu_shirdi_sai_baba());
-        vec_push(incarnate_all_vec, incarnate_hindu_neem_karoli_baba());
-        # Buddhist (10)
-        vec_push(incarnate_all_vec, incarnate_buddhist_dalai_lama());
-        vec_push(incarnate_all_vec, incarnate_buddhist_karmapa());
-        vec_push(incarnate_all_vec, incarnate_buddhist_padmasambhava());
-        vec_push(incarnate_all_vec, incarnate_buddhist_milarepa());
-        vec_push(incarnate_all_vec, incarnate_buddhist_thich_nhat_hanh());
-        vec_push(incarnate_all_vec, incarnate_buddhist_dogen());
-        vec_push(incarnate_all_vec, incarnate_buddhist_bodhidharma());
-        vec_push(incarnate_all_vec, incarnate_buddhist_machig_labdron());
-        vec_push(incarnate_all_vec, incarnate_buddhist_nagarjuna());
-        vec_push(incarnate_all_vec, incarnate_buddhist_tsongkhapa());
-        # Mystic (12)
-        vec_push(incarnate_all_vec, incarnate_mystic_rumi());
-        vec_push(incarnate_all_vec, incarnate_mystic_meister_eckhart());
-        vec_push(incarnate_all_vec, incarnate_mystic_hildegard());
-        vec_push(incarnate_all_vec, incarnate_mystic_teresa_of_avila());
-        vec_push(incarnate_all_vec, incarnate_mystic_francis_of_assisi());
-        vec_push(incarnate_all_vec, incarnate_mystic_john_of_the_cross());
-        vec_push(incarnate_all_vec, incarnate_mystic_hallaj());
-        vec_push(incarnate_all_vec, incarnate_mystic_rabia());
-        vec_push(incarnate_all_vec, incarnate_mystic_isaac_luria());
-        vec_push(incarnate_all_vec, incarnate_mystic_baal_shem_tov());
-        vec_push(incarnate_all_vec, incarnate_mystic_ibn_arabi());
-        vec_push(incarnate_all_vec, incarnate_mystic_julian_of_norwich());
-        vec_push(incarnate_all_vec, incarnate_mystic_desert_fathers());
-        vec_push(incarnate_all_vec, incarnate_mystic_gregory_palamas());
-        vec_push(incarnate_all_vec, incarnate_mystic_thomas_merton());
-        vec_push(incarnate_all_vec, incarnate_mystic_attar());
-        vec_push(incarnate_all_vec, incarnate_mystic_al_ghazali());
-        # Taoist (5)
-        vec_push(incarnate_all_vec, incarnate_taoist_zhang_daoling());
-        vec_push(incarnate_all_vec, incarnate_taoist_ge_hong());
-        vec_push(incarnate_all_vec, incarnate_taoist_wang_chongyang());
-        vec_push(incarnate_all_vec, incarnate_taoist_sun_buer());
-        vec_push(incarnate_all_vec, incarnate_taoist_zhuangzi());
-        # Indigenous (4)
-        vec_push(incarnate_all_vec, incarnate_indigenous_white_buffalo_calf_woman());
-        vec_push(incarnate_all_vec, incarnate_indigenous_quanah_parker());
-        vec_push(incarnate_all_vec, incarnate_indigenous_deganawidah());
-        vec_push(incarnate_all_vec, incarnate_indigenous_wovoka());
-        # Sage (7)
-        vec_push(incarnate_all_vec, incarnate_sage_kashyapa());
-        vec_push(incarnate_all_vec, incarnate_sage_atri());
-        vec_push(incarnate_all_vec, incarnate_sage_vashishtha());
-        vec_push(incarnate_all_vec, incarnate_sage_vishvamitra());
-        vec_push(incarnate_all_vec, incarnate_sage_gautama());
-        vec_push(incarnate_all_vec, incarnate_sage_jamadagni());
-        vec_push(incarnate_all_vec, incarnate_sage_bharadvaja());
+        incarnate_append(incarnate_all_vec, all_incarnate_hindu());
+        incarnate_append(incarnate_all_vec, all_incarnate_buddhist());
+        incarnate_append(incarnate_all_vec, all_incarnate_mystic());
+        incarnate_append(incarnate_all_vec, all_incarnate_taoist());
+        incarnate_append(incarnate_all_vec, all_incarnate_indigenous());
+        incarnate_append(incarnate_all_vec, all_incarnate_sage());
         incarnate_all_init_done = 1;
     }
     return incarnate_all_vec;

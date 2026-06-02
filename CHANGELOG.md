@@ -12,6 +12,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cross-tradition affinity graph (pre-computed, stored)
 - Shadow aspect support (dark/inverted form of each archetype)
 
+## [2.4.1] — 2026-06-02
+
+Hardening + refactor sweep. No API removals; behavior changes are limited to
+rejecting invalid input that previously caused undefined behavior.
+
+### Fixed
+- **NULL-profile guards** (`affinity`, `trait_affinity`, `compose`, `conflicts`/`detect_conflicts`, `similar_to`, `cross_tradition_match`, `cross_tradition_matches`) — a `0` returned by `lookup`/`lookup_in`/`cross_tradition_match` on a miss no longer flows into `load64(p + off)` and dereferences near-NULL; these now return a `0`/empty sentinel.
+- **`compose()` buffer overflow** — the composite name/tradition buffers were fixed at 512/256 bytes and written unchecked; composing many archetypes (e.g. all 24 traditions) overran them and corrupted the bump heap. Buffers are now sized exactly from the input.
+- **`compose()` rejects NULL profiles and NaN weights** (in addition to the existing empty-vec / negative-weight / zero-total guards).
+- **Out-of-range query offsets** — `query_min_trait`/`query_max_trait`/`query_count_min_trait`/`filter_min_trait` now bounds-check the caller-supplied `offset` (via `is_f64_field_offset`) and return empty instead of reading outside the 312-byte profile.
+
+### Changed
+- **`all_incarnate()`** rebuilt from the six cached subgroup collections instead of re-listing and re-constructing all 56 incarnate profiles — removes a 56-profile double-allocation (~50 LOC).
+- **`profile_new()`** default-fills the 29 contiguous trait/emphasis fields with a loop over `TW_FIRST..ME_LAST` instead of 29 literal stores.
+- **`affinity`/`trait_affinity`** share a `sum_abs_diff(a, b, first, last)` helper.
+- The three history queries (`query_civilization`/`query_era`/`query_active_at`) delegate to a shared `query_by_traditions(trads)`.
+- Affinity tuning values are named: `conflict_threshold()` (0.4) and `INCOMPAT_MIN_CONFLICTS` (5).
+- `compose()` dominant-entry tie-break now picks the first max-weight entry (matches composite-name ordering).
+
+### Added
+- **`validate_profile(p)`** — public entry point wiring up the previously-unused validation layer (`require_unit_range`/`require_all_unit_range`); returns `ERR_INVALID_PARAMETER`/`ERR_OUT_OF_RANGE`/`ERR_NONE`.
+
+### Docs
+- Corrected the history-mapping count to 27 (was variously 25/26 in comments and CLAUDE.md; the test already asserted 27).
+- Smoke-test banner no longer hardcodes the version string (avoids per-release drift).
+
 ## [2.4.0] — 2026-06-02
 
 ### Changed

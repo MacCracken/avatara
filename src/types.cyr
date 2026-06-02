@@ -226,37 +226,13 @@ fn profile_new() {
     store64(p + PROF_NAME, 0);
     store64(p + PROF_TRADITION, 0);
     store64(p + PROF_DESC, 0);
-    # All 15 trait weights default to 0.5
-    store64(p + PROF_WARMTH, 0.5);
-    store64(p + PROF_HUMOR, 0.5);
-    store64(p + PROF_EMPATHY, 0.5);
-    store64(p + PROF_PATIENCE, 0.5);
-    store64(p + PROF_CONFIDENCE, 0.5);
-    store64(p + PROF_CURIOSITY, 0.5);
-    store64(p + PROF_CREATIVITY, 0.5);
-    store64(p + PROF_DIRECTNESS, 0.5);
-    store64(p + PROF_FORMALITY, 0.5);
-    store64(p + PROF_VERBOSITY, 0.5);
-    store64(p + PROF_COURAGE, 0.5);
-    store64(p + PROF_PRECISION, 0.5);
-    store64(p + PROF_SKEPTICISM, 0.5);
-    store64(p + PROF_AUTONOMY, 0.5);
-    store64(p + PROF_PEDAGOGY, 0.5);
-    # All 14 module emphases default to 0.5
-    store64(p + PROF_MOOD, 0.5);
-    store64(p + PROF_ENERGY, 0.5);
-    store64(p + PROF_STRESS, 0.5);
-    store64(p + PROF_GROWTH, 0.5);
-    store64(p + PROF_SPIRIT, 0.5);
-    store64(p + PROF_REASONING, 0.5);
-    store64(p + PROF_REGULATION, 0.5);
-    store64(p + PROF_RELATIONSHIP, 0.5);
-    store64(p + PROF_FLOW, 0.5);
-    store64(p + PROF_BELIEF, 0.5);
-    store64(p + PROF_INTUITION, 0.5);
-    store64(p + PROF_SALIENCE, 0.5);
-    store64(p + PROF_APPRAISAL, 0.5);
-    store64(p + PROF_EQ, 0.5);
+    # All 15 trait weights and 14 module emphases default to 0.5.
+    # The two ranges are contiguous (TW_FIRST..ME_LAST, step 8).
+    var off = TW_FIRST;
+    while (off <= ME_LAST) {
+        store64(p + off, 0.5);
+        off = off + 8;
+    }
     # Default enums
     store64(p + PROF_BREATH, BREATH_LATE_EXHALE);
     store64(p + PROF_GROWTH_DIR, GROWTH_DIFFERENTIATE);

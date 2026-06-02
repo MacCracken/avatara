@@ -170,6 +170,7 @@ fn profile_count() {
 # min_val: f64 threshold
 fn query_min_trait(offset, min_val) {
     var result = vec_new();
+    if (is_f64_field_offset(offset) == 0) { return result; }
     var v = all_profiles();
     var n = vec_len(v);
     for (var i = 0; i < n; i = i + 1) {
@@ -184,6 +185,7 @@ fn query_min_trait(offset, min_val) {
 # Filter profiles by maximum trait value at a given offset.
 fn query_max_trait(offset, max_val) {
     var result = vec_new();
+    if (is_f64_field_offset(offset) == 0) { return result; }
     var v = all_profiles();
     var n = vec_len(v);
     for (var i = 0; i < n; i = i + 1) {
@@ -258,6 +260,7 @@ fn query_tier(tier) {
 # Count profiles matching a min trait threshold (without allocating a result vec).
 fn query_count_min_trait(offset, min_val) {
     var c = 0;
+    if (is_f64_field_offset(offset) == 0) { return c; }
     var v = all_profiles();
     var n = vec_len(v);
     for (var i = 0; i < n; i = i + 1) {
@@ -281,9 +284,9 @@ fn filter_tradition(src, tradition) {
 
 # --- History-based query filters ---
 
-# Filter profiles by civilization (via history mappings).
-fn query_civilization(civ_name) {
-    var trads = traditions_for_civilization(civ_name);
+# Filter profiles whose tradition is in the given vec of tradition names.
+# Shared implementation for the history-based queries below.
+fn query_by_traditions(trads) {
     var result = vec_new();
     var v = all_profiles();
     var n = vec_len(v);
@@ -297,47 +300,27 @@ fn query_civilization(civ_name) {
         }
     }
     return result;
+}
+
+# Filter profiles by civilization (via history mappings).
+fn query_civilization(civ_name) {
+    return query_by_traditions(traditions_for_civilization(civ_name));
 }
 
 # Filter profiles by era (via history mappings).
 fn query_era(era_name) {
-    var trads = traditions_for_era(era_name);
-    var result = vec_new();
-    var v = all_profiles();
-    var n = vec_len(v);
-    for (var i = 0; i < n; i = i + 1) {
-        var p = vec_get(v, i);
-        var t = prof_tradition(p);
-        for (var j = 0; j < vec_len(trads); j = j + 1) {
-            if (streq(vec_get(trads, j), t) == 1) {
-                vec_push(result, p);
-            }
-        }
-    }
-    return result;
+    return query_by_traditions(traditions_for_era(era_name));
 }
 
 # Filter profiles by year of tradition activity (via history mappings).
 fn query_active_at(year) {
-    var trads = traditions_active_at(year);
-    var result = vec_new();
-    var v = all_profiles();
-    var n = vec_len(v);
-    for (var i = 0; i < n; i = i + 1) {
-        var p = vec_get(v, i);
-        var t = prof_tradition(p);
-        for (var j = 0; j < vec_len(trads); j = j + 1) {
-            if (streq(vec_get(trads, j), t) == 1) {
-                vec_push(result, p);
-            }
-        }
-    }
-    return result;
+    return query_by_traditions(traditions_active_at(year));
 }
 
 # Filter a vec by minimum trait (for chaining).
 fn filter_min_trait(src, offset, min_val) {
     var result = vec_new();
+    if (is_f64_field_offset(offset) == 0) { return result; }
     var n = vec_len(src);
     for (var i = 0; i < n; i = i + 1) {
         var p = vec_get(src, i);
