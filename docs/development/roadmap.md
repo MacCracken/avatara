@@ -9,16 +9,14 @@
 > stdlib `f64_le`/`f64_ge`). The feature items below were not part of that line
 > and have been re-bucketed accordingly.
 
-### v2.5.0 — Architecture Modernization
+### v2.5.0 — Result error model ✅ (shipped)
 
-Deferred from the 2.4.x sweep because the blast radius is too large for a patch
-line (see CHANGELOG 2.4.x). Breaking at the layout/API level — minor bump.
-**Do the struct migration first** — it rewrites the field-access surface that
-every 2.5.x item below builds on, so landing it first avoids re-doing the
-domain-field and shadow work against the old `store64`/offset idiom.
+- [x] **`Result<T, E>` + `?`** — `lookup`/`lookup_in`/`compose`/`validate_profile` now return `Result` (`Ok(profile)` / `Err(AvataraError)`) instead of `0`-on-error / bare int codes; added `find_and_validate` demonstrating `?`. API-breaking for consumers (see CHANGELOG 2.5.0).
 
-- [ ] **`struct` + `#derive(accessors)` for `ArchetypeProfile`** — replace the manual 312-byte blob (offset enums + `store64`/`load64` + ~39 hand-written `prof_*` accessors) with a native struct. ~10k `store64(p + PROF_*)` write sites across 23 files. Requires: a `sizeof(Profile) == 312` + offset-assertion test, a mechanical migration, and `prof_*` compat shims so consumers (bhava/joshua/kiran/agnosai/hadara) don't break.
-- [ ] **`Result<T, E>` + `?` for `error.cyr`** — replace integer error codes / `0`-on-error returns with tagged sum-type results. API-breaking for consumers; pair with the accessor migration.
+### Blocked — struct migration (waiting on cyrius)
+
+- [ ] **`struct` + `#derive(accessors)` for `ArchetypeProfile`** — replace the manual 312-byte blob (offset enums + `store64`/`load64` + ~39 hand-written `prof_*` accessors) with a native struct. **Blocked**: cyrius caps structs at 32 fields and `Profile` has 39 — proposal filed at `cyrius/docs/development/proposals/2026-06-02-struct-field-cap-raise.md`. Resume when the cap is raised upstream (the named-field struct would also make the 2.4.5 `PROF_SPIRIT` offset-collision class of bug a compile error). When unblocked: `sizeof == 312` + offset-assertion test, mechanical `store64 → Profile_set_*` migration (~10k sites), `prof_*` compat shims for consumers.
+- This migration was to precede the layout-changing items below (esp. the `domain` field); with it blocked, sequence those independently or wait.
 
 ### v2.5.1 — `domain` field (slipped from 2.4.0)
 

@@ -45,7 +45,9 @@ vec_push(w, weighted_new(kabbalah_tiphareth(), 1.0));
 vec_push(w, weighted_new(hindu_vishnu(), 0.8));
 vec_push(w, weighted_new(olympian_athena(), 0.6));
 
-var profile = compose(w);
+var composed = compose(w);
+if (is_err_result(composed) == 1) { println("compose failed"); syscall(SYS_EXIT, 1); }
+var profile = result_unwrap(composed);
 
 prints("Composite: ");
 println(prof_name(profile));

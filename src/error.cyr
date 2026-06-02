@@ -28,11 +28,16 @@ fn require_all_unit_range(p, first, last) {
 }
 
 # Validate a whole profile: all 15 traits and 14 emphases must be in 0.0-1.0.
-# Returns ERR_NONE, ERR_INVALID_PARAMETER (NULL profile), or ERR_OUT_OF_RANGE.
+# Returns Result: Ok(p) on success, or Err(AvataraError) — Err(ERR_INVALID_PARAMETER)
+# for a NULL profile, Err(ERR_OUT_OF_RANGE) for an out-of-range field.
 # Public entry point for consumers that build profiles from external data.
+# (require_unit_range / require_all_unit_range stay bare-int — they run in
+# per-field loops, where a Result heap alloc per element would be wasteful.)
 fn validate_profile(p) {
-    if (p == 0) { return ERR_INVALID_PARAMETER; }
-    return require_all_unit_range(p, TW_FIRST, ME_LAST);
+    if (p == 0) { return Err(ERR_INVALID_PARAMETER); }
+    var code = require_all_unit_range(p, TW_FIRST, ME_LAST);
+    if (code != ERR_NONE) { return Err(code); }
+    return Ok(p);
 }
 
 # True (1) if `offset` names an in-range f64 trait/emphasis field of a profile

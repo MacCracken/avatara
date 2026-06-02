@@ -26,28 +26,28 @@ fn weighted_weight(w)  { return load64(w + WE_WEIGHT); }
 # Compose multiple archetype profiles into a single blended profile.
 #
 # weighted: vec of weighted_new(profile, weight) entries
-# Returns: new ArchetypeProfile pointer, or 0 on error
+# Returns Result: Ok(new ArchetypeProfile) or Err(ERR_INVALID_PARAMETER).
 #
-# Errors (returns 0):
+# Err(ERR_INVALID_PARAMETER) for:
 #   - empty vec
 #   - any NULL profile pointer (e.g. an unresolved lookup)
 #   - any negative or NaN weight
 #   - total weight <= 0
 fn compose(weighted) {
     var n = vec_len(weighted);
-    if (n == 0) { return 0; }
+    if (n == 0) { return Err(ERR_INVALID_PARAMETER); }
 
     # Sum weights; reject NULL profiles, negative weights, and NaN weights.
     var total = 0.0;
     for (var i = 0; i < n; i += 1) {
         var entry = vec_get(weighted, i);
-        if (weighted_profile(entry) == 0) { return 0; }
+        if (weighted_profile(entry) == 0) { return Err(ERR_INVALID_PARAMETER); }
         var w = weighted_weight(entry);
-        if (f64_lt(w, 0.0) == 1) { return 0; }
-        if (f64_eq(w, w) == 0) { return 0; }
+        if (f64_lt(w, 0.0) == 1) { return Err(ERR_INVALID_PARAMETER); }
+        if (f64_eq(w, w) == 0) { return Err(ERR_INVALID_PARAMETER); }
         total = f64_add(total, w);
     }
-    if (f64_le(total, 0.0) == 1) { return 0; }
+    if (f64_le(total, 0.0) == 1) { return Err(ERR_INVALID_PARAMETER); }
 
     var result = profile_new();
 
@@ -230,5 +230,5 @@ fn compose(weighted) {
 
     store64(result + PROF_DESC, "Composite archetype");
 
-    return result;
+    return Ok(result);
 }

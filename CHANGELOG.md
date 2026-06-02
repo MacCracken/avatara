@@ -15,6 +15,30 @@ See [docs/development/roadmap.md](docs/development/roadmap.md). Next up:
 - **v2.5.3 — Shadow aspect support**: pure `shadow(profile)` derivation with defined inversion semantics.
 - **v2.6.0 — The Solar Year** (362 → 365.25 archetypes).
 
+## [2.5.0] — 2026-06-02
+
+Architecture Modernization — adopts Cyrius tagged `Result<T, E>` for the error
+model. **API-breaking** for consumers (return types changed). The companion
+struct/`#derive(accessors)` migration is deferred (see Notes).
+
+### Changed (breaking)
+- **`lookup(name)` / `lookup_in(tradition, name)`** now return `Result` — `Ok(profile)` or `Err(ERR_UNKNOWN_ARCHETYPE)` — instead of a profile pointer or `0`.
+- **`compose(weighted)`** now returns `Result` — `Ok(profile)` or `Err(ERR_INVALID_PARAMETER)` (empty vec / NULL profile / negative or NaN weight / total ≤ 0) — instead of a pointer or `0`.
+- **`validate_profile(p)`** now returns `Result` — `Ok(p)` or `Err(ERR_INVALID_PARAMETER | ERR_OUT_OF_RANGE)` — instead of a bare `AvataraError` int.
+- `AvataraError` codes are now carried as the `Err` payload (read with `err_code_of`).
+
+### Added
+- `lib/result.cyr` to the stdlib deps; `Result`/`Ok`/`Err` + helpers (`is_ok`, `is_err_result`, `result_unwrap`, `result_unwrap_or`, `err_code_of`) are now the error vocabulary.
+- **`find_and_validate(name)`** — chains `lookup` + `validate_profile` via the `?` propagation operator (the lookup `Err` short-circuits).
+
+### Consumer migration
+- `var p = lookup(n); if (p == 0) {…}` → `var r = lookup(n); if (is_err_result(r) == 1) {…} var p = result_unwrap(r);` (same shape for `compose`). Build on cyrius 6.0.39+ with `result` (or `tagged`) in `[deps] stdlib`.
+
+### Notes
+- Internal range predicates (`require_unit_range` / `require_all_unit_range`) stay bare-int — they run in per-field loops where a `Result` heap alloc per element would be wasteful.
+- `cross_tradition_match` / `find_mapping` still return `0` for "not found" — those are absence (Option-shaped), not errors; a future pass may move them to `Option`.
+- **Deferred:** the `struct` + `#derive(accessors)` migration of `ArchetypeProfile` is blocked — cyrius caps structs at 32 fields and `Profile` has 39. Proposal filed (`cyrius/.../2026-06-02-struct-field-cap-raise.md`); resumes when the cap is raised. This was originally the other half of 2.5.0.
+
 ## [2.4.5] — 2026-06-02
 
 Correctness fix, surfaced while scoping the 2.5.0 struct migration. **Behavior-changing** (affinity/compose outputs shift) — isolated in its own release so it's bisectable before the migration.

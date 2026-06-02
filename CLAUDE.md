@@ -6,7 +6,7 @@
 
 - **Language**: Cyrius (ported from Rust in v2.0)
 - **License**: GPL-3.0-only
-- **Version**: SemVer 2.4.5
+- **Version**: SemVer 2.5.0
 - **Compiler**: cyrius >= 6.0.40 (pinned in `cyrius.cyml` `[package].cyrius`)
 
 ## Consumers
@@ -58,8 +58,9 @@ All values are i64. f64 trait/emphasis weights stored as IEEE 754 bit patterns. 
 - `ArchetypeProfile` — 312 bytes, inline TraitWeights + ModuleEmphasis + enum fields + string pointers
 - `profile_new()` — allocates with defaults (traits=0.5, emphasis=0.5, breath=LATE_EXHALE, growth=DIFFERENTIATE)
 - Each tradition module: entity functions (e.g. `kabbalah_kether()`) + lazy-init `all_*()` collection + `*_count()`
-- Registry: `all_profiles()`, `lookup(name)`, `lookup_in(tradition, name)`, `by_tradition()`, `query_*()` filters
-- Compose: `compose(weighted_vec)` — weighted blending with f64 arithmetic
+- Registry: `all_profiles()`, `by_tradition()`, `query_*()` filters; `lookup(name)` / `lookup_in(tradition, name)` return `Result` (`Ok(profile)` / `Err(ERR_UNKNOWN_ARCHETYPE)`); `find_and_validate(name)` chains lookup + validate via `?`
+- Compose: `compose(weighted_vec)` — weighted blending; returns `Result` (`Ok(profile)` / `Err(ERR_INVALID_PARAMETER)`)
+- Errors: `Result<T, E>` from `lib/result.cyr` (`is_ok` / `is_err_result` / `result_unwrap` / `err_code_of`); `validate_profile(p)` returns `Result`. `AvataraError` codes are the `Err` payload. Internal range predicates (`require_unit_range`/`require_all_unit_range`) stay bare-int (loop-hot)
 - History: `context_for_tradition()`, `traditions_for_civilization()`, `traditions_active_at()`, `traditions_for_era()`
 - Affinity: `affinity()`, `similar_to()`, `cross_tradition_match()`, `cross_tradition_matches()`, `detect_conflicts()`, `is_incompatible()`
 

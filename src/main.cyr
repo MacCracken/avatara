@@ -57,16 +57,17 @@ if (vec_len(trads) < 24) {
     syscall(SYS_EXIT, 1);
 }
 
-# Verify lookup works
-var k = lookup("Krishna");
-if (k == 0) { println("FAIL: lookup Krishna"); syscall(SYS_EXIT, 1); }
+# Verify lookup works (now returns Result)
+var kr = lookup("Krishna");
+if (is_err_result(kr) == 1) { println("FAIL: lookup Krishna"); syscall(SYS_EXIT, 1); }
+var k = result_unwrap(kr);
 
-# Verify compose works
+# Verify compose works (now returns Result)
 var w = vec_new();
 vec_push(w, weighted_new(kabbalah_tiphareth(), 1.0));
 vec_push(w, weighted_new(k, 0.8));
 var c = compose(w);
-if (c == 0) { println("FAIL: compose"); syscall(SYS_EXIT, 1); }
+if (is_err_result(c) == 1) { println("FAIL: compose"); syscall(SYS_EXIT, 1); }
 
 # Verify affinity works
 var aff = affinity(kabbalah_tiphareth(), k);

@@ -159,8 +159,9 @@ fn main() {
     var tip = kabbalah_tiphareth();
     var single = vec_new();
     vec_push(single, weighted_new(tip, 1.0));
-    var comp = compose(single);
-    assert_neq(comp, 0, "compose single not null");
+    var compR = compose(single);
+    assert_eq(is_ok(compR), 1, "compose single ok");
+    var comp = result_unwrap(compR);
     assert_eq(streq(prof_name(comp), "Tiphareth"), 1, "compose single name");
     assert_eq(prof_breath(comp), prof_breath(tip), "compose single breath");
     assert_eq(prof_growth_dir(comp), prof_growth_dir(tip), "compose single growth");
@@ -169,7 +170,7 @@ fn main() {
     # Compose: empty is error
     # ================================================================
     var empty = vec_new();
-    assert_eq(compose(empty), 0, "compose empty returns 0");
+    assert_eq(is_err_result(compose(empty)), 1, "compose empty returns Err");
 
     # ================================================================
     # Compose: traits stay in range after blend
@@ -177,7 +178,7 @@ fn main() {
     var blend = vec_new();
     vec_push(blend, weighted_new(kabbalah_gevurah(), 1.0));
     vec_push(blend, weighted_new(kabbalah_chesed(), 1.0));
-    var blended = compose(blend);
+    var blended = result_unwrap(compose(blend));
     var blend_ok = 1;
     var off = TW_FIRST;
     while (off <= TW_LAST) {

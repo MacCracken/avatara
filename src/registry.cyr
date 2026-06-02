@@ -103,28 +103,38 @@ fn all_profiles() {
     return registry_vec;
 }
 
-# Lookup a profile by name (case-sensitive). Returns profile ptr or 0.
+# Lookup a profile by name (case-sensitive).
+# Returns Result: Ok(profile) or Err(ERR_UNKNOWN_ARCHETYPE).
 fn lookup(name) {
     var v = all_profiles();
     var n = vec_len(v);
     for (var i = 0; i < n; i += 1) {
         var p = vec_get(v, i);
-        if (streq(prof_name(p), name) == 1) { return p; }
+        if (streq(prof_name(p), name) == 1) { return Ok(p); }
     }
-    return 0;
+    return Err(ERR_UNKNOWN_ARCHETYPE);
 }
 
-# Lookup by tradition + name. Returns profile ptr or 0.
+# Lookup by tradition + name.
+# Returns Result: Ok(profile) or Err(ERR_UNKNOWN_ARCHETYPE).
 fn lookup_in(tradition, name) {
     var v = all_profiles();
     var n = vec_len(v);
     for (var i = 0; i < n; i += 1) {
         var p = vec_get(v, i);
         if (streq(prof_tradition(p), tradition) == 1) {
-            if (streq(prof_name(p), name) == 1) { return p; }
+            if (streq(prof_name(p), name) == 1) { return Ok(p); }
         }
     }
-    return 0;
+    return Err(ERR_UNKNOWN_ARCHETYPE);
+}
+
+# Lookup a profile and validate its trait/emphasis ranges in one step.
+# Returns Result: Ok(profile) or Err(...) from either the lookup or validation.
+# Demonstrates `?` propagation: the lookup Err short-circuits before validation.
+fn find_and_validate(name) {
+    var p = lookup(name)?;
+    return validate_profile(p);
 }
 
 # Return vec of all profiles matching a tradition name.
