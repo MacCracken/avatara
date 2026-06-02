@@ -4,7 +4,7 @@ version = "${file:VERSION}"
 description = "Avatara — divine archetype engine: theological and mythological personality mapping across traditions"
 license = "GPL-3.0-only"
 language = "cyrius"
-cyrius = "6.0.38"
+cyrius = "6.0.40"
 repository = "https://github.com/MacCracken/avatara"
 
 [build]

@@ -12,6 +12,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cross-tradition affinity graph (pre-computed, stored)
 - Shadow aspect support (dark/inverted form of each archetype)
 
+## [2.4.3] — 2026-06-02
+
+Toolchain bump + stdlib alignment.
+
+### Changed
+- **Cyrius pin 6.0.38 → 6.0.40.** `f64_le`/`f64_ge` landed in stdlib `lib/math.cyr` at 6.0.39 (from the proposal filed during the 2.4.x sweep); 6.0.40 is the current public release and is pinned here.
+- **Dropped avatara's local `f64_le`/`f64_ge`** (`src/types.cyr`) — now supplied by stdlib. Keeping them would have collided with the new stdlib definitions (duplicate-fn, last-wins) — the exact shadowing risk the proposal called out.
+
+### Consumer note
+- `dist/avatara.cyr` no longer carries `f64_le`/`f64_ge`. Consumers that include the bundle must build on cyrius **6.0.39+** and have `"math"` in their `[deps] stdlib` so the stdlib definitions resolve. (avatara already lists `math`.)
+
+### Notes
+- Evaluated the optional `#regalloc` perf hint on the hot `affinity`/`compose` loops and **declined it**: the directive is unused across the cyrius stdlib and reference projects (vidya), the hot path (`affinity` score = 92ns) is already tight, and run-to-run bench variance exceeds any plausible gain. Not worth an ecosystem-unique tuning knob in the source.
+
 ## [2.4.2] — 2026-06-02
 
 Language modernization — adopting Cyrius 6.x idioms. No behavior or API

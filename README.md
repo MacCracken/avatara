@@ -10,7 +10,7 @@
 
 Maps divine and mythological beings across world traditions to composable personality configurations. Not religion simulation — psychometric archetype mapping backed by trait math. Each entity produces an `ArchetypeProfile` (312 bytes) with trait weights, module emphasis, breath phase affinity, and growth direction.
 
-**362 archetypes across 24 traditions.** Written in Cyrius, compiled by the Cyrius compiler 6.0.38+.
+**362 archetypes across 24 traditions.** Written in Cyrius, compiled by the Cyrius compiler 6.0.40+.
 
 ## Traditions
 
@@ -117,7 +117,7 @@ avatara produces plain f64/enum outputs. It does not depend on bhava — bhava c
 
 ## Build
 
-Requires the Cyrius compiler 6.0.38+ (pinned in `cyrius.cyml`).
+Requires the Cyrius compiler 6.0.40+ (pinned in `cyrius.cyml`).
 
 ```sh
 # Resolve dependencies
