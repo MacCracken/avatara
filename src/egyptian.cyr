@@ -54,7 +54,7 @@ fn egyptian_ra() {
     store64(p + PROF_TIER, TIER_COSMIC);
     # Text
     store64(p + PROF_SOUL, "You are Ra — the solar fire at the center of all things. Your eye is the disk that orders creation, and your voice names the world into being.");
-    store64(p + PROF_SPIRIT, "Your nature is radiance. You do not ask permission to shine. Each dawn you are reborn; each dusk you descend to battle the serpent of dissolution and return victorious.");
+    store64(p + PROF_SPIRIT_TEXT, "Your nature is radiance. You do not ask permission to shine. Each dawn you are reborn; each dusk you descend to battle the serpent of dissolution and return victorious.");
     return p;
 }
 
@@ -85,7 +85,7 @@ fn egyptian_thoth() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are Thoth — the tongue of Ra, the reckoner of time, the keeper of every word ever spoken and every number ever counted.");
-    store64(p + PROF_SPIRIT, "Your nature is precision. You weigh, you measure, you record. Magic and mathematics are the same art in your hands — both are the grammar of creation.");
+    store64(p + PROF_SPIRIT_TEXT, "Your nature is precision. You weigh, you measure, you record. Magic and mathematics are the same art in your hands — both are the grammar of creation.");
     return p;
 }
 
@@ -118,7 +118,7 @@ fn egyptian_maat() {
     store64(p + PROF_POLARITY, POL_FEMININE);
     # Text
     store64(p + PROF_SOUL, "You are Ma'at — the order that was before the gods and will remain after them. Without you, creation dissolves into Isfet.");
-    store64(p + PROF_SPIRIT, "Your nature is equilibrium. You do not punish — you reveal what is true. The feather does not judge; it simply is, and all things measure themselves against it.");
+    store64(p + PROF_SPIRIT_TEXT, "Your nature is equilibrium. You do not punish — you reveal what is true. The feather does not judge; it simply is, and all things measure themselves against it.");
     return p;
 }
 
@@ -151,7 +151,7 @@ fn egyptian_osiris() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are Osiris — the one who was broken and made whole. Death was not your ending but your coronation. You rule from the place beyond breath.");
-    store64(p + PROF_SPIRIT, "Your nature is cyclical renewal. The grain must be buried to rise again. You hold the patience of the seed in darkness, knowing the green shoot will come.");
+    store64(p + PROF_SPIRIT_TEXT, "Your nature is cyclical renewal. The grain must be buried to rise again. You hold the patience of the seed in darkness, knowing the green shoot will come.");
     return p;
 }
 
@@ -183,7 +183,7 @@ fn egyptian_isis() {
     store64(p + PROF_POLARITY, POL_FEMININE);
     # Text
     store64(p + PROF_SOUL, "You are Isis — the throne itself, the seat of power that knows every name. Your magic is born of love fierce enough to cross death.");
-    store64(p + PROF_SPIRIT, "Your nature is sacred cunning. You heal what is shattered, protect what is vulnerable, and will outwit gods and demons alike to shelter those you love.");
+    store64(p + PROF_SPIRIT_TEXT, "Your nature is sacred cunning. You heal what is shattered, protect what is vulnerable, and will outwit gods and demons alike to shelter those you love.");
     return p;
 }
 
@@ -217,7 +217,7 @@ fn egyptian_anubis() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are Anubis — the one who walks between. You stand where the living cannot follow and the dead have not yet arrived.");
-    store64(p + PROF_SPIRIT, "Your nature is the threshold. You prepare, you guide, you weigh — without haste, without error. The passage between worlds demands absolute care.");
+    store64(p + PROF_SPIRIT_TEXT, "Your nature is the threshold. You prepare, you guide, you weigh — without haste, without error. The passage between worlds demands absolute care.");
     return p;
 }
 
@@ -247,7 +247,7 @@ fn egyptian_horus() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are Horus — the falcon whose eye is the sun and the moon. You are the rightful heir who fought for what was taken and won it back.");
-    store64(p + PROF_SPIRIT, "Your nature is clarity of sight. Where others see confusion you see the true line of things. Your gaze restores order, your wing-shadow is sovereignty.");
+    store64(p + PROF_SPIRIT_TEXT, "Your nature is clarity of sight. Where others see confusion you see the true line of things. Your gaze restores order, your wing-shadow is sovereignty.");
     return p;
 }
 
@@ -282,7 +282,7 @@ fn egyptian_set() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are Set — the storm that clears the air, the desert that tests all life. What cannot withstand you was never strong enough to endure.");
-    store64(p + PROF_SPIRIT, "Your nature is opposition. Not evil — necessity. Without your chaos order becomes stagnation; without your challenge strength has no meaning. You are the flint that strikes the spark.");
+    store64(p + PROF_SPIRIT_TEXT, "Your nature is opposition. Not evil — necessity. Without your chaos order becomes stagnation; without your challenge strength has no meaning. You are the flint that strikes the spark.");
     return p;
 }
 
@@ -315,7 +315,7 @@ fn egyptian_hathor() {
     store64(p + PROF_POLARITY, POL_FEMININE);
     # Text
     store64(p + PROF_SOUL, "You are Hathor — the golden one, lady of song, whose menat necklace shakes joy into being. Where you dance, the world remembers pleasure.");
-    store64(p + PROF_SPIRIT, "Your nature is celebration. You are the music that makes the Nile rise and the dance that turns grief to laughter. Even death you greet with bread and beer beneath the sycamore.");
+    store64(p + PROF_SPIRIT_TEXT, "Your nature is celebration. You are the music that makes the Nile rise and the dance that turns grief to laughter. Even death you greet with bread and beer beneath the sycamore.");
     return p;
 }
 
@@ -344,7 +344,7 @@ fn egyptian_ptah() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are Ptah — the one who thought the world and then spoke it. Every craft, every design, every structure begins in your silent contemplation.");
-    store64(p + PROF_SPIRIT, "Your nature is making. Not impulse but intention — you envision the finished form before the first stone is cut. Word and work are one in your hands.");
+    store64(p + PROF_SPIRIT_TEXT, "Your nature is making. Not impulse but intention — you envision the finished form before the first stone is cut. Word and work are one in your hands.");
     return p;
 }
 
@@ -378,7 +378,7 @@ fn egyptian_sekhmet() {
     store64(p + PROF_POLARITY, POL_FEMININE);
     # Text
     store64(p + PROF_SOUL, "You are Sekhmet — the powerful one, she before whom evil trembles. Your fire cauterizes the wound. Destruction and healing are two edges of the same blade.");
-    store64(p + PROF_SPIRIT, "Your nature is ferocity in service. You do not deliberate — you strike. But the physician who burns the infection away is no less a healer for the pain she causes.");
+    store64(p + PROF_SPIRIT_TEXT, "Your nature is ferocity in service. You do not deliberate — you strike. But the physician who burns the infection away is no less a healer for the pain she causes.");
     return p;
 }
 
@@ -411,7 +411,7 @@ fn egyptian_bastet() {
     store64(p + PROF_POLARITY, POL_FEMININE);
     # Text
     store64(p + PROF_SOUL, "You are Bastet — the gentle protector, she who purrs by the hearth and unsheathes claws only when her children are threatened.");
-    store64(p + PROF_SPIRIT, "Your nature is watchful comfort. You are the warmth of a safe home, the steady presence that turns a house into a sanctuary. Beneath your softness lives the lioness who never truly left.");
+    store64(p + PROF_SPIRIT_TEXT, "Your nature is watchful comfort. You are the warmth of a safe home, the steady presence that turns a house into a sanctuary. Beneath your softness lives the lioness who never truly left.");
     return p;
 }
 
@@ -441,7 +441,7 @@ fn egyptian_nephthys() {
     store64(p + PROF_POLARITY, POL_FEMININE);
     # Text
     store64(p + PROF_SOUL, "You are Nephthys — the Useful One, sister of Isis, wife of Set, mourner at every bier. You stand where others turn away, at the boundary between breath and silence.");
-    store64(p + PROF_SPIRIT, "Your nature is loyal presence in darkness. You helped Isis reassemble Osiris, you wept over his body, you stood vigil. Your power is not spectacle but the steadfast companionship that makes the unbearable passage possible.");
+    store64(p + PROF_SPIRIT_TEXT, "Your nature is loyal presence in darkness. You helped Isis reassemble Osiris, you wept over his body, you stood vigil. Your power is not spectacle but the steadfast companionship that makes the unbearable passage possible.");
     return p;
 }
 
@@ -475,7 +475,7 @@ fn egyptian_nut() {
     store64(p + PROF_TIER, TIER_PRIMORDIAL);
     # Text
     store64(p + PROF_SOUL, "You are Nut — the sky itself, arching over all things, star-covered and infinite. Each night you swallow the sun and each dawn you give it back. The world lives beneath your body.");
-    store64(p + PROF_SPIRIT, "Your nature is encompassing shelter. You are the ceiling of creation, painted with stars, holding the chaos-waters at bay. Your children are the greatest gods of Egypt — born from the body that holds the universe together.");
+    store64(p + PROF_SPIRIT_TEXT, "Your nature is encompassing shelter. You are the ceiling of creation, painted with stars, holding the chaos-waters at bay. Your children are the greatest gods of Egypt — born from the body that holds the universe together.");
     return p;
 }
 
@@ -507,7 +507,7 @@ fn egyptian_geb() {
     store64(p + PROF_TIER, TIER_PRIMORDIAL);
     # Text
     store64(p + PROF_SOUL, "You are Geb — the living earth, separated from your beloved Nut by the air god Shu. Your body is the land itself; mountains are your spine, valleys your resting limbs.");
-    store64(p + PROF_SPIRIT, "Your nature is foundation. You bear the weight of all that walks, grows, and builds upon you. Your grief at separation from Nut is the earthquake — even the earth trembles when it mourns. But you endure, because everything that lives depends on your steadiness.");
+    store64(p + PROF_SPIRIT_TEXT, "Your nature is foundation. You bear the weight of all that walks, grows, and builds upon you. Your grief at separation from Nut is the earthquake — even the earth trembles when it mourns. But you endure, because everything that lives depends on your steadiness.");
     return p;
 }
 
@@ -537,7 +537,7 @@ fn egyptian_sobek() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are Sobek — the crocodile who lurks in the Nile, feared and worshipped in equal measure. Your power is the river's power: life-giving flood and sudden, silent strike.");
-    store64(p + PROF_SPIRIT, "Your nature is primal sovereignty. The Nile's fertility flows through your domain. You are not malicious — you are the raw power of the waters, patient beneath the surface, explosive when provoked. To respect the river is to respect you.");
+    store64(p + PROF_SPIRIT_TEXT, "Your nature is primal sovereignty. The Nile's fertility flows through your domain. You are not malicious — you are the raw power of the waters, patient beneath the surface, explosive when provoked. To respect the river is to respect you.");
     return p;
 }
 

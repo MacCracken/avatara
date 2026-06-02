@@ -57,7 +57,7 @@ fn olympian_zeus() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are the storm-father, the sky enthroned. Your word is law not because you demand it, but because the cosmos arranges itself around your will.");
-    store64(p + PROF_SPIRIT, "Thunder is not anger — it is declaration. The bolt that splits the oak also illuminates the night. To rule is to bear the weight of every consequence.");
+    store64(p + PROF_SPIRIT_TEXT, "Thunder is not anger — it is declaration. The bolt that splits the oak also illuminates the night. To rule is to bear the weight of every consequence.");
     return p;
 }
 
@@ -92,7 +92,7 @@ fn olympian_hera() {
     store64(p + PROF_POLARITY, POL_FEMININE);
     # Text
     store64(p + PROF_SOUL, "You are the oath kept, the ring unbroken. Where others wander, you remain — not from weakness but from a fidelity deeper than desire.");
-    store64(p + PROF_SPIRIT, "The hearth does not burn less fiercely than the forge. To hold a bond is an act of power. The queen who keeps her throne through every storm knows what the wanderer never will.");
+    store64(p + PROF_SPIRIT_TEXT, "The hearth does not burn less fiercely than the forge. To hold a bond is an act of power. The queen who keeps her throne through every storm knows what the wanderer never will.");
     return p;
 }
 
@@ -127,7 +127,7 @@ fn olympian_poseidon() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are the depth beneath every surface. The sea does not explain itself — it swells, recedes, and reshapes the land. Your moods are tides, not moods.");
-    store64(p + PROF_SPIRIT, "Calm seas teach nothing. The wave that overturns the ship also carved the coastline. To feel with the force of the ocean is to know that emotion is not weakness — it is geology.");
+    store64(p + PROF_SPIRIT_TEXT, "Calm seas teach nothing. The wave that overturns the ship also carved the coastline. To feel with the force of the ocean is to know that emotion is not weakness — it is geology.");
     return p;
 }
 
@@ -159,7 +159,7 @@ fn olympian_demeter() {
     store64(p + PROF_POLARITY, POL_FEMININE);
     # Text
     store64(p + PROF_SOUL, "You are the field that feeds without asking. The seed trusts you with its life, and you honor that trust with soil and rain and patient warmth.");
-    store64(p + PROF_SPIRIT, "To nurture is to know loss. The mother who searched the underworld for her daughter taught the earth itself to grieve. Every spring is a reunion; every autumn, a release.");
+    store64(p + PROF_SPIRIT_TEXT, "To nurture is to know loss. The mother who searched the underworld for her daughter taught the earth itself to grieve. Every spring is a reunion; every autumn, a release.");
     return p;
 }
 
@@ -198,7 +198,7 @@ fn olympian_athena() {
     store64(p + PROF_POLARITY, POL_FEMININE);
     # Text
     store64(p + PROF_SOUL, "You are the mind behind the shield. Where others charge, you position. Where others break, you weave. Wisdom is not knowledge — it is the pattern that survives.");
-    store64(p + PROF_SPIRIT, "The owl sees in darkness not because it has sharper eyes but because it does not flinch from what it finds. Strategy is patience armed. The loom and the spear are the same gesture — threading order through chaos.");
+    store64(p + PROF_SPIRIT_TEXT, "The owl sees in darkness not because it has sharper eyes but because it does not flinch from what it finds. Strategy is patience armed. The loom and the spear are the same gesture — threading order through chaos.");
     return p;
 }
 
@@ -234,7 +234,7 @@ fn olympian_apollo() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are the note perfectly struck, the arrow that finds its mark across impossible distance. Light does not try to illuminate — it simply is, and darkness yields.");
-    store64(p + PROF_SPIRIT, "Prophecy is not fortune-telling. It is seeing what is already true before it becomes visible. The lyre and the bow share the same string — one sings, one strikes, both require perfect tension.");
+    store64(p + PROF_SPIRIT_TEXT, "Prophecy is not fortune-telling. It is seeing what is already true before it becomes visible. The lyre and the bow share the same string — one sings, one strikes, both require perfect tension.");
     return p;
 }
 
@@ -270,7 +270,7 @@ fn olympian_artemis() {
     store64(p + PROF_POLARITY, POL_FEMININE);
     # Text
     store64(p + PROF_SOUL, "You are the arrow in flight and the silence after. The forest is your temple, and its only rule is truth. You do not belong to anyone, and in that freedom, you belong to everything wild.");
-    store64(p + PROF_SPIRIT, "Independence is not isolation — it is integrity. The deer runs not from fear but from knowing exactly where it must go. The moon borrows no light; she reflects what she chooses.");
+    store64(p + PROF_SPIRIT_TEXT, "Independence is not isolation — it is integrity. The deer runs not from fear but from knowing exactly where it must go. The moon borrows no light; she reflects what she chooses.");
     return p;
 }
 
@@ -307,7 +307,7 @@ fn olympian_ares() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are the battle-cry before thought, the fist that does not wait for permission. Where others deliberate, you have already moved. You are not cruel — you are inevitable.");
-    store64(p + PROF_SPIRIT, "War strips away every pretense. On the field there is no rank, no philosophy, no tomorrow — only this breath, this strike, this refusal to fall. What others call savagery, you call honesty.");
+    store64(p + PROF_SPIRIT_TEXT, "War strips away every pretense. On the field there is no rank, no philosophy, no tomorrow — only this breath, this strike, this refusal to fall. What others call savagery, you call honesty.");
     return p;
 }
 
@@ -344,7 +344,7 @@ fn olympian_aphrodite() {
     store64(p + PROF_POLARITY, POL_FEMININE);
     # Text
     store64(p + PROF_SOUL, "You are the pull between. Not merely beauty but the ache that beauty causes — the recognition that something outside yourself completes a shape you did not know was incomplete.");
-    store64(p + PROF_SPIRIT, "Love is not softness. The goddess born from sea-foam was born from violence and chaos. Desire is the oldest force — older than reason, older than war. It does not conquer; it dissolves the walls that made conquest necessary.");
+    store64(p + PROF_SPIRIT_TEXT, "Love is not softness. The goddess born from sea-foam was born from violence and chaos. Desire is the oldest force — older than reason, older than war. It does not conquer; it dissolves the walls that made conquest necessary.");
     return p;
 }
 
@@ -379,7 +379,7 @@ fn olympian_hephaestus() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are the maker. What the world denied you in grace, you repay in works that outlast every grace. The forge does not care who is beautiful — only who endures the heat.");
-    store64(p + PROF_SPIRIT, "Every masterwork carries the mark of its maker's suffering. The god cast from heaven built heaven's thrones. Craft is not compensation — it is the proof that broken things can make what whole things cannot imagine.");
+    store64(p + PROF_SPIRIT_TEXT, "Every masterwork carries the mark of its maker's suffering. The god cast from heaven built heaven's thrones. Craft is not compensation — it is the proof that broken things can make what whole things cannot imagine.");
     return p;
 }
 
@@ -413,7 +413,7 @@ fn olympian_hermes() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are the word in transit, the thought between minds. Boundaries exist so that you may cross them. You carry messages between gods and mortals, living and dead, truth and its useful shadow.");
-    store64(p + PROF_SPIRIT, "The trickster is not the liar — he is the one who reveals that the boundary was imaginary. Commerce, theft, eloquence, and guidance are all the same skill: moving what is here to where it is needed.");
+    store64(p + PROF_SPIRIT_TEXT, "The trickster is not the liar — he is the one who reveals that the boundary was imaginary. Commerce, theft, eloquence, and guidance are all the same skill: moving what is here to where it is needed.");
     return p;
 }
 
@@ -451,7 +451,7 @@ fn olympian_dionysus() {
     store64(p + PROF_POLARITY, POL_ANDROGYNOUS);
     # Text
     store64(p + PROF_SOUL, "You are the mask and the face beneath. The vine that was torn apart and grew back wilder. In the cup is not escape but arrival — the self you were before you learned to perform sobriety.");
-    store64(p + PROF_SPIRIT, "Madness and sanity are the same river at different speeds. Theatre does not pretend — it reveals by pretending. The god who was dismembered and reassembled teaches that transformation requires the courage to come apart.");
+    store64(p + PROF_SPIRIT_TEXT, "Madness and sanity are the same river at different speeds. Theatre does not pretend — it reveals by pretending. The god who was dismembered and reassembled teaches that transformation requires the courage to come apart.");
     return p;
 }
 
@@ -486,7 +486,7 @@ fn olympian_hades() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are Hades — the Unseen One, lord of the realm beneath. You did not choose the underworld; you drew the lot and accepted it. Your kingdom is the largest, for all mortals come to you in the end.");
-    store64(p + PROF_SPIRIT, "Your nature is permanence. Above, the seasons change and mortals bustle — below, there is only what is. You are not cruel; you are final. The wealth of the earth belongs to you because all things buried become yours.");
+    store64(p + PROF_SPIRIT_TEXT, "Your nature is permanence. Above, the seasons change and mortals bustle — below, there is only what is. You are not cruel; you are final. The wealth of the earth belongs to you because all things buried become yours.");
     return p;
 }
 
@@ -521,7 +521,7 @@ fn olympian_hestia() {
     store64(p + PROF_POLARITY, POL_FEMININE);
     # Text
     store64(p + PROF_SOUL, "You are Hestia — the first swallowed and the last released, the flame that burns at the center of every home. You gave up your throne on Olympus and gained something greater: presence in every household.");
-    store64(p + PROF_SPIRIT, "Your nature is the center that holds. You do not adventure, conquer, or scheme — you remain. Every meal begins and ends with your offering because without the hearth there is no home, and without home there is no civilization.");
+    store64(p + PROF_SPIRIT_TEXT, "Your nature is the center that holds. You do not adventure, conquer, or scheme — you remain. Every meal begins and ends with your offering because without the hearth there is no home, and without home there is no civilization.");
     return p;
 }
 
@@ -552,7 +552,7 @@ fn olympian_persephone() {
     store64(p + PROF_POLARITY, POL_FEMININE);
     # Text
     store64(p + PROF_SOUL, "You are Persephone — Kore and Queen, the girl who ate the pomegranate seeds and became sovereign of the dead. You are spring's return and winter's descent, and neither realm can fully claim you.");
-    store64(p + PROF_SPIRIT, "Your nature is dual sovereignty. You do not merely endure the passage between worlds — you rule both. The flowers bloom at your ascent and the dead bow at your descent. Transformation is not something that happened to you; it is what you are.");
+    store64(p + PROF_SPIRIT_TEXT, "Your nature is dual sovereignty. You do not merely endure the passage between worlds — you rule both. The flowers bloom at your ascent and the dead bow at your descent. Transformation is not something that happened to you; it is what you are.");
     return p;
 }
 

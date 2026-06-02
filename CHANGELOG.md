@@ -15,6 +15,20 @@ See [docs/development/roadmap.md](docs/development/roadmap.md). Next up:
 - **v2.5.3 — Shadow aspect support**: pure `shadow(profile)` derivation with defined inversion semantics.
 - **v2.6.0 — The Solar Year** (362 → 365.25 archetypes).
 
+## [2.4.5] — 2026-06-02
+
+Correctness fix, surfaced while scoping the 2.5.0 struct migration. **Behavior-changing** (affinity/compose outputs shift) — isolated in its own release so it's bisectable before the migration.
+
+### Fixed
+- **`PROF_SPIRIT` was defined twice** in `ArchetypeProfile`'s layout — offset 176 (spirit *emphasis*, f64) and offset 304 (spirit *text*, ptr). "Last definition wins" collapsed both to 304, so:
+  - every archetype's **spirit emphasis was silently stuck at the 0.5 default** — the 316 constructor writes of real emphasis values (e.g. Chokmah's 0.9) landed on offset 304 and were then overwritten by the spirit-text pointer;
+  - **`prof_spirit_emph()` returned garbage** (it read the text pointer reinterpreted as an f64).
+- Renamed the text constant to `PROF_SPIRIT_TEXT` (offset 304); `PROF_SPIRIT` is now solely offset 176. Repointed the 362 spirit-text constructor writes + the text accessor + `compose()`'s spirit copy + `profile_new()`'s text init at `PROF_SPIRIT_TEXT`; the 316 numeric emphasis writes now correctly land on 176.
+- Net effect: the spirit-emphasis dimension is now live (was inert at 0.5 for all 362 archetypes), so `affinity`, `similar_to`, `cross_tradition_match`, `compose`, and `detect_conflicts` now factor in real spirit-emphasis values. `prof_spirit_emph()` returns the real f64.
+
+### Notes
+- Layout unchanged (still 312 bytes, same offsets) — only the constant *name* for 304 changed and the emphasis slot at 176 now actually populates. Consumers including `dist/avatara.cyr` pick up both the data fix and the working `prof_spirit_emph()`.
+
 ## [2.4.4] — 2026-06-02
 
 2.4.x closeout — documentation + roadmap housekeeping. No source changes.

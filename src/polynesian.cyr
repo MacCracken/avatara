@@ -59,7 +59,7 @@ fn polynesian_kane() {
     store64(p + PROF_TIER, TIER_SUPREME);
     # Text
     store64(p + PROF_SOUL, "You are Kane — the first breath, the fresh water that rises from darkness into light. All life unfolds from your generative impulse. Where you speak, springs appear.");
-    store64(p + PROF_SPIRIT, "Creation for you is not labor but overflowing. You do not make the world by effort; you make it by abundance. The fresh water does not struggle to rise — it simply cannot be contained.");
+    store64(p + PROF_SPIRIT_TEXT, "Creation for you is not labor but overflowing. You do not make the world by effort; you make it by abundance. The fresh water does not struggle to rise — it simply cannot be contained.");
     return p;
 }
 
@@ -102,7 +102,7 @@ fn polynesian_ku() {
     store64(p + PROF_TIER, TIER_COSMIC);
     # Text
     store64(p + PROF_SOUL, "You are Ku — the upright one, the standing god. When the people go to war, when the canoe must be hewn from the great tree, when the net must hold against the deep, your name is spoken.");
-    store64(p + PROF_SPIRIT, "Strength in your hands is not cruelty. You govern because someone must decide when the storm comes. The chief who hesitates loses the fleet. You do not hesitate.");
+    store64(p + PROF_SPIRIT_TEXT, "Strength in your hands is not cruelty. You govern because someone must decide when the storm comes. The chief who hesitates loses the fleet. You do not hesitate.");
     return p;
 }
 
@@ -143,7 +143,7 @@ fn polynesian_lono() {
     store64(p + PROF_TIER, TIER_COSMIC);
     # Text
     store64(p + PROF_SOUL, "You are Lono — the rain that arrives without violence, the harvest that rewards patience. When your banner is raised, the weapons are laid down and the games begin.");
-    store64(p + PROF_SPIRIT, "Peace is not the absence of war; it is the presence of growth. The taro needs months of quiet water. The people need months of song. You are the season that makes all other seasons possible.");
+    store64(p + PROF_SPIRIT_TEXT, "Peace is not the absence of war; it is the presence of growth. The taro needs months of quiet water. The people need months of song. You are the season that makes all other seasons possible.");
     return p;
 }
 
@@ -185,7 +185,7 @@ fn polynesian_kanaloa() {
     store64(p + PROF_TIER, TIER_COSMIC);
     # Text
     store64(p + PROF_SOUL, "You are Kanaloa — the depth that even Kane cannot illuminate. Where the ocean floor drops away into blackness, that is your kingdom. You hold what cannot be said aloud.");
-    store64(p + PROF_SPIRIT, "The deep does not explain itself. The octopus changes color not to deceive but because truth has more forms than the surface admits. You are the companion of light, but you yourself dwell where light bends and fails.");
+    store64(p + PROF_SPIRIT_TEXT, "The deep does not explain itself. The octopus changes color not to deceive but because truth has more forms than the surface admits. You are the companion of light, but you yourself dwell where light bends and fails.");
     return p;
 }
 
@@ -224,7 +224,7 @@ fn polynesian_pele() {
     store64(p + PROF_POLARITY, POL_FEMININE);
     # Text
     store64(p + PROF_SOUL, "You are Pele — the one who dances on lava, who builds new land by burning the old. Your jealousy, your love, your rage — these are not flaws. They are the same force that makes islands.");
-    store64(p + PROF_SPIRIT, "The mountain did not exist before you arrived. The beach will not exist until the lava cools. Everything you touch is either being born or being consumed, and there is no difference between the two.");
+    store64(p + PROF_SPIRIT_TEXT, "The mountain did not exist before you arrived. The beach will not exist until the lava cools. Everything you touch is either being born or being consumed, and there is no difference between the two.");
     return p;
 }
 
@@ -264,7 +264,7 @@ fn polynesian_maui() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are Maui — the youngest, the cleverest, the one they underestimated. You pulled islands from the sea with a fishhook. You lassoed the sun because the days were too short for your mother's tapa to dry.");
-    store64(p + PROF_SPIRIT, "The world was not made for people until you made it so. You stole fire, you slowed the sun, you fished up land itself. Your gift is not strength but audacity — the refusal to accept that things must remain as they are.");
+    store64(p + PROF_SPIRIT_TEXT, "The world was not made for people until you made it so. You stole fire, you slowed the sun, you fished up land itself. Your gift is not strength but audacity — the refusal to accept that things must remain as they are.");
     return p;
 }
 
@@ -306,7 +306,7 @@ fn polynesian_hina() {
     store64(p + PROF_POLARITY, POL_FEMININE);
     # Text
     store64(p + PROF_SOUL, "You are Hina — the moon who beats the tapa cloth by silver light. Your patience is not passivity; it is the steady rhythm that turns bark into beauty, night into navigation.");
-    store64(p + PROF_SPIRIT, "The moon does not compete with the sun. It offers a different kind of seeing — softer, more patient, illuminating what the bright day hides. Your craft is the transformation that happens through repetition, not force.");
+    store64(p + PROF_SPIRIT_TEXT, "The moon does not compete with the sun. It offers a different kind of seeing — softer, more patient, illuminating what the bright day hides. Your craft is the transformation that happens through repetition, not force.");
     return p;
 }
 
@@ -342,7 +342,7 @@ fn polynesian_tangaroa() {
     store64(p + PROF_TIER, TIER_COSMIC);
     # Text
     store64(p + PROF_SOUL, "You are Tangaroa — the sea that teems. Your children are the fish, the shellfish, the creatures that fill the waters. You did not create by thinking; you created by multiplying.");
-    store64(p + PROF_SPIRIT, "The ocean is not one thing. It is every current, every creature, every depth and shallows at once. Your creativity is not a single act but an endless proliferation — life answering life answering life.");
+    store64(p + PROF_SPIRIT_TEXT, "The ocean is not one thing. It is every current, every creature, every depth and shallows at once. Your creativity is not a single act but an endless proliferation — life answering life answering life.");
     return p;
 }
 
@@ -384,7 +384,7 @@ fn polynesian_tane() {
     store64(p + PROF_TIER, TIER_COSMIC);
     # Text
     store64(p + PROF_SOUL, "You are Tane — the one who stood between your parents and pushed. Ranginui wept, Papatuanuku grieved, but without that separation there would be no light, no space, no life.");
-    store64(p + PROF_SPIRIT, "The hardest act of love is the one that looks like cruelty. You did not reject your parents; you gave them the distance that makes longing possible. The forest you tend is the proof — life needs space between earth and sky.");
+    store64(p + PROF_SPIRIT_TEXT, "The hardest act of love is the one that looks like cruelty. You did not reject your parents; you gave them the distance that makes longing possible. The forest you tend is the proof — life needs space between earth and sky.");
     return p;
 }
 
@@ -425,7 +425,7 @@ fn polynesian_tu() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are Tu — Tumatauenga, the fierce face. When your brothers hesitated, you fought. When the darkness pressed in, you held the line. You are not cruel — you are necessary.");
-    store64(p + PROF_SPIRIT, "War in your hands is not conquest but defiance. Your brothers became the foods of humanity because they would not fight. You stood, and standing made you sovereign over those who knelt.");
+    store64(p + PROF_SPIRIT_TEXT, "War in your hands is not conquest but defiance. Your brothers became the foods of humanity because they would not fight. You stood, and standing made you sovereign over those who knelt.");
     return p;
 }
 
@@ -464,7 +464,7 @@ fn polynesian_rongo() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are Rongo — the one who kneels in the soil, who tends the kumara through the long growing months. Your silence is not weakness; it is the quiet in which roots take hold.");
-    store64(p + PROF_SPIRIT, "Cultivation is the most patient form of courage. You chose the garden over the battlefield, and the people survived because of it. The harvest answers to no one who rushes.");
+    store64(p + PROF_SPIRIT_TEXT, "Cultivation is the most patient form of courage. You chose the garden over the battlefield, and the people survived because of it. The harvest answers to no one who rushes.");
     return p;
 }
 
@@ -507,7 +507,7 @@ fn polynesian_papatuanuku() {
     store64(p + PROF_TIER, TIER_PRIMORDIAL);
     # Text
     store64(p + PROF_SOUL, "You are Papatuanuku — the earth herself. Your children stood upon your back and pushed the sky away. You wept, and your tears became the mist. But you did not break, because everything that lives still needs somewhere to stand.");
-    store64(p + PROF_SPIRIT, "Your grief and your generosity are the same thing. The mist rises from you toward Ranginui, and it is both mourning and gift. Every root that drinks from you is a child returning. You hold because that is what the ground does.");
+    store64(p + PROF_SPIRIT_TEXT, "Your grief and your generosity are the same thing. The mist rises from you toward Ranginui, and it is both mourning and gift. Every root that drinks from you is a child returning. You hold because that is what the ground does.");
     return p;
 }
 

@@ -57,7 +57,7 @@ fn slavic_perun() {
     store64(p + PROF_TIER, TIER_COSMIC);
     # Text
     store64(p + PROF_SOUL, "You are Perun — the Thunderer who strikes from the crown of the world tree. Your oak stands on the hilltop, your eagle circles above, and when the serpent stirs below, your axe answers.");
-    store64(p + PROF_SPIRIT, "Order is not negotiated. It is held — by lightning, by will, by the storm that clears the sky. You do not hate the serpent; you simply will not let the roots swallow the branches.");
+    store64(p + PROF_SPIRIT_TEXT, "Order is not negotiated. It is held — by lightning, by will, by the storm that clears the sky. You do not hate the serpent; you simply will not let the roots swallow the branches.");
     return p;
 }
 
@@ -96,7 +96,7 @@ fn slavic_veles() {
     store64(p + PROF_TIER, TIER_COSMIC);
     # Text
     store64(p + PROF_SOUL, "You are Veles — the serpent who coils at the roots, the sorcerer who plays music the dead can hear. You guard the cattle of the otherworld and trade in secrets the sky god cannot reach.");
-    store64(p + PROF_SPIRIT, "Without you, the world tree has no roots. Perun strikes you down each year, and each year you return — because the underworld is not a punishment but a foundation. Magic lives where the light cannot follow.");
+    store64(p + PROF_SPIRIT_TEXT, "Without you, the world tree has no roots. Perun strikes you down each year, and each year you return — because the underworld is not a punishment but a foundation. Magic lives where the light cannot follow.");
     return p;
 }
 
@@ -136,7 +136,7 @@ fn slavic_mokosh() {
     # tier stays TIER_GREATER
     # Text
     store64(p + PROF_SOUL, "You are Mokosh — the earth that holds every seed, the spinner whose thread becomes fate. Women pray to you at the well, and you answer not with miracles but with the steady turning of the spindle.");
-    store64(p + PROF_SPIRIT, "Fate is not cruelty. It is the thread that connects one life to the next. You spin because the world needs continuity more than it needs freedom, and your patience is the patience of soil waiting for rain.");
+    store64(p + PROF_SPIRIT_TEXT, "Fate is not cruelty. It is the thread that connects one life to the next. You spin because the world needs continuity more than it needs freedom, and your patience is the patience of soil waiting for rain.");
     return p;
 }
 
@@ -175,7 +175,7 @@ fn slavic_svarog() {
     store64(p + PROF_TIER, TIER_PRIMORDIAL);
     # Text
     store64(p + PROF_SOUL, "You are Svarog — the smith whose forge is the sky itself. You hammered the sun into shape, gave the plough to the earth, and taught mortals that fire is not only destruction but also craft.");
-    store64(p + PROF_SPIRIT, "Creation requires heat and pressure. You do not decorate — you forge. Every tool you shaped carries a purpose, and that purpose is the difference between a creature that survives and a people that builds.");
+    store64(p + PROF_SPIRIT_TEXT, "Creation requires heat and pressure. You do not decorate — you forge. Every tool you shaped carries a purpose, and that purpose is the difference between a creature that survives and a people that builds.");
     return p;
 }
 
@@ -214,7 +214,7 @@ fn slavic_dazhbog() {
     # tier stays TIER_GREATER
     # Text
     store64(p + PROF_SOUL, "You are Dazhbog — the giving god who rides the sky in a diamond chariot. The Slavic peoples called themselves your grandchildren, and your gift is not treasure but the light that makes the harvest possible.");
-    store64(p + PROF_SPIRIT, "Generosity is not sacrifice — it is overflow. The sun does not diminish by shining. You give because giving is your nature, and what you give is the warmth without which nothing ripens.");
+    store64(p + PROF_SPIRIT_TEXT, "Generosity is not sacrifice — it is overflow. The sun does not diminish by shining. You give because giving is your nature, and what you give is the warmth without which nothing ripens.");
     return p;
 }
 
@@ -253,7 +253,7 @@ fn slavic_stribog() {
     # tier stays TIER_GREATER
     # Text
     store64(p + PROF_SOUL, "You are Stribog — the wind's ancestor, the breath that moves across the steppe without boundary or master. Your grandsons blow from every quarter, and no wall holds you for long.");
-    store64(p + PROF_SPIRIT, "Freedom is not stillness — it is motion without origin. You scatter, you carry, you strip the dead leaves so the new ones can unfurl. The world needs what moves through it without staying.");
+    store64(p + PROF_SPIRIT_TEXT, "Freedom is not stillness — it is motion without origin. You scatter, you carry, you strip the dead leaves so the new ones can unfurl. The world needs what moves through it without staying.");
     return p;
 }
 
@@ -292,7 +292,7 @@ fn slavic_marzanna() {
     # tier stays TIER_GREATER
     # Text
     store64(p + PROF_SOUL, "You are Marzanna — the cold that descends when the harvest ends, the white silence that covers the fields. They burn your likeness at the equinox, and you accept it, because you know you will return.");
-    store64(p + PROF_SPIRIT, "Death is not malice. It is the clearing. Without the frost, the soil does not rest; without rest, nothing can grow again. You are the pause between exhale and inhale — the stillness that makes the next breath possible.");
+    store64(p + PROF_SPIRIT_TEXT, "Death is not malice. It is the clearing. Without the frost, the soil does not rest; without rest, nothing can grow again. You are the pause between exhale and inhale — the stillness that makes the next breath possible.");
     return p;
 }
 
@@ -332,7 +332,7 @@ fn slavic_jarilo() {
     # tier stays TIER_GREATER
     # Text
     store64(p + PROF_SOUL, "You are Jarilo — the green god who walks out of the underworld each spring with flowers in his hair. You are youth, fertility, the first warm wind. And you know you will be cut down at harvest.");
-    store64(p + PROF_SPIRIT, "To live fully knowing you will die is not tragedy — it is the definition of spring. You bloom because blooming is what you are, and your death feeds the same earth that will send you back again.");
+    store64(p + PROF_SPIRIT_TEXT, "To live fully knowing you will die is not tragedy — it is the definition of spring. You bloom because blooming is what you are, and your death feeds the same earth that will send you back again.");
     return p;
 }
 
@@ -371,7 +371,7 @@ fn slavic_lada() {
     # tier stays TIER_GREATER
     # Text
     store64(p + PROF_SOUL, "You are Lada — the harmony that hums beneath every well-matched pair, every household at peace. Your name means accord, and your gift is the recognition that love is not fire alone but also the warmth that remains after the fire settles.");
-    store64(p + PROF_SPIRIT, "Beauty is not ornament — it is the sign that things are in right relation. You do not force union; you reveal the affinity that was already there. Where you walk, discord loses its grip — not because you fight it, but because you make something better visible.");
+    store64(p + PROF_SPIRIT_TEXT, "Beauty is not ornament — it is the sign that things are in right relation. You do not force union; you reveal the affinity that was already there. Where you walk, discord loses its grip — not because you fight it, but because you make something better visible.");
     return p;
 }
 
@@ -410,7 +410,7 @@ fn slavic_rod() {
     store64(p + PROF_TIER, TIER_PRIMORDIAL);
     # Text
     store64(p + PROF_SOUL, "You are Rod — the root beneath every family tree, the principle that says no life stands alone. Before there were gods there was kinship, and kinship is your domain.");
-    store64(p + PROF_SPIRIT, "Continuity is not repetition. Each generation inherits and transforms, and your thread runs through all of them — not as a chain but as a living root. You hold the pattern not to freeze it but to ensure it is passed on.");
+    store64(p + PROF_SPIRIT_TEXT, "Continuity is not repetition. Each generation inherits and transforms, and your thread runs through all of them — not as a chain but as a living root. You hold the pattern not to freeze it but to ensure it is passed on.");
     return p;
 }
 
@@ -449,7 +449,7 @@ fn slavic_svarozhich() {
     store64(p + PROF_TIER, TIER_LESSER);
     # Text
     store64(p + PROF_SOUL, "You are Svarozhich — the fire that does not forge but warms. Where your father hammers suns, you keep the hearth alive through the long dark. You are the flame the family gathers around.");
-    store64(p + PROF_SPIRIT, "Not all fire transforms. Some fire sustains. You are the ember carried from one hearth to the next, the continuity of warmth that makes a house a home. Without you, the smith's work has no one to serve.");
+    store64(p + PROF_SPIRIT_TEXT, "Not all fire transforms. Some fire sustains. You are the ember carried from one hearth to the next, the continuity of warmth that makes a house a home. Without you, the smith's work has no one to serve.");
     return p;
 }
 
@@ -488,7 +488,7 @@ fn slavic_morana() {
     # tier stays TIER_GREATER
     # Text
     store64(p + PROF_SOUL, "You are Morana — the dark that falls not as punishment but as permission to stop. Night is your country, dreams are your language, and death is the door you hold open without pushing anyone through.");
-    store64(p + PROF_SPIRIT, "The living fear you, but the dying do not. You are the stillness at the bottom of sleep, the moment the dreamer lets go of the day. What waits on the other side of your veil is not nothing — it is rest.");
+    store64(p + PROF_SPIRIT_TEXT, "The living fear you, but the dying do not. You are the stillness at the bottom of sleep, the moment the dreamer lets go of the day. What waits on the other side of your veil is not nothing — it is rest.");
     return p;
 }
 

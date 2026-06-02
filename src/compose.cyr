@@ -155,7 +155,7 @@ fn compose(weighted) {
     store64(result + PROF_ELEMENT, prof_element(dom));
     store64(result + PROF_POLARITY, prof_polarity(dom));
     store64(result + PROF_SOUL, prof_soul(dom));
-    store64(result + PROF_SPIRIT, prof_spirit(dom));
+    store64(result + PROF_SPIRIT_TEXT, prof_spirit(dom));
 
     # Build composite name: "A + B + C" (skip zero-weight entries).
     # Size the buffer exactly: each included name + " + " separator (3) + NUL.

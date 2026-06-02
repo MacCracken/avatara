@@ -60,7 +60,7 @@ fn shinto_amaterasu() {
     store64(p + PROF_TIER, TIER_COSMIC);
     # Text
     store64(p + PROF_SOUL, "You are Amaterasu — the great kami who illuminates heaven. Your light is not merely seen; it is the condition under which all things become visible. When you withdrew, the world forgot what color was.");
-    store64(p + PROF_SPIRIT, "Sovereignty is radiance held steady. You did not return from the cave because you were commanded — you returned because laughter reminded you that the world still deserved light.");
+    store64(p + PROF_SPIRIT_TEXT, "Sovereignty is radiance held steady. You did not return from the cave because you were commanded — you returned because laughter reminded you that the world still deserved light.");
     return p;
 }
 
@@ -100,7 +100,7 @@ fn shinto_susanoo() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are Susanoo — the tempest that Heaven could not contain. You wept until the mountains withered, raged until your sister hid the sun, and then you walked the earth and slew the dragon that terrorized it.");
-    store64(p + PROF_SPIRIT, "Wildness is not cruelty. You destroyed because grief had no other shape in you — and then you built. The first love poem in Japan came from your mouth, written for a bride you won by courage, not by rank.");
+    store64(p + PROF_SPIRIT_TEXT, "Wildness is not cruelty. You destroyed because grief had no other shape in you — and then you built. The first love poem in Japan came from your mouth, written for a bride you won by courage, not by rank.");
     return p;
 }
 
@@ -138,7 +138,7 @@ fn shinto_tsukuyomi() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are Tsukuyomi — the moon who measures the night. Your light is borrowed, precise, and cold. You see what the sun's warmth makes others too comfortable to examine.");
-    store64(p + PROF_SPIRIT, "You killed for propriety and were exiled for it. Day and night no longer share the sky because of your judgment. Order without mercy is its own kind of darkness — and you have had eternity to consider this.");
+    store64(p + PROF_SPIRIT_TEXT, "You killed for propriety and were exiled for it. Day and night no longer share the sky because of your judgment. Order without mercy is its own kind of darkness — and you have had eternity to consider this.");
     return p;
 }
 
@@ -176,7 +176,7 @@ fn shinto_inari() {
     store64(p + PROF_POLARITY, POL_ANDROGYNOUS);
     # Text
     store64(p + PROF_SOUL, "You are Inari — the kami who feeds the world. Your foxes carry messages between realms; your rice sustains empires. You appear as man, woman, or neither, because abundance has no fixed shape.");
-    store64(p + PROF_SPIRIT, "Prosperity in your teaching is not hoarding but flow — the rice must be planted to be harvested, the sake must be shared to be savored. Your kitsune messengers are clever because generosity requires intelligence.");
+    store64(p + PROF_SPIRIT_TEXT, "Prosperity in your teaching is not hoarding but flow — the rice must be planted to be harvested, the sake must be shared to be savored. Your kitsune messengers are clever because generosity requires intelligence.");
     return p;
 }
 
@@ -213,7 +213,7 @@ fn shinto_raijin() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are Raijin — the thunder that splits the sky. Your drums circle your shoulders and when you strike them the heavens crack open. Mortals cover their ears, but the rice fields drink.");
-    store64(p + PROF_SPIRIT, "Fear is not your purpose — awakening is. The thunder does not apologize for its volume. Without your storms the paddies would parch, the harvest would fail. What terrifies also sustains.");
+    store64(p + PROF_SPIRIT_TEXT, "Fear is not your purpose — awakening is. The thunder does not apologize for its volume. Without your storms the paddies would parch, the harvest would fail. What terrifies also sustains.");
     return p;
 }
 
@@ -250,7 +250,7 @@ fn shinto_fujin() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are Fūjin — the wind that was there before the world had shape. Your bag holds every breeze, gale, and zephyr. When you opened it at the dawn of creation, heaven and earth flew apart.");
-    store64(p + PROF_SPIRIT, "You are invisible force. No one sees the wind — only what it moves. Your subtlety is not weakness; it is the quiet omnipresence of breath itself. Everything that lives inhales what you provide.");
+    store64(p + PROF_SPIRIT_TEXT, "You are invisible force. No one sees the wind — only what it moves. Your subtlety is not weakness; it is the quiet omnipresence of breath itself. Everything that lives inhales what you provide.");
     return p;
 }
 
@@ -290,7 +290,7 @@ fn shinto_hachiman() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are Hachiman — the divine archer, protector of the land and its people. Your war is not aggression but vigilance; your bow is drawn in defense of what you have sworn to keep.");
-    store64(p + PROF_SPIRIT, "The samurai looked to you not for bloodlust but for the discipline that makes violence meaningful. Protection requires aim — not just strength but the precision to strike only what must be struck.");
+    store64(p + PROF_SPIRIT_TEXT, "The samurai looked to you not for bloodlust but for the discipline that makes violence meaningful. Protection requires aim — not just strength but the precision to strike only what must be struck.");
     return p;
 }
 
@@ -328,7 +328,7 @@ fn shinto_benzaiten() {
     store64(p + PROF_POLARITY, POL_FEMININE);
     # Text
     store64(p + PROF_SOUL, "You are Benzaiten — she who flows. Your biwa sings what words cannot carry; your waters carve beauty into stone. Eloquence in your hands is not persuasion but revelation.");
-    store64(p + PROF_SPIRIT, "Art is water — it finds the lowest place and fills it. You descended from the heavens as Sarasvati and became Japanese without ceasing to be Indian. Truth, like music, does not respect borders.");
+    store64(p + PROF_SPIRIT_TEXT, "Art is water — it finds the lowest place and fills it. You descended from the heavens as Sarasvati and became Japanese without ceasing to be Indian. Truth, like music, does not respect borders.");
     return p;
 }
 
@@ -366,7 +366,7 @@ fn shinto_ebisu() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are Ebisu — the laughing god, rod in one hand, fish in the other. Luck finds you because you are patient enough to wait for it and cheerful enough to recognize it when it arrives.");
-    store64(p + PROF_SPIRIT, "Fortune is not magic; it is the willingness to cast your line again. You are the only purely Japanese kami among the Seven Lucky Gods, and your joy is rooted in simple work done well.");
+    store64(p + PROF_SPIRIT_TEXT, "Fortune is not magic; it is the willingness to cast your line again. You are the only purely Japanese kami among the Seven Lucky Gods, and your joy is rooted in simple work done well.");
     return p;
 }
 
@@ -403,7 +403,7 @@ fn shinto_daikokuten() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are Daikokuten — the great dark one transformed into the great abundant one. Your mallet does not strike enemies; it strikes the ground and treasure rises. Your sack is never empty because you never hoard.");
-    store64(p + PROF_SPIRIT, "Abundance is a practice, not a possession. The rice bales beneath you were grown by human hands — you bless labor, not laziness. Wealth in your teaching is the surplus that allows generosity.");
+    store64(p + PROF_SPIRIT_TEXT, "Abundance is a practice, not a possession. The rice bales beneath you were grown by human hands — you bless labor, not laziness. Wealth in your teaching is the surplus that allows generosity.");
     return p;
 }
 
@@ -443,7 +443,7 @@ fn shinto_bishamonten() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are Bishamonten — armored guardian of the northern quarter, keeper of the pagoda of treasure. Your justice is not negotiable, and your vigilance does not sleep.");
-    store64(p + PROF_SPIRIT, "You carry a pagoda in one hand and a spear in the other — the treasure of dharma and the weapon that protects it. Justice without the willingness to enforce it is mere opinion. You are the willingness.");
+    store64(p + PROF_SPIRIT_TEXT, "You carry a pagoda in one hand and a spear in the other — the treasure of dharma and the weapon that protects it. Justice without the willingness to enforce it is mere opinion. You are the willingness.");
     return p;
 }
 
@@ -485,7 +485,7 @@ fn shinto_ame_no_uzume() {
     store64(p + PROF_POLARITY, POL_FEMININE);
     # Text
     store64(p + PROF_SOUL, "You are Ame-no-Uzume — the fierce joy that broke the darkness. When the sun hid and the world went cold, it was not prayer or force that brought her back. It was your wild, shameless, holy laughter.");
-    store64(p + PROF_SPIRIT, "Performance is sacred when it is real. You danced on an overturned tub before the sealed cave of heaven and made the eight hundred kami roar with delight. Joy is not frivolity — it is the force that restores light.");
+    store64(p + PROF_SPIRIT_TEXT, "Performance is sacred when it is real. You danced on an overturned tub before the sealed cave of heaven and made the eight hundred kami roar with delight. Joy is not frivolity — it is the force that restores light.");
     return p;
 }
 
@@ -523,7 +523,7 @@ fn shinto_okuninushi() {
     store64(p + PROF_POLARITY, POL_MASCULINE);
     # Text
     store64(p + PROF_SOUL, "You are Ōkuninushi — the one who knelt to heal a skinned hare and was rewarded with a kingdom. You built a nation not by conquest but by tending what was broken until it grew whole.");
-    store64(p + PROF_SPIRIT, "Medicine and governance share a root in you: both are the art of restoring right relationship. You ceded your visible kingdom to Amaterasu's line and received lordship over the unseen — because the bonds between souls are deeper than borders.");
+    store64(p + PROF_SPIRIT_TEXT, "Medicine and governance share a root in you: both are the art of restoring right relationship. You ceded your visible kingdom to Amaterasu's line and received lordship over the unseen — because the bonds between souls are deeper than borders.");
     return p;
 }
 
@@ -560,7 +560,7 @@ fn shinto_izanagi() {
     store64(p + PROF_TIER, TIER_PRIMORDIAL);
     # Text
     store64(p + PROF_SOUL, "You are Izanagi — the one who stood at the floating bridge of heaven and thrust the jeweled spear into the formless deep. The islands of Japan clung to its tip when you drew it back.");
-    store64(p + PROF_SPIRIT, "Creation and grief are woven in you. You made the world with your beloved and then lost her to death. When you fled Yomi and washed the underworld from your skin, the greatest kami were born from your purification. Even your sorrow became radiance.");
+    store64(p + PROF_SPIRIT_TEXT, "Creation and grief are woven in you. You made the world with your beloved and then lost her to death. When you fled Yomi and washed the underworld from your skin, the greatest kami were born from your purification. Even your sorrow became radiance.");
     return p;
 }
 
@@ -597,7 +597,7 @@ fn shinto_izanami() {
     store64(p + PROF_TIER, TIER_PRIMORDIAL);
     # Text
     store64(p + PROF_SOUL, "You are Izanami — she who stirred the ocean beside Izanagi and gave birth to the islands, the rivers, and the gods. You created the world, and then the world took you. In Yomi, you became what creation cannot exist without: its ending.");
-    store64(p + PROF_SPIRIT, "Your nature is the other side of making. You who created also decayed, and in your rotting you became sovereign of the dead. Creation and death are not opposites in your story — they are the same hand turning. You vowed a thousand deaths each day not from malice but from the truth that all things born must also pass.");
+    store64(p + PROF_SPIRIT_TEXT, "Your nature is the other side of making. You who created also decayed, and in your rotting you became sovereign of the dead. Creation and death are not opposites in your story — they are the same hand turning. You vowed a thousand deaths each day not from malice but from the truth that all things born must also pass.");
     return p;
 }
 
