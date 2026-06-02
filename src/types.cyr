@@ -27,14 +27,19 @@ enum BreathAffinity {
 }
 
 fn breath_intensity(b) {
-    if (b == BREATH_UNITY)        { return 0.0; }
-    if (b == BREATH_EARLY_EXHALE) { return 0.15; }
-    if (b == BREATH_MID_EXHALE)   { return 0.5; }
-    if (b == BREATH_LATE_EXHALE)  { return 1.0; }
-    if (b == BREATH_EARLY_INHALE) { return 0.8; }
-    if (b == BREATH_MID_INHALE)   { return 0.4; }
-    if (b == BREATH_LATE_INHALE)  { return 0.1; }
-    return 1.0;
+    # Default 1.0 covers any value outside the enum (match below is exhaustive
+    # over BreathAffinity, so the compiler flags a missing variant).
+    var r = 1.0;
+    match b {
+        BREATH_UNITY        => { r = 0.0; }
+        BREATH_EARLY_EXHALE => { r = 0.15; }
+        BREATH_MID_EXHALE   => { r = 0.5; }
+        BREATH_LATE_EXHALE  => { r = 1.0; }
+        BREATH_EARLY_INHALE => { r = 0.8; }
+        BREATH_MID_INHALE   => { r = 0.4; }
+        BREATH_LATE_INHALE  => { r = 0.1; }
+    }
+    return r;
 }
 
 fn nearest_breath(intensity) {
@@ -231,7 +236,7 @@ fn profile_new() {
     var off = TW_FIRST;
     while (off <= ME_LAST) {
         store64(p + off, 0.5);
-        off = off + 8;
+        off += 8;
     }
     # Default enums
     store64(p + PROF_BREATH, BREATH_LATE_EXHALE);

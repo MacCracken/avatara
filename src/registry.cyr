@@ -12,91 +12,91 @@ fn all_profiles() {
 
         # Kabbalah (10)
         var v = all_kabbalah();
-        for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
 
         # Angelic (archangels + orders)
         v = all_angelic();
-        for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
 
         # Hindu (trimurti + devas + avatars)
         v = all_hindu();
-        for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
 
         # Olympian (15)
         v = all_olympians();
-        for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
 
         # Norse (13)
         v = all_norse();
-        for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
 
         # Egyptian (16)
         v = all_egyptian();
-        for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
 
         # Buddhist (bodhisattvas + dhyani buddhas)
         v = all_buddhist();
-        for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
 
         # Mesopotamian (14)
         v = all_mesopotamian();
-        for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
 
         # Celtic (15)
         v = all_celtic();
-        for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
 
         # Shinto (15)
         v = all_shinto();
-        for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
 
         # Aztec (14)
         v = all_aztec();
-        for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
 
         # Maya (12)
         v = all_maya();
-        for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
 
         # Yoruba (14)
         v = all_yoruba();
-        for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
 
         # Zoroastrian (amesha spentas + beings)
         v = all_zoroastrian();
-        for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
 
         # Taoist (immortals + deities)
         v = all_taoist();
-        for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
 
         # Polynesian (12)
         v = all_polynesian();
-        for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
 
         # Slavic (12)
         v = all_slavic();
-        for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
 
         # Jain (24)
         v = all_jain();
-        for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
 
         # Sikh (10)
         v = all_sikh();
-        for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
 
         # Incarnate (all sub-groups)
         v = all_incarnate();
-        for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
 
         # Finnish (Kalevala + Sami)
         v = all_finnish();
-        for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
 
         # Vodou (Lwa)
         v = all_vodou();
-        for (var i = 0; i < vec_len(v); i = i + 1) { vec_push(registry_vec, vec_get(v, i)); }
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
 
         registry_init_done = 1;
     }
@@ -107,7 +107,7 @@ fn all_profiles() {
 fn lookup(name) {
     var v = all_profiles();
     var n = vec_len(v);
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var p = vec_get(v, i);
         if (streq(prof_name(p), name) == 1) { return p; }
     }
@@ -118,7 +118,7 @@ fn lookup(name) {
 fn lookup_in(tradition, name) {
     var v = all_profiles();
     var n = vec_len(v);
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var p = vec_get(v, i);
         if (streq(prof_tradition(p), tradition) == 1) {
             if (streq(prof_name(p), name) == 1) { return p; }
@@ -132,7 +132,7 @@ fn by_tradition(tradition) {
     var result = vec_new();
     var v = all_profiles();
     var n = vec_len(v);
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var p = vec_get(v, i);
         if (streq(prof_tradition(p), tradition) == 1) {
             vec_push(result, p);
@@ -146,10 +146,10 @@ fn all_traditions() {
     var result = vec_new();
     var v = all_profiles();
     var n = vec_len(v);
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var t = prof_tradition(vec_get(v, i));
         var dup = 0;
-        for (var j = 0; j < vec_len(result); j = j + 1) {
+        for (var j = 0; j < vec_len(result); j += 1) {
             if (streq(vec_get(result, j), t) == 1) { dup = 1; }
         }
         if (dup == 0) { vec_push(result, t); }
@@ -173,7 +173,7 @@ fn query_min_trait(offset, min_val) {
     if (is_f64_field_offset(offset) == 0) { return result; }
     var v = all_profiles();
     var n = vec_len(v);
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var p = vec_get(v, i);
         if (f64_ge(load64(p + offset), min_val) == 1) {
             vec_push(result, p);
@@ -188,7 +188,7 @@ fn query_max_trait(offset, max_val) {
     if (is_f64_field_offset(offset) == 0) { return result; }
     var v = all_profiles();
     var n = vec_len(v);
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var p = vec_get(v, i);
         if (f64_le(load64(p + offset), max_val) == 1) {
             vec_push(result, p);
@@ -202,7 +202,7 @@ fn query_breath(breath) {
     var result = vec_new();
     var v = all_profiles();
     var n = vec_len(v);
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var p = vec_get(v, i);
         if (prof_breath(p) == breath) { vec_push(result, p); }
     }
@@ -214,7 +214,7 @@ fn query_growth(growth) {
     var result = vec_new();
     var v = all_profiles();
     var n = vec_len(v);
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var p = vec_get(v, i);
         if (prof_growth_dir(p) == growth) { vec_push(result, p); }
     }
@@ -226,7 +226,7 @@ fn query_element(elem) {
     var result = vec_new();
     var v = all_profiles();
     var n = vec_len(v);
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var p = vec_get(v, i);
         if (prof_element(p) == elem) { vec_push(result, p); }
     }
@@ -238,7 +238,7 @@ fn query_polarity(pol) {
     var result = vec_new();
     var v = all_profiles();
     var n = vec_len(v);
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var p = vec_get(v, i);
         if (prof_polarity(p) == pol) { vec_push(result, p); }
     }
@@ -250,7 +250,7 @@ fn query_tier(tier) {
     var result = vec_new();
     var v = all_profiles();
     var n = vec_len(v);
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var p = vec_get(v, i);
         if (prof_tier(p) == tier) { vec_push(result, p); }
     }
@@ -263,8 +263,8 @@ fn query_count_min_trait(offset, min_val) {
     if (is_f64_field_offset(offset) == 0) { return c; }
     var v = all_profiles();
     var n = vec_len(v);
-    for (var i = 0; i < n; i = i + 1) {
-        if (f64_ge(load64(vec_get(v, i) + offset), min_val) == 1) { c = c + 1; }
+    for (var i = 0; i < n; i += 1) {
+        if (f64_ge(load64(vec_get(v, i) + offset), min_val) == 1) { c += 1; }
     }
     return c;
 }
@@ -273,7 +273,7 @@ fn query_count_min_trait(offset, min_val) {
 fn filter_tradition(src, tradition) {
     var result = vec_new();
     var n = vec_len(src);
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var p = vec_get(src, i);
         if (streq(prof_tradition(p), tradition) == 1) {
             vec_push(result, p);
@@ -290,10 +290,10 @@ fn query_by_traditions(trads) {
     var result = vec_new();
     var v = all_profiles();
     var n = vec_len(v);
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var p = vec_get(v, i);
         var t = prof_tradition(p);
-        for (var j = 0; j < vec_len(trads); j = j + 1) {
+        for (var j = 0; j < vec_len(trads); j += 1) {
             if (streq(vec_get(trads, j), t) == 1) {
                 vec_push(result, p);
             }
@@ -322,7 +322,7 @@ fn filter_min_trait(src, offset, min_val) {
     var result = vec_new();
     if (is_f64_field_offset(offset) == 0) { return result; }
     var n = vec_len(src);
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var p = vec_get(src, i);
         if (f64_ge(load64(p + offset), min_val) == 1) {
             vec_push(result, p);

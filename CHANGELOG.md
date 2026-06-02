@@ -12,6 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cross-tradition affinity graph (pre-computed, stored)
 - Shadow aspect support (dark/inverted form of each archetype)
 
+## [2.4.2] — 2026-06-02
+
+Language modernization — adopting Cyrius 6.x idioms. No behavior or API
+changes; codegen is identical (verified: build, 39 tests, lint, benchmarks).
+
+### Changed
+- **Compound assignment** — converted 91 integer accumulator/loop sites (`i = i + 1`, `off = off + 8`, `j = j - 1`, etc.) to `+=` / `-=` across the logic modules (types, error, compose, affinity, registry, history, incarnate). The f64 accumulators stay on the `f64_add` builtins (bit-pattern math — `+=` would be wrong there).
+- **`breath_intensity()`** now uses a `match` over `BreathAffinity` instead of an if-chain, gaining a compile-time exhaustiveness check on the enum.
+
 ## [2.4.1] — 2026-06-02
 
 Hardening + refactor sweep. No API removals; behavior changes are limited to

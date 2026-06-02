@@ -2427,7 +2427,7 @@ var incarnate_all_init_done = 0;
 # Append every element of src onto dst (shares profile pointers, no re-alloc).
 fn incarnate_append(dst, src) {
     var n = vec_len(src);
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         vec_push(dst, vec_get(src, i));
     }
 }

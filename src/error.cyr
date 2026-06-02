@@ -22,7 +22,7 @@ fn require_all_unit_range(p, first, last) {
     while (off <= last) {
         var r = require_unit_range(load64(p + off));
         if (r != ERR_NONE) { return r; }
-        off = off + 8;
+        off += 8;
     }
     return ERR_NONE;
 }

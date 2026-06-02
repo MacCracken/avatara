@@ -39,7 +39,7 @@ fn compose(weighted) {
 
     # Sum weights; reject NULL profiles, negative weights, and NaN weights.
     var total = 0.0;
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var entry = vec_get(weighted, i);
         if (weighted_profile(entry) == 0) { return 0; }
         var w = weighted_weight(entry);
@@ -55,16 +55,16 @@ fn compose(weighted) {
     var off = TW_FIRST;
     while (off <= TW_LAST) {
         store64(result + off, 0.0);
-        off = off + 8;
+        off += 8;
     }
     off = ME_FIRST;
     while (off <= ME_LAST) {
         store64(result + off, 0.0);
-        off = off + 8;
+        off += 8;
     }
 
     # Blend traits and emphases: weighted average
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var entry = vec_get(weighted, i);
         var p = weighted_profile(entry);
         var w = weighted_weight(entry);
@@ -76,7 +76,7 @@ fn compose(weighted) {
             var cur = load64(result + off);
             var src = load64(p + off);
             store64(result + off, f64_add(cur, f64_mul(src, f)));
-            off = off + 8;
+            off += 8;
         }
         # Emphases
         off = ME_FIRST;
@@ -84,13 +84,13 @@ fn compose(weighted) {
             var cur = load64(result + off);
             var src = load64(p + off);
             store64(result + off, f64_add(cur, f64_mul(src, f)));
-            off = off + 8;
+            off += 8;
         }
     }
 
     # Blend breath: weighted average of intensities, snap to nearest
     var avg_intensity = 0.0;
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var entry = vec_get(weighted, i);
         var p = weighted_profile(entry);
         var w = weighted_weight(entry);
@@ -107,7 +107,7 @@ fn compose(weighted) {
     var dir = 0;
     while (dir <= 4) {
         var score = 0.0;
-        for (var i = 0; i < n; i = i + 1) {
+        for (var i = 0; i < n; i += 1) {
             var entry = vec_get(weighted, i);
             if (prof_growth_dir(weighted_profile(entry)) == dir) {
                 score = f64_add(score, weighted_weight(entry));
@@ -117,7 +117,7 @@ fn compose(weighted) {
             best_growth = dir;
             best_growth_w = score;
         }
-        dir = dir + 1;
+        dir += 1;
     }
     store64(result + PROF_GROWTH_DIR, best_growth);
 
@@ -127,7 +127,7 @@ fn compose(weighted) {
     var tier = 0;
     while (tier <= 6) {
         var score = 0.0;
-        for (var i = 0; i < n; i = i + 1) {
+        for (var i = 0; i < n; i += 1) {
             var entry = vec_get(weighted, i);
             if (prof_tier(weighted_profile(entry)) == tier) {
                 score = f64_add(score, weighted_weight(entry));
@@ -137,14 +137,14 @@ fn compose(weighted) {
             best_tier = tier;
             best_tier_w = score;
         }
-        tier = tier + 1;
+        tier += 1;
     }
     store64(result + PROF_TIER, best_tier);
 
     # Find dominant (highest weight) for name, element, polarity, soul, spirit
     var dom_idx = 0;
     var dom_w = 0.0;
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var w = weighted_weight(vec_get(weighted, i));
         if (f64_gt(w, dom_w) == 1) {
             dom_idx = i;
@@ -160,28 +160,28 @@ fn compose(weighted) {
     # Build composite name: "A + B + C" (skip zero-weight entries).
     # Size the buffer exactly: each included name + " + " separator (3) + NUL.
     var name_size = 1;
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var entry = vec_get(weighted, i);
         if (f64_gt(weighted_weight(entry), 0.0) == 1) {
-            name_size = name_size + strlen(prof_name(weighted_profile(entry))) + 3;
+            name_size += strlen(prof_name(weighted_profile(entry))) + 3;
         }
     }
     var name_buf = alloc(name_size);
     var name_pos = 0;
     var first = 1;
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var entry = vec_get(weighted, i);
         var w = weighted_weight(entry);
         if (f64_gt(w, 0.0) == 1) {
             if (first == 0) {
-                store8(name_buf + name_pos, 32); name_pos = name_pos + 1;
-                store8(name_buf + name_pos, 43); name_pos = name_pos + 1;
-                store8(name_buf + name_pos, 32); name_pos = name_pos + 1;
+                store8(name_buf + name_pos, 32); name_pos += 1;
+                store8(name_buf + name_pos, 43); name_pos += 1;
+                store8(name_buf + name_pos, 32); name_pos += 1;
             }
             var nm = prof_name(weighted_profile(entry));
             var nmlen = strlen(nm);
             memcpy(name_buf + name_pos, nm, nmlen);
-            name_pos = name_pos + nmlen;
+            name_pos += nmlen;
             first = 0;
         }
     }
@@ -191,36 +191,36 @@ fn compose(weighted) {
     # Build composite tradition: "A + B + C" (deduped). Size to an upper bound
     # (every included entry + separator); dedup only shrinks the result.
     var trad_size = 1;
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var entry = vec_get(weighted, i);
         if (f64_gt(weighted_weight(entry), 0.0) == 1) {
-            trad_size = trad_size + strlen(prof_tradition(weighted_profile(entry))) + 3;
+            trad_size += strlen(prof_tradition(weighted_profile(entry))) + 3;
         }
     }
     var trad_buf = alloc(trad_size);
     var trad_pos = 0;
     var seen_trads = vec_new();
     first = 1;
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var entry = vec_get(weighted, i);
         var w = weighted_weight(entry);
         if (f64_gt(w, 0.0) == 1) {
             var t = prof_tradition(weighted_profile(entry));
             # Check if already seen
             var dup = 0;
-            for (var j = 0; j < vec_len(seen_trads); j = j + 1) {
+            for (var j = 0; j < vec_len(seen_trads); j += 1) {
                 if (streq(vec_get(seen_trads, j), t) == 1) { dup = 1; }
             }
             if (dup == 0) {
                 vec_push(seen_trads, t);
                 if (first == 0) {
-                    store8(trad_buf + trad_pos, 32); trad_pos = trad_pos + 1;
-                    store8(trad_buf + trad_pos, 43); trad_pos = trad_pos + 1;
-                    store8(trad_buf + trad_pos, 32); trad_pos = trad_pos + 1;
+                    store8(trad_buf + trad_pos, 32); trad_pos += 1;
+                    store8(trad_buf + trad_pos, 43); trad_pos += 1;
+                    store8(trad_buf + trad_pos, 32); trad_pos += 1;
                 }
                 var tlen = strlen(t);
                 memcpy(trad_buf + trad_pos, t, tlen);
-                trad_pos = trad_pos + tlen;
+                trad_pos += tlen;
                 first = 0;
             }
         }

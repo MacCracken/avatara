@@ -22,7 +22,7 @@ fn sum_abs_diff(a, b, first, last) {
     var off = first;
     while (off <= last) {
         total = f64_add(total, f64_abs(f64_sub(load64(a + off), load64(b + off))));
-        off = off + 8;
+        off += 8;
     }
     return total;
 }
@@ -78,7 +78,7 @@ fn similar_to(source, max_results) {
     var n = vec_len(profiles);
     var src_name = prof_name(source);
 
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var p = vec_get(profiles, i);
         # Skip self
         if (streq(prof_name(p), src_name) == 1) {
@@ -92,7 +92,7 @@ fn similar_to(source, max_results) {
 
     # Sort by score descending (simple insertion sort — N is small)
     var rn = vec_len(results);
-    for (var i = 1; i < rn; i = i + 1) {
+    for (var i = 1; i < rn; i += 1) {
         var key = vec_get(results, i);
         var key_score = sim_score(key);
         var j = i - 1;
@@ -103,7 +103,7 @@ fn similar_to(source, max_results) {
             }
             # Shift jentry right (swap j and j+1)
             vec_set(results, j + 1, jentry);
-            j = j - 1;
+            j -= 1;
         }
         vec_set(results, j + 1, key);
     }
@@ -112,7 +112,7 @@ fn similar_to(source, max_results) {
     if (max_results > 0) {
         if (rn > max_results) {
             var trimmed = vec_new();
-            for (var i = 0; i < max_results; i = i + 1) {
+            for (var i = 0; i < max_results; i += 1) {
                 vec_push(trimmed, vec_get(results, i));
             }
             return trimmed;
@@ -131,7 +131,7 @@ fn cross_tradition_match(source) {
     var n = vec_len(profiles);
     var src_trad = prof_tradition(source);
 
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var p = vec_get(profiles, i);
         # Must be different tradition
         if (streq(prof_tradition(p), src_trad) == 1) { continue; }
@@ -152,7 +152,7 @@ fn cross_tradition_matches(source, max_results) {
     var src_trad = prof_tradition(source);
     var trads = all_traditions();
 
-    for (var i = 0; i < vec_len(trads); i = i + 1) {
+    for (var i = 0; i < vec_len(trads); i += 1) {
         var t = vec_get(trads, i);
         if (streq(t, src_trad) == 1) { continue; }
 
@@ -160,7 +160,7 @@ fn cross_tradition_matches(source, max_results) {
         var tprofs = by_tradition(t);
         var best = 0;
         var best_score = 0.0;
-        for (var j = 0; j < vec_len(tprofs); j = j + 1) {
+        for (var j = 0; j < vec_len(tprofs); j += 1) {
             var p = vec_get(tprofs, j);
             var score = affinity(source, p);
             if (f64_gt(score, best_score) == 1) {
@@ -175,14 +175,14 @@ fn cross_tradition_matches(source, max_results) {
 
     # Sort by score descending
     var rn = vec_len(results);
-    for (var i = 1; i < rn; i = i + 1) {
+    for (var i = 1; i < rn; i += 1) {
         var key = vec_get(results, i);
         var key_score = sim_score(key);
         var j = i - 1;
         while (j >= 0) {
             if (f64_gt(sim_score(vec_get(results, j)), key_score) == 1) { break; }
             vec_set(results, j + 1, vec_get(results, j));
-            j = j - 1;
+            j -= 1;
         }
         vec_set(results, j + 1, key);
     }
@@ -190,7 +190,7 @@ fn cross_tradition_matches(source, max_results) {
     if (max_results > 0) {
         if (rn > max_results) {
             var trimmed = vec_new();
-            for (var i = 0; i < max_results; i = i + 1) {
+            for (var i = 0; i < max_results; i += 1) {
                 vec_push(trimmed, vec_get(results, i));
             }
             return trimmed;
@@ -259,19 +259,19 @@ fn conflicts(a, b, threshold) {
             store64(c + CONF_DELTA, delta);
             vec_push(result, c);
         }
-        off = off + 8;
+        off += 8;
     }
 
     # Sort by delta descending
     var rn = vec_len(result);
-    for (var i = 1; i < rn; i = i + 1) {
+    for (var i = 1; i < rn; i += 1) {
         var key = vec_get(result, i);
         var key_d = conf_delta(key);
         var j = i - 1;
         while (j >= 0) {
             if (f64_gt(conf_delta(vec_get(result, j)), key_d) == 1) { break; }
             vec_set(result, j + 1, vec_get(result, j));
-            j = j - 1;
+            j -= 1;
         }
         vec_set(result, j + 1, key);
     }

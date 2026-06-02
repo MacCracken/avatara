@@ -226,7 +226,7 @@ fn mapping_count() { return vec_len(all_mappings()); }
 fn find_mapping(tradition) {
     var v = all_mappings();
     var n = vec_len(v);
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var m = vec_get(v, i);
         if (streq(map_tradition(m), tradition) == 1) { return m; }
     }
@@ -257,7 +257,7 @@ fn mapped_traditions() {
     var result = vec_new();
     var v = all_mappings();
     var n = vec_len(v);
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         vec_push(result, map_tradition(vec_get(v, i)));
     }
     return result;
@@ -268,11 +268,11 @@ fn traditions_for_civilization(civ_name) {
     var result = vec_new();
     var v = all_mappings();
     var n = vec_len(v);
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var m = vec_get(v, i);
         var civs = map_civs(m);
         var cn = vec_len(civs);
-        for (var j = 0; j < cn; j = j + 1) {
+        for (var j = 0; j < cn; j += 1) {
             if (streq(vec_get(civs, j), civ_name) == 1) {
                 vec_push(result, map_tradition(m));
             }
@@ -286,7 +286,7 @@ fn traditions_active_at(year) {
     var result = vec_new();
     var v = all_mappings();
     var n = vec_len(v);
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var m = vec_get(v, i);
         if (map_start(m) <= year) {
             if (year <= map_end(m)) {
@@ -302,11 +302,11 @@ fn traditions_for_era(era_name) {
     var result = vec_new();
     var v = all_mappings();
     var n = vec_len(v);
-    for (var i = 0; i < n; i = i + 1) {
+    for (var i = 0; i < n; i += 1) {
         var m = vec_get(v, i);
         var eras = map_eras(m);
         var en = vec_len(eras);
-        for (var j = 0; j < en; j = j + 1) {
+        for (var j = 0; j < en; j += 1) {
             if (streq(vec_get(eras, j), era_name) == 1) {
                 vec_push(result, map_tradition(m));
             }
