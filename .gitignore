@@ -3,6 +3,9 @@
 /build/
 **/*.rs.bk
 
+# Resolved dependencies (populated by `cyrius deps` from the pinned toolchain)
+/lib/
+
 # IDE
 .idea/
 .vscode/

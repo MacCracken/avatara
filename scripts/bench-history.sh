@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Record the benchmark suite into bench-history.csv, keyed by date + version,
+# so deltas and potential regressions are visible across releases. Run as a
+# standard step of every version bump, then diff against the prior release's
+# rows before tagging. See CLAUDE.md § Versioning & Benchmarking.
 set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT"
@@ -11,21 +15,25 @@ CSV="bench-history.csv"
 
 echo "Building benchmarks..."
 cyrius deps 2>/dev/null
-cyrius build tests/avatara.bcyr /tmp/avatara_bench
+CYRIUS_DCE=1 cyrius build tests/avatara.bcyr /tmp/avatara_bench
 
 echo "Running benchmarks..."
-/tmp/avatara_bench 2>&1 | grep -E '^\s+\S+:' | while read -r line; do
-    name=$(echo "$line" | sed 's/:.*//' | tr -d ' ')
-    # Extract avg time and unit
-    avg=$(echo "$line" | grep -oP '\d+[a-z]*\s+avg' | grep -oP '\d+[a-z]*')
-    time_ns="$avg"
-    case "$avg" in
-        *us) time_ns="$(echo "${avg%us} * 1000" | bc)" ;;
-        *ns) time_ns="${avg%ns}" ;;
-        *ms) time_ns="$(echo "${avg%ms} * 1000000" | bc)" ;;
-    esac
-    echo "${DATE},${VERSION},${name},${time_ns}" >> "$CSV"
-done
+# Parse lines like "  name/case: 226ns avg (min=... max=...) [N iters]" and
+# normalize the avg time to nanoseconds. awk handles the unit math (no bc).
+/tmp/avatara_bench 2>&1 | awk -v date="$DATE" -v ver="$VERSION" '
+    /:[[:space:]]+[0-9.]+[a-z]+[[:space:]]+avg/ {
+        name = $1; sub(/:$/, "", name)
+        for (i = 1; i <= NF; i++) if ($i == "avg") { v = $(i-1); break }
+        unit = v; gsub(/[0-9.]/, "", unit)
+        num  = v; gsub(/[a-z]/,  "", num)
+        mult = (unit == "ns") ? 1 : \
+               (unit == "us") ? 1000 : \
+               (unit == "ms") ? 1000000 : \
+               (unit == "s")  ? 1000000000 : 1
+        printf "%s,%s,%s,%d\n", date, ver, name, num * mult
+    }
+' >> "$CSV"
 
-echo "Benchmarks recorded for ${VERSION} (${DATE})"
+RECORDED=$(grep -c ",${VERSION}," "$CSV")
+echo "Benchmarks recorded for ${VERSION} (${DATE}): ${RECORDED} entries -> ${CSV}"
 rm -f /tmp/avatara_bench

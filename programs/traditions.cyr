@@ -3,7 +3,7 @@
 # Prints a single profile, cosmic breath positions, courage query,
 # and tradition entity counts.
 
-# Stdlib auto-included via cyrius.toml
+# Stdlib auto-included via cyrius.cyml
 
 include "src/types.cyr"
 include "src/error.cyr"
