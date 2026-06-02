@@ -9,8 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Roadmap
 See [docs/development/roadmap.md](docs/development/roadmap.md). Next up:
-- **v2.5.0 — Architecture Modernization**: `struct` + `#derive(accessors)` for `ArchetypeProfile`; `Result<T, E>` + `?` for `error.cyr` (both deferred from the 2.4.x sweep — layout/API-breaking).
-- **v2.5.x — Structural Enrichment** (slipped from 2.4.0): `domain` field; cross-tradition affinity graph; shadow aspect support.
+- **v2.5.0 — Architecture Modernization**: `struct` + `#derive(accessors)` for `ArchetypeProfile`, then `Result<T, E>` + `?` for `error.cyr` (both deferred from the 2.4.x sweep — layout/API-breaking; do the struct migration first).
+- **v2.5.1 — `domain` field** (slipped from 2.4.0): categorical axis; layout 312 → 320, folded into the struct migration.
+- **v2.5.2 — Cross-tradition affinity graph**: pre-computed/cached, additive, must beat the 2.4.x bench baseline.
+- **v2.5.3 — Shadow aspect support**: pure `shadow(profile)` derivation with defined inversion semantics.
 - **v2.6.0 — The Solar Year** (362 → 365.25 archetypes).
 
 ## [2.4.4] — 2026-06-02

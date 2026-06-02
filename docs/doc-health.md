@@ -23,7 +23,7 @@ _Last swept: 2026-06-02 (v2.4.4 — 2.4.x closeout)._
 
 | Doc | Last touched | Status | Notes |
 |-----|--------------|--------|-------|
-| `docs/development/roadmap.md` | 2026-06-02 | ✅ Fresh | Re-bucketed at 2.4.4: 2.5.0 architecture items added; Structural Enrichment slipped from 2.4.0 → 2.5.x; Solar Year → 2.6.0. |
+| `docs/development/roadmap.md` | 2026-06-02 | ✅ Fresh | Re-bucketed at 2.4.4 then detailed: 2.5.0 architecture items (struct-first ordering); Structural Enrichment broken into v2.5.1 (`domain` field), v2.5.2 (affinity graph), v2.5.3 (shadow aspect) with specs + acceptance criteria; Solar Year → 2.6.0. |
 | `docs/development/state.md` | — | ❓ Open | Not yet split out. Volatile state (cyrius pin, consumer status) currently lives in CLAUDE.md + the Dependencies table in roadmap.md. Adopt vidya's `state.md` split if CLAUDE.md churn warrants. |
 
 ## Architecture
