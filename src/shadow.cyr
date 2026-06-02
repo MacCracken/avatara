@@ -1,0 +1,97 @@
+# shadow.cyr -- Shadow aspect: the dark/inverted form of an archetype
+#
+# Every archetype has a shadow — the disowned, inverted half (the Jungian
+# shadow; the destructive aspect every tradition grants its deities). The
+# shadow is a *pure derivation*: shadow(profile) returns a new ArchetypeProfile
+# with each dimension inverted by a fixed, involutive rule, so
+# shadow(shadow(x)) restores x on every inverted dimension.
+#
+# Inversions:
+#   traits + emphases  v -> 1.0 - v          (involutive)
+#   breath             mirror across unity: UNITY fixed, else 7 - b
+#                      (EARLY_EXHALE<->LATE_INHALE, MID<->MID, LATE_EXHALE<->EARLY_INHALE)
+#   growth_dir         DIFFERENTIATE<->INTEGRATE, PRESERVE<->TRANSFORM, STILL fixed
+#   polarity           MASCULINE<->FEMININE, ANDROGYNOUS/TRANSCENDENT fixed
+#   element, tier      preserved (a shadow shares the archetype's domain & rank)
+#   name               "Shadow of <name>"; tradition preserved; text marked
+
+# Mirror the cosmic-breath phase: the still point (unity) is its own shadow;
+# every other phase mirrors to the opposite side of the breath (b + result = 7).
+fn shadow_breath(b) {
+    if (b == BREATH_UNITY) { return BREATH_UNITY; }
+    return 7 - b;
+}
+
+# Invert growth pressure. STILL (no pressure) is its own shadow.
+fn shadow_growth(g) {
+    if (g == GROWTH_DIFFERENTIATE) { return GROWTH_INTEGRATE; }
+    if (g == GROWTH_INTEGRATE)     { return GROWTH_DIFFERENTIATE; }
+    if (g == GROWTH_PRESERVE)      { return GROWTH_TRANSFORM; }
+    if (g == GROWTH_TRANSFORM)     { return GROWTH_PRESERVE; }
+    return GROWTH_STILL;
+}
+
+# Flip gender polarity; balance (androgynous) and transcendence are self-shadow.
+fn shadow_polarity(p) {
+    if (p == POL_MASCULINE) { return POL_FEMININE; }
+    if (p == POL_FEMININE)  { return POL_MASCULINE; }
+    return p;
+}
+
+# Build the "Shadow of <name>" display name.
+fn shadow_name(name) {
+    var prefix = "Shadow of ";
+    var plen = strlen(prefix);
+    var nlen = strlen(name);
+    var buf = alloc(plen + nlen + 1);
+    memcpy(buf, prefix, plen);
+    memcpy(buf + plen, name, nlen);
+    store8(buf + plen + nlen, 0);
+    return buf;
+}
+
+# Return the shadow (dark/inverted form) of a profile, or 0 if p is NULL.
+fn shadow(p) {
+    if (p == 0) { return 0; }
+    var s = profile_new();
+
+    # Invert every trait + emphasis (contiguous range, step 8).
+    var off = TW_FIRST;
+    while (off <= ME_LAST) {
+        store64(s + off, f64_sub(1.0, load64(p + off)));
+        off += 8;
+    }
+
+    # Inverted classifications
+    store64(s + PROF_BREATH, shadow_breath(prof_breath(p)));
+    store64(s + PROF_GROWTH_DIR, shadow_growth(prof_growth_dir(p)));
+    store64(s + PROF_POLARITY, shadow_polarity(prof_polarity(p)));
+    # Preserved classifications
+    store64(s + PROF_ELEMENT, prof_element(p));
+    store64(s + PROF_TIER, prof_tier(p));
+
+    # Identity
+    store64(s + PROF_NAME, shadow_name(prof_name(p)));
+    store64(s + PROF_TRADITION, prof_tradition(p));
+    store64(s + PROF_DESC, "Shadow aspect — the inverted, disowned form");
+    store64(s + PROF_SOUL, "Your shadow: the half you suppress, made manifest. Not evil — unintegrated.");
+    store64(s + PROF_SPIRIT_TEXT, "What you reject in yourself waits here, asking to be owned.");
+    return s;
+}
+
+# True (1) if `a` is the shadow of `b`: every inverted dimension of `a` matches
+# the inversion of `b` (traits/emphases within f64 rounding tolerance).
+fn is_shadow_of(a, b) {
+    if (a == 0) { return 0; }
+    if (b == 0) { return 0; }
+    var off = TW_FIRST;
+    while (off <= ME_LAST) {
+        var want = f64_sub(1.0, load64(b + off));
+        if (f64_gt(f64_abs(f64_sub(load64(a + off), want)), 0.0001) == 1) { return 0; }
+        off += 8;
+    }
+    if (prof_breath(a) != shadow_breath(prof_breath(b))) { return 0; }
+    if (prof_growth_dir(a) != shadow_growth(prof_growth_dir(b))) { return 0; }
+    if (prof_polarity(a) != shadow_polarity(prof_polarity(b))) { return 0; }
+    return 1;
+}

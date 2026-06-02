@@ -18,42 +18,24 @@
 - [ ] **`struct` + `#derive(accessors)` for `ArchetypeProfile`** — replace the manual 312-byte blob (offset enums + `store64`/`load64` + ~39 hand-written `prof_*` accessors) with a native struct. **Blocked**: cyrius caps structs at 32 fields and `Profile` has 39 — proposal filed at `cyrius/docs/development/proposals/2026-06-02-struct-field-cap-raise.md`. Resume when the cap is raised upstream (the named-field struct would also make the 2.4.5 `PROF_SPIRIT` offset-collision class of bug a compile error). When unblocked: `sizeof == 312` + offset-assertion test, mechanical `store64 → Profile_set_*` migration (~10k sites), `prof_*` compat shims for consumers.
 - This migration was to precede the layout-changing items below (esp. the `domain` field); with it blocked, sequence those independently or wait.
 
-### v2.5.1 — `domain` field (slipped from 2.4.0)
+### v2.5.1 — Shadow aspect ✅ (shipped)
 
-A categorical axis orthogonal to the trait/emphasis numbers: what an archetype
-is *about*. **Layout-changing** (adds one i64 field → profile grows 312 → 320
-bytes), so it lands right after / folded into the 2.5.0 struct migration to
-avoid a second pass over all constructors + a second layout-assertion bump.
+- [x] **`shadow(profile)`** + **`is_shadow_of(a, b)`** (`src/shadow.cyr`) — involutive inversion: traits/emphases → `1.0 − v`; breath mirrored across unity; growth (`DIFFERENTIATE↔INTEGRATE`, `PRESERVE↔TRANSFORM`) and polarity (`MASCULINE↔FEMININE`) inverted; element/tier preserved; name → `"Shadow of …"`. 10 tests; involution verified.
 
-- [ ] `enum Domain` in `types.cyr` — War, Love, Death, Creation, Knowledge, Order, Chaos, Nature, Fate, Trickery, Healing, … (settle the closed set first; default `DOMAIN_UNSPECIFIED`).
-- [ ] Add the field to `ArchetypeProfile` (struct field post-migration), update `profile_new()` default, add `prof_domain()` (+ derived setter).
-- [ ] Assign a domain to each of the 362 archetypes across the 23 tradition modules (scholarly correspondence, no inventions).
-- [ ] `query_domain(domain)` registry filter + count helper.
-- [ ] Tests: per-tradition domain spot-checks; layout assertion updated to 320; `query_domain` coverage.
-- **Acceptance:** every archetype has a non-default domain; `sizeof == 320` asserted; consumers still build against the bundle.
+### Affinity graph — evaluated, declined
 
-### v2.5.2 — Cross-tradition affinity graph (pre-computed, stored)
+- A pre-computed, **pointer-keyed** cross-tradition cache regressed the bench (`cross_tradition_match` 49µs → 945µs): the construct-then-query pattern passes fresh profile pointers that miss the cache, and the per-tradition build path is slower than the existing single-pass scan. Reverted; kept the original O(n) functions. **Revisit only with a non-pointer-keyed design** (index/name-based) that fits the access pattern and is bench-proven.
 
-Today `cross_tradition_match`/`cross_tradition_matches` rescan `all_profiles()`
-on every call (O(n) per query). Pre-compute the cross-tradition best-match graph
-once and serve lookups from it. **Additive — no layout change.**
+### Deferred — `domain` field (blocked-adjacent)
 
-- [ ] Lazy-init `affinity_graph()` building, per profile, its best match in each *other* tradition (reuse `affinity()` + the existing sort).
-- [ ] `cross_tradition_match`/`cross_tradition_matches` read the cached graph instead of rescanning; keep signatures identical.
-- [ ] Optional public accessor to enumerate the stored edges for a profile.
-- [ ] Bench: `affinity/cross_tradition_match` must improve vs the 2.4.x baseline in `bench-history.csv` (record the delta); guard the build/cache cost.
-- **Acceptance:** identical results to the current scan (regression test cross-checks graph vs brute force on a sample), measurable speedup, no new warnings.
+A categorical axis (War, Love, Death, Creation, …) orthogonal to the
+trait/emphasis numbers. **Layout-changing** (312 → 320) + a 362-archetype
+scholarly assignment the roadmap wanted folded into the struct migration (still
+blocked on the cyrius 32-field cap). Resume alongside that migration, or do it
+standalone on the manual layout if it's wanted sooner.
 
-### v2.5.3 — Shadow aspect support
-
-The dark/inverted form of each archetype. Spec as a **pure derivation
-function** (no stored fields, no layout change) so it composes with everything.
-
-- [ ] `shadow(profile)` → new `ArchetypeProfile` with defined inversion semantics: traits/emphases → `1.0 - value`; polarity flipped (masculine↔feminine, transcendent fixed); breath mirrored across the cosmic-breath cycle; growth direction inverted (differentiate↔integrate, transform↔preserve); element/tier preserved; name/soul/spirit prefixed/marked as shadow.
-- [ ] Settle and document each inversion rule before coding (this is the design-sensitive part — get the breath/growth mirrors right).
-- [ ] `is_shadow_of(a, b)` convenience check.
-- [ ] Tests: `shadow(shadow(x))` ≈ `x` (involution within rounding); shadow of a high-warmth archetype is low-warmth; respectful-representation review of shadow naming/text.
-- **Acceptance:** involution property holds; no tradition is trivialized by its shadow text.
+- [ ] `enum Domain` (settle the closed set; default `DOMAIN_UNSPECIFIED`) + `PROF_DOMAIN` field + `prof_domain()` + `query_domain()`.
+- [ ] Assign a scholarly domain to all 362 archetypes (no inventions); layout assertion → 320.
 
 ### v2.6.0 — The Solar Year (362 → 365.25)
 

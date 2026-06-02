@@ -6,7 +6,7 @@
 
 - **Language**: Cyrius (ported from Rust in v2.0)
 - **License**: GPL-3.0-only
-- **Version**: SemVer 2.5.0
+- **Version**: SemVer 2.5.1
 - **Compiler**: cyrius >= 6.0.40 (pinned in `cyrius.cyml` `[package].cyrius`)
 
 ## Consumers
@@ -23,6 +23,7 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/history.cyr` — 27 tradition-to-history mappings (civilization, era, temporal range, notes)
 - `src/registry.cyr` — lookup by name, enumeration, query/filter API (includes history-based queries)
 - `src/affinity.cyr` — affinity scoring, similarity search, cross-tradition matching, conflict detection
+- `src/shadow.cyr` — shadow aspect: `shadow(profile)` (involutive inversion), `is_shadow_of(a, b)`
 - `src/kabbalah.cyr` — Tree of Life: 10 Sephiroth
 - `src/angelic.cyr` — 9 angelic orders, 7 archangels
 - `src/hindu.cyr` — Trimurti, 11 Devas, 10 Avatars of Vishnu
@@ -63,6 +64,7 @@ All values are i64. f64 trait/emphasis weights stored as IEEE 754 bit patterns. 
 - Errors: `Result<T, E>` from `lib/result.cyr` (`is_ok` / `is_err_result` / `result_unwrap` / `err_code_of`); `validate_profile(p)` returns `Result`. `AvataraError` codes are the `Err` payload. Internal range predicates (`require_unit_range`/`require_all_unit_range`) stay bare-int (loop-hot)
 - History: `context_for_tradition()`, `traditions_for_civilization()`, `traditions_active_at()`, `traditions_for_era()`
 - Affinity: `affinity()`, `similar_to()`, `cross_tradition_match()`, `cross_tradition_matches()`, `detect_conflicts()`, `is_incompatible()`
+- Shadow: `shadow(profile)` — inverted form (traits→1−v, breath/growth/polarity mirrored, element/tier kept); involutive; `is_shadow_of(a, b)`
 
 ## Key Principles
 

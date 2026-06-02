@@ -122,7 +122,8 @@ fn similar_to(source, max_results) {
 }
 
 # Find the most similar archetype across a different tradition.
-# Useful for cross-tradition mapping (e.g. "who is the Norse Thor?")
+# Useful for cross-tradition mapping (e.g. "who is the Norse Thor?").
+# Single O(n) pass over all profiles — returns the best foreign profile, or 0.
 fn cross_tradition_match(source) {
     var best = 0;
     if (source == 0) { return best; }

@@ -33,6 +33,7 @@ include "src/compose.cyr"
 include "src/history.cyr"
 include "src/registry.cyr"
 include "src/affinity.cyr"
+include "src/shadow.cyr"
 include "src/logging.cyr"
 
 fn main() {
@@ -252,6 +253,25 @@ fn main() {
     assert_eq(vec_len(self_conf), 0, "self conflicts = 0");
     var gev_ches = detect_conflicts(kabbalah_gevurah(), kabbalah_chesed());
     assert_gt(vec_len(gev_ches), 0, "gevurah-chesed has conflicts");
+
+    # ================================================================
+    # Shadow: inverted form, involutive
+    # ================================================================
+    var thor = norse_thor();
+    var sh = shadow(thor);
+    assert_neq(sh, 0, "shadow not null");
+    assert_eq(is_shadow_of(sh, thor), 1, "shadow(thor) is shadow of thor");
+    assert_eq(is_shadow_of(thor, thor), 0, "thor is not its own shadow");
+    # high trait inverts to low: warmth + shadow warmth ~= 1.0
+    assert_eq(f64_eq(f64_add(prof_warmth(thor), prof_warmth(sh)), 1.0), 1, "warmth inverts (sum=1)");
+    # involution: shadow(shadow(x)) restores the inverted dimensions of x
+    assert_eq(is_shadow_of(shadow(sh), sh), 1, "shadow is involutive");
+    assert_eq(prof_breath(shadow(sh)), prof_breath(thor), "double-shadow restores breath");
+    assert_eq(prof_growth_dir(shadow(sh)), prof_growth_dir(thor), "double-shadow restores growth");
+    assert_eq(prof_polarity(shadow(sh)), prof_polarity(thor), "double-shadow restores polarity");
+    # shadow shares tradition, element, tier
+    assert_eq(streq(prof_tradition(sh), "Norse"), 1, "shadow keeps tradition");
+    assert_eq(prof_element(sh), prof_element(thor), "shadow keeps element");
 
     return assert_summary();
 }

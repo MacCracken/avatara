@@ -44,6 +44,7 @@ modules = [
     "src/history.cyr",
     "src/registry.cyr",
     "src/affinity.cyr",
+    "src/shadow.cyr",
     "src/logging.cyr",
     "src/lib.cyr",
 ]

@@ -15,6 +15,18 @@ See [docs/development/roadmap.md](docs/development/roadmap.md). Next up:
 - **v2.5.3 — Shadow aspect support**: pure `shadow(profile)` derivation with defined inversion semantics.
 - **v2.6.0 — The Solar Year** (362 → 365.25 archetypes).
 
+## [2.5.1] — 2026-06-02
+
+Structural enrichment — the shadow aspect (slipped from the 2.4.0 roadmap).
+
+### Added
+- **Shadow aspect** (`src/shadow.cyr`) — `shadow(profile)` returns the dark/inverted form of an archetype: traits & emphases → `1.0 − v`; breath mirrored across unity (UNITY fixed, else `7 − b`); growth (`DIFFERENTIATE↔INTEGRATE`, `PRESERVE↔TRANSFORM`) and polarity (`MASCULINE↔FEMININE`) inverted; element/tier preserved; name → `"Shadow of <name>"`. The inversion is **involutive** — `shadow(shadow(x))` restores every inverted dimension. Plus `is_shadow_of(a, b)`.
+- 10 shadow tests (49 total).
+
+### Notes
+- **Affinity graph (planned) evaluated and declined.** A pre-computed, pointer-keyed cross-tradition cache regressed the benchmark (`cross_tradition_match` 49µs → 945µs): the common construct-then-query pattern passes fresh profile pointers that miss a pointer-keyed cache, and the per-tradition build path is slower than the existing single O(n) pass. Kept the original `cross_tradition_match`/`cross_tradition_matches`. A non-pointer-keyed (index/name-based) approach could revisit this later.
+- **Domain field (planned) deferred** — a layout change + 362-archetype scholarly assignment the roadmap wanted folded into the struct migration, which remains blocked on the cyrius 32-field struct cap.
+
 ## [2.5.0] — 2026-06-02
 
 Architecture Modernization — adopts Cyrius tagged `Result<T, E>` for the error
