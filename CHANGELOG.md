@@ -8,9 +8,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Roadmap
-- `domain` field (War, Love, Death, Creation, Knowledge, etc.)
-- Cross-tradition affinity graph (pre-computed, stored)
-- Shadow aspect support (dark/inverted form of each archetype)
+See [docs/development/roadmap.md](docs/development/roadmap.md). Next up:
+- **v2.5.0 — Architecture Modernization**: `struct` + `#derive(accessors)` for `ArchetypeProfile`; `Result<T, E>` + `?` for `error.cyr` (both deferred from the 2.4.x sweep — layout/API-breaking).
+- **v2.5.x — Structural Enrichment** (slipped from 2.4.0): `domain` field; cross-tradition affinity graph; shadow aspect support.
+- **v2.6.0 — The Solar Year** (362 → 365.25 archetypes).
+
+## [2.4.4] — 2026-06-02
+
+2.4.x closeout — documentation + roadmap housekeeping. No source changes.
+
+### Changed
+- **Roadmap re-bucketed** (`docs/development/roadmap.md`): added **v2.5.0 — Architecture Modernization** (the deferred `struct` + `#derive(accessors)` migration and `Result<T, E>` error model); slipped **Structural Enrichment** (domain field, affinity graph, shadow aspect) from 2.4.0 → **v2.5.x**; slipped **The Solar Year** to **v2.6.0**. `CHANGELOG [Unreleased]` updated to match.
+
+### Added
+- **`docs/doc-health.md`** — living doc-currency ledger (cyrius/vidya convention).
+
+### Notes
+- **2.4.x benchmark summary** (net 2.4.0 → 2.4.3, recorded in `bench-history.csv`): every meaningful (≥500ns) path got faster, no regressions — history queries −16% to −25%, `registry/by_tradition` −23%, `registry/query_courage` −29% (from the `query_by_traditions` refactor + the 6.0.40 toolchain). Sub-500ns rows are timer-noise dominated.
+- Closes the 2.4.x line: cyrius 3.10.0 → 6.0.40, NULL/overflow hardening, `+=`/`match` modernization, stdlib `f64_le`/`f64_ge` alignment.
 
 ## [2.4.3] — 2026-06-02
 
