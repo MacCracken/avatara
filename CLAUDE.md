@@ -16,7 +16,7 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 ## Architecture
 
 - `src/lib.cyr` — public API: includes all modules
-- `src/main.cyr` — test harness (~80 assertions)
+- `src/main.cyr` — smoke test (~10 core-subsystem checks)
 - `src/types.cyr` — ArchetypeProfile layout (320 bytes), TraitWeights (15 f64), ModuleEmphasis (14 f64), enums (BreathAffinity, GrowthDirection, Element, Polarity, CosmicTier, Domain)
 - `src/error.cyr` — AvataraError enum codes, validation
 - `src/compose.cyr` — archetype composition: weighted blending of multiple profiles
@@ -50,8 +50,8 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/etruscan.cyr` — 4 Etruscan deities (Tinia, Uni, Menrva, Voltumna)
 - `src/incarnate.cyr` — 56 incarnate divine figures (Hindu, Buddhist, Mystic, Taoist, Indigenous, Sage)
 - `src/logging.cyr` — sakshi logging init
-- `tests/avatara.tcyr` — integration test suite
-- `tests/avatara.bcyr` — benchmarks
+- `tests/avatara.tcyr` — integration test suite (71 assertions)
+- `tests/avatara.bcyr` — benchmarks (49)
 - `programs/traditions.cyr` — example: explore archetypes
 - `programs/compose.cyr` — example: blend traditions
 

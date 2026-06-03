@@ -53,19 +53,20 @@ alloc_init();
 var tip = kabbalah_tiphareth();
 # prof_warmth(tip) = 0.8, prof_confidence(tip) = 0.8
 
-# Lookup by name
-var krishna = lookup("Krishna");
+# Lookup by name — returns Result (Ok(profile) / Err(ERR_UNKNOWN_ARCHETYPE))
+var kr = lookup("Krishna");
+var krishna = result_unwrap(kr);   # or: if (is_err_result(kr) == 1) { ... }
 # prof_tradition(krishna) = "Hindu"
 
 # Query by trait
 var brave = query_min_trait(PROF_COURAGE, 0.9);
 # vec of all entities with courage >= 0.9
 
-# Compose across traditions
+# Compose across traditions — also returns Result
 var w = vec_new();
 vec_push(w, weighted_new(tip, 1.0));
 vec_push(w, weighted_new(krishna, 0.8));
-var blended = compose(w);
+var blended = result_unwrap(compose(w));
 
 # Historical context
 var ctx = context_for_tradition("Hindu");

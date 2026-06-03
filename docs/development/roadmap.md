@@ -5,11 +5,11 @@
 ## Shipped
 
 - **2.4.x** — toolchain + hardening + language modernization: cyrius 3.10.0 → 6.0.40, `cyrius.cyml` manifest, modern CI/release, dist bundle, bench-on-every-release; NULL/overflow hardening; `+=`/`match` adoption; stdlib `f64_le`/`f64_ge`; spirit-emphasis (`PROF_SPIRIT`) collision fix.
-- **2.5.x** — architecture: `Result<T, E>` error model (2.5.0); shadow aspect (2.5.1); `domain` field, all 366 archetypes assigned (2.5.2); native `#derive` `struct Profile` migration (2.5.3); security audit + CWE-690 `xalloc` hardening (2.5.4).
+- **2.5.x** — architecture: `Result<T, E>` error model (2.5.0); shadow aspect (2.5.1); `domain` field, all 362 archetypes assigned (2.5.2); native `#derive` `struct Profile` migration (2.5.3); security audit + CWE-690 `xalloc` hardening (2.5.4).
 - **2.6.0** — The Solar Year: 25th "Solar" tradition (intercalary archetypes), landing at **366 archetypes (365 + the leap quarter)**.
+- **2.7.0** — Canaanite & Etruscan micro-traditions (El/Baal/Asherah/Anat; Tinia/Uni/Menrva/Voltumna) → **374 archetypes, 27 traditions**.
 
-All originally-roadmapped items are complete. The path below sequences the
-former demand-gated backlog into minors toward a 3.0.0 consolidation.
+The minors below sequence the former demand-gated backlog toward a 3.0.0 consolidation.
 
 ## Planned — minors to 3.0.0
 
@@ -17,7 +17,6 @@ Each is additive and non-breaking (new archetypes / traditions / an additive
 overlay layer). Historical-accuracy rule stands throughout: established
 scholarly correspondences only, no inventions.
 
-- **v2.7.0 — Canaanite & Etruscan** ✅ shipped — two new micro-traditions (Canaanite/Ugaritic: El, Baal, Asherah, Anat; Etruscan: Tinia, Uni, Menrva, Voltumna). 8 entities → 374 archetypes, 27 traditions.
 - **v2.8.0 — Tarot Major Arcana** — 22 archetypes, mapped to the 22 Tree-of-Life paths (bridges the existing Kabbalah module).
 - **v2.9.0 — I Ching** — 64 hexagram archetypes.
 - **v2.10.0 — World-traditions completion** — Aboriginal Australian, Native American (specific nations), Inuit; plus the deferred Polynesian / Slavic / Celtic additions (Pele/Kanaloa aspects, Mokosh aspects/Rod, Ogma/Miach/Airmed).
