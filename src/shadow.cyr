@@ -43,7 +43,7 @@ fn shadow_name(name) {
     var prefix = "Shadow of ";
     var plen = strlen(prefix);
     var nlen = strlen(name);
-    var buf = alloc(plen + nlen + 1);
+    var buf = xalloc(plen + nlen + 1);
     memcpy(buf, prefix, plen);
     memcpy(buf + plen, name, nlen);
     store8(buf + plen + nlen, 0);

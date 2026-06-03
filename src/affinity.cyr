@@ -58,7 +58,7 @@ enum SimLayout {
 }
 
 fn sim_new(profile, score) {
-    var s = alloc(SIM_SIZE);
+    var s = xalloc(SIM_SIZE);
     store64(s + SIM_PROFILE, profile);
     store64(s + SIM_SCORE, score);
     return s;
@@ -252,7 +252,7 @@ fn conflicts(a, b, threshold) {
         var vb = load64(b + off);
         var delta = f64_abs(f64_sub(va, vb));
         if (f64_gt(delta, threshold) == 1) {
-            var c = alloc(CONF_SIZE);
+            var c = xalloc(CONF_SIZE);
             store64(c + CONF_OFFSET, off);
             store64(c + CONF_NAME, trait_name_for_offset(off));
             store64(c + CONF_VAL_A, va);

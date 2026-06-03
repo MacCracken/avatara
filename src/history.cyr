@@ -25,7 +25,7 @@ enum MapLayout {
 enum HistConst { LIVING = 2147483647; }
 
 fn history_map_new(tradition, primary_civ, civs, eras, start, end, note) {
-    var m = alloc(MAP_SIZE);
+    var m = xalloc(MAP_SIZE);
     store64(m + MAP_TRADITION, tradition);
     store64(m + MAP_PRIMARY_CIV, primary_civ);
     store64(m + MAP_CIV_NAMES, civs);
@@ -237,7 +237,7 @@ fn find_mapping(tradition) {
 fn context_for_tradition(tradition) {
     var m = find_mapping(tradition);
     if (m == 0) { return 0; }
-    var c = alloc(CTX_SIZE);
+    var c = xalloc(CTX_SIZE);
     store64(c + CTX_PRIMARY_CIV, map_primary(m));
     store64(c + CTX_CIV_NAMES, map_civs(m));
     store64(c + CTX_ERA_NAMES, map_eras(m));

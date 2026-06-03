@@ -14,7 +14,7 @@ enum WeightedLayout {
 }
 
 fn weighted_new(profile, weight) {
-    var w = alloc(WE_SIZE);
+    var w = xalloc(WE_SIZE);
     store64(w + WE_PROFILE, profile);
     store64(w + WE_WEIGHT, weight);
     return w;
@@ -166,7 +166,7 @@ fn compose(weighted) {
             name_size += strlen(prof_name(weighted_profile(entry))) + 3;
         }
     }
-    var name_buf = alloc(name_size);
+    var name_buf = xalloc(name_size);
     var name_pos = 0;
     var first = 1;
     for (var i = 0; i < n; i += 1) {
@@ -197,7 +197,7 @@ fn compose(weighted) {
             trad_size += strlen(prof_tradition(weighted_profile(entry))) + 3;
         }
     }
-    var trad_buf = alloc(trad_size);
+    var trad_buf = xalloc(trad_size);
     var trad_pos = 0;
     var seen_trads = vec_new();
     first = 1;

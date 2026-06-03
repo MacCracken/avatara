@@ -13,6 +13,22 @@ See [docs/development/roadmap.md](docs/development/roadmap.md). Shipped in 2.5.x
 - **Affinity graph** — declined (pointer-keyed cache regressed the bench); revisit only with a non-pointer-keyed design.
 - **v2.6.0 — The Solar Year** (362 → 365.25 archetypes).
 
+## [2.5.4] — 2026-06-03
+
+2.5.x closeout — a security/hardening audit (with CVE/0day web research) plus documentation sync.
+
+### Security
+- **Audit + web research**: avatara has no network, file, or untrusted-deserialization attack surface, and no public CVEs exist for its stack (Cyrius / AGNOS / sakshi are an internal ecosystem — confirmed via web search). The 2.4.1/2.5.1/2.5.2 hardening (NULL-profile guards, caller-offset bounds-checks via `is_f64_field_offset`, exact `compose` buffer sizing) was verified intact after the struct migration. No high-severity, memory-disclosure, overflow, or out-of-bounds issue is reachable through the public API.
+- **Fixed CWE-690** (Unchecked Return Value to NULL Pointer Dereference): the stdlib `alloc()` returns `0` on OOM, and 9 sites wrote into the result unchecked (near-NULL write / UB under memory exhaustion). All heap allocation now routes through a checked **`xalloc(n)`** (`src/types.cyr`) that aborts with a diagnostic on failure — the abort-on-OOM policy Rust/Go allocators use (ADR-009).
+
+### Added
+- **ADR-008** — native struct + `#derive(accessors)` migration (records the 2.5.3 decision; was a tracked forward commitment).
+- **ADR-009** — checked-allocation / abort-on-OOM policy.
+
+### Docs
+- `doc-health.md` re-swept for the 2.5.x line; `roadmap.md` reflects shipped (Result 2.5.0, shadow 2.5.1, domain 2.5.2, struct 2.5.3), declined (affinity graph), and next (v2.6.0 Solar Year).
+- **2.5.x benchmark summary**: net 2.5.0 → 2.5.3 (Result allocs + domain field + ~10.4k struct setters) is noise-level on the ≥500ns paths — no regressions across the four-feature line.
+
 ## [2.5.3] — 2026-06-03
 
 Architecture: native-struct migration of `ArchetypeProfile` (the deferred 2.5.0 item, unblocked by the cyrius 6.0.47 struct-field-cap raise). Mechanical/behavior-preserving — all 60 tests pass unchanged.

@@ -11,6 +11,22 @@
 # f64_lt, f64_gt, f64_eq are cyrius builtins; f64_le / f64_ge come from
 # stdlib lib/math.cyr (added in cyrius 6.0.39). Avatara no longer defines them.
 
+# --- Checked allocation (CWE-690 guard) ---
+# stdlib alloc() returns 0 on OOM / invalid size; an unchecked store into a 0
+# pointer is a near-NULL write (undefined behavior — a crash, and worse in some
+# environments). xalloc converts that into a defined, diagnosed abort — the same
+# OOM policy Rust's and Go's allocators use. Every avatara heap allocation
+# routes through here, so memory exhaustion is a clean exit, not silent UB.
+fn xalloc(n) {
+    var p = alloc(n);
+    if (p == 0) {
+        var msg = "avatara: fatal — heap allocation failed (out of memory)\n";
+        syscall(SYS_WRITE, 2, msg, strlen(msg));
+        syscall(SYS_EXIT, 134);
+    }
+    return p;
+}
+
 # --- BreathAffinity ---
 # Manifestation phase: where on the cosmic breath this archetype sits.
 # intensity() values in parentheses.
@@ -279,7 +295,7 @@ enum EmphRange {
 #   breath = LATE_EXHALE, growth = DIFFERENTIATE
 #   element = MIXED, polarity = TRANSCENDENT, tier = GREATER
 fn profile_new() {
-    var p = alloc(PROF_SIZE);
+    var p = xalloc(PROF_SIZE);
     Profile_set_name(p, 0);
     Profile_set_tradition(p, 0);
     Profile_set_desc(p, 0);

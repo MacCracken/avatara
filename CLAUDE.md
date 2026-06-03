@@ -6,7 +6,7 @@
 
 - **Language**: Cyrius (ported from Rust in v2.0)
 - **License**: GPL-3.0-only
-- **Version**: SemVer 2.5.3
+- **Version**: SemVer 2.5.4
 - **Compiler**: cyrius >= 6.0.47 (pinned in `cyrius.cyml` `[package].cyrius`)
 
 ## Consumers
@@ -58,6 +58,7 @@ All values are i64. f64 trait/emphasis weights stored as IEEE 754 bit patterns. 
 
 - `ArchetypeProfile` — a native `#derive(accessors)` `struct Profile` (`src/types.cyr`), 40 i64 fields = 320 bytes (incl. `domain` at offset 312). The compiler-generated `Profile_<field>(p)` / `Profile_set_<field>(p, v)` are canonical; constructors set fields via `Profile_set_*`. The `prof_*` accessors are thin consumer-facing shims that delegate to `Profile_*`. The `ProfLayout` offset enum is retained for the loop-based code (compose/affinity/error iterate offset ranges) and the layout-assertion test.
 - `profile_new()` — allocates with defaults (traits=0.5, emphasis=0.5, breath=LATE_EXHALE, growth=DIFFERENTIATE)
+- All heap allocation routes through `xalloc(n)` (`src/types.cyr`) — checked alloc that aborts on OOM (CWE-690 guard; abort-on-OOM policy, see ADR-009). Use `xalloc`, not raw `alloc`, for new profile/struct allocations.
 - Each tradition module: entity functions (e.g. `kabbalah_kether()`) + lazy-init `all_*()` collection + `*_count()`
 - Registry: `all_profiles()`, `by_tradition()`, `query_*()` filters; `lookup(name)` / `lookup_in(tradition, name)` return `Result` (`Ok(profile)` / `Err(ERR_UNKNOWN_ARCHETYPE)`); `find_and_validate(name)` chains lookup + validate via `?`
 - Compose: `compose(weighted_vec)` — weighted blending; returns `Result` (`Ok(profile)` / `Err(ERR_INVALID_PARAMETER)`)
