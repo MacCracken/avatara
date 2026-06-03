@@ -11,7 +11,7 @@
 
 ## Consumers
 
-bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine archetypes), kiran (game entities), agnosai (agent personalities with theological depth), hadara (archetype-to-culture context — ready for integration)
+bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine archetypes), kiran (game entities), agnosai (agent personalities with theological depth), hadara (archetype-to-culture context — ready for integration), sankhya (ancient sciences — planned; shared IncarnateSage/Vedic bridge)
 
 ## Architecture
 
