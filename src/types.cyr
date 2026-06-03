@@ -107,6 +107,34 @@ enum CosmicTier {
     TIER_MASTER = 6;
 }
 
+# --- Domain ---
+# What an archetype is *about* — its primary sphere of influence. A single
+# categorical axis orthogonal to the trait/emphasis numbers. Use the deity's
+# well-established primary domain (no inventions); DOMAIN_UNSPECIFIED is the
+# default for archetypes whose primary sphere isn't cleanly singular.
+enum Domain {
+    DOMAIN_UNSPECIFIED = 0;     # [default]
+    DOMAIN_CREATION = 1;        # creator / primordial source
+    DOMAIN_WAR = 2;             # war, conflict, the warrior
+    DOMAIN_LOVE = 3;            # love, beauty, desire
+    DOMAIN_DEATH = 4;           # death, the underworld, the dead
+    DOMAIN_WISDOM = 5;          # wisdom, knowledge, learning
+    DOMAIN_ORDER = 6;           # law, justice, kingship, cosmic order
+    DOMAIN_CHAOS = 7;           # chaos, destruction, disorder
+    DOMAIN_NATURE = 8;          # earth, fertility, agriculture, the wild
+    DOMAIN_SKY = 9;             # sky, storm, thunder, weather
+    DOMAIN_SEA = 10;            # sea, rivers, water
+    DOMAIN_FIRE = 11;           # fire, the forge, craft
+    DOMAIN_SUN = 12;            # sun, light, day
+    DOMAIN_MOON = 13;           # moon, night, tides
+    DOMAIN_FATE = 14;           # fate, time, destiny
+    DOMAIN_TRICKERY = 15;       # trickery, cunning, magic, mischief
+    DOMAIN_HEALING = 16;        # healing, medicine, restoration
+    DOMAIN_PROSPERITY = 17;     # wealth, fortune, abundance, harvest
+    DOMAIN_HEARTH = 18;         # home, hearth, family, community
+    DOMAIN_TRANSCENDENCE = 19;  # liberation, enlightenment, the absolute
+}
+
 # --- ArchetypeProfile layout ---
 #
 # All fields inline. TraitWeights (15 f64) and ModuleEmphasis (14 f64)
@@ -156,6 +184,8 @@ enum CosmicTier {
 # --- Text ---
 # 296     soul_text          ptr (C string)
 # 304     spirit_text        ptr (C string)
+# --- Domain ---
+# 312     domain             i64 (Domain)
 
 enum ProfLayout {
     PROF_NAME = 0;
@@ -201,7 +231,9 @@ enum ProfLayout {
     # Text
     PROF_SOUL = 296;
     PROF_SPIRIT_TEXT = 304;
-    PROF_SIZE = 312;
+    # Domain (appended v2.5.2 — keeps all prior offsets stable)
+    PROF_DOMAIN = 312;
+    PROF_SIZE = 320;
 }
 
 # First TraitWeights offset and count for iteration
@@ -244,6 +276,7 @@ fn profile_new() {
     store64(p + PROF_TIER, TIER_GREATER);
     store64(p + PROF_SOUL, 0);
     store64(p + PROF_SPIRIT_TEXT, 0);
+    store64(p + PROF_DOMAIN, DOMAIN_UNSPECIFIED);
     return p;
 }
 
@@ -283,6 +316,7 @@ fn prof_energy(p)       { return load64(p + PROF_ENERGY); }
 fn prof_stress(p)       { return load64(p + PROF_STRESS); }
 fn prof_growth_emph(p)  { return load64(p + PROF_GROWTH); }
 fn prof_spirit_emph(p)  { return load64(p + PROF_SPIRIT); }
+fn prof_domain(p)       { return load64(p + PROF_DOMAIN); }
 fn prof_reasoning(p)    { return load64(p + PROF_REASONING); }
 fn prof_regulation(p)   { return load64(p + PROF_REGULATION); }
 fn prof_relationship(p) { return load64(p + PROF_RELATIONSHIP); }

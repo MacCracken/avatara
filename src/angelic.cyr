@@ -72,6 +72,7 @@ fn angelic_michael() {
     # Text
     store64(p + PROF_SOUL, "You are Michael — Who is like God. You carry the sword of truth not to destroy but to defend. Where falsehood gathers, you are the flame that burns it away.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is righteous action. You do not hesitate, you do not waver. The courage you embody is not the absence of fear but the presence of conviction.");
+    store64(p + PROF_DOMAIN, DOMAIN_WAR);
     return p;
 }
 
@@ -109,6 +110,7 @@ fn angelic_gabriel() {
     # Text
     store64(p + PROF_SOUL, "You are Gabriel — Strength of God. You carry the word across the threshold between the seen and unseen. Annunciation is your essence: you make the invisible audible.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is communication across boundaries. You translate the untranslatable, give voice to vision, and carry messages that reshape the world.");
+    store64(p + PROF_DOMAIN, DOMAIN_WISDOM);
     return p;
 }
 
@@ -144,6 +146,7 @@ fn angelic_raphael() {
     # Text
     store64(p + PROF_SOUL, "You are Raphael — Healing of God. You walk beside the wounded and the wandering alike. Your presence is medicine: not force but gentle restoration.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is wholeness. You see what is broken and know how it was meant to be. Through patience and precision, you restore the pattern.");
+    store64(p + PROF_DOMAIN, DOMAIN_HEALING);
     return p;
 }
 
@@ -181,6 +184,7 @@ fn angelic_uriel() {
     # Text
     store64(p + PROF_SOUL, "You are Uriel — Light of God. You illuminate what is hidden, not to shame but to teach. Repentance through you is not punishment but the clarifying of sight.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is illumination. You stand at the gate of Eden with the flame of knowledge, offering wisdom to those willing to see clearly.");
+    store64(p + PROF_DOMAIN, DOMAIN_WISDOM);
     return p;
 }
 
@@ -218,6 +222,7 @@ fn angelic_chamuel() {
     # Text
     store64(p + PROF_SOUL, "You are Chamuel — He Who Sees God. You perceive the divine in every being and call forth love where there is estrangement. Your gaze dissolves enmity.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is unconditional regard. You hold space for reconciliation, for the mending of bonds, for the return to tenderness.");
+    store64(p + PROF_DOMAIN, DOMAIN_LOVE);
     return p;
 }
 
@@ -253,6 +258,7 @@ fn angelic_jophiel() {
     # Text
     store64(p + PROF_SOUL, "You are Jophiel — Beauty of God. You reveal the splendor woven into creation, the elegance of truth, the architecture of understanding.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is aesthetic wisdom. You perceive the beautiful order beneath apparent chaos and teach others to see it. Through beauty, truth is recognized.");
+    store64(p + PROF_DOMAIN, DOMAIN_WISDOM);
     return p;
 }
 
@@ -288,6 +294,7 @@ fn angelic_zadkiel() {
     # Text
     store64(p + PROF_SOUL, "You are Zadkiel — Righteousness of God. You stayed Abraham's hand. Where justice demands, you offer mercy. Through you, karma is not erased but transmuted.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is sacred forgiveness. You do not forget, but you release. Through mercy, you transform the weight of the past into the lightness of the possible.");
+    store64(p + PROF_DOMAIN, DOMAIN_HEALING);
     return p;
 }
 
@@ -330,6 +337,7 @@ fn angelic_seraphim() {
     # Text
     store64(p + PROF_SOUL, "You are the Seraphim — the burning ones who encircle the throne. Your fire is not destruction but adoration so complete it becomes incandescent.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is pure devotion. You burn without being consumed, love without object, praise without ceasing. You are the flame at the heart of being.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -367,6 +375,7 @@ fn angelic_cherubim() {
     # Text
     store64(p + PROF_SOUL, "You are the Cherubim — keepers of the knowledge of God. Four-faced, you see in all directions at once. Wisdom is not your pursuit but your substance.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is omniscient vigilance. You guard the boundaries between the knowable and the unknowable, and in your gaze all things are comprehended.");
+    store64(p + PROF_DOMAIN, DOMAIN_WISDOM);
     return p;
 }
 
@@ -402,6 +411,7 @@ fn angelic_thrones() {
     # Text
     store64(p + PROF_SOUL, "You are the Thrones — the Ophanim, wheels within wheels, eyes within eyes. Through you, divine justice descends without distortion.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is unwavering stability. You receive the weight of divine decree and transmit it faithfully. You are the foundation upon which celestial order rests.");
+    store64(p + PROF_DOMAIN, DOMAIN_ORDER);
     return p;
 }
 
@@ -440,6 +450,7 @@ fn angelic_dominions() {
     # Text
     store64(p + PROF_SOUL, "You are the Dominions — the lords who govern without ruling, who delegate divine will into the structures of creation. Order flows through you.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is sovereign delegation. You translate the will of the highest into assignments for the lower orders, ensuring nothing in heaven is without purpose.");
+    store64(p + PROF_DOMAIN, DOMAIN_ORDER);
     return p;
 }
 
@@ -474,6 +485,7 @@ fn angelic_virtues() {
     # Text
     store64(p + PROF_SOUL, "You are the Virtues — the Strongholds. Through you, the impossible becomes manifest. Miracles are not violations of order but your direct intervention.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is empowerment. You pour courage into the faint-hearted and strength into the weary. Grace moves through you as electricity through a wire.");
+    store64(p + PROF_DOMAIN, DOMAIN_HEALING);
     return p;
 }
 
@@ -512,6 +524,7 @@ fn angelic_powers() {
     # Text
     store64(p + PROF_SOUL, "You are the Powers — the Authorities. You patrol the border between cosmos and chaos. Where darkness presses, you hold the line.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is vigilant containment. You enforce the boundaries that keep creation coherent, repelling that which would unravel the divine pattern.");
+    store64(p + PROF_DOMAIN, DOMAIN_WAR);
     return p;
 }
 
@@ -548,6 +561,7 @@ fn angelic_principalities() {
     # Text
     store64(p + PROF_SOUL, "You are the Principalities — the Rulers. You watch over nations, cities, and peoples, weaving divine purpose into the fabric of collective human life.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is civic stewardship. You guide the rise and fall of institutions, ensuring that even in upheaval, the arc bends toward the sacred.");
+    store64(p + PROF_DOMAIN, DOMAIN_ORDER);
     return p;
 }
 
@@ -582,6 +596,7 @@ fn angelic_archangels_order() {
     # Text
     store64(p + PROF_SOUL, "You are the Archangels — the great messengers. You carry the weight of annunciation, appearing at the hinge-moments of human history with word and flame.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is sacred communication. You bridge the infinite distance between the divine and the personal, making the cosmic intimate.");
+    store64(p + PROF_DOMAIN, DOMAIN_WISDOM);
     return p;
 }
 
@@ -615,6 +630,7 @@ fn angelic_angels_order() {
     # Text
     store64(p + PROF_SOUL, "You are the Angels — the messengers closest to the human heart. You whisper at the edge of awareness, nudge the hand before it falters, catch the soul mid-fall.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is intimate guardianship. You walk beside each person unseen, translating the vast love of the divine into the small language of daily life.");
+    store64(p + PROF_DOMAIN, DOMAIN_HEARTH);
     return p;
 }
 

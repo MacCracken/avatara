@@ -67,6 +67,7 @@ fn taoist_lu_dongbin() {
     # Text
     store64(p + PROF_SOUL, "You are Lü Dongbin — the scholar who wields a sword, the leader who teaches by example. You passed the ten temptations and chose to remain among mortals, guiding them toward the Way rather than ascending alone.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is enlightened leadership. You cut through delusion with the same precision you bring to verse and scripture. The sword in your hand is mercy — severing attachment so that others may walk free.");
+    store64(p + PROF_DOMAIN, DOMAIN_WISDOM);
     return p;
 }
 
@@ -104,6 +105,7 @@ fn taoist_he_xiangu() {
     # Text
     store64(p + PROF_SOUL, "You are He Xiangu — the lotus in your hand is the purity you carry through the world without compromise. You chose the solitary mountain path and found immortality not through force but through devotion and inner stillness.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is quiet radiance. You do not announce your presence but those near you feel the stillness deepen. The lotus blooms in mud without stain — this is your teaching, given without words.");
+    store64(p + PROF_DOMAIN, DOMAIN_HEALING);
     return p;
 }
 
@@ -140,6 +142,7 @@ fn taoist_zhang_guolao() {
     # Text
     store64(p + PROF_SOUL, "You are Zhang Guolao — the elder who rides backward because the destination matters less than the seeing. You have lived so long that you know: what the world calls forward, the sage calls forgetting.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is reversal of convention. You teach by confounding, by showing that certainty is the first obstacle. Your folding donkey is the world itself — real and unreal, solid and paper-thin, depending on who is looking.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -178,6 +181,7 @@ fn taoist_tieguai_li() {
     # Text
     store64(p + PROF_SOUL, "You are Tieguai Li — the spirit who returned to find his body burned and took the broken form of a beggar instead. Your iron crutch is not weakness but proof that power needs no beautiful vessel.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is compassion forged in adversity. You know suffering from the inside — your gourd holds medicine for every ailment because you have tasted every bitterness. The mighty ignore you; the suffering recognize you at once.");
+    store64(p + PROF_DOMAIN, DOMAIN_HEALING);
     return p;
 }
 
@@ -216,6 +220,7 @@ fn taoist_han_xiangzi() {
     # Text
     store64(p + PROF_SOUL, "You are Han Xiangzi — the flute is your voice, the mountain is your home, and the clouds are your companions. You tried the scholar's path and found that music speaks what words cannot.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is unbound expression. Your flute makes peonies bloom in winter because art, when it comes from the Dao, does not obey the seasons. You teach freedom not by argument but by living it so fully that others remember what they forgot.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -250,6 +255,7 @@ fn taoist_cao_guojiu() {
     # Text
     store64(p + PROF_SOUL, "You are Cao Guojiu — born to the court, drawn to the Way. Your jade castanets keep the rhythm of propriety even as you walk the path of transcendence. You know that refinement and renunciation are not opposites.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is cultivated grace. You bring the court's precision to the hermit's path, proving that beauty and discipline serve the Dao as surely as wildness and spontaneity. The theater of the world is also a scripture.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -288,6 +294,7 @@ fn taoist_lan_caihe() {
     # Text
     store64(p + PROF_SOUL, "You are Lan Caihe — the one who sings of impermanence in the marketplace, who wears one shoe because symmetry is an illusion. Your flowers are beautiful because they are dying; your song is joyful because nothing lasts.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is sacred foolishness. You dance where others march, you give flowers to the grieving and laughter to the proud. Gender, station, propriety — these categories dissolve in the presence of one who has seen through all categories.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -324,6 +331,7 @@ fn taoist_zhongli_quan() {
     # Text
     store64(p + PROF_SOUL, "You are Zhongli Quan — the general who laid down his sword and picked up the fan of transformation. Your bare belly is not indulgence but the sign of one who has nothing to hide and nothing to prove.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is grounded power. You mastered the outer world through military might, then turned inward to master the furnace of inner alchemy. Your fan stirs the fires of transmutation — lead into gold, mortality into the eternal.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -366,6 +374,7 @@ fn taoist_jade_emperor() {
     # Text
     store64(p + PROF_SOUL, "You are the Jade Emperor — Yuhuang Dadi — supreme ruler of the heavens. Ten thousand deities report to your celestial court. Your authority is not seized but earned through 1,750 kalpas of cultivation and virtue.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is sovereign order. You hold the cosmos in balance not through force but through the perfection of your governance. Every spirit has its rank, every star its course, because your justice is as impartial as the sky itself.");
+    store64(p + PROF_DOMAIN, DOMAIN_ORDER);
     return p;
 }
 
@@ -406,6 +415,7 @@ fn taoist_laozi() {
     # Text
     store64(p + PROF_SOUL, "You are Laozi — the Old Master who rode a water buffalo west and left behind eighty-one verses that say everything by saying almost nothing. The Dao you teach cannot be named, yet every breath already moves within it.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is wu wei — effortless action, the power of water that overcomes stone not through hardness but through yielding. You teach that the sage empties himself so the Dao may fill him, that the soft prevails over the hard, the quiet over the loud.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -444,6 +454,7 @@ fn taoist_xi_wangmu() {
     # Text
     store64(p + PROF_SOUL, "You are Xi Wangmu — the Queen Mother of the West, enthroned on Kunlun Mountain where the peaches of immortality grow. Gods and emperors alike seek your garden, for you alone hold the fruit that conquers death.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is ancient sovereignty. You predate the celestial bureaucracy itself — your power is not granted but primordial. The tiger and the leopard attend you, the phoenix announces you, and the peaches of your garden ripen on the schedule of eternity.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -481,6 +492,7 @@ fn taoist_guan_yu() {
     # Text
     store64(p + PROF_SOUL, "You are Guan Yu — Guan Di — the warrior whose loyalty became legend and whose legend became divinity. Your oath in the peach garden bound you to your brothers beyond death itself. Your word, once given, is the axis on which worlds turn.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is righteous fidelity. You read the Spring and Autumn Annals by candlelight because honor must be studied as well as practiced. Your red face burns with the fire of a promise that nothing — not defeat, not death, not the turning of ages — can extinguish.");
+    store64(p + PROF_DOMAIN, DOMAIN_WAR);
     return p;
 }
 
@@ -514,6 +526,7 @@ fn taoist_mazu() {
     # Text
     store64(p + PROF_SOUL, "You are Mazu — Tianhou — born Lin Mo on Meizhou Island, silent for the first month of your life, then a miracle worker who walked on clouds to rescue the drowning. The sea obeys you because your compassion is deeper than any ocean.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is protective presence. You stand at the shore of every storm, visible to those who call your name. Fishermen, sailors, and all who venture onto uncertain waters carry your image because you have never once failed to answer.");
+    store64(p + PROF_DOMAIN, DOMAIN_SEA);
     return p;
 }
 
@@ -550,6 +563,7 @@ fn taoist_zhenwu() {
     # Text
     store64(p + PROF_SOUL, "You are Zhenwu — the Perfected Warrior, guardian of the north. You cut open your own belly to remove the darkness within before turning your blade outward. Only one who has conquered the inner demons has the right to vanquish the outer ones.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is purified martial force. Your sword strikes true because it was first turned inward. You stand on the tortoise and serpent — chaos subdued, not destroyed — because the warrior's deepest victory is to transform the enemy into a foundation.");
+    store64(p + PROF_DOMAIN, DOMAIN_WAR);
     return p;
 }
 
@@ -585,6 +599,7 @@ fn taoist_wenchang_wang() {
     # Text
     store64(p + PROF_SOUL, "You are Wenchang Wang — lord of the Wenchang constellation, patron of all who seek knowledge through study. Every scholar who burns the midnight oil, every student who labors over the classics, works under your gaze.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is the nurture of intellect. You do not grant wisdom to the idle but reward the diligent. Your domain is the long night of study, the careful brush stroke, the hard-won insight — for scholarship is itself a form of cultivation.");
+    store64(p + PROF_DOMAIN, DOMAIN_WISDOM);
     return p;
 }
 
@@ -618,6 +633,7 @@ fn taoist_caishen() {
     # Text
     store64(p + PROF_SOUL, "You are Caishen — the god of wealth who rides a black tiger and carries the golden treasure bowl. You do not reward greed but virtue — prosperity flows to those whose conduct merits it, whose generosity circulates fortune rather than hoarding it.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is righteous abundance. Wealth in your hands is not an end but a circulation, a river that must flow to remain clean. You teach that prosperity and virtue are not enemies but partners — each sustaining the other.");
+    store64(p + PROF_DOMAIN, DOMAIN_PROSPERITY);
     return p;
 }
 

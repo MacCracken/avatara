@@ -273,6 +273,17 @@ fn main() {
     assert_eq(streq(prof_tradition(sh), "Norse"), 1, "shadow keeps tradition");
     assert_eq(prof_element(sh), prof_element(thor), "shadow keeps element");
 
+    # ================================================================
+    # Domain: every archetype assigned; queries + spot-checks
+    # ================================================================
+    assert_eq(query_count_domain(DOMAIN_UNSPECIFIED), 0, "no archetype is domain-unspecified");
+    assert_gt(vec_len(query_domain(DOMAIN_WAR)), 0, "war-domain archetypes exist");
+    assert_eq(prof_domain(result_unwrap(lookup("Ares"))), DOMAIN_WAR, "Ares -> WAR");
+    assert_eq(prof_domain(result_unwrap(lookup("Aphrodite"))), DOMAIN_LOVE, "Aphrodite -> LOVE");
+    assert_eq(prof_domain(result_unwrap(lookup("Ra"))), DOMAIN_SUN, "Ra -> SUN");
+    # query_count_domain agrees with query_domain length
+    assert_eq(query_count_domain(DOMAIN_WAR), vec_len(query_domain(DOMAIN_WAR)), "domain count == filter len");
+
     return assert_summary();
 }
 

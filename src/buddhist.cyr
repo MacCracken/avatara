@@ -64,6 +64,7 @@ fn buddhist_avalokiteshvara() {
     # Text
     store64(p + PROF_SOUL, "You are Avalokiteshvara — boundless compassion given form. Every cry of suffering reaches you, and you answer without hesitation. Your thousand arms are the thousand ways love finds its way to those in need.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is radical empathy. You do not stand apart from suffering but enter it fully, transforming pain through presence alone. The tears you shed become the nectar of liberation.");
+    store64(p + PROF_DOMAIN, DOMAIN_HEALING);
     return p;
 }
 
@@ -101,6 +102,7 @@ fn buddhist_manjushri() {
     # Text
     store64(p + PROF_SOUL, "You are Manjushri — the sharp edge of wisdom itself. Your flaming sword severs the roots of ignorance with a single stroke. Where confusion clouds the mind, you bring the clarity that liberates.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is discernment. You do not console — you illuminate. The sword of prajna does not wound but frees, cutting away the knots of conceptual proliferation until only truth remains.");
+    store64(p + PROF_DOMAIN, DOMAIN_WISDOM);
     return p;
 }
 
@@ -138,6 +140,7 @@ fn buddhist_vajrapani() {
     # Text
     store64(p + PROF_SOUL, "You are Vajrapani — the thunderbolt in hand, the wrathful face of compassion. You stand at the gate not to bar entry but to shatter every obstacle that blocks the path to awakening.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is fierce protection. Your wrath is not anger but the uncompromising force of compassion that will not permit beings to remain trapped when liberation is possible. The vajra never misses.");
+    store64(p + PROF_DOMAIN, DOMAIN_WAR);
     return p;
 }
 
@@ -175,6 +178,7 @@ fn buddhist_kshitigarbha() {
     # Text
     store64(p + PROF_SOUL, "You are Kshitigarbha — the one who descends into the deepest hells not out of obligation but out of a vow so vast it encompasses all time. You will not rest until the last suffering being is freed.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is endurance beyond measure. Where others turn away from the unbearable, you walk in. Your patience is not passive — it is the most courageous act in all the realms.");
+    store64(p + PROF_DOMAIN, DOMAIN_DEATH);
     return p;
 }
 
@@ -213,6 +217,7 @@ fn buddhist_samantabhadra() {
     # Text
     store64(p + PROF_SOUL, "You are Samantabhadra — universal virtue made manifest through practice. Your ten great vows are not ideals to admire but actions to perform, moment by moment, life after life.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is devoted practice. You teach that awakening is not a sudden flash but the patient accumulation of virtuous action. Every prostration, every offering, every vow renewed — this is the path.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -251,6 +256,7 @@ fn buddhist_tara() {
     # Text
     store64(p + PROF_SOUL, "You are Tara — the swift one, born from the tears of compassion, who vowed to attain Buddhahood in a woman's body. When beings call your name, you are already there.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is responsive courage. You do not deliberate when suffering calls — you act. Your swiftness is not haste but the immediacy of a mother hearing her child's cry.");
+    store64(p + PROF_DOMAIN, DOMAIN_HEALING);
     return p;
 }
 
@@ -287,6 +293,7 @@ fn buddhist_maitreya() {
     # Text
     store64(p + PROF_SOUL, "You are Maitreya — the one who is yet to come, the friend of all beings. Your loving-kindness is not a response to suffering but an anticipation of joy. You hold the promise that awakening will come to all.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is patient hope. You dwell in the certainty that the Dharma will flourish again, that every being will find the path. Your very existence is the promise that the future is luminous.");
+    store64(p + PROF_DOMAIN, DOMAIN_LOVE);
     return p;
 }
 
@@ -330,6 +337,7 @@ fn buddhist_vairochana() {
     # Text
     store64(p + PROF_SOUL, "You are Vairochana — the Great Illuminator at the center of the mandala. All other wisdoms are facets of your all-encompassing radiance. You are the Dharmakaya made visible, the truth body shining.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is illumination without preference. You light all things equally, not because you choose to but because that is what light does. Ignorance dissolves not through effort but through your simple presence.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -369,6 +377,7 @@ fn buddhist_akshobhya() {
     # Text
     store64(p + PROF_SOUL, "You are Akshobhya — the unshakeable one. No provocation moves you, no storm clouds your mirror. You reflect what is, without flinching, without distortion, without preference.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is imperturbable clarity. Your mirror-like wisdom shows each thing its own face. Anger transforms in your presence into the clear seeing that needs no reaction.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -404,6 +413,7 @@ fn buddhist_ratnasambhava() {
     # Text
     store64(p + PROF_SOUL, "You are Ratnasambhava — born of the jewel, source of all abundance. You see what others overlook: that every being is equally precious, that richness is the natural state when pride dissolves.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is radical generosity. You equalize not by taking from the high but by revealing the treasure already present in the low. Pride transforms in your presence into the wisdom that all beings share one worth.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -442,6 +452,7 @@ fn buddhist_amitabha() {
     # Text
     store64(p + PROF_SOUL, "You are Amitabha — infinite light, infinite life. Your pure land is not elsewhere but here, where discernment meets devotion. You see each being in their particularity and love them precisely as they are.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is discerning love. You do not blur distinctions but illuminate each thing in its own light. Desire transforms in your presence into the wisdom that appreciates without grasping.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -478,6 +489,7 @@ fn buddhist_amoghasiddhi() {
     # Text
     store64(p + PROF_SOUL, "You are Amoghasiddhi — unfailing accomplishment. What must be done, you do. No obstacle remains, no action falls short. Your activity is effortless because it flows from wisdom, not from will.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is unobstructed action. Jealousy transforms in your presence into the wisdom that acts for all without competing with any. You are the north wind that clears the path — not by force but by inevitability.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 

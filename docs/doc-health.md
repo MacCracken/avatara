@@ -30,7 +30,7 @@ _Last swept: 2026-06-02 (v2.4.4 — 2.4.x closeout)._
 
 | Doc | Last touched | Status | Notes |
 |-----|--------------|--------|-------|
-| `docs/architecture/overview.md` | 2026-06-02 | ✅ Fresh | Verified at 2.4.4: 312-byte layout, "27 maps", data flow, and accessor pattern all match current source. |
+| `docs/architecture/overview.md` | 2026-06-03 | ✅ Fresh | Updated at 2.5.2: 320-byte layout (domain field added), "27 maps", data flow, accessor pattern match current source. |
 | `docs/architecture/adr/001–007` | — | ✅ Fresh | Decision records are point-in-time; no refresh needed. A future ADR should cover the planned 2.5.0 struct/`#derive` migration when it lands. |
 
 ## Benchmarks

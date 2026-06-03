@@ -6,8 +6,8 @@
 
 - **Language**: Cyrius (ported from Rust in v2.0)
 - **License**: GPL-3.0-only
-- **Version**: SemVer 2.5.1
-- **Compiler**: cyrius >= 6.0.40 (pinned in `cyrius.cyml` `[package].cyrius`)
+- **Version**: SemVer 2.5.2
+- **Compiler**: cyrius >= 6.0.47 (pinned in `cyrius.cyml` `[package].cyrius`)
 
 ## Consumers
 
@@ -17,7 +17,7 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 
 - `src/lib.cyr` — public API: includes all modules
 - `src/main.cyr` — test harness (~80 assertions)
-- `src/types.cyr` — ArchetypeProfile layout (312 bytes), TraitWeights (15 f64), ModuleEmphasis (14 f64), enums (BreathAffinity, GrowthDirection, Element, Polarity, CosmicTier)
+- `src/types.cyr` — ArchetypeProfile layout (320 bytes), TraitWeights (15 f64), ModuleEmphasis (14 f64), enums (BreathAffinity, GrowthDirection, Element, Polarity, CosmicTier, Domain)
 - `src/error.cyr` — AvataraError enum codes, validation
 - `src/compose.cyr` — archetype composition: weighted blending of multiple profiles
 - `src/history.cyr` — 27 tradition-to-history mappings (civilization, era, temporal range, notes)
@@ -56,7 +56,7 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 
 All values are i64. f64 trait/emphasis weights stored as IEEE 754 bit patterns. Use f64_* builtins for arithmetic and comparison.
 
-- `ArchetypeProfile` — 312 bytes, inline TraitWeights + ModuleEmphasis + enum fields + string pointers
+- `ArchetypeProfile` — 320 bytes, inline TraitWeights + ModuleEmphasis + enum fields (incl. `domain` at offset 312) + string pointers
 - `profile_new()` — allocates with defaults (traits=0.5, emphasis=0.5, breath=LATE_EXHALE, growth=DIFFERENTIATE)
 - Each tradition module: entity functions (e.g. `kabbalah_kether()`) + lazy-init `all_*()` collection + `*_count()`
 - Registry: `all_profiles()`, `by_tradition()`, `query_*()` filters; `lookup(name)` / `lookup_in(tradition, name)` return `Result` (`Ok(profile)` / `Err(ERR_UNKNOWN_ARCHETYPE)`); `find_and_validate(name)` chains lookup + validate via `?`
@@ -65,6 +65,7 @@ All values are i64. f64 trait/emphasis weights stored as IEEE 754 bit patterns. 
 - History: `context_for_tradition()`, `traditions_for_civilization()`, `traditions_active_at()`, `traditions_for_era()`
 - Affinity: `affinity()`, `similar_to()`, `cross_tradition_match()`, `cross_tradition_matches()`, `detect_conflicts()`, `is_incompatible()`
 - Shadow: `shadow(profile)` — inverted form (traits→1−v, breath/growth/polarity mirrored, element/tier kept); involutive; `is_shadow_of(a, b)`
+- Domain: every archetype has a `Domain` (primary sphere, offset 312); `prof_domain(p)`, `query_domain(domain)`, `query_count_domain(domain)`
 
 ## Key Principles
 

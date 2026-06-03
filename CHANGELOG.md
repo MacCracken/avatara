@@ -8,12 +8,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Roadmap
-See [docs/development/roadmap.md](docs/development/roadmap.md). Next up:
-- **v2.5.0 — Architecture Modernization**: `struct` + `#derive(accessors)` for `ArchetypeProfile`, then `Result<T, E>` + `?` for `error.cyr` (both deferred from the 2.4.x sweep — layout/API-breaking; do the struct migration first).
-- **v2.5.1 — `domain` field** (slipped from 2.4.0): categorical axis; layout 312 → 320, folded into the struct migration.
-- **v2.5.2 — Cross-tradition affinity graph**: pre-computed/cached, additive, must beat the 2.4.x bench baseline.
-- **v2.5.3 — Shadow aspect support**: pure `shadow(profile)` derivation with defined inversion semantics.
+See [docs/development/roadmap.md](docs/development/roadmap.md). Shipped in 2.5.x: Result error model (2.5.0), shadow aspect (2.5.1), domain field (2.5.2). Next up:
+- **`struct` + `#derive(accessors)` for `ArchetypeProfile`** — now unblocked (cyrius 6.0.47 raised the struct field cap 32 → 256). Large mechanical migration (~10k `store64` → setters); its own release sequence.
+- **Affinity graph** — declined (pointer-keyed cache regressed the bench); revisit only with a non-pointer-keyed design.
 - **v2.6.0 — The Solar Year** (362 → 365.25 archetypes).
+
+## [2.5.2] — 2026-06-03
+
+Structural enrichment — the `domain` field (slipped from the 2.4.0 roadmap), plus a toolchain bump.
+
+### Added
+- **`domain` field** on `ArchetypeProfile` — a categorical primary-sphere axis orthogonal to the trait/emphasis numbers. New `enum Domain` (20 spheres: Creation, War, Love, Death, Wisdom, Order, Chaos, Nature, Sky, Sea, Fire, Sun, Moon, Fate, Trickery, Healing, Prosperity, Hearth, Transcendence, + Unspecified default). Field appended at offset 312 (profile **312 → 320 bytes**; all prior offsets unchanged). Accessors: `prof_domain(p)`; registry `query_domain(domain)` + `query_count_domain(domain)`.
+- A scholarly primary domain assigned to **all 362 archetypes** (0 unspecified), using each archetype's established correspondence. Distribution: transcendence 74, wisdom 38, war 32, order 29, healing 23, love 22, nature 22, death 21, creation 14, sky 16, sea 13, sun 11, fire 9, trickery 9, prosperity 8, moon 6, fate 6, hearth 5, chaos 4.
+- 6 domain tests (55 total).
+
+### Changed
+- **Cyrius pin 6.0.40 → 6.0.47** — among other fixes, 6.0.47 raised the struct field cap 32 → 256 (our filed proposal), which **unblocks the deferred struct migration** (a 40-field `#derive` struct now compiles). The struct migration remains a separate future release; the domain field here was done on the existing manual offset layout.
+
+### Notes
+- Layout grew by 8 bytes (one i64). Consumers reading the bundle inherit the `domain` field and accessors; existing offsets are unchanged, so existing field reads are unaffected.
 
 ## [2.5.1] — 2026-06-02
 

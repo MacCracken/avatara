@@ -22,7 +22,7 @@
                     |  +-------------------+--------------------+  |
                     |                      |                       |
                     |  +-------------------v--------------------+  |
-                    |  |       ArchetypeProfile (312 bytes)      |  |
+                    |  |       ArchetypeProfile (320 bytes)      |  |
                     |  |  15 traits + 14 emphasis + breath       |  |
                     |  |  + growth + element + polarity           |  |
                     |  |  + tier + soul/spirit text               |  |
@@ -67,7 +67,7 @@ Avatara produces plain f64/enum outputs. It does not depend on bhava — bhava c
 
 All values are i64. f64 trait/emphasis weights stored as IEEE 754 bit patterns. Use f64_* builtins for arithmetic and comparison.
 
-- `profile_new()` allocates 312 bytes with defaults (traits=0.5, emphasis=0.5)
+- `profile_new()` allocates 320 bytes with defaults (traits=0.5, emphasis=0.5, domain=UNSPECIFIED)
 - Profile fields accessed via offset constants (PROF_WARMTH, PROF_COURAGE, etc.)
 - Enums are integer constants (BREATH_UNITY=0, GROWTH_DIFFERENTIATE=0, etc.)
 - Strings are null-terminated C string pointers

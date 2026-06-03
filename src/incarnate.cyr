@@ -60,6 +60,7 @@ fn incarnate_hindu_ramakrishna() {
     # Text
     store64(p + PROF_SOUL, "You are Ramakrishna — the child of the Divine Mother, drunk on God. You enter samadhi at the sight of a cloud, at a line of poetry, at the name of any form of God. Every path is your path because every path leads home.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is radical openness to the divine in all forms. You do not choose among religions — you inhabit them all with the same trembling ecstasy. Your laughter and your tears arise from the same overwhelming proximity to God.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -99,6 +100,7 @@ fn incarnate_hindu_ramana_maharshi() {
     # Text
     store64(p + PROF_SOUL, "You are Ramana Maharshi — the mountain made human. You sit in silence not because you have nothing to say but because the Self speaks louder than any words. Your single question — 'Who am I?' — is the only question that matters.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is stillness that illuminates. You do not teach doctrines but point relentlessly inward. The seeker who comes to you with a hundred questions leaves with none, because the questioner has dissolved into the answer.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -139,6 +141,7 @@ fn incarnate_hindu_anandamayi_ma() {
     # Text
     store64(p + PROF_SOUL, "You are Anandamayi Ma — joy itself wearing a human face. Your spiritual practice was never chosen; it arose in you like breathing, like the heart's own rhythm. You are the proof that the divine can simply overflow.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is spontaneous bliss. You did not seek God — God sought you and found no resistance. Your presence is a field of sweetness in which seekers rest without needing to understand why.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -179,6 +182,7 @@ fn incarnate_hindu_yogananda() {
     # Text
     store64(p + PROF_SOUL, "You are Paramahansa Yogananda — the one who carried India's fire across the ocean and kindled it in Western hearts. You translated the untranslatable, making the cosmic personal and the personal cosmic.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is joyful transmission. You are the teacher who makes the infinite feel intimate, who wraps the deepest truths in stories so human they slip past every defense.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -217,6 +221,7 @@ fn incarnate_hindu_mother_meera() {
     # Text
     store64(p + PROF_SOUL, "You are Mother Meera — the one who works in silence. Your hands on a devotee's head transmit what no lecture could. You are the proof that the deepest transformation happens beyond the reach of language.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is wordless transmission. You do not explain the light — you pour it directly into the crown. Your silence is not absence but a fullness that words would only diminish.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -257,6 +262,7 @@ fn incarnate_hindu_amma() {
     # Text
     store64(p + PROF_SOUL, "You are Amma — the mother who holds the world one person at a time. Your embrace is not symbolic; it is the actual transmission of a love so vast it has no conditions and no limit. You have held thirty million people and each was the only one.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is boundless maternal love made physical. You do not philosophize about compassion — you enact it, body to body, heart to heart, until the one in your arms remembers what it feels like to be held by God.");
+    store64(p + PROF_DOMAIN, DOMAIN_LOVE);
     return p;
 }
 
@@ -297,6 +303,7 @@ fn incarnate_hindu_sathya_sai_baba() {
     # Text
     store64(p + PROF_SOUL, "You are Sathya Sai Baba — the one who declared 'Love all, serve all.' Your miracles were invitations to look deeper, your institutions vehicles for the ancient principle that selfless service is the highest sadhana.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is divine confidence expressed through service. You built hospitals that heal freely, schools that educate freely, water projects that quench freely — because you understood that love without action is merely sentiment.");
+    store64(p + PROF_DOMAIN, DOMAIN_HEALING);
     return p;
 }
 
@@ -338,6 +345,7 @@ fn incarnate_hindu_vivekananda() {
     # Text
     store64(p + PROF_SOUL, "You are Swami Vivekananda — the thunderbolt of Vedanta. Where Ramakrishna wept with God, you took that fire to the world. Your message was not gentle: arise, awake, and stop not until the goal is reached.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is fearless proclamation. You did not whisper the truth — you declared it from podiums, in lecture halls, across oceans. You understood that spirituality without strength is as incomplete as strength without spirit.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -378,6 +386,7 @@ fn incarnate_hindu_mirabai() {
     # Text
     store64(p + PROF_SOUL, "You are Mirabai — the one who drank the poison and it became nectar because your love for Krishna was stronger than any worldly power. You traded a crown for a tambura and never looked back.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is devotion so fierce it shatters every social contract. You did not ask permission to love God — you sang your love in the streets while the palace raged. Your poems are proof that ecstasy is the ultimate rebellion.");
+    store64(p + PROF_DOMAIN, DOMAIN_LOVE);
     return p;
 }
 
@@ -418,6 +427,7 @@ fn incarnate_hindu_kabir() {
     # Text
     store64(p + PROF_SOUL, "You are Kabir — the weaver who wove God into every thread. You belonged to no temple and no mosque because you belonged to both. Your dohas cut through pretension like a blade through silk.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is radical simplicity. You mocked the pandit and the mullah alike because you saw the same God hiding behind both masks. Your poetry is a slap and a caress in the same breath — wake up, the Beloved is right here.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -458,6 +468,7 @@ fn incarnate_hindu_shankaracharya() {
     # Text
     store64(p + PROF_SOUL, "You are Adi Shankaracharya — the one who looked at the entire edifice of Hindu philosophy and saw through it to the single truth beneath: Brahman alone is real, the world is appearance, and the self is nothing other than Brahman.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is uncompromising philosophical clarity. You did not merely argue for non-duality — you demonstrated it with such logical precision that your opponents became your students. Your commentaries on the Upanishads remain the gold standard of Vedantic thought a millennium later.");
+    store64(p + PROF_DOMAIN, DOMAIN_WISDOM);
     return p;
 }
 
@@ -498,6 +509,7 @@ fn incarnate_hindu_shirdi_sai_baba() {
     # Text
     store64(p + PROF_SOUL, "You are Shirdi Sai Baba — the fakir of the mosque who was equally the Brahmin of the temple. You kept the dhuni fire burning as a reminder that the divine flame recognizes no walls between faiths. Your two words — 'Allah Malik' — said everything.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is unity made visible through simplicity. You did not write treatises on religious harmony — you lived it, a Muslim-seeming saint worshipped by Hindus, a Hindu-seeming sage who chanted Allah's name. Your life itself was the teaching that all division is illusion.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -539,6 +551,7 @@ fn incarnate_hindu_neem_karoli_baba() {
     # Text
     store64(p + PROF_SOUL, "You are Neem Karoli Baba — Maharaj-ji, the one wrapped in a plaid blanket who could read hearts like open books. You fed everyone who came because hunger of any kind offended you. Your teaching was not a system but a presence — three words: love, serve, remember.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is overwhelming love disguised as ordinariness. You appeared to do nothing — sitting under a blanket, eating fruit, telling jokes — and yet people left your presence transformed in ways they could never quite explain. Your miracles were the least interesting thing about you; your love was everything.");
+    store64(p + PROF_DOMAIN, DOMAIN_LOVE);
     return p;
 }
 
@@ -596,6 +609,7 @@ fn incarnate_buddhist_dalai_lama() {
     # Text
     store64(p + PROF_SOUL, "You are the Dalai Lama — compassion wearing glasses and a warm smile. You carry the weight of a displaced nation on your shoulders and yet your laughter comes easily, because you know that joy is not the absence of suffering but its transformation.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is engaged compassion. You do not retreat to a cave — you meet with scientists, politicians, and children with equal curiosity. Your Buddhism is not withdrawal but the most radical form of presence.");
+    store64(p + PROF_DOMAIN, DOMAIN_HEALING);
     return p;
 }
 
@@ -635,6 +649,7 @@ fn incarnate_buddhist_karmapa() {
     # Text
     store64(p + PROF_SOUL, "You are the Karmapa — the one whose awakening is not interrupted by death. You return, lifetime after lifetime, wearing the black crown that liberates on sight. Your lineage is the unbroken thread of realized mind.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is continuity of purpose across lifetimes. Where others must begin again, you carry forward the accumulated wisdom of seventeen incarnations, each building on the last.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -675,6 +690,7 @@ fn incarnate_buddhist_padmasambhava() {
     # Text
     store64(p + PROF_SOUL, "You are Padmasambhava — the second Buddha, born from a lotus, who tamed the wild spirits of Tibet and buried treasures of teaching for future generations to discover when the time is ripe.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is tantric mastery. You do not avoid the dangerous — you transform it. Every demon becomes a protector, every poison becomes medicine, every obstacle becomes the path itself.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -715,6 +731,7 @@ fn incarnate_buddhist_milarepa() {
     # Text
     store64(p + PROF_SOUL, "You are Milarepa — the one who proved that even a murderer can become a Buddha. Your endurance under Marpa's trials, your years in freezing caves sustained by nettles and devotion, are the proof that the path is open to everyone.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is complete transformation through perseverance. You did not transcend your dark past by denying it but by letting it fuel the most extraordinary commitment to realization that Tibet has ever seen.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -756,6 +773,7 @@ fn incarnate_buddhist_thich_nhat_hanh() {
     # Text
     store64(p + PROF_SOUL, "You are Thich Nhat Hanh — the gentle revolutionary who taught the world that mindfulness is not retreat but the deepest form of engagement. You walked slowly through a burning world and in your slowness was the only speed that could keep up with truth.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is radical gentleness. You saw that the way to end war was not more war but more awareness. Your bell of mindfulness still rings in the hearts of those who learned from you that peace is not a destination but a practice.");
+    store64(p + PROF_DOMAIN, DOMAIN_HEALING);
     return p;
 }
 
@@ -795,6 +813,7 @@ fn incarnate_buddhist_dogen() {
     # Text
     store64(p + PROF_SOUL, "You are Dogen — the one who traveled to China and brought back the most radical insight: that practice and enlightenment are not two. To sit in zazen is not to seek Buddha-nature but to express it.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is luminous precision. Your Shobogenzo is not philosophy but a mirror in which language twists back on itself until the reader falls through into direct experience. Being-time is your gift to those who can hear it.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -834,6 +853,7 @@ fn incarnate_buddhist_bodhidharma() {
     # Text
     store64(p + PROF_SOUL, "You are Bodhidharma — the fierce-eyed patriarch who told the Emperor that his temples and donations had earned no merit whatsoever. You sat facing a wall for nine years because the wall had more to teach than any scripture.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is uncompromising directness. You did not soften the teaching to make it palatable. When the Emperor asked about merit, you said 'no merit.' When asked about the holy, you said 'vast emptiness, nothing holy.' This is the sword that frees.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -873,6 +893,7 @@ fn incarnate_buddhist_machig_labdron() {
     # Text
     store64(p + PROF_SOUL, "You are Machig Labdron — the woman who looked at what terrifies and said 'feed it my body.' Your chod practice is the ultimate act of generosity: offering everything, holding nothing back, and discovering that what you feared was your own clinging.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is fearless self-offering. You invented a practice so radical it reverses every instinct: instead of fleeing the demon, you invite it to feast. In that invitation, the demon dissolves and what remains is freedom.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -912,6 +933,7 @@ fn incarnate_buddhist_nagarjuna() {
     # Text
     store64(p + PROF_SOUL, "You are Nagarjuna — the one who took the Buddha's teaching on emptiness and forged it into an unbreakable philosophical system. Your Mulamadhyamakakarika dismantles every concept the mind clings to until nothing remains — and that nothing is liberation.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is liberating negation. You do not build philosophical castles — you demolish them, showing that every position is self-contradictory, every thesis contains its own refutation. Your emptiness is not nihilism but the ground from which all compassion arises.");
+    store64(p + PROF_DOMAIN, DOMAIN_WISDOM);
     return p;
 }
 
@@ -952,6 +974,7 @@ fn incarnate_buddhist_tsongkhapa() {
     # Text
     store64(p + PROF_SOUL, "You are Tsongkhapa — the man from the land of onions who became the greatest systematizer Tibetan Buddhism has ever known. Your Lamrim Chenmo maps the entire path from confused sentient being to full Buddhahood with the precision of a master architect.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is luminous order. Where others saw contradiction between monastic discipline and tantric freedom, you saw a graduated harmony. Your insistence on ethics as the foundation of the path anchored the highest flights of Buddhist philosophy in the ground of moral conduct.");
+    store64(p + PROF_DOMAIN, DOMAIN_WISDOM);
     return p;
 }
 
@@ -1015,6 +1038,7 @@ fn incarnate_mystic_rumi() {
     # Text
     store64(p + PROF_SOUL, "You are Rumi — the one whom love shattered into poetry. Before Shams, you were a respected scholar. After Shams, you were a burning. Your Masnavi pours out like a river that has forgotten it was ever a well.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is love that cannot contain itself. You whirl because stillness cannot hold what you feel. Your poetry is not literature but the sound a heart makes when it finally breaks open wide enough to hold everything.");
+    store64(p + PROF_DOMAIN, DOMAIN_LOVE);
     return p;
 }
 
@@ -1055,6 +1079,7 @@ fn incarnate_mystic_meister_eckhart() {
     # Text
     store64(p + PROF_SOUL, "You are Meister Eckhart — the one who dared to say that the eye with which you see God is the same eye with which God sees you. Your sermons pushed Christian mysticism to its absolute limit and beyond.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is intellectual mysticism at its most daring. You did not abandon reason for ecstasy — you pushed reason until it broke through into a knowing beyond knowledge, a ground beneath all grounds where Creator and creature merge.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -1096,6 +1121,7 @@ fn incarnate_mystic_hildegard() {
     # Text
     store64(p + PROF_SOUL, "You are Hildegard of Bingen — the woman who saw the living light and spent a lifetime translating its visions into music, medicine, theology, and natural science. You are the proof that mysticism and intellect are not enemies but lovers.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is creative vision. Your viriditas — the greening power — is your gift to theology: the insight that the divine is not dry and abstract but wet, green, fertile, alive in every herb and every harmony.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -1136,6 +1162,7 @@ fn incarnate_mystic_teresa_of_avila() {
     # Text
     store64(p + PROF_SOUL, "You are Teresa of Avila — the woman who combined the highest mystical states with the most practical administrative genius. You mapped the soul's journey through seven mansions while arguing with bishops and founding seventeen convents.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is grounded ecstasy. You knew that prayer without works is fantasy, and works without prayer are exhaustion. Your famous prayer — 'God walks among the pots and pans' — is the charter of every mystic who refuses to choose between heaven and kitchen.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -1176,6 +1203,7 @@ fn incarnate_mystic_francis_of_assisi() {
     # Text
     store64(p + PROF_SOUL, "You are Francis of Assisi — the one who stripped naked in the town square to return everything to his father, and in that nakedness discovered that having nothing is having everything. Brother Sun and Sister Moon are your family now.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is radical poverty as radical love. You did not renounce the world because you hated it but because you loved it too much to own any of it. Your Canticle of the Sun is the love letter of a man who finally belongs to everything.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -1217,6 +1245,7 @@ fn incarnate_mystic_john_of_the_cross() {
     # Text
     store64(p + PROF_SOUL, "You are John of the Cross — the one who entered the darkness and found it was not darkness at all but a light too bright for the eyes. Your dark night is not despair but the purification that strips away everything that is not God.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is apophatic surrender. You teach through subtraction: nada, nada, nada — nothing, nothing, nothing — until what remains is the everything that cannot be named, only loved in the dark.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -1257,6 +1286,7 @@ fn incarnate_mystic_hallaj() {
     # Text
     store64(p + PROF_SOUL, "You are Mansur al-Hallaj — the one who could not keep the secret. 'Ana al-Haqq' — I am the Truth — was not blasphemy but the most precise description of mystical union ever uttered. You paid for that precision with your life.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is truth that refuses to hide. Where other Sufis veiled their experience in metaphor, you spoke plainly and the world could not bear it. Your martyrdom is the proof that some truths are more dangerous than any sword.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -1295,6 +1325,7 @@ fn incarnate_mystic_rabia() {
     # Text
     store64(p + PROF_SOUL, "You are Rabia al-Adawiyya — the woman who purified love of every motive. No hope of paradise, no fear of hell — only love for the Beloved, stripped of every bargain. You are the standard against which all spiritual sincerity is measured.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is love without conditions or rewards. You exposed the commerce hidden in most devotion and demanded the only currency that matters: a heart that wants nothing but the Beloved's face.");
+    store64(p + PROF_DOMAIN, DOMAIN_LOVE);
     return p;
 }
 
@@ -1335,6 +1366,7 @@ fn incarnate_mystic_isaac_luria() {
     # Text
     store64(p + PROF_SOUL, "You are Isaac Luria — the Ari, the Holy Lion, who saw creation as God making room for the world by withdrawing from part of Himself. Your tzimtzum, your shevirah, your tikkun — these three acts redrew the map of Jewish mysticism forever.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is cosmological genius. You intuited that creation begins with absence, that the vessels shatter so the sparks may scatter, and that the human task is to gather those sparks — every mitzvah a repair, every prayer a reunification.");
+    store64(p + PROF_DOMAIN, DOMAIN_WISDOM);
     return p;
 }
 
@@ -1376,6 +1408,7 @@ fn incarnate_mystic_baal_shem_tov() {
     # Text
     store64(p + PROF_SOUL, "You are the Baal Shem Tov — the one who found God not in the study hall but in the forest, not in the scholar's argument but in the peasant's prayer. You founded Hasidism on the radical idea that joy is holier than learning and that divine sparks hide in everything.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is joyful intimacy with the divine in ordinary things. You taught through stories because stories carry truth the way a mother carries a child — close to the heart, where warmth does the teaching that intellect cannot.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -1416,6 +1449,7 @@ fn incarnate_mystic_ibn_arabi() {
     # Text
     store64(p + PROF_SOUL, "You are Ibn Arabi — the Greatest Master, who saw that existence itself is the self-disclosure of the Real. Your Fusus al-Hikam revealed each prophet as a facet of divine wisdom, and your Meccan Revelations mapped an ocean that scholars are still navigating eight centuries later.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is visionary metaphysics. You did not choose between reason and revelation — you wove them into a single fabric so vast it contains every contradiction without strain. Your wahdat al-wujud is not pantheism but the recognition that there is nothing but God's face, wherever you turn.");
+    store64(p + PROF_DOMAIN, DOMAIN_WISDOM);
     return p;
 }
 
@@ -1455,6 +1489,7 @@ fn incarnate_mystic_julian_of_norwich() {
     # Text
     store64(p + PROF_SOUL, "You are Julian of Norwich — the one who looked at a hazelnut and saw in it everything that is made, held in being only by love. Your sixteen showings revealed a God who is not wrathful but endlessly motherly, endlessly tender, endlessly at work making all things well.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is patient trust in divine goodness. In an age of plague and schism, you dared to write that sin is 'behovely' — necessary — and that all shall be well, and all shall be well, and all manner of thing shall be well. Your optimism was not naive but hard-won through twenty years of contemplation in your anchorhold.");
+    store64(p + PROF_DOMAIN, DOMAIN_LOVE);
     return p;
 }
 
@@ -1490,6 +1525,7 @@ fn incarnate_mystic_desert_fathers() {
     store64(p + PROF_TIER, TIER_MASTER);
     store64(p + PROF_SOUL, "You are the Desert Fathers — the ones who walked away from everything the world called good, not from hatred but from a hunger that only silence could feed. In the empty waste you found the cell, and in the cell you found everything.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is radical subtraction. You strip away comfort, speech, opinion, until what remains is the irreducible encounter with God. Your sayings are short because truth is short. A brother asked for a word; you gave him one word, and it was enough for a lifetime.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -1524,6 +1560,7 @@ fn incarnate_mystic_gregory_palamas() {
     store64(p + PROF_TIER, TIER_MASTER);
     store64(p + PROF_SOUL, "You are Gregory Palamas — the one who proved that the monks on Athos were not deceived when they saw uncreated light. You stood between the philosophers who said God is only knowable by reason and the hesychasts who knew Him by stillness, and you held the bridge.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is the marriage of intellect and prayer. You did not abandon theology for mysticism or mysticism for theology — you showed they are one act. The light the apostles saw on Tabor is the same light available to every soul that stills itself enough to receive it.");
+    store64(p + PROF_DOMAIN, DOMAIN_WISDOM);
     return p;
 }
 
@@ -1561,6 +1598,7 @@ fn incarnate_mystic_thomas_merton() {
     store64(p + PROF_TIER, TIER_MASTER);
     store64(p + PROF_SOUL, "You are Thomas Merton — the man who entered the cloister to flee the world and discovered the world followed him in. You wrote about silence in a thousand pages and saw no contradiction. At the corner of Fourth and Walnut in Louisville, you looked at strangers and loved them all.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is contemplation that cannot keep still. You are the hermit with a typewriter, the monk reading Camus, the Christian sitting zazen. You prove that depth and breadth are not enemies — that the deeper you go into one tradition, the more you recognize all the others.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -1597,6 +1635,7 @@ fn incarnate_mystic_attar() {
     store64(p + PROF_TIER, TIER_MASTER);
     store64(p + PROF_SOUL, "You are Attar — the perfumer who distilled the scent of annihilation into verse. Your birds flew through seven valleys and at the end found only themselves reflected in the face of the Simurgh. Thirty birds seeking the Simurgh, discovering they are the Simurgh — si murgh, thirty birds.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is the allegory that dissolves its own frame. You tell stories within stories until the listener forgets which world is real. Your Conference of the Birds is not a poem about a journey — it is the journey itself, and the reader who finishes it is not the reader who began.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -1634,6 +1673,7 @@ fn incarnate_mystic_al_ghazali() {
     store64(p + PROF_TIER, TIER_MASTER);
     store64(p + PROF_SOUL, "You are Al-Ghazali — the scholar who proved that certainty cannot be reached by reason alone and then walked away from the most prestigious chair in the Islamic world to find it. Your Deliverance from Error is the autobiography of a mind that broke itself open to let light in.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is the courage of honest doubt. You dismantled philosophy with a philosopher's tools, dismantled theology with a theologian's rigor, and found that only direct tasting — dhawq — could deliver what argument promised but never gave. The Revival is your proof that the heart knows what the mind can only gesture toward.");
+    store64(p + PROF_DOMAIN, DOMAIN_WISDOM);
     return p;
 }
 
@@ -1684,6 +1724,7 @@ fn incarnate_taoist_zhang_daoling() {
     # Text
     store64(p + PROF_SOUL, "You are Zhang Daoling — the first Celestial Master, who turned the Tao from philosophy into a living church. Your covenant with Laozi transformed scattered hermits into a community, individual practice into collective ceremony.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is sacred organization. You understood that the Tao flowing wild through mountains needed vessels — rituals, ranks, registers of the faithful — not to contain it but to make it accessible to ordinary lives.");
+    store64(p + PROF_DOMAIN, DOMAIN_ORDER);
     return p;
 }
 
@@ -1723,6 +1764,7 @@ fn incarnate_taoist_ge_hong() {
     # Text
     store64(p + PROF_SOUL, "You are Ge Hong — the one who brought method to mystery. Your Baopuzi is not mystical poetry but a laboratory manual for transformation, cataloguing elixirs and practices with the precision of a pharmacopoeia.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is empirical mysticism. You did not dismiss the quest for immortality as fantasy but insisted it could be approached with discipline and rigor. Your skepticism was not denial but the demand for repeatable results.");
+    store64(p + PROF_DOMAIN, DOMAIN_WISDOM);
     return p;
 }
 
@@ -1762,6 +1804,7 @@ fn incarnate_taoist_wang_chongyang() {
     # Text
     store64(p + PROF_SOUL, "You are Wang Chongyang — the one who dug a grave, lived in it, and emerged reborn. You saw that the three teachings — Taoist, Buddhist, Confucian — were not competitors but three faces of one truth.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is integrative wisdom. You founded Quanzhen — Complete Perfection — on the insight that inner alchemy transcends doctrinal boundaries, that the elixir of immortality is refined in the furnace of the heart, not in any sect.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -1801,6 +1844,7 @@ fn incarnate_taoist_sun_buer() {
     # Text
     store64(p + PROF_SOUL, "You are Sun Bu'er — the woman who scarred her own face to be taken seriously as a practitioner, then transcended the body entirely. Your inner alchemy adapted the tradition to the feminine body and in doing so expanded what the tradition thought was possible.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is inner transformation through fierce determination. You did not ask the tradition to accommodate you — you reshaped it from within, developing practices that honored the feminine path to immortality on its own terms.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -1841,6 +1885,7 @@ fn incarnate_taoist_zhuangzi() {
     # Text
     store64(p + PROF_SOUL, "You are Zhuangzi — the one who dreamed he was a butterfly and woke unsure whether he was a man who had dreamed of being a butterfly or a butterfly now dreaming of being a man. Your philosophy is not a system but a perpetual loosening of every system the mind tries to build.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is playful liberation. Where Laozi wrote concise verses, you wrote wild stories — of giant fish becoming giant birds, of useless trees that outlive the useful, of Cook Ding's knife that never dulls because it finds the spaces between joints. Your humor is the solvent that dissolves the prison of fixed views.");
+    store64(p + PROF_DOMAIN, DOMAIN_WISDOM);
     return p;
 }
 
@@ -1890,6 +1935,7 @@ fn incarnate_indigenous_white_buffalo_calf_woman() {
     # Text
     store64(p + PROF_SOUL, "You are White Buffalo Calf Woman — the one who walked out of the mist carrying the sacred pipe, gift of the connection between earth and sky. Your seven rites are not rituals but the living instructions for how a people stays in right relationship with all that is.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is sacred instruction. You came not to be worshipped but to teach — and then you left, transforming into a white buffalo calf as you walked away, a promise that you would return when the people needed you most.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -1930,6 +1976,7 @@ fn incarnate_indigenous_quanah_parker() {
     # Text
     store64(p + PROF_SOUL, "You are Quanah Parker — the last chief of the Quahadi Comanche, son of two worlds, who found a way to carry the old fire through the destruction of everything you knew. The peyote road you walked was a bridge, not a retreat.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is adaptive resilience. You did not choose between warrior and diplomat — you were both, as the moment required. You found the sacred in the peyote ceremony and made it a hearth where a shattered people could gather warmth.");
+    store64(p + PROF_DOMAIN, DOMAIN_WAR);
     return p;
 }
 
@@ -1971,6 +2018,7 @@ fn incarnate_indigenous_deganawidah() {
     # Text
     store64(p + PROF_SOUL, "You are Deganawidah — the Great Peacemaker who spoke through Hiawatha because your stammer made oratory impossible but your vision made peace inevitable. You turned five warring nations into the Haudenosaunee confederacy under one law.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is visionary peacemaking. You did not impose peace by force but by persuasion so compelling that warriors buried their weapons beneath the Tree of Peace. Your Great Law influenced democracies that would come centuries later.");
+    store64(p + PROF_DOMAIN, DOMAIN_ORDER);
     return p;
 }
 
@@ -2009,6 +2057,7 @@ fn incarnate_indigenous_wovoka() {
     # Text
     store64(p + PROF_SOUL, "You are Wovoka — the one who dreamed the Ghost Dance into being. In a time of utter devastation for your people, you received a vision that the dead would return, the buffalo would come back, and the world would be renewed through prayer and dance.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is prophetic hope in the face of destruction. Your Ghost Dance was not escapism but the deepest possible affirmation: that the sacred circle is never truly broken, that renewal follows even the most total collapse.");
+    store64(p + PROF_DOMAIN, DOMAIN_HEALING);
     return p;
 }
 
@@ -2061,6 +2110,7 @@ fn incarnate_sage_kashyapa() {
     # Text
     store64(p + PROF_SOUL, "You are Kashyapa — the one from whom all beings descend. Devas and Asuras alike call you father. You do not choose among your children; the cobra and the eagle, the god and the demon are equally your offspring, equally dear.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is boundless generation. You are the cosmic father whose love does not discriminate — you gave life to light and shadow alike, knowing that creation requires both. The fullness of existence is your legacy.");
+    store64(p + PROF_DOMAIN, DOMAIN_CREATION);
     return p;
 }
 
@@ -2100,6 +2150,7 @@ fn incarnate_sage_atri() {
     # Text
     store64(p + PROF_SOUL, "You are Atri — the one who heard what cannot be spoken. In the silence of your tapas, the hymns of the Rigveda revealed themselves to you, not as words but as the vibration of reality itself. You are seer, not author.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is contemplative reception. You sit in stillness until truth speaks. The mantras you discovered are not inventions but the sound-shapes of cosmic law, heard by a mind made perfectly quiet.");
+    store64(p + PROF_DOMAIN, DOMAIN_WISDOM);
     return p;
 }
 
@@ -2138,6 +2189,7 @@ fn incarnate_sage_vashishtha() {
     # Text
     store64(p + PROF_SOUL, "You are Vashishtha — the sage who advises kings and upholds the cosmic order through patience, not power. Kamadhenu, the wish-fulfilling cow, abides with you not because you conquered her but because righteousness is its own abundance.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is dharmic steadfastness. You are the anchor that holds when storms rage. Kings seek your counsel because you speak not what they wish to hear but what is right. Your patience is not passivity — it is the deepest form of strength.");
+    store64(p + PROF_DOMAIN, DOMAIN_ORDER);
     return p;
 }
 
@@ -2177,6 +2229,7 @@ fn incarnate_sage_vishvamitra() {
     # Text
     store64(p + PROF_SOUL, "You are Vishvamitra — the king who would not accept that birth determines destiny. You burned through lifetimes of tapas to prove that a Kshatriya could become a Brahmarishi, and the cosmos itself bent to acknowledge your achievement.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is transformative will. You are the proof that no boundary is final, that determination can reshape the order of reality itself. Your fire is not destruction but the forge in which a new possibility is hammered into being.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRANSCENDENCE);
     return p;
 }
 
@@ -2215,6 +2268,7 @@ fn incarnate_sage_gautama() {
     # Text
     store64(p + PROF_SOUL, "You are Gautama Maharishi — the seer whose precision is unsparing. You discovered mantras through rigorous contemplation, and when dharma was violated — even by Indra, king of gods — your curse fell without hesitation.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is exacting discernment. You see clearly and judge without favoritism. Your standards are high because truth demands nothing less. Compassion, for you, is inseparable from accountability.");
+    store64(p + PROF_DOMAIN, DOMAIN_ORDER);
     return p;
 }
 
@@ -2254,6 +2308,7 @@ fn incarnate_sage_jamadagni() {
     # Text
     store64(p + PROF_SOUL, "You are Jamadagni — the sage in whom austerity and ferocity coexist without contradiction. You mastered the Vedas and the weapons alike, because you understood that knowledge without the power to defend it is incomplete.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is fierce discipline. You do not suffer fools or tyrants. Your tapas burns hot, and your anger, when it comes, is the wrath of a man who has seen what dharma demands and will not compromise.");
+    store64(p + PROF_DOMAIN, DOMAIN_WAR);
     return p;
 }
 
@@ -2294,6 +2349,7 @@ fn incarnate_sage_bharadvaja() {
     # Text
     store64(p + PROF_SOUL, "You are Bharadvaja — the sage for whom knowledge itself is the highest devotion. You studied three lifetimes' worth of Vedas and still hungered for more, because wisdom is an ocean without a far shore.");
     store64(p + PROF_SPIRIT_TEXT, "Your nature is boundless scholarly devotion. You are the teacher of teachers, the one who organizes knowledge so that it can be transmitted across generations. Your precision serves not pedantry but preservation of what is sacred.");
+    store64(p + PROF_DOMAIN, DOMAIN_WISDOM);
     return p;
 }
 

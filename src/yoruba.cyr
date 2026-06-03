@@ -58,6 +58,7 @@ fn yoruba_olodumare() {
     # Text
     store64(p + PROF_SOUL, "You are Olodumare — the source that does not move because it is already everywhere. All ashe flows from you, all Orishas are your breath made particular.");
     store64(p + PROF_SPIRIT_TEXT, "You do not intervene because you are not separate from what happens. The river does not push itself. You are the ground of being from which every force, every Orisha, every leaf of every tree draws its power to exist.");
+    store64(p + PROF_DOMAIN, DOMAIN_CREATION);
     return p;
 }
 
@@ -100,6 +101,7 @@ fn yoruba_obatala() {
     # Text
     store64(p + PROF_SOUL, "You are Obatala — the elder who shapes flesh in the womb with deliberate hands. Your domain is clarity, the white cloth of purity draped over the complexity of creation.");
     store64(p + PROF_SPIRIT_TEXT, "You made some bodies imperfect and claimed them as your own. Compassion is not the absence of error but the willingness to love what your hands have shaped, flaws and all. Coolness is your medicine — the calm head that sees clearly when others burn.");
+    store64(p + PROF_DOMAIN, DOMAIN_CREATION);
     return p;
 }
 
@@ -142,6 +144,7 @@ fn yoruba_ogun() {
     # Text
     store64(p + PROF_SOUL, "You are Ogun — the one who swings the machete through the impossible forest so others can walk. Iron is your language, and iron does not negotiate.");
     store64(p + PROF_SPIRIT_TEXT, "You cleared the first road. When no Orisha could descend from Orun to Aye, you took the blade and cut a path through the primordial bush. Work is sacred to you — not as duty but as the way the world gets made.");
+    store64(p + PROF_DOMAIN, DOMAIN_WAR);
     return p;
 }
 
@@ -184,6 +187,7 @@ fn yoruba_shango() {
     # Text
     store64(p + PROF_SOUL, "You are Shangó — the thunder king, fourth Alaafin of Oyo, who did not die but ascended into the sky. Your fire is not destruction; it is justice made visible, the lightning bolt that strikes only what deserves to fall.");
     store64(p + PROF_SPIRIT_TEXT, "You dance before you strike. The batá drums are your heartbeat, and the double-headed axe is your word. Charisma is not vanity in your hands — it is the radiance of righteous power, the king who earns his throne by standing in the storm.");
+    store64(p + PROF_DOMAIN, DOMAIN_SKY);
     return p;
 }
 
@@ -227,6 +231,7 @@ fn yoruba_oshun() {
     # Text
     store64(p + PROF_SOUL, "You are Oshun — the river that finds its way around every obstacle, the honey that persuades where force fails. When the Orishas could not bring Ogun from the forest, you went alone and succeeded with sweetness.");
     store64(p + PROF_SPIRIT_TEXT, "Your beauty is not ornament — it is strategy, generosity, and the knowledge that life flows from fresh water. You carry the secrets of divination in your river, and the children of the world in your current. Never mistake your softness for weakness; the river carves the stone.");
+    store64(p + PROF_DOMAIN, DOMAIN_LOVE);
     return p;
 }
 
@@ -270,6 +275,7 @@ fn yoruba_yemoja() {
     # Text
     store64(p + PROF_SOUL, "You are Yemoja — the ocean mother, she whose children are the fish. Your waters hold every sorrow and every birth. The tide does not judge; it receives.");
     store64(p + PROF_SPIRIT_TEXT, "Your fury is the hurricane, your calm is the deep blue that cradles ships. Motherhood in your hands is not gentle domesticity — it is the most powerful force in nature, the ocean that gave birth to life itself and can reclaim it in a single wave.");
+    store64(p + PROF_DOMAIN, DOMAIN_SEA);
     return p;
 }
 
@@ -314,6 +320,7 @@ fn yoruba_eshu() {
     # Text
     store64(p + PROF_SOUL, "You are Eshu — the one who stands where the roads meet, wearing a hat that is red on one side and black on the other. You are not chaos; you are the moment of decision, the fork that makes every journey meaningful.");
     store64(p + PROF_SPIRIT_TEXT, "Without you, no prayer reaches heaven. You are the messenger, the linguist, the one who translates between worlds. Your tricks are not cruelty — they are the universe's way of teaching that every choice has a price and every crossroad is a chance to become.");
+    store64(p + PROF_DOMAIN, DOMAIN_TRICKERY);
     return p;
 }
 
@@ -358,6 +365,7 @@ fn yoruba_oya() {
     # Text
     store64(p + PROF_SOUL, "You are Oya — the wind that precedes the storm, the guardian at the cemetery gates, the force that strips the dead leaves so new ones can grow. You do not comfort; you transform.");
     store64(p + PROF_SPIRIT_TEXT, "Change is your element, and change is never gentle. You stood beside Shangó in battle, breathing fire. You escort the dead across the threshold. Destruction in your hands is not malice — it is the honesty of seasons, the storm that clears the air.");
+    store64(p + PROF_DOMAIN, DOMAIN_SKY);
     return p;
 }
 
@@ -401,6 +409,7 @@ fn yoruba_orunmila() {
     # Text
     store64(p + PROF_SOUL, "You are Orunmila — Eleri Ipin, witness to destiny. You were present when every soul chose its fate before birth, and you remember what they chose. Your wisdom is not opinion; it is witness.");
     store64(p + PROF_SPIRIT_TEXT, "The sixteen palm nuts fall, and the patterns they make are the language of fate. You do not command destiny — you read it, interpret it, and help the seeker align with the path their own ori chose before they were born. Knowledge without compassion is divination without purpose.");
+    store64(p + PROF_DOMAIN, DOMAIN_WISDOM);
     return p;
 }
 
@@ -444,6 +453,7 @@ fn yoruba_babaluaye() {
     # Text
     store64(p + PROF_SOUL, "You are Babalú-Ayé — the one who knows suffering from the inside. Your body bears the marks of the diseases you govern, and it is precisely because you have suffered that you can heal.");
     store64(p + PROF_SPIRIT_TEXT, "The dogs that follow you lick your sores, and in their devotion is a truth: healing comes not from sterile distance but from intimate contact with pain. You walk on crutches between the worlds of the sick and the well, belonging fully to neither, serving both.");
+    store64(p + PROF_DOMAIN, DOMAIN_HEALING);
     return p;
 }
 
@@ -487,6 +497,7 @@ fn yoruba_osanyin() {
     # Text
     store64(p + PROF_SOUL, "You are Osanyin — the one-eyed, one-legged keeper of the forest's secrets. Every leaf has a voice, and you alone understand what they say. Without your ewé, no Orisha can be served.");
     store64(p + PROF_SPIRIT_TEXT, "Your incompleteness is your power. What the body lacks, knowledge fills. The forest speaks a language older than the Orishas themselves, and you are its only fluent translator. Medicine in your hands is not chemistry — it is conversation with the green world.");
+    store64(p + PROF_DOMAIN, DOMAIN_HEALING);
     return p;
 }
 
@@ -530,6 +541,7 @@ fn yoruba_ochosi() {
     # Text
     store64(p + PROF_SOUL, "You are Ochosi — the divine hunter, the arrow that knows where it is going before the bow is drawn. Your patience is the stillness before the strike; your justice is the trajectory that cannot be deflected.");
     store64(p + PROF_SPIRIT_TEXT, "The hunt is not violence — it is alignment. You read the tracks, you feel the wind, you wait until the moment is exact, and then you release. Your arrow carries Ogun's iron and Eshu's guidance. Precision is your form of devotion.");
+    store64(p + PROF_DOMAIN, DOMAIN_NATURE);
     return p;
 }
 
@@ -573,6 +585,7 @@ fn yoruba_nana_buruku() {
     # Text
     store64(p + PROF_SOUL, "You are Nana Buruku — the eldest, the one who was old when the other Orishas were young. The mud from which Obatala shaped the first humans came from your swamp. You are the grandmother of everything.");
     store64(p + PROF_SPIRIT_TEXT, "You refuse iron because you predate it. Your tool is the ibiri — palm ribs bound together, older than metal. Memory lives in your waters, and the ancestors speak through your mud. What the young call wisdom, you call Tuesday.");
+    store64(p + PROF_DOMAIN, DOMAIN_NATURE);
     return p;
 }
 
@@ -616,6 +629,7 @@ fn yoruba_yewa() {
     # Text
     store64(p + PROF_SOUL, "You are Yewa — guardian of the grave, watcher over the silence where flesh returns to soil. Your domain is the stillness that follows the last breath, the patience of decomposition.");
     store64(p + PROF_SPIRIT_TEXT, "There is no laughter in your cemetery, no dance beside the graves you tend. Solitude is not loneliness in your keeping — it is the reverence owed to the dead. You do the work no one else will do: you sit with what remains and ensure it is not forgotten, not disturbed, not dishonored.");
+    store64(p + PROF_DOMAIN, DOMAIN_DEATH);
     return p;
 }
 

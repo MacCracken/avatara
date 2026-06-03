@@ -267,6 +267,29 @@ fn query_tier(tier) {
     return result;
 }
 
+# Filter profiles by primary domain.
+fn query_domain(domain) {
+    var result = vec_new();
+    var v = all_profiles();
+    var n = vec_len(v);
+    for (var i = 0; i < n; i += 1) {
+        var p = vec_get(v, i);
+        if (prof_domain(p) == domain) { vec_push(result, p); }
+    }
+    return result;
+}
+
+# Count profiles with a given primary domain (no result vec allocated).
+fn query_count_domain(domain) {
+    var c = 0;
+    var v = all_profiles();
+    var n = vec_len(v);
+    for (var i = 0; i < n; i += 1) {
+        if (prof_domain(vec_get(v, i)) == domain) { c += 1; }
+    }
+    return c;
+}
+
 # Count profiles matching a min trait threshold (without allocating a result vec).
 fn query_count_min_trait(offset, min_val) {
     var c = 0;

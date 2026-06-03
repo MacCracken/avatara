@@ -13,10 +13,9 @@
 
 - [x] **`Result<T, E>` + `?`** — `lookup`/`lookup_in`/`compose`/`validate_profile` now return `Result` (`Ok(profile)` / `Err(AvataraError)`) instead of `0`-on-error / bare int codes; added `find_and_validate` demonstrating `?`. API-breaking for consumers (see CHANGELOG 2.5.0).
 
-### Blocked — struct migration (waiting on cyrius)
+### Unblocked — struct migration (cap raised in cyrius 6.0.47)
 
-- [ ] **`struct` + `#derive(accessors)` for `ArchetypeProfile`** — replace the manual 312-byte blob (offset enums + `store64`/`load64` + ~39 hand-written `prof_*` accessors) with a native struct. **Blocked**: cyrius caps structs at 32 fields and `Profile` has 39 — proposal filed at `cyrius/docs/development/proposals/2026-06-02-struct-field-cap-raise.md`. Resume when the cap is raised upstream (the named-field struct would also make the 2.4.5 `PROF_SPIRIT` offset-collision class of bug a compile error). When unblocked: `sizeof == 312` + offset-assertion test, mechanical `store64 → Profile_set_*` migration (~10k sites), `prof_*` compat shims for consumers.
-- This migration was to precede the layout-changing items below (esp. the `domain` field); with it blocked, sequence those independently or wait.
+- [ ] **`struct` + `#derive(accessors)` for `ArchetypeProfile`** — replace the manual 320-byte blob (offset enums + `store64`/`load64` + ~40 hand-written `prof_*` accessors) with a native struct. **No longer blocked**: cyrius 6.0.47 raised the struct field cap 32 → 256 (proposal `2026-06-02-struct-field-cap-raise.md`, landed); a 40-field `#derive` struct now compiles. The named-field struct would make the 2.4.5 `PROF_SPIRIT` offset-collision class of bug a compile error. Scope: `sizeof == 320` + offset-assertion test, mechanical `store64(p + PROF_*) → Profile_set_*` migration (~10k sites across 24 modules), `prof_*` compat shims for consumers. Large but mechanical — its own release sequence.
 
 ### v2.5.1 — Shadow aspect ✅ (shipped)
 
@@ -26,16 +25,10 @@
 
 - A pre-computed, **pointer-keyed** cross-tradition cache regressed the bench (`cross_tradition_match` 49µs → 945µs): the construct-then-query pattern passes fresh profile pointers that miss the cache, and the per-tradition build path is slower than the existing single-pass scan. Reverted; kept the original O(n) functions. **Revisit only with a non-pointer-keyed design** (index/name-based) that fits the access pattern and is bench-proven.
 
-### Deferred — `domain` field (blocked-adjacent)
+### v2.5.2 — `domain` field ✅ (shipped)
 
-A categorical axis (War, Love, Death, Creation, …) orthogonal to the
-trait/emphasis numbers. **Layout-changing** (312 → 320) + a 362-archetype
-scholarly assignment the roadmap wanted folded into the struct migration (still
-blocked on the cyrius 32-field cap). Resume alongside that migration, or do it
-standalone on the manual layout if it's wanted sooner.
-
-- [ ] `enum Domain` (settle the closed set; default `DOMAIN_UNSPECIFIED`) + `PROF_DOMAIN` field + `prof_domain()` + `query_domain()`.
-- [ ] Assign a scholarly domain to all 362 archetypes (no inventions); layout assertion → 320.
+- [x] **`enum Domain`** (20 spheres; default `DOMAIN_UNSPECIFIED`) + `PROF_DOMAIN` field (offset 312, profile 312 → 320) + `prof_domain()` + `query_domain()` + `query_count_domain()`. Done on the manual offset layout (independent of the struct migration).
+- [x] Assigned a scholarly primary domain to **all 362 archetypes** across the 24 modules (0 unspecified). Distribution: transcendence 74, wisdom 38, war 32, order 29, heal 23, love/nature 22, death 21, … 6 domain tests added.
 
 ### v2.6.0 — The Solar Year (362 → 365.25)
 
