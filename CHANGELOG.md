@@ -13,6 +13,22 @@ See [docs/development/roadmap.md](docs/development/roadmap.md). Shipped in 2.5.x
 - **Affinity graph** — declined (pointer-keyed cache regressed the bench); revisit only with a non-pointer-keyed design.
 - **v2.6.0 — The Solar Year** (362 → 365.25 archetypes).
 
+## [2.5.3] — 2026-06-03
+
+Architecture: native-struct migration of `ArchetypeProfile` (the deferred 2.5.0 item, unblocked by the cyrius 6.0.47 struct-field-cap raise). Mechanical/behavior-preserving — all 60 tests pass unchanged.
+
+### Changed
+- **`ArchetypeProfile` is now a native `#derive(accessors)` `struct Profile`** (40 i64 fields = 320 bytes, declaration order matching the existing offsets). The compiler-generated `Profile_<field>(p)` / `Profile_set_<field>(p, v)` are canonical.
+- **~10.4k field writes across 24 modules converted** from `store64(p + PROF_*, v)` to `Profile_set_*(p, v)` (constructors, `profile_new`, `compose`, `shadow`). The loop-based code that iterates computed offset ranges (`profile_new` default-fill, `compose` blend, `affinity`/`error` range scans, `shadow` inversion) keeps raw `load64`/`store64` — 6 such loops retained.
+- **The 39 hand-written `prof_*` getters now delegate** to the derived `Profile_*` (e.g. `prof_warmth(p)` → `Profile_warmth(p)`); `prof_*` are kept as consumer-facing compat shims, so no downstream call sites break.
+- `ProfLayout` offset enum retained — used by the loop-based code and the layout-assertion test.
+
+### Added
+- **Layout-assertion test** (5 asserts, 60 total): `sizeof == 320` and each `Profile_set_*` writes at its `PROF_*` offset — guards the struct↔offset correspondence against future field changes. A named-field struct also makes the 2.4.5 `PROF_SPIRIT` offset-collision class of bug a compile error (duplicate field names are rejected).
+
+### Notes
+- Behavior- and perf-neutral: identical codegen semantics; benchmarks within run-to-run noise (single-profile construction ~365ns, affinity score ~102ns).
+
 ## [2.5.2] — 2026-06-03
 
 Structural enrichment — the `domain` field (slipped from the 2.4.0 roadmap), plus a toolchain bump.

@@ -98,7 +98,7 @@ fn compose(weighted) {
         var bi = breath_intensity(prof_breath(p));
         avg_intensity = f64_add(avg_intensity, f64_mul(bi, f));
     }
-    store64(result + PROF_BREATH, nearest_breath(avg_intensity));
+    Profile_set_breath(result, nearest_breath(avg_intensity));
 
     # Blend growth: highest weighted direction wins
     var best_growth = GROWTH_DIFFERENTIATE;
@@ -119,7 +119,7 @@ fn compose(weighted) {
         }
         dir += 1;
     }
-    store64(result + PROF_GROWTH_DIR, best_growth);
+    Profile_set_growth_dir(result, best_growth);
 
     # Blend tier: highest weighted tier wins
     var best_tier = TIER_GREATER;
@@ -139,7 +139,7 @@ fn compose(weighted) {
         }
         tier += 1;
     }
-    store64(result + PROF_TIER, best_tier);
+    Profile_set_tier(result, best_tier);
 
     # Find dominant (highest weight) for name, element, polarity, soul, spirit
     var dom_idx = 0;
@@ -152,10 +152,10 @@ fn compose(weighted) {
         }
     }
     var dom = weighted_profile(vec_get(weighted, dom_idx));
-    store64(result + PROF_ELEMENT, prof_element(dom));
-    store64(result + PROF_POLARITY, prof_polarity(dom));
-    store64(result + PROF_SOUL, prof_soul(dom));
-    store64(result + PROF_SPIRIT_TEXT, prof_spirit(dom));
+    Profile_set_element(result, prof_element(dom));
+    Profile_set_polarity(result, prof_polarity(dom));
+    Profile_set_soul(result, prof_soul(dom));
+    Profile_set_spirit_text(result, prof_spirit(dom));
 
     # Build composite name: "A + B + C" (skip zero-weight entries).
     # Size the buffer exactly: each included name + " + " separator (3) + NUL.
@@ -186,7 +186,7 @@ fn compose(weighted) {
         }
     }
     store8(name_buf + name_pos, 0);
-    store64(result + PROF_NAME, name_buf);
+    Profile_set_name(result, name_buf);
 
     # Build composite tradition: "A + B + C" (deduped). Size to an upper bound
     # (every included entry + separator); dedup only shrinks the result.
@@ -226,9 +226,9 @@ fn compose(weighted) {
         }
     }
     store8(trad_buf + trad_pos, 0);
-    store64(result + PROF_TRADITION, trad_buf);
+    Profile_set_tradition(result, trad_buf);
 
-    store64(result + PROF_DESC, "Composite archetype");
+    Profile_set_desc(result, "Composite archetype");
 
     return Ok(result);
 }

@@ -40,6 +40,21 @@ fn main() {
     alloc_init();
 
     # ================================================================
+    # Struct layout: Profile_* (#derive) accessors map to ProfLayout
+    # offsets, and sizeof == 320. Guards the manual-offset/struct match.
+    # ================================================================
+    assert_eq(PROF_SIZE, 320, "profile size 320");
+    var lp = alloc(PROF_SIZE);
+    Profile_set_warmth(lp, 42);
+    assert_eq(load64(lp + PROF_WARMTH), 42, "Profile_set_warmth -> offset 24");
+    Profile_set_spirit(lp, 176);
+    assert_eq(load64(lp + PROF_SPIRIT), 176, "Profile_set_spirit -> offset 176 (emphasis)");
+    Profile_set_domain(lp, 7);
+    assert_eq(load64(lp + PROF_DOMAIN), 7, "Profile_set_domain -> offset 312");
+    store64(lp + PROF_TIER, 5);
+    assert_eq(Profile_tier(lp), 5, "Profile_tier reads offset 288");
+
+    # ================================================================
     # Total entity count
     # ================================================================
     var profiles = all_profiles();

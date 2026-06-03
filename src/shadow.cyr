@@ -63,19 +63,19 @@ fn shadow(p) {
     }
 
     # Inverted classifications
-    store64(s + PROF_BREATH, shadow_breath(prof_breath(p)));
-    store64(s + PROF_GROWTH_DIR, shadow_growth(prof_growth_dir(p)));
-    store64(s + PROF_POLARITY, shadow_polarity(prof_polarity(p)));
+    Profile_set_breath(s, shadow_breath(prof_breath(p)));
+    Profile_set_growth_dir(s, shadow_growth(prof_growth_dir(p)));
+    Profile_set_polarity(s, shadow_polarity(prof_polarity(p)));
     # Preserved classifications
-    store64(s + PROF_ELEMENT, prof_element(p));
-    store64(s + PROF_TIER, prof_tier(p));
+    Profile_set_element(s, prof_element(p));
+    Profile_set_tier(s, prof_tier(p));
 
     # Identity
-    store64(s + PROF_NAME, shadow_name(prof_name(p)));
-    store64(s + PROF_TRADITION, prof_tradition(p));
-    store64(s + PROF_DESC, "Shadow aspect — the inverted, disowned form");
-    store64(s + PROF_SOUL, "Your shadow: the half you suppress, made manifest. Not evil — unintegrated.");
-    store64(s + PROF_SPIRIT_TEXT, "What you reject in yourself waits here, asking to be owned.");
+    Profile_set_name(s, shadow_name(prof_name(p)));
+    Profile_set_tradition(s, prof_tradition(p));
+    Profile_set_desc(s, "Shadow aspect — the inverted, disowned form");
+    Profile_set_soul(s, "Your shadow: the half you suppress, made manifest. Not evil — unintegrated.");
+    Profile_set_spirit_text(s, "What you reject in yourself waits here, asking to be owned.");
     return s;
 }
 

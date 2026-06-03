@@ -13,9 +13,9 @@
 
 - [x] **`Result<T, E>` + `?`** — `lookup`/`lookup_in`/`compose`/`validate_profile` now return `Result` (`Ok(profile)` / `Err(AvataraError)`) instead of `0`-on-error / bare int codes; added `find_and_validate` demonstrating `?`. API-breaking for consumers (see CHANGELOG 2.5.0).
 
-### Unblocked — struct migration (cap raised in cyrius 6.0.47)
+### v2.5.3 — struct + `#derive(accessors)` migration ✅ (shipped)
 
-- [ ] **`struct` + `#derive(accessors)` for `ArchetypeProfile`** — replace the manual 320-byte blob (offset enums + `store64`/`load64` + ~40 hand-written `prof_*` accessors) with a native struct. **No longer blocked**: cyrius 6.0.47 raised the struct field cap 32 → 256 (proposal `2026-06-02-struct-field-cap-raise.md`, landed); a 40-field `#derive` struct now compiles. The named-field struct would make the 2.4.5 `PROF_SPIRIT` offset-collision class of bug a compile error. Scope: `sizeof == 320` + offset-assertion test, mechanical `store64(p + PROF_*) → Profile_set_*` migration (~10k sites across 24 modules), `prof_*` compat shims for consumers. Large but mechanical — its own release sequence.
+- [x] **`ArchetypeProfile` is now a native `#derive` `struct Profile`** (40 i64 fields = 320 bytes). ~10.4k `store64(p + PROF_*)` writes converted to `Profile_set_*` across 24 modules; `prof_*` getters delegate to the derived `Profile_*` (kept as consumer shims); offset enum retained for the loop-based code. Layout-assertion test added (`sizeof == 320` + per-field offset). Unblocked by the cyrius 6.0.47 cap raise (32 → 256). Behavior/perf-neutral; 60 tests pass.
 
 ### v2.5.1 — Shadow aspect ✅ (shipped)
 

@@ -236,6 +236,28 @@ enum ProfLayout {
     PROF_SIZE = 320;
 }
 
+# --- Profile struct (native view over the 320-byte layout) ---
+# Field order MUST match the ProfLayout offsets above (declaration order x 8,
+# all fields i64). #derive(accessors) generates Profile_<field>(p) /
+# Profile_set_<field>(p, v); the prof_* accessors delegate to these and
+# constructors set fields via the generated setters. Named fields make offset
+# collisions impossible — the 2.4.5 PROF_SPIRIT double-definition bug cannot
+# recur (the compiler rejects duplicate field names). The layout-assertion test
+# (tests/avatara.tcyr) pins each field to its ProfLayout offset and sizeof==320.
+# (The ProfLayout enum is retained: the loop-based code in compose/affinity/
+# error/profile_new iterates computed offset ranges, and the test references it.)
+#derive(accessors)
+struct Profile {
+    name; tradition; desc;
+    warmth; humor; empathy; patience; confidence; curiosity; creativity;
+    directness; formality; verbosity; courage; precision; skepticism;
+    autonomy; pedagogy;
+    mood; energy; stress; growth; spirit; reasoning; regulation;
+    relationship; flow; belief; intuition; salience; appraisal; eq;
+    breath; growth_dir; element; polarity; tier;
+    soul; spirit_text; domain;
+}
+
 # First TraitWeights offset and count for iteration
 enum TraitRange {
     TW_FIRST = 24;
@@ -258,9 +280,9 @@ enum EmphRange {
 #   element = MIXED, polarity = TRANSCENDENT, tier = GREATER
 fn profile_new() {
     var p = alloc(PROF_SIZE);
-    store64(p + PROF_NAME, 0);
-    store64(p + PROF_TRADITION, 0);
-    store64(p + PROF_DESC, 0);
+    Profile_set_name(p, 0);
+    Profile_set_tradition(p, 0);
+    Profile_set_desc(p, 0);
     # All 15 trait weights and 14 module emphases default to 0.5.
     # The two ranges are contiguous (TW_FIRST..ME_LAST, step 8).
     var off = TW_FIRST;
@@ -269,60 +291,60 @@ fn profile_new() {
         off += 8;
     }
     # Default enums
-    store64(p + PROF_BREATH, BREATH_LATE_EXHALE);
-    store64(p + PROF_GROWTH_DIR, GROWTH_DIFFERENTIATE);
-    store64(p + PROF_ELEMENT, ELEM_MIXED);
-    store64(p + PROF_POLARITY, POL_TRANSCENDENT);
-    store64(p + PROF_TIER, TIER_GREATER);
-    store64(p + PROF_SOUL, 0);
-    store64(p + PROF_SPIRIT_TEXT, 0);
-    store64(p + PROF_DOMAIN, DOMAIN_UNSPECIFIED);
+    Profile_set_breath(p, BREATH_LATE_EXHALE);
+    Profile_set_growth_dir(p, GROWTH_DIFFERENTIATE);
+    Profile_set_element(p, ELEM_MIXED);
+    Profile_set_polarity(p, POL_TRANSCENDENT);
+    Profile_set_tier(p, TIER_GREATER);
+    Profile_set_soul(p, 0);
+    Profile_set_spirit_text(p, 0);
+    Profile_set_domain(p, DOMAIN_UNSPECIFIED);
     return p;
 }
 
 # --- Accessors ---
 
-fn prof_name(p)         { return load64(p + PROF_NAME); }
-fn prof_tradition(p)    { return load64(p + PROF_TRADITION); }
-fn prof_desc(p)         { return load64(p + PROF_DESC); }
-fn prof_breath(p)       { return load64(p + PROF_BREATH); }
-fn prof_growth_dir(p)   { return load64(p + PROF_GROWTH_DIR); }
-fn prof_element(p)      { return load64(p + PROF_ELEMENT); }
-fn prof_polarity(p)     { return load64(p + PROF_POLARITY); }
-fn prof_tier(p)         { return load64(p + PROF_TIER); }
-fn prof_soul(p)         { return load64(p + PROF_SOUL); }
-fn prof_spirit(p)       { return load64(p + PROF_SPIRIT_TEXT); }
+fn prof_name(p)         { return Profile_name(p); }
+fn prof_tradition(p)    { return Profile_tradition(p); }
+fn prof_desc(p)         { return Profile_desc(p); }
+fn prof_breath(p)       { return Profile_breath(p); }
+fn prof_growth_dir(p)   { return Profile_growth_dir(p); }
+fn prof_element(p)      { return Profile_element(p); }
+fn prof_polarity(p)     { return Profile_polarity(p); }
+fn prof_tier(p)         { return Profile_tier(p); }
+fn prof_soul(p)         { return Profile_soul(p); }
+fn prof_spirit(p)       { return Profile_spirit_text(p); }
 
 # Trait accessors (return f64 bit pattern)
-fn prof_warmth(p)       { return load64(p + PROF_WARMTH); }
-fn prof_humor(p)        { return load64(p + PROF_HUMOR); }
-fn prof_empathy(p)      { return load64(p + PROF_EMPATHY); }
-fn prof_patience(p)     { return load64(p + PROF_PATIENCE); }
-fn prof_confidence(p)   { return load64(p + PROF_CONFIDENCE); }
-fn prof_curiosity(p)    { return load64(p + PROF_CURIOSITY); }
-fn prof_creativity(p)   { return load64(p + PROF_CREATIVITY); }
-fn prof_directness(p)   { return load64(p + PROF_DIRECTNESS); }
-fn prof_formality(p)    { return load64(p + PROF_FORMALITY); }
-fn prof_verbosity(p)    { return load64(p + PROF_VERBOSITY); }
-fn prof_courage(p)      { return load64(p + PROF_COURAGE); }
-fn prof_precision(p)    { return load64(p + PROF_PRECISION); }
-fn prof_skepticism(p)   { return load64(p + PROF_SKEPTICISM); }
-fn prof_autonomy(p)     { return load64(p + PROF_AUTONOMY); }
-fn prof_pedagogy(p)     { return load64(p + PROF_PEDAGOGY); }
+fn prof_warmth(p)       { return Profile_warmth(p); }
+fn prof_humor(p)        { return Profile_humor(p); }
+fn prof_empathy(p)      { return Profile_empathy(p); }
+fn prof_patience(p)     { return Profile_patience(p); }
+fn prof_confidence(p)   { return Profile_confidence(p); }
+fn prof_curiosity(p)    { return Profile_curiosity(p); }
+fn prof_creativity(p)   { return Profile_creativity(p); }
+fn prof_directness(p)   { return Profile_directness(p); }
+fn prof_formality(p)    { return Profile_formality(p); }
+fn prof_verbosity(p)    { return Profile_verbosity(p); }
+fn prof_courage(p)      { return Profile_courage(p); }
+fn prof_precision(p)    { return Profile_precision(p); }
+fn prof_skepticism(p)   { return Profile_skepticism(p); }
+fn prof_autonomy(p)     { return Profile_autonomy(p); }
+fn prof_pedagogy(p)     { return Profile_pedagogy(p); }
 
 # Emphasis accessors (return f64 bit pattern)
-fn prof_mood(p)         { return load64(p + PROF_MOOD); }
-fn prof_energy(p)       { return load64(p + PROF_ENERGY); }
-fn prof_stress(p)       { return load64(p + PROF_STRESS); }
-fn prof_growth_emph(p)  { return load64(p + PROF_GROWTH); }
-fn prof_spirit_emph(p)  { return load64(p + PROF_SPIRIT); }
-fn prof_domain(p)       { return load64(p + PROF_DOMAIN); }
-fn prof_reasoning(p)    { return load64(p + PROF_REASONING); }
-fn prof_regulation(p)   { return load64(p + PROF_REGULATION); }
-fn prof_relationship(p) { return load64(p + PROF_RELATIONSHIP); }
-fn prof_flow(p)         { return load64(p + PROF_FLOW); }
-fn prof_belief(p)       { return load64(p + PROF_BELIEF); }
-fn prof_intuition(p)    { return load64(p + PROF_INTUITION); }
-fn prof_salience(p)     { return load64(p + PROF_SALIENCE); }
-fn prof_appraisal(p)    { return load64(p + PROF_APPRAISAL); }
-fn prof_eq(p)           { return load64(p + PROF_EQ); }
+fn prof_mood(p)         { return Profile_mood(p); }
+fn prof_energy(p)       { return Profile_energy(p); }
+fn prof_stress(p)       { return Profile_stress(p); }
+fn prof_growth_emph(p)  { return Profile_growth(p); }
+fn prof_spirit_emph(p)  { return Profile_spirit(p); }
+fn prof_domain(p)       { return Profile_domain(p); }
+fn prof_reasoning(p)    { return Profile_reasoning(p); }
+fn prof_regulation(p)   { return Profile_regulation(p); }
+fn prof_relationship(p) { return Profile_relationship(p); }
+fn prof_flow(p)         { return Profile_flow(p); }
+fn prof_belief(p)       { return Profile_belief(p); }
+fn prof_intuition(p)    { return Profile_intuition(p); }
+fn prof_salience(p)     { return Profile_salience(p); }
+fn prof_appraisal(p)    { return Profile_appraisal(p); }
+fn prof_eq(p)           { return Profile_eq(p); }
