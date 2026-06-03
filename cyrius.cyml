@@ -4,7 +4,7 @@ version = "${file:VERSION}"
 description = "Avatara — divine archetype engine: theological and mythological personality mapping across traditions"
 license = "GPL-3.0-only"
 language = "cyrius"
-cyrius = "6.0.47"
+cyrius = "6.0.49"
 repository = "https://github.com/MacCracken/avatara"
 
 [build]
@@ -40,6 +40,7 @@ modules = [
     "src/incarnate.cyr",
     "src/finnish.cyr",
     "src/vodou.cyr",
+    "src/solar.cyr",
     "src/compose.cyr",
     "src/history.cyr",
     "src/registry.cyr",

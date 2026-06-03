@@ -1,63 +1,40 @@
 # Roadmap
 
-> avatara — Forward-looking milestones only. Completed work is in [CHANGELOG.md](../../CHANGELOG.md).
+> avatara — forward-looking milestones only. Shipped work lives in [CHANGELOG.md](../../CHANGELOG.md).
 
-## Planned
+## Shipped
 
-> Note: 2.4.0–2.4.3 were a toolchain + hardening + language-modernization line
-> (cyrius 3.10.0 → 6.0.40, NULL/overflow hardening, `+=`/`match` adoption,
-> stdlib `f64_le`/`f64_ge`). The feature items below were not part of that line
-> and have been re-bucketed accordingly.
+- **2.4.x** — toolchain + hardening + language modernization: cyrius 3.10.0 → 6.0.40, `cyrius.cyml` manifest, modern CI/release, dist bundle, bench-on-every-release; NULL/overflow hardening; `+=`/`match` adoption; stdlib `f64_le`/`f64_ge`; spirit-emphasis (`PROF_SPIRIT`) collision fix.
+- **2.5.x** — architecture: `Result<T, E>` error model (2.5.0); shadow aspect (2.5.1); `domain` field, all 366 archetypes assigned (2.5.2); native `#derive` `struct Profile` migration (2.5.3); security audit + CWE-690 `xalloc` hardening (2.5.4).
+- **2.6.0** — The Solar Year: 25th "Solar" tradition (intercalary archetypes), landing at **366 archetypes (365 + the leap quarter)**.
 
-### v2.5.0 — Result error model ✅ (shipped)
+All originally-roadmapped items are complete. The path below sequences the
+former demand-gated backlog into minors toward a 3.0.0 consolidation.
 
-- [x] **`Result<T, E>` + `?`** — `lookup`/`lookup_in`/`compose`/`validate_profile` now return `Result` (`Ok(profile)` / `Err(AvataraError)`) instead of `0`-on-error / bare int codes; added `find_and_validate` demonstrating `?`. API-breaking for consumers (see CHANGELOG 2.5.0).
+## Planned — minors to 3.0.0
 
-### v2.5.3 — struct + `#derive(accessors)` migration ✅ (shipped)
+Each is additive and non-breaking (new archetypes / traditions / an additive
+overlay layer). Historical-accuracy rule stands throughout: established
+scholarly correspondences only, no inventions.
 
-- [x] **`ArchetypeProfile` is now a native `#derive` `struct Profile`** (40 i64 fields = 320 bytes). ~10.4k `store64(p + PROF_*)` writes converted to `Profile_set_*` across 24 modules; `prof_*` getters delegate to the derived `Profile_*` (kept as consumer shims); offset enum retained for the loop-based code. Layout-assertion test added (`sizeof == 320` + per-field offset). Unblocked by the cyrius 6.0.47 cap raise (32 → 256). Behavior/perf-neutral; 60 tests pass.
+- **v2.7.0 — Canaanite & Etruscan** — two new micro-traditions (Canaanite/Ugaritic: El, Baal, Asherah, Anat; Etruscan: Tinia, Uni, Menrva, Voltumna). ~8 entities.
+- **v2.8.0 — Tarot Major Arcana** — 22 archetypes, mapped to the 22 Tree-of-Life paths (bridges the existing Kabbalah module).
+- **v2.9.0 — I Ching** — 64 hexagram archetypes.
+- **v2.10.0 — World-traditions completion** — Aboriginal Australian, Native American (specific nations), Inuit; plus the deferred Polynesian / Slavic / Celtic additions (Pele/Kanaloa aspects, Mokosh aspects/Rod, Ogma/Miach/Airmed).
+- **v2.11.0 — Archetype overlays** — the first cross-cutting layer *on top of* the archetype profiles: Enneagram (9 types) and the Jungian set (Hero, Shadow, Anima/Animus, Self, Trickster — composes with the existing `shadow()`). Additive new API; profiles unchanged.
 
-### v2.5.1 — Shadow aspect ✅ (shipped)
+## v3.0.0 — Consolidation (breaking)
 
-- [x] **`shadow(profile)`** + **`is_shadow_of(a, b)`** (`src/shadow.cyr`) — involutive inversion: traits/emphases → `1.0 − v`; breath mirrored across unity; growth (`DIFFERENTIATE↔INTEGRATE`, `PRESERVE↔TRANSFORM`) and polarity (`MASCULINE↔FEMININE`) inverted; element/tier preserved; name → `"Shadow of …"`. 10 tests; involution verified.
+The major bump banks the API cleanups deferred through 2.x:
 
-### Affinity graph — evaluated, declined
+- Migrate `cross_tradition_match` / `find_mapping` from `0`-on-not-found to `Option` (the absence-vs-error distinction noted in 2.5.0).
+- Drop the `prof_*` compat shims — consumers move to the derived `Profile_*` accessors (shims have eased the transition since 2.5.3).
+- Retire the public `ProfLayout` offset enum from the consumer surface (internal-only).
+- Formalize the overlay subsystem (2.11.0) as first-class API. The "archetype + overlay engine" identity for v3.
 
-- A pre-computed, **pointer-keyed** cross-tradition cache regressed the bench (`cross_tradition_match` 49µs → 945µs): the construct-then-query pattern passes fresh profile pointers that miss the cache, and the per-tradition build path is slower than the existing single-pass scan. Reverted; kept the original O(n) functions. **Revisit only with a non-pointer-keyed design** (index/name-based) that fits the access pattern and is bench-proven.
+## Declined
 
-### v2.5.2 — `domain` field ✅ (shipped)
-
-- [x] **`enum Domain`** (20 spheres; default `DOMAIN_UNSPECIFIED`) + `PROF_DOMAIN` field (offset 312, profile 312 → 320) + `prof_domain()` + `query_domain()` + `query_count_domain()`. Done on the manual offset layout (independent of the struct migration).
-- [x] Assigned a scholarly primary domain to **all 362 archetypes** across the 24 modules (0 unspecified). Distribution: transcendence 74, wisdom 38, war 32, order 29, heal 23, love/nature 22, death 21, … 6 domain tests added.
-
-### v2.6.0 — The Solar Year (362 → 365.25)
-
-The joke: avatara at 362 archetypes is *just shy* of the tropical year (365.25 days). Land at the solar revolution. Three whole archetypes + one "quarter" (the leap-day / intercalary correction) — historically grounded across three themes, pick any mix:
-
-- **A. Calendrical / solar correction (most literal fit)**
-  - Mayan **Wayeb** — 5 unlucky nameless days ending the Haab year (extend `maya.cyr`)
-  - Egyptian **Epagomenal Days** — 5 intercalary days (birthdays of Osiris, Horus, Set, Isis, Nephthys) added outside the 360-day civil year (extend `egyptian.cyr`)
-  - Zoroastrian **Gatha days** — 5 intercalary days between Spenta Mainyu and Ahunavaiti (extend `zoroastrian.cyr`)
-  - The "quarter" lands here naturally: any of the above represents the calendar's structural correction to the solar year
-
-- **B. Complete under-represented traditions**
-  - Polynesian: Pele-aspects, Kanaloa-aspects
-  - Slavic: Mokosh-aspects, Rod
-  - Celtic: Ogma, Miach, Airmed (Tuatha healers)
-
-- **C. New micro-tradition**
-  - Canaanite / Ugaritic: El, Baal, Asherah, Anat
-  - Etruscan: Tinia, Uni, Menrva, Voltumna
-
-Historical-accuracy rule stands: use established correspondences from scholarly sources, no inventions. Land on 365.25 cleanly or overshoot — either is fine.
-
-## Future (demand-gated)
-
-- Tarot major arcana mapping (22 archetypes ~ 22 Tree of Life paths)
-- I Ching hexagram personality mapping (64 archetypes)
-- Enneagram integration (9 types as archetype overlays)
-- Jungian archetype layer (Hero, Shadow, Anima/Animus, Self, Trickster)
-- Additional traditions: Aboriginal Australian, Native American (specific nations), Inuit
+- **Affinity-graph caching** — a pointer-keyed cross-tradition cache regressed the bench (`cross_tradition_match` 49µs → 945µs); the construct-then-query access pattern misses a pointer-keyed cache. Revisit only with a non-pointer-keyed (index/name-based), bench-proven design.
 
 ## Dependencies for Consumer Integration
 

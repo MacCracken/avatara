@@ -6,7 +6,7 @@ timer. Modeled on cyrius/vidya `doc-health.md`.
 
 Buckets: ✅ Fresh · 🟡 Stale (needs a pass) · 🔵 Dated artifact (frozen on purpose) · ❓ Open question
 
-_Last swept: 2026-06-03 (v2.5.4 — 2.5.x closeout + security audit)._
+_Last swept: 2026-06-03 (v2.6.0 — The Solar Year + roadmap cleanup)._
 
 ## Structural docs
 
@@ -23,7 +23,7 @@ _Last swept: 2026-06-03 (v2.5.4 — 2.5.x closeout + security audit)._
 
 | Doc | Last touched | Status | Notes |
 |-----|--------------|--------|-------|
-| `docs/development/roadmap.md` | 2026-06-03 | ✅ Fresh | 2.5.x shipped (Result 2.5.0, shadow 2.5.1, domain 2.5.2, struct migration 2.5.3); affinity-graph declined; v2.6.0 Solar Year next. |
+| `docs/development/roadmap.md` | 2026-06-03 | ✅ Fresh | Cleaned up at 2.6.0: shipped 2.4.x–2.6.0 collapsed to a summary; backlog sequenced as additive minors v2.7.0 (Canaanite/Etruscan), v2.8.0 (Tarot), v2.9.0 (I Ching), v2.10.0 (world-traditions), v2.11.0 (Enneagram/Jungian overlays) → v3.0.0 breaking consolidation. |
 | `docs/development/state.md` | — | ❓ Open | Not yet split out. Volatile state (cyrius pin, consumer status) lives in CLAUDE.md + the roadmap Dependencies table. Adopt vidya's `state.md` split if CLAUDE.md churn warrants. |
 
 ## Architecture

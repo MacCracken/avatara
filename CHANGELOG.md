@@ -8,10 +8,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Roadmap
-See [docs/development/roadmap.md](docs/development/roadmap.md). Shipped in 2.5.x: Result error model (2.5.0), shadow aspect (2.5.1), domain field (2.5.2). Next up:
-- **`struct` + `#derive(accessors)` for `ArchetypeProfile`** — now unblocked (cyrius 6.0.47 raised the struct field cap 32 → 256). Large mechanical migration (~10k `store64` → setters); its own release sequence.
-- **Affinity graph** — declined (pointer-keyed cache regressed the bench); revisit only with a non-pointer-keyed design.
-- **v2.6.0 — The Solar Year** (362 → 365.25 archetypes).
+See [docs/development/roadmap.md](docs/development/roadmap.md). All originally-roadmapped items are shipped (through v2.6.0). The former demand-gated backlog is now sequenced as additive minors toward a 3.0.0 consolidation: **v2.7.0** Canaanite & Etruscan, **v2.8.0** Tarot Major Arcana, **v2.9.0** I Ching, **v2.10.0** world-traditions completion, **v2.11.0** archetype overlays (Enneagram + Jungian); **v3.0.0** breaking consolidation (Option migration, drop `prof_*` shims, retire public `ProfLayout`, formalize overlays). Affinity-graph caching stays declined.
+
+## [2.6.0] — 2026-06-03
+
+The Solar Year — avatara lands at the tropical year: **362 → 366 archetypes** (365 + the leap quarter), **24 → 25 traditions**.
+
+### Added
+- **`src/solar.cyr` — the "Solar" tradition**: four intercalary archetypes of the days *outside* the year (the calendar's reconciliation with the sun), historically grounded, no inventions:
+  - **Wayeb** — the five nameless days ending the Maya Haab (liminal, unlucky; `DOMAIN_FATE`).
+  - **Nemontemi** — the five "hollow" days of the Aztec xiuhpohualli (`DOMAIN_FATE`).
+  - **Epagomenai** — the days "upon the year," the intercalary days on which the great gods were born outside the 360-day count (`DOMAIN_CREATION`).
+  - **Bissextus** — *the quarter*: the Julian leap-day correction (Sosigenes, 46 BCE), the day that does not count yet keeps the calendar true to the sun (`DOMAIN_ORDER`).
+- Registry, history-independent: `all_solar()` / `solar_count()`; folded into `all_profiles()`. "Solar" is a cross-cultural thematic grouping, so it has no single history (civilization/era) mapping — `mapping_count()` stays 27.
+- 5 solar tests (65 total), including `profile_count() == 366`.
+
+### Changed
+- **Cyrius pin 6.0.47 → 6.0.49** (latest).
+
+### Notes
+- Additive and non-breaking: existing 362 archetypes, traditions, and the 320-byte layout are unchanged; "Solar" is a new 25th tradition. Consumers including the bundle gain the four archetypes automatically.
+
+### Docs
+- Roadmap cleaned up: shipped work collapsed to a summary; the former demand-gated backlog sequenced as additive minors (v2.7.0–v2.11.0) toward a v3.0.0 breaking consolidation.
 
 ## [2.5.4] — 2026-06-03
 

@@ -29,6 +29,7 @@ include "src/sikh.cyr"
 include "src/incarnate.cyr"
 include "src/finnish.cyr"
 include "src/vodou.cyr"
+include "src/solar.cyr"
 include "src/compose.cyr"
 include "src/history.cyr"
 include "src/registry.cyr"
@@ -298,6 +299,17 @@ fn main() {
     assert_eq(prof_domain(result_unwrap(lookup("Ra"))), DOMAIN_SUN, "Ra -> SUN");
     # query_count_domain agrees with query_domain length
     assert_eq(query_count_domain(DOMAIN_WAR), vec_len(query_domain(DOMAIN_WAR)), "domain count == filter len");
+
+    # ================================================================
+    # Solar: the intercalary archetypes — landing at the solar year
+    # ================================================================
+    assert_eq(solar_count(), 4, "4 solar archetypes");
+    assert_eq(vec_len(by_tradition("Solar")), 4, "Solar tradition has 4");
+    var leap = lookup_in("Solar", "Bissextus");
+    assert_eq(is_ok(leap), 1, "Bissextus (the leap quarter) exists");
+    assert_eq(prof_domain(result_unwrap(leap)), DOMAIN_ORDER, "Bissextus -> ORDER");
+    # 365 + the quarter: total archetype count is 366
+    assert_eq(profile_count(), 366, "366 archetypes (365 + the leap quarter)");
 
     return assert_summary();
 }

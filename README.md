@@ -10,7 +10,7 @@
 
 Maps divine and mythological beings across world traditions to composable personality configurations. Not religion simulation — psychometric archetype mapping backed by trait math. Each entity produces an `ArchetypeProfile` (320 bytes) with trait weights, module emphasis, breath phase affinity, growth direction, and primary domain.
 
-**362 archetypes across 24 traditions.** Written in Cyrius, compiled by the Cyrius compiler 6.0.47+.
+**366 archetypes across 25 traditions** (365 + the leap quarter — avatara lands at the solar year). Written in Cyrius, compiled by the Cyrius compiler 6.0.49+.
 
 ## Traditions
 
@@ -38,6 +38,7 @@ Maps divine and mythological beings across world traditions to composable person
 | **Finnish** | `finnish` | 14 Kalevala figures & Sami spirits |
 | **Vodou** | `vodou` | 14 Lwa (Rada, Petwo, Ghede) |
 | **Incarnate** | `incarnate` | 56 incarnate masters across 6 sub-traditions |
+| **Solar** | `solar` | 4 intercalary archetypes (the days upon the year + the leap quarter) |
 
 ## Quick Start
 
@@ -104,7 +105,7 @@ var conflicts = detect_conflicts(kabbalah_gevurah(), kabbalah_chesed());
 ## Relationship to AGNOS
 
 ```
-avatara (this) — divine archetype profiles (362 entities, 24 traditions)
+avatara (this) — divine archetype profiles (366 entities, 25 traditions)
   |
   +-> bhava — emotion/personality engine (archetype overlay)
   +-> joshua — NPC divine archetypes for games
@@ -117,7 +118,7 @@ avatara produces plain f64/enum outputs. It does not depend on bhava — bhava c
 
 ## Build
 
-Requires the Cyrius compiler 6.0.47+ (pinned in `cyrius.cyml`).
+Requires the Cyrius compiler 6.0.49+ (pinned in `cyrius.cyml`).
 
 ```sh
 # Resolve dependencies
