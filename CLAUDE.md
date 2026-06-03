@@ -6,7 +6,7 @@
 
 - **Language**: Cyrius (ported from Rust in v2.0)
 - **License**: GPL-3.0-only
-- **Version**: SemVer 2.6.0
+- **Version**: SemVer 2.7.0
 - **Compiler**: cyrius >= 6.0.49 (pinned in `cyrius.cyml` `[package].cyrius`)
 
 ## Consumers
@@ -46,6 +46,8 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/finnish.cyr` — 14 Kalevala figures & Sami spirits
 - `src/vodou.cyr` — 14 Vodou Lwa (Rada, Petwo, Ghede)
 - `src/solar.cyr` — 4 intercalary archetypes: the days upon the year (Wayeb, Nemontemi, Epagomenai) + the leap quarter (Bissextus) — avatara's landing at the solar year (365 + ¼)
+- `src/canaanite.cyr` — 4 Canaanite/Ugaritic deities (El, Baal, Asherah, Anat)
+- `src/etruscan.cyr` — 4 Etruscan deities (Tinia, Uni, Menrva, Voltumna)
 - `src/incarnate.cyr` — 56 incarnate divine figures (Hindu, Buddhist, Mystic, Taoist, Indigenous, Sage)
 - `src/logging.cyr` — sakshi logging init
 - `tests/avatara.tcyr` — integration test suite

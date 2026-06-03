@@ -11,7 +11,7 @@
                     +----------------------------------------------+
                     |                                              |
                     |  +----------------------------------------+  |
-                    |  |        25 Tradition Modules (366)       |  |
+                    |  |        27 Tradition Modules (374)       |  |
                     |  |  kabbalah  angelic  hindu  olympian     |  |
                     |  |  norse  egyptian  buddhist  celtic      |  |
                     |  |  mesopotamian  shinto  aztec  maya      |  |
@@ -20,6 +20,7 @@
                     |  |  finnish  vodou                         |  |
                     |  |  incarnate (6 sub-traditions, 56)       |  |
                     |  |  solar (intercalary: 365 + the quarter) |  |
+                    |  |  canaanite  etruscan                    |  |
                     |  +-------------------+--------------------+  |
                     |                      |                       |
                     |  +-------------------v--------------------+  |

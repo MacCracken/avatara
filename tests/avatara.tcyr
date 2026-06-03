@@ -30,6 +30,8 @@ include "src/incarnate.cyr"
 include "src/finnish.cyr"
 include "src/vodou.cyr"
 include "src/solar.cyr"
+include "src/canaanite.cyr"
+include "src/etruscan.cyr"
 include "src/compose.cyr"
 include "src/history.cyr"
 include "src/registry.cyr"
@@ -308,8 +310,18 @@ fn main() {
     var leap = lookup_in("Solar", "Bissextus");
     assert_eq(is_ok(leap), 1, "Bissextus (the leap quarter) exists");
     assert_eq(prof_domain(result_unwrap(leap)), DOMAIN_ORDER, "Bissextus -> ORDER");
-    # 365 + the quarter: total archetype count is 366
-    assert_eq(profile_count(), 366, "366 archetypes (365 + the leap quarter)");
+    # 366 (solar year) + 8 (Canaanite + Etruscan) = 374
+    assert_eq(profile_count(), 374, "374 archetypes");
+
+    # ================================================================
+    # Canaanite & Etruscan (2.7.0 micro-traditions)
+    # ================================================================
+    assert_eq(canaanite_count(), 4, "4 Canaanite");
+    assert_eq(etruscan_count(), 4, "4 Etruscan");
+    assert_eq(prof_domain(result_unwrap(lookup("Baal"))), DOMAIN_SKY, "Baal -> SKY");
+    assert_eq(prof_domain(result_unwrap(lookup("Menrva"))), DOMAIN_WISDOM, "Menrva -> WISDOM");
+    assert_eq(vec_len(by_tradition("Canaanite")), 4, "Canaanite tradition has 4");
+    assert_eq(vec_len(by_tradition("Etruscan")), 4, "Etruscan tradition has 4");
 
     return assert_summary();
 }

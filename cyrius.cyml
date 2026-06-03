@@ -41,6 +41,8 @@ modules = [
     "src/finnish.cyr",
     "src/vodou.cyr",
     "src/solar.cyr",
+    "src/canaanite.cyr",
+    "src/etruscan.cyr",
     "src/compose.cyr",
     "src/history.cyr",
     "src/registry.cyr",

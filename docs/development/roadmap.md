@@ -17,7 +17,7 @@ Each is additive and non-breaking (new archetypes / traditions / an additive
 overlay layer). Historical-accuracy rule stands throughout: established
 scholarly correspondences only, no inventions.
 
-- **v2.7.0 — Canaanite & Etruscan** — two new micro-traditions (Canaanite/Ugaritic: El, Baal, Asherah, Anat; Etruscan: Tinia, Uni, Menrva, Voltumna). ~8 entities.
+- **v2.7.0 — Canaanite & Etruscan** ✅ shipped — two new micro-traditions (Canaanite/Ugaritic: El, Baal, Asherah, Anat; Etruscan: Tinia, Uni, Menrva, Voltumna). 8 entities → 374 archetypes, 27 traditions.
 - **v2.8.0 — Tarot Major Arcana** — 22 archetypes, mapped to the 22 Tree-of-Life paths (bridges the existing Kabbalah module).
 - **v2.9.0 — I Ching** — 64 hexagram archetypes.
 - **v2.10.0 — World-traditions completion** — Aboriginal Australian, Native American (specific nations), Inuit; plus the deferred Polynesian / Slavic / Celtic additions (Pele/Kanaloa aspects, Mokosh aspects/Rod, Ogma/Miach/Airmed).

@@ -8,7 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Roadmap
-See [docs/development/roadmap.md](docs/development/roadmap.md). All originally-roadmapped items are shipped (through v2.6.0). The former demand-gated backlog is now sequenced as additive minors toward a 3.0.0 consolidation: **v2.7.0** Canaanite & Etruscan, **v2.8.0** Tarot Major Arcana, **v2.9.0** I Ching, **v2.10.0** world-traditions completion, **v2.11.0** archetype overlays (Enneagram + Jungian); **v3.0.0** breaking consolidation (Option migration, drop `prof_*` shims, retire public `ProfLayout`, formalize overlays). Affinity-graph caching stays declined.
+See [docs/development/roadmap.md](docs/development/roadmap.md). All originally-roadmapped items are shipped (through v2.6.0). The former demand-gated backlog is sequenced as additive minors toward a 3.0.0 consolidation: ~~v2.7.0 Canaanite & Etruscan~~ (shipped), **v2.8.0** Tarot Major Arcana, **v2.9.0** I Ching, **v2.10.0** world-traditions completion, **v2.11.0** archetype overlays (Enneagram + Jungian); **v3.0.0** breaking consolidation (Option migration, drop `prof_*` shims, retire public `ProfLayout`, formalize overlays). Affinity-graph caching stays declined.
+
+## [2.7.0] — 2026-06-03
+
+Two new micro-traditions (first of the minors toward 3.0.0): **366 → 374 archetypes, 25 → 27 traditions**.
+
+### Added
+- **`src/canaanite.cyr` — Canaanite/Ugaritic** (4): **El** (kindly father/creator, `CREATION`), **Baal** (storm-king/rain, `SKY`), **Asherah** (Lady of the Sea/mother of the gods, `NATURE`), **Anat** (maiden-warrior, `WAR`). Grounded in the Ugaritic Baal Cycle.
+- **`src/etruscan.cyr` — Etruscan** (4): **Tinia** (sky-king/graded thunderbolt, `SKY`), **Uni** (sovereign queen, `ORDER`), **Menrva** (wisdom/craft/war, `WISDOM`), **Voltumna** (god of the league, chthonic/earth, `NATURE`). Grounded in the Etrusca Disciplina + the Piacenza Liver.
+- Registry aggregation (`all_canaanite` / `all_etruscan` + counts); both wired into all build roots and the dist bundle. 8 new tests (71 total); 3 new benchmarks (solar/canaanite/etruscan, 49 total).
+
+### Notes
+- Additive, non-breaking: existing archetypes, traditions, and the 320-byte layout unchanged; all 8 new archetypes domain-assigned (0 unspecified). No history (civilization/era) mappings added — `mapping_count()` stays 27.
 
 ## [2.6.0] — 2026-06-03
 
