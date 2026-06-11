@@ -53,4 +53,4 @@ modules = [
 ]
 
 [deps]
-stdlib = ["syscalls", "string", "alloc", "str", "fmt", "vec", "math", "hashmap", "io", "args", "assert", "bench", "json", "tagged", "result", "fnptr", "sakshi"]
+stdlib = ["syscalls", "string", "alloc", "str", "fmt", "vec", "math", "hashmap", "io", "args", "assert", "bench", "tagged", "result", "fnptr", "sakshi"]

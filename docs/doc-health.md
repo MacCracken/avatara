@@ -20,7 +20,7 @@ cyrius pin **6.1.34**; 71 integration tests; 49 benchmarks; `ArchetypeProfile`
 | `CHANGELOG.md` | 2026-06-11 | ✅ Fresh | Entries through 2.7.1; `[Unreleased]` points at the roadmap (minors → 3.0.0). |
 | `CLAUDE.md` | 2026-06-11 | ✅ Fresh | Version 2.7.1, compiler 6.1.34; main.cyr=smoke / tcyr=71 / bcyr=49 corrected; all 26 modules + struct/Result/domain/shadow/xalloc API. |
 | `CONTRIBUTING.md` / `SECURITY.md` / `CODE_OF_CONDUCT.md` | — | ✅ Fresh | No version/count/API content. |
-| `cyrius.cyml` | 2026-06-11 | ✅ Fresh | Pin 6.1.34; `result` in stdlib deps; `[lib]` distlib section incl. solar/canaanite/etruscan/shadow. |
+| `cyrius.cyml` | 2026-06-11 | ✅ Fresh | Pin 6.1.34; `result` in stdlib deps, `json` dropped (removed from stdlib in 6.1.x, unused); `[lib]` distlib section incl. solar/canaanite/etruscan/shadow. |
 
 ## Development
 
