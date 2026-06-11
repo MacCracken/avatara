@@ -6,21 +6,21 @@ timer. Modeled on cyrius/vidya `doc-health.md`.
 
 Buckets: ✅ Fresh · 🟡 Stale (needs a pass) · 🔵 Dated artifact (frozen on purpose) · ❓ Open question
 
-_Last swept: 2026-06-03 (v2.7.0 — Canaanite & Etruscan + full doc staleness sweep)._
+_Last swept: 2026-06-11 (v2.7.1 — toolchain pin bump 6.0.49 → 6.1.34)._
 
-Ground truth at this sweep: **374 archetypes, 27 traditions**; version **2.7.0**;
-cyrius pin **6.0.49**; 71 integration tests; 49 benchmarks; `ArchetypeProfile`
+Ground truth at this sweep: **374 archetypes, 27 traditions**; version **2.7.1**;
+cyrius pin **6.1.34**; 71 integration tests; 49 benchmarks; `ArchetypeProfile`
 = 320-byte `#derive` struct.
 
 ## Structural docs
 
 | Doc | Last touched | Status | Notes |
 |-----|--------------|--------|-------|
-| `README.md` | 2026-06-03 | ✅ Fresh | 374/27, compiler 6.0.49; tradition table lists all 26 modules; Quick Start examples updated to the `Result` API (lookup/compose unwrap). |
-| `CHANGELOG.md` | 2026-06-03 | ✅ Fresh | Entries through 2.7.0; `[Unreleased]` points at the roadmap (minors → 3.0.0). |
-| `CLAUDE.md` | 2026-06-03 | ✅ Fresh | Version 2.7.0, compiler 6.0.49; main.cyr=smoke / tcyr=71 / bcyr=49 corrected; all 26 modules + struct/Result/domain/shadow/xalloc API. |
+| `README.md` | 2026-06-11 | ✅ Fresh | 374/27, compiler 6.1.34; tradition table lists all 26 modules; Quick Start examples updated to the `Result` API (lookup/compose unwrap). |
+| `CHANGELOG.md` | 2026-06-11 | ✅ Fresh | Entries through 2.7.1; `[Unreleased]` points at the roadmap (minors → 3.0.0). |
+| `CLAUDE.md` | 2026-06-11 | ✅ Fresh | Version 2.7.1, compiler 6.1.34; main.cyr=smoke / tcyr=71 / bcyr=49 corrected; all 26 modules + struct/Result/domain/shadow/xalloc API. |
 | `CONTRIBUTING.md` / `SECURITY.md` / `CODE_OF_CONDUCT.md` | — | ✅ Fresh | No version/count/API content. |
-| `cyrius.cyml` | 2026-06-03 | ✅ Fresh | Pin 6.0.49; `result` in stdlib deps; `[lib]` distlib section incl. solar/canaanite/etruscan/shadow. |
+| `cyrius.cyml` | 2026-06-11 | ✅ Fresh | Pin 6.1.34; `result` in stdlib deps; `[lib]` distlib section incl. solar/canaanite/etruscan/shadow. |
 
 ## Development
 
@@ -40,7 +40,7 @@ cyrius pin **6.0.49**; 71 integration tests; 49 benchmarks; `ArchetypeProfile`
 
 | Doc | Last touched | Status | Notes |
 |-----|--------------|--------|-------|
-| `bench-history.csv` | 2026-06-03 | ✅ Fresh | Rows for 2.4.0–2.7.0 (49 benches/release). Recorded every release via `scripts/bench-history.sh`; bench is a hard release gate (build + run-to-completion + exit 0). |
+| `bench-history.csv` | 2026-06-11 | ✅ Fresh | Rows for 2.4.0–2.7.1 (49 benches/release). Recorded every release via `scripts/bench-history.sh`; bench is a hard release gate (build + run-to-completion + exit 0). Known 6.1.34 codegen delta: `kabbalah/single_profile` +46% (see 2.7.1 CHANGELOG). |
 | `benchmarks-rust-v-cyrius.md` | 2026-04-12 | 🔵 Dated artifact | Frozen Rust v1.1.0 vs Cyrius v2.0.1 comparison; references cc3 3.7.0 — intentionally historical. |
 
 ## Forward commitments

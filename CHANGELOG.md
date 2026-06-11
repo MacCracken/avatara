@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.7.1] — 2026-06-11
+
+Toolchain maintenance release — no source changes.
+
+### Changed
+- **Toolchain pin bumped 6.0.49 → 6.1.34** (`cyrius.cyml` `[package].cyrius`); vendored `lib/` stdlib re-synced to the pinned snapshot via `cyrius lib sync`. Full build, smoke test, and integration suite (71 assertions) pass under 6.1.34.
+
+### Benchmarks
+- 49/49 recorded for 2.7.1 (see `bench-history.csv`). One reproducible toolchain-codegen slowdown: `kabbalah/single_profile` 293ns → ~427ns (+46%) under 6.1.34; stable across re-runs, all other deltas within run-to-run noise (`compose/three_traditions` and collection benches return to baseline on re-run). No source changes — attributable to the compiler bump.
+
 ### Roadmap
 See [docs/development/roadmap.md](docs/development/roadmap.md). All originally-roadmapped items are shipped (through v2.6.0). The former demand-gated backlog is sequenced as additive minors toward a 3.0.0 consolidation: ~~v2.7.0 Canaanite & Etruscan~~ (shipped), **v2.8.0** Tarot Major Arcana, **v2.9.0** I Ching, **v2.10.0** world-traditions completion, **v2.11.0** archetype overlays (Enneagram + Jungian); **v3.0.0** breaking consolidation (Option migration, drop `prof_*` shims, retire public `ProfLayout`, formalize overlays). Affinity-graph caching stays declined.
 
