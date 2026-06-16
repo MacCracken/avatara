@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.7.2] — 2026-06-16
+
+Toolchain maintenance release — no source changes.
+
+### Changed
+- **Toolchain pin bumped 6.1.34 → 6.2.11** (`cyrius.cyml` `[package].cyrius`); vendored `lib/` stdlib re-synced to the pinned snapshot via `cyrius lib sync` (88 → 97 `.cyr` files — the 6.2.x snapshot adds `async_agnos`, `thread_agnos`, `regression_agnos`, and the split `tls_native_*` modules; nothing avatara depends on was dropped). `cyrius deps` resolves clean and all 16 `[deps] stdlib` entries remain present in the new snapshot. Full build, smoke test, and integration suite (71 assertions) pass under 6.2.11.
+
+### Benchmarks
+- 49/49 recorded for 2.7.2 (see `bench-history.csv`). No meaningful regressions: the collection (`all_*`) benches sit in the sub-25 ns range where the integer-ns averages swing ±2–3 ns run-to-run (re-runs settle back to the 2.7.1 baseline). The one persistent signal is `kabbalah/single_profile` (~446 ns, vs 428 ns in 2.7.1), continuing the toolchain-codegen creep first noted under 6.1.34. No source changes — attributable to the compiler bump.
+
 ## [2.7.1] — 2026-06-11
 
 Toolchain maintenance release — no source changes.
