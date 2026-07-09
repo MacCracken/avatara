@@ -17,6 +17,7 @@ output = "build/avatara"
 # matches src/lib.cyr's include order; lib.cyr itself is listed last.
 modules = [
     "src/types.cyr",
+    "src/aspect.cyr",
     "src/error.cyr",
     "src/kabbalah.cyr",
     "src/angelic.cyr",

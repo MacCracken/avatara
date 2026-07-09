@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.8.0] — 2026-07-09
+
+**Role aspects** — derive an archetype's roles from its personality vector. An archetype is a personality
+(15 traits + 14 emphases + soul/spirit + a domain) with no single "role"; a role is a facet of that
+personality. New `src/aspect.cyr` derives a small, universal set of aspects from the trait weights, each
+mapping one salient trait to a role label, so every one of the 374 archetypes has selectable roles with no
+per-archetype authoring. Consumers (thoth's `/role`) enumerate/select an aspect, or override the role with
+their own label. Purely additive — no existing API or profile behavior changes.
+
+### Added
+- **`src/aspect.cyr`** — trait-derived role aspects:
+  - `aspect_count()` (8), `aspect_name(i)` / `aspect_role(i)` (e.g. `measurer` → "the Measurer",
+    `mediator` → "the Mediator"), `aspect_trait_offset(i)` (the `PROF_*` trait each aspect derives from),
+    `aspect_index_by_name(name)` (exact lookup, −1 if none).
+  - `profile_aspect_weight(p, i)` (the archetype's f64 weight for aspect `i`'s trait) and
+    `profile_dominant_aspect(p)` (the highest-weighted aspect — an archetype's default role; ties → lowest
+    index; null-safe).
+  - Included after `types.cyr` in `src/main.cyr` / `src/lib.cyr` and the `[lib]` distlib manifest, so the
+    consumer bundle (`dist/avatara.cyr`) carries it.
+- **Tests**: aspect enumeration, name/role/offset mapping, `index_by_name` (hit / miss / null), and
+  `profile_dominant_aspect` following the strongest mapped trait (82 assertions total).
+
 ## [2.7.2] — 2026-06-16
 
 Toolchain maintenance release — no source changes.
