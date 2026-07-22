@@ -13,7 +13,8 @@
 - **2.10.0** — I Ching (`src/iching.cyr`): the 64 hexagrams of the King Wen sequence, each carrying its six lines and its two constituent trigrams (bagua), with element derived from the upper trigram and polarity from the yang-line balance → **460 archetypes, 29 traditions**. All 64 trigram pairings occur exactly once — a bijection the suite pins.
 - **2.10.1** — performance: `similar_to()` switched from sort-then-trim to bounded top-k selection, removing an O(N²) insertion sort over the whole registry (`affinity/similar_to_5` 809 → 73 µs, −91%). Identical results and ordering; the cost no longer grows with N².
 - **2.11.0** — World-traditions completion, organised as **named nations** rather than pan-continental buckets: Inuit (10), Lakota (10), Haudenosaunee (6), Anishinaabe (6), and a deliberately scoped Aboriginal Australian set (5, each attributed to its people); plus the outstanding Celtic healers Miach and Airmed → **499 archetypes, 34 traditions**. White Buffalo Calf Woman and Deganawidah remain in the existing "Indigenous" incarnate tradition and are not duplicated. Restricted Dreaming material is excluded by design — see the `aboriginal.cyr` header and the 2.11.x arc below.
-- **Toolchain maintenance** — 2.7.2 (pin 6.1.34 → 6.2.11) and 2.8.1 (6.2.11 → 6.4.69) as standalone maintenance releases; 2.10.0 also carried the pin 6.4.69 → 6.4.70. Vendored stdlib re-resolved to the pinned snapshot each time, benches recorded.
+- **2.12.0** — World traditions, part 2: the three items the 2.11.0 review deferred. The pan-ethnic `"Indigenous"` label is retired — White Buffalo Calf Woman, the Peacemaker, Quanah Parker and Wovoka now carry Lakota, Haudenosaunee, Comanche and Northern Paiute (which also fixed an orphaned history mapping that had filed all four under the Tonga Empire). The seven Grandfather Teachings (Nizhwaaswi Gagiikwewin) join `anishinaabe.cyr`, restoring the balance lost when the wiindigoo was dropped. Separators normalised to the em dash codebase-wide → **504 archetypes, 35 traditions**.
+- **Toolchain maintenance** — 2.7.2 (pin 6.1.34 → 6.2.11) and 2.8.1 (6.2.11 → 6.4.69) as standalone maintenance releases; 2.10.0 carried 6.4.69 → 6.4.70 and 2.11.0 carried 6.4.70 → 6.4.71. Vendored stdlib re-resolved to the pinned snapshot each time, benches recorded.
 
 The minors below sequence the former demand-gated backlog toward a 3.0.0 consolidation. (Role aspects took the original 2.8.0 slot, so the Tarot → overlays sequence shifted up one minor; Tarot shipped as 2.9.0 and I Ching as 2.10.0.)
 
@@ -23,7 +24,7 @@ Each is additive and non-breaking (new archetypes / traditions / an additive
 overlay layer). Historical-accuracy rule stands throughout: established
 scholarly correspondences only, no inventions.
 
-- **v2.12.0 — Archetype overlays** — the first cross-cutting layer *on top of* the archetype profiles: Enneagram (9 types) and the Jungian set (Hero, Shadow, Anima/Animus, Self, Trickster — composes with the existing `shadow()`). Additive new API; profiles unchanged.
+- **v2.13.0 — Archetype overlays** — the first cross-cutting layer *on top of* the archetype profiles: Enneagram (9 types) and the Jungian set (Hero, Shadow, Anima/Animus, Self, Trickster — composes with the existing `shadow()`). Additive new API; profiles unchanged.
 
 ## Backlog — additive, unscheduled
 
@@ -46,26 +47,12 @@ restricted Dreaming material excluded. Two follow-ups are queued behind that, in
 
 ### Carried over from the 2.11.0 review
 
-The 2.11.0 cultural-accuracy review raised three items that were deliberately not
-fixed in passing, because each is a separate change rather than a correction:
+All three items shipped in 2.12.0: the `"Indigenous"` re-attribution, the Seven Grandfather
+Teachings, and the separator normalisation. One follow-on remains:
 
-- **Re-attribute the incarnate "Indigenous" bucket to named nations.** `incarnate.cyr`
-  carries White Buffalo Calf Woman, Deganawidah, Quanah Parker and Wovoka — four figures
-  from four different nations — under one pan-ethnic `"Indigenous"` tradition label. That
-  predates 2.11.0 and is inconsistent with the named-nation approach the new modules use;
-  `lakota.cyr` and `haudenosaunee.cyr` both have to defer to it awkwardly as a result.
-  Re-attributing them (Lakota, Haudenosaunee, Comanche, Northern Paiute) also needs
-  history mappings for the two new nations and retires the orphaned `Incarnate Indigenous`
-  mapping. Note that Deganawidah is carried under the personal name; in many communities
-  the Peacemaker's name is reserved for ceremonial use, so the title is preferable.
-- **Anishinaabe selection balance.** With the wiindigoo removed the module carries the
-  trickster and no counterweight from the material Anishinaabe communities most actively
-  publish. The Nizhwaaswi Gagiikwewin (Seven Grandfather Teachings — wisdom, love, respect,
-  bravery, honesty, humility, truth) are the obvious addition, as seven entries or one
-  composite.
-- **Separator convention.** `inuit.cyr` now uses an em dash in consumer-facing strings
-  while the other four world-tradition modules use ` -- `; the wider codebase is split
-  between the two. Worth settling one way and normalising.
+- **`incarnate_indigenous_*` function names are now stale.** The four figures no longer carry
+  an "Indigenous" tradition, but their constructor names and the `all_incarnate_indigenous()`
+  collection still say so. Renaming them is a breaking API change and belongs in v3.0.0.
 
 ### Other additive options not yet assigned to a version:
 
@@ -78,7 +65,7 @@ The major bump banks the API cleanups deferred through 2.x:
 - Migrate `cross_tradition_match` / `find_mapping` from `0`-on-not-found to `Option` (the absence-vs-error distinction noted in 2.5.0).
 - Drop the `prof_*` compat shims — consumers move to the derived `Profile_*` accessors (shims have eased the transition since 2.5.3).
 - Retire the public `ProfLayout` offset enum from the consumer surface (internal-only).
-- Formalize the overlay subsystem (2.12.0) as first-class API. The "archetype + overlay engine" identity for v3.
+- Formalize the overlay subsystem (2.13.0) as first-class API. The "archetype + overlay engine" identity for v3.
 
 ## Declined
 

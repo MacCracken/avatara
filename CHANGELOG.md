@@ -7,6 +7,55 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.12.0] — 2026-07-22
+
+**World traditions, part 2** — the three items the 2.11.0 cultural-accuracy review deferred rather than
+fixed in passing: **497 → 504 archetypes, 34 → 35 traditions**.
+
+### Changed
+- **The pan-ethnic `"Indigenous"` tradition label is retired.** `incarnate.cyr` carried four figures from
+  four different nations under one bucket, which contradicted the named-nation approach 2.11.0 adopted and
+  forced both `lakota.cyr` and `haudenosaunee.cyr` into awkward deferrals. They now carry their own nations:
+  - White Buffalo Calf Woman → **Lakota** (that tradition 10 → 11)
+  - Deganawidah → **Haudenosaunee** (6 → 7), and renamed to **"The Peacemaker"**: in many communities the
+    personal name is reserved for ceremonial use, and the title is what the review recommended.
+  - Quanah Parker → **Comanche** (new tradition)
+  - Wovoka → **Northern Paiute** (new tradition)
+- **This also fixed a live bug.** The `"Incarnate Indigenous"` history mapping never matched any profile —
+  the profiles said `"Indigenous"` — so `context_for_tradition("Indigenous")` silently returned 0. Worse,
+  that orphaned mapping filed four North American figures under the **Tonga Empire and Hawaiian Kingdom**.
+  It is replaced by proper Comanche (Great Plains, 1700→living) and Northern Paiute (Great Basin) mappings;
+  `mapping_count()` 34 → 35.
+- **Separators normalised to the em dash** across every consumer-facing `desc`/`soul`/`spirit_text` string.
+  The codebase was split 1129 em dash to 133 `" -- "`; the outliers were `celtic.cyr`, `maya.cyr` and the
+  four world-tradition modules added in 2.11.0. Now 1274 to 0.
+
+### Added
+- **The seven Grandfather Teachings (Nizhwaaswi Gagiikwewin)** join `src/anishinaabe.cyr` (5 → 12),
+  restoring the selection balance lost when the wiindigoo was removed in 2.11.0 — the module carried the
+  trickster and no counterweight from the material Anishinaabe communities most actively publish.
+  Nibwaakaawin (wisdom/beaver), Zaagiidiwin (love/eagle), Minaadendamowin (respect/buffalo),
+  Aakodeewin (bravery/bear), Gwayakwaadiziwin (honesty/sabe), Dabaadendiziwin (humility/wolf) and
+  Debwewin (truth/turtle). They are carried by their Ojibwe names, which is how they are taught, and are
+  modelled as **principles rather than beings**: `TIER_COSMIC` and `POL_ANDROGYNOUS` throughout, pinned by
+  test. These are among the most actively community-published Anishinaabe material — taught in schools,
+  tribal colleges, health services and child-welfare practice — which is why they clear the bar the
+  wiindigoo did not.
+- 11 new tests (199 → 210), including negative assertions that the retired label is gone and that the
+  personal name "Deganawidah" is no longer a lookup key.
+
+### Notes
+- Non-breaking for archetype data and the 320-byte layout, but **tradition strings changed** for four
+  profiles; a consumer querying `by_tradition("Indigenous")` now gets an empty result by design.
+- The `incarnate_indigenous_*` constructor names and `all_incarnate_indigenous()` are now stale labels for
+  figures that no longer carry that tradition. Renaming them is a breaking API change and is queued for
+  v3.0.0; the module grouping itself remains a reasonable organisational unit.
+- Archetype overlays moved from v2.12.0 to **v2.13.0** to make room for this.
+
+### Benchmarks
+- 57/57 recorded for 2.12.0. No regressions; the Anishinaabe collection bench simply reflects its larger
+  set (`anishinaabe/all_12`).
+
 ## [2.11.0] — 2026-07-22
 
 **World traditions** — organised as **named nations** rather than pan-continental buckets:

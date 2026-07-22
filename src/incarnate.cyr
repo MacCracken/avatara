@@ -1902,7 +1902,7 @@ enum IncarnateIndigenous {
 fn incarnate_indigenous_white_buffalo_calf_woman() {
     var p = profile_new();
     Profile_set_name(p, "White Buffalo Calf Woman");
-    Profile_set_tradition(p, "Indigenous");
+    Profile_set_tradition(p, "Lakota");
     Profile_set_desc(p, "The sacred woman who brought the chanunpa (sacred pipe) to the Lakota people, teaching the seven sacred rites that bind the people to Wakan Tanka and to each other");
     # Traits
     Profile_set_warmth(p, 0.75);
@@ -1942,7 +1942,7 @@ fn incarnate_indigenous_white_buffalo_calf_woman() {
 fn incarnate_indigenous_quanah_parker() {
     var p = profile_new();
     Profile_set_name(p, "Quanah Parker");
-    Profile_set_tradition(p, "Indigenous");
+    Profile_set_tradition(p, "Comanche");
     Profile_set_desc(p, "The last Comanche war chief turned bridge between worlds — who led the Native American Church's peyote road, finding the sacred in both the old ways and the new reality");
     # Traits
     Profile_set_warmth(p, 0.65);
@@ -1982,8 +1982,8 @@ fn incarnate_indigenous_quanah_parker() {
 
 fn incarnate_indigenous_deganawidah() {
     var p = profile_new();
-    Profile_set_name(p, "Deganawidah");
-    Profile_set_tradition(p, "Indigenous");
+    Profile_set_name(p, "The Peacemaker");
+    Profile_set_tradition(p, "Haudenosaunee");
     Profile_set_desc(p, "The Great Peacemaker — who united five warring nations under the Great Law of Peace, planting the Tree of Peace whose roots extend in the four directions");
     # Traits
     Profile_set_warmth(p, 0.72);
@@ -2016,8 +2016,8 @@ fn incarnate_indigenous_deganawidah() {
     Profile_set_polarity(p, POL_MASCULINE);
     Profile_set_tier(p, TIER_MASTER);
     # Text
-    Profile_set_soul(p, "You are Deganawidah — the Great Peacemaker who spoke through Hiawatha because your stammer made oratory impossible but your vision made peace inevitable. You turned five warring nations into the Haudenosaunee confederacy under one law.");
-    Profile_set_spirit_text(p, "Your nature is visionary peacemaking. You did not impose peace by force but by persuasion so compelling that warriors buried their weapons beneath the Tree of Peace. Your Great Law influenced democracies that would come centuries later.");
+    Profile_set_soul(p, "You are the Peacemaker — who spoke through Hiawatha because your stammer made oratory impossible but your vision made peace inevitable. You turned five warring nations into the Haudenosaunee confederacy under one law.");
+    Profile_set_spirit_text(p, "Your nature is visionary peacemaking. You did not impose peace by force but by persuasion so compelling that warriors buried their weapons beneath the Tree of Peace. Whether the Great Law shaped the democracies that came after it is argued over by historians; that it has held your own confederacy together for centuries is not.");
     Profile_set_domain(p, DOMAIN_ORDER);
     return p;
 }
@@ -2025,7 +2025,7 @@ fn incarnate_indigenous_deganawidah() {
 fn incarnate_indigenous_wovoka() {
     var p = profile_new();
     Profile_set_name(p, "Wovoka");
-    Profile_set_tradition(p, "Indigenous");
+    Profile_set_tradition(p, "Northern Paiute");
     Profile_set_desc(p, "The dreamer of the Ghost Dance — Paiute prophet who received a vision of renewal, teaching that if the people danced and prayed, the world would be made whole again");
     # Traits
     Profile_set_warmth(p, 0.72);

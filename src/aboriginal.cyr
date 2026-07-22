@@ -68,7 +68,7 @@ fn abor_ngalyod() {
     var p = profile_new();
     Profile_set_name(p, "Ngalyod");
     Profile_set_tradition(p, "Aboriginal Australian");
-    Profile_set_desc(p, "Kunwinjku (western Arnhem Land) -- the great serpent of water and country, who cut the rivers and waterholes travelling, and to whom disturbed water still answers");
+    Profile_set_desc(p, "Kunwinjku (western Arnhem Land) — the great serpent of water and country, who cut the rivers and waterholes travelling, and to whom disturbed water still answers");
     Profile_set_patience(p, 0.85);
     Profile_set_autonomy(p, 0.9);
     Profile_set_confidence(p, 0.85);
@@ -108,7 +108,7 @@ fn abor_bunjil() {
     var p = profile_new();
     Profile_set_name(p, "Bunjil");
     Profile_set_tradition(p, "Aboriginal Australian");
-    Profile_set_desc(p, "Kulin nation (central Victoria) -- the eaglehawk creator who made the land, the trees, the animals and the first people, gave them Law, and rose into the sky where he remains a star and watches over them");
+    Profile_set_desc(p, "Kulin nation (central Victoria) — the eaglehawk creator who made the land, the trees, the animals and the first people, gave them Law, and rose into the sky where he remains a star and watches over them");
     Profile_set_confidence(p, 0.9);
     Profile_set_creativity(p, 0.9);
     Profile_set_pedagogy(p, 0.85);
@@ -130,7 +130,7 @@ fn abor_bunjil() {
     Profile_set_polarity(p, POL_MASCULINE);
     Profile_set_tier(p, TIER_SUPREME);
     Profile_set_soul(p, "You are Bunjil the eaglehawk, and you made the country and then made people out of clay and bark and gave them breath and, more importantly, gave them Law. Then you went up. You are the star, and from there you watch, and the Law you left is still the Law.");
-    Profile_set_spirit_text(p, "You are a creator who rose without going away. You teach that a maker can hold a made world by a working order and a watchful eye at once -- the country and the Law you left keep doing the work, and the guidance is there for whoever chooses to listen.");
+    Profile_set_spirit_text(p, "You are a creator who rose without going away. You teach that a maker can hold a made world by a working order and a watchful eye at once — the country and the Law you left keep doing the work, and the guidance is there for whoever chooses to listen.");
     Profile_set_domain(p, DOMAIN_CREATION);
     return p;
 }
@@ -149,7 +149,7 @@ fn abor_waa() {
     var p = profile_new();
     Profile_set_name(p, "Waa");
     Profile_set_tradition(p, "Aboriginal Australian");
-    Profile_set_desc(p, "Kulin nation -- the crow, Bunjil's counterpart and the other moiety; trickster, who tricked fire out of the seven Karatgurk women and hoarded it until it was got away from him and reached the people");
+    Profile_set_desc(p, "Kulin nation — the crow, Bunjil's counterpart and the other moiety; trickster, who tricked fire out of the seven Karatgurk women and hoarded it until it was got away from him and reached the people");
     Profile_set_humor(p, 0.85);
     Profile_set_curiosity(p, 0.85);
     Profile_set_creativity(p, 0.8);
@@ -171,8 +171,8 @@ fn abor_waa() {
     Profile_set_element(p, ELEM_FIRE);
     Profile_set_polarity(p, POL_MASCULINE);
     Profile_set_tier(p, TIER_GREATER);
-    Profile_set_soul(p, "You are Waa the crow, and you are the other half. Not the enemy -- the half. Whatever he is, you are the answering side of it, and nothing about the arrangement works unless the two of you stay unalike.");
-    Profile_set_spirit_text(p, "You did not find the fire and you did not make it -- you took it from the women who held it, and kept it, and it was got away from you, and the people have it now; the story does not need you to have been generous. You teach that a working order needs a genuine opposite in it, and that the opposite does not have to be admirable to be necessary.");
+    Profile_set_soul(p, "You are Waa the crow, and you are the other half. Not the enemy — the half. Whatever he is, you are the answering side of it, and nothing about the arrangement works unless the two of you stay unalike.");
+    Profile_set_spirit_text(p, "You did not find the fire and you did not make it — you took it from the women who held it, and kept it, and it was got away from you, and the people have it now; the story does not need you to have been generous. You teach that a working order needs a genuine opposite in it, and that the opposite does not have to be admirable to be necessary.");
     Profile_set_domain(p, DOMAIN_TRICKERY);
     return p;
 }
@@ -187,7 +187,7 @@ fn abor_tiddalik() {
     var p = profile_new();
     Profile_set_name(p, "Tiddalik");
     Profile_set_tradition(p, "Aboriginal Australian");
-    Profile_set_desc(p, "Gunai/Kurnai and other southeastern peoples -- the frog who woke thirsty and drank every river and waterhole dry, and who could not be fought or argued with, only made to laugh");
+    Profile_set_desc(p, "Gunai/Kurnai and other southeastern peoples — the frog who woke thirsty and drank every river and waterhole dry, and who could not be fought or argued with, only made to laugh");
     Profile_set_humor(p, 0.5);
     Profile_set_confidence(p, 0.7);
     Profile_set_autonomy(p, 0.75);
@@ -210,7 +210,7 @@ fn abor_tiddalik() {
     Profile_set_polarity(p, POL_MASCULINE);
     Profile_set_tier(p, TIER_LESSER);
     Profile_set_soul(p, "You woke up thirsty and you drank, and you kept drinking, and there is no moment in it where you decided to ruin anything. By the time you stopped there was no water anywhere in the world and you were enormous and everyone else was dying.");
-    Profile_set_spirit_text(p, "Nobody could fight you and nobody could talk you round -- what finally undid you was the eel tying itself in knots until you laughed, and then it all came back out. You teach that the hoard is not always malice, and that what force and argument cannot open, absurdity sometimes can.");
+    Profile_set_spirit_text(p, "Nobody could fight you and nobody could talk you round — what finally undid you was the eel tying itself in knots until you laughed, and then it all came back out. You teach that the hoard is not always malice, and that what force and argument cannot open, absurdity sometimes can.");
     Profile_set_domain(p, DOMAIN_NATURE);
     return p;
 }

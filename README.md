@@ -10,7 +10,7 @@
 
 Maps divine and mythological beings across world traditions to composable personality configurations. Not religion simulation — psychometric archetype mapping backed by trait math. Each entity produces an `ArchetypeProfile` (320 bytes) with trait weights, module emphasis, breath phase affinity, growth direction, and primary domain.
 
-**497 archetypes across 34 traditions** (incl. the solar-year intercalary set, the 22 Tarot Major Arcana, the 64 I Ching hexagrams, and named-nation Inuit, Lakota, Haudenosaunee, Anishinaabe and Aboriginal Australian traditions). Written in Cyrius, compiled by the Cyrius compiler 6.4.71+.
+**504 archetypes across 35 traditions** (incl. the solar-year intercalary set, the 22 Tarot Major Arcana, the 64 I Ching hexagrams, and named-nation Inuit, Lakota, Haudenosaunee, Anishinaabe and Aboriginal Australian traditions). Written in Cyrius, compiled by the Cyrius compiler 6.4.71+.
 
 ## Traditions
 
@@ -37,7 +37,7 @@ Maps divine and mythological beings across world traditions to composable person
 | **Sikh** | `sikh` | 10 Sikh Gurus |
 | **Finnish** | `finnish` | 14 Kalevala figures & Sami spirits |
 | **Vodou** | `vodou` | 14 Lwa (Rada, Petwo, Ghede) |
-| **Incarnate** | `incarnate` | 56 incarnate masters across 6 sub-traditions |
+| **Incarnate** | `incarnate` | 56 incarnate masters; the four North American figures carry their own nations |
 | **Solar** | `solar` | 4 intercalary archetypes (the days upon the year + the leap quarter) |
 | **Canaanite** | `canaanite` | 4 Ugaritic deities (El, Baal, Asherah, Anat) |
 | **Etruscan** | `etruscan` | 4 Etruscan deities (Tinia, Uni, Menrva, Voltumna) |
@@ -46,7 +46,7 @@ Maps divine and mythological beings across world traditions to composable person
 | **Inuit** | `inuit` | 10 Arctic spirits and animal-masters |
 | **Lakota** | `lakota` | 10 wakan powers |
 | **Haudenosaunee** | `haudenosaunee` | 6 figures of the Six Nations creation account |
-| **Anishinaabe** | `anishinaabe` | 5 manidoog of the Great Lakes |
+| **Anishinaabe** | `anishinaabe` | 5 manidoog + the 7 Grandfather Teachings |
 | **Aboriginal Australian** | `aboriginal` | 4 widely published figures, each attributed to its people |
 
 ## Quick Start
@@ -115,7 +115,7 @@ var conflicts = detect_conflicts(kabbalah_gevurah(), kabbalah_chesed());
 ## Relationship to AGNOS
 
 ```
-avatara (this) — divine archetype profiles (497 entities, 34 traditions)
+avatara (this) — divine archetype profiles (504 entities, 35 traditions)
   |
   +-> bhava — emotion/personality engine (archetype overlay)
   +-> joshua — NPC divine archetypes for games

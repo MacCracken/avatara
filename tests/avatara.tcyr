@@ -219,7 +219,7 @@ fn main() {
     # ================================================================
     # History: mapped traditions count
     # ================================================================
-    assert_eq(mapping_count(), 34, "34 history mappings");
+    assert_eq(mapping_count(), 35, "35 history mappings");
 
     # ================================================================
     # History: all mapped traditions resolve
@@ -341,8 +341,8 @@ fn main() {
     var leap = lookup_in("Solar", "Bissextus");
     assert_eq(is_ok(leap), 1, "Bissextus (the leap quarter) exists");
     assert_eq(prof_domain(result_unwrap(leap)), DOMAIN_ORDER, "Bissextus -> ORDER");
-    # 366 (solar) + 8 (Canaanite/Etruscan) + 22 (Tarot) + 64 (I Ching) + 2 (Celtic) + 35 (world traditions) = 497
-    assert_eq(profile_count(), 497, "497 archetypes");
+    # 366 (solar) + 8 (Canaanite/Etruscan) + 22 (Tarot) + 64 (I Ching) + 2 (Celtic) + 42 (world traditions incl. the seven teachings) = 504
+    assert_eq(profile_count(), 504, "504 archetypes");
 
     # ================================================================
     # Canaanite & Etruscan (2.7.0 micro-traditions)
@@ -526,12 +526,12 @@ fn main() {
     assert_eq(inuit_count(), 10, "10 Inuit spirits");
     assert_eq(lakota_count(), 10, "10 Lakota powers");
     assert_eq(haudenosaunee_count(), 6, "6 Haudenosaunee figures");
-    assert_eq(anishinaabe_count(), 5, "5 Anishinaabe manidoog");
+    assert_eq(anishinaabe_count(), 12, "5 Anishinaabe manidoog + 7 teachings");
     assert_eq(aboriginal_count(), 4, "4 Aboriginal Australian figures");
     assert_eq(vec_len(by_tradition("Inuit")), 10, "Inuit tradition has 10");
-    assert_eq(vec_len(by_tradition("Lakota")), 10, "Lakota tradition has 10");
-    assert_eq(vec_len(by_tradition("Haudenosaunee")), 6, "Haudenosaunee tradition has 6");
-    assert_eq(vec_len(by_tradition("Anishinaabe")), 5, "Anishinaabe tradition has 5");
+    assert_eq(vec_len(by_tradition("Lakota")), 11, "Lakota tradition has 11 (incl. White Buffalo Calf Woman)");
+    assert_eq(vec_len(by_tradition("Haudenosaunee")), 7, "Haudenosaunee tradition has 7 (incl. the Peacemaker)");
+    assert_eq(vec_len(by_tradition("Anishinaabe")), 12, "Anishinaabe tradition has 12");
     assert_eq(vec_len(by_tradition("Aboriginal Australian")), 4, "Aboriginal Australian tradition has 4");
     # each is a distinct named-nation tradition, not one pan-indigenous bucket
     var wt = all_traditions();
@@ -557,14 +557,40 @@ fn main() {
     assert_eq(prof_domain(result_unwrap(lookup("Iktomi"))), DOMAIN_TRICKERY, "Iktomi -> TRICKERY");
     assert_eq(prof_domain(result_unwrap(lookup("Sky Woman"))), DOMAIN_CREATION, "Sky Woman -> CREATION");
     assert_eq(prof_domain(result_unwrap(lookup("Nanabozho"))), DOMAIN_TRICKERY, "Nanabozho -> TRICKERY");
+    # the Seven Grandfather Teachings (2.12.0) — principles, not beings
+    assert_eq(streq(prof_name(vec_get(all_anishinaabe(), ANISH_DEBWEWIN)), "Debwewin"), 1, "seventh teaching is Debwewin");
+    assert_eq(prof_domain(result_unwrap(lookup("Zaagiidiwin"))), DOMAIN_LOVE, "Zaagiidiwin -> LOVE");
+    assert_eq(prof_domain(result_unwrap(lookup("Dabaadendiziwin"))), DOMAIN_TRANSCENDENCE, "Dabaadendiziwin -> TRANSCENDENCE");
+    var teach_ok = 1;
+    var gv = all_anishinaabe();
+    for (var gi = 5; gi <= 11; gi = gi + 1) {
+        var gp = vec_get(gv, gi);
+        if (prof_tier(gp) != TIER_COSMIC) { teach_ok = 0; }
+        if (prof_polarity(gp) != POL_ANDROGYNOUS) { teach_ok = 0; }
+    }
+    assert_eq(teach_ok, 1, "all 7 teachings are cosmic-tier and androgynous (principles, not beings)");
     assert_eq(prof_domain(result_unwrap(lookup("Bunjil"))), DOMAIN_CREATION, "Bunjil -> CREATION");
     assert_eq(is_err_result(lookup("Baiame")), 1, "Baiame deferred to the 2.11.x arc");
     assert_eq(is_err_result(lookup("Wiindigoo")), 1, "Wiindigoo deliberately not carried");
-    # White Buffalo Calf Woman and Deganawidah stay in the "Indigenous" incarnate
-    # tradition and are NOT duplicated into the new nation modules
-    assert_eq(streq(prof_tradition(result_unwrap(lookup("White Buffalo Calf Woman"))), "Indigenous"), 1,
-              "White Buffalo Calf Woman stays under Indigenous");
-    assert_eq(vec_len(by_tradition("Indigenous")), 4, "Indigenous tradition still has 4");
+    # 2.12.0: the pan-ethnic "Indigenous" bucket is gone -- the four incarnate
+    # figures now carry their own nations, and none is duplicated in the modules.
+    assert_eq(vec_len(by_tradition("Indigenous")), 0, "pan-ethnic Indigenous bucket retired");
+    assert_eq(streq(prof_tradition(result_unwrap(lookup("White Buffalo Calf Woman"))), "Lakota"), 1,
+              "White Buffalo Calf Woman -> Lakota");
+    assert_eq(streq(prof_tradition(result_unwrap(lookup("Quanah Parker"))), "Comanche"), 1,
+              "Quanah Parker -> Comanche");
+    assert_eq(streq(prof_tradition(result_unwrap(lookup("Wovoka"))), "Northern Paiute"), 1,
+              "Wovoka -> Northern Paiute");
+    # the Peacemaker is carried by title, not by the personal name reserved for ceremony
+    assert_eq(streq(prof_tradition(result_unwrap(lookup("The Peacemaker"))), "Haudenosaunee"), 1,
+              "The Peacemaker -> Haudenosaunee");
+    assert_eq(is_err_result(lookup("Deganawidah")), 1, "personal name no longer used as the key");
+    # the two new nations resolve history, and it is no longer the Polynesian
+    # civilisation the orphaned "Incarnate Indigenous" mapping wrongly gave them
+    assert_neq(context_for_tradition("Comanche"), 0, "Comanche resolves history context");
+    assert_neq(context_for_tradition("Northern Paiute"), 0, "Northern Paiute resolves history context");
+    assert_eq(streq(ctx_primary(context_for_tradition("Comanche")), "Great Plains"), 1,
+              "Comanche -> Great Plains, not Tonga Empire");
     # history: every new tradition resolves a context
     assert_neq(context_for_tradition("Inuit"), 0, "Inuit resolves history context");
     assert_neq(context_for_tradition("Lakota"), 0, "Lakota resolves history context");

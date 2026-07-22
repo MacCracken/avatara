@@ -6,7 +6,7 @@
 
 - **Language**: Cyrius (ported from Rust in v2.0)
 - **License**: GPL-3.0-only
-- **Version**: SemVer 2.11.0
+- **Version**: SemVer 2.12.0
 - **Compiler**: cyrius >= 6.4.71 (pinned in `cyrius.cyml` `[package].cyrius`)
 
 ## Consumers
@@ -20,7 +20,7 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/types.cyr` — ArchetypeProfile layout (320 bytes), TraitWeights (15 f64), ModuleEmphasis (14 f64), enums (BreathAffinity, GrowthDirection, Element, Polarity, CosmicTier, Domain)
 - `src/error.cyr` — AvataraError enum codes, validation
 - `src/compose.cyr` — archetype composition: weighted blending of multiple profiles
-- `src/history.cyr` — 34 tradition-to-history mappings (civilization, era, temporal range, notes)
+- `src/history.cyr` — 35 tradition-to-history mappings (civilization, era, temporal range, notes)
 - `src/registry.cyr` — lookup by name, enumeration, query/filter API (includes history-based queries)
 - `src/affinity.cyr` — affinity scoring, similarity search, cross-tradition matching, conflict detection
 - `src/shadow.cyr` — shadow aspect: `shadow(profile)` (involutive inversion), `is_shadow_of(a, b)`
@@ -50,14 +50,14 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/solar.cyr` — 4 intercalary archetypes: the days upon the year (Wayeb, Nemontemi, Epagomenai) + the leap quarter (Bissextus) — avatara's landing at the solar year (365 + ¼)
 - `src/canaanite.cyr` — 4 Canaanite/Ugaritic deities (El, Baal, Asherah, Anat)
 - `src/etruscan.cyr` — 4 Etruscan deities (Tinia, Uni, Menrva, Voltumna)
-- `src/incarnate.cyr` — 56 incarnate divine figures (Hindu, Buddhist, Mystic, Taoist, Indigenous, Sage)
+- `src/incarnate.cyr` — 56 incarnate divine figures (Hindu, Buddhist, Mystic, Taoist, Sage, and four North American figures re-attributed in 2.12.0 to Lakota / Haudenosaunee / Comanche / Northern Paiute — the pan-ethnic "Indigenous" label is retired)
 - `src/inuit.cyr` — 10 Inuit spirits and powers (Sedna, Nanuq, Sila, the animal-masters)
 - `src/lakota.cyr` — 10 Lakota wakan powers (Wakan Tanka, Inyan, Skan, Wakinyan, Iktomi)
 - `src/haudenosaunee.cyr` — 6 Six Nations figures (Sky Woman, the twins, Three Sisters, Great Turtle)
-- `src/anishinaabe.cyr` — 5 Anishinaabe manidoog (Gichi-Manidoo, Nanabozho, Nokomis, Mishipeshu, Animikii); the wiindigoo is deliberately not carried — see module header
+- `src/anishinaabe.cyr` — 5 Anishinaabe manidoog + the 7 Grandfather Teachings (Nizhwaaswi Gagiikwewin), carried by their Ojibwe names as cosmic-tier principles; the wiindigoo is deliberately not carried — see module header
 - `src/aboriginal.cyr` — 4 widely published Aboriginal Australian figures, each attributed to its people; restricted Dreaming material deliberately excluded (see module header)
 - `src/logging.cyr` — sakshi logging init
-- `tests/avatara.tcyr` — integration test suite (199 assertions)
+- `tests/avatara.tcyr` — integration test suite (210 assertions)
 - `tests/avatara.bcyr` — benchmarks (57)
 - `programs/traditions.cyr` — example: explore archetypes
 - `programs/compose.cyr` — example: blend traditions

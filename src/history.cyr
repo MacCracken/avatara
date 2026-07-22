@@ -193,10 +193,15 @@ fn all_mappings() {
         (0-400), LIVING,
         "Taoist sages and alchemists -- Zhang Daoling, Ge Hong, Sun Simiao -- who developed inner alchemy, medicine, and monastic traditions"));
 
-        vec_push(history_vec, history_map_new("Incarnate Indigenous", "Tonga Empire",
-        svec2("Tonga Empire", "Hawaiian Kingdom"), svec1("Middle Ages"),
-        (0-500), LIVING,
-        "Indigenous spiritual leaders and wisdom keepers across traditions -- carriers of oral tradition, ceremony, and land-based spirituality"));
+        vec_push(history_vec, history_map_new("Comanche", "Great Plains",
+        svec1("Great Plains"), svec2("Middle Ages", "Modern"),
+        1700, LIVING,
+        "The Comanche (Numunuu) separated from the Eastern Shoshone and moved onto the southern plains in the early 1700s, becoming the dominant horse power of the region; Quanah Parker, the last war chief of the Quahada band, later led the move to reservation life and was a founding figure of the Native American Church"));
+
+        vec_push(history_vec, history_map_new("Northern Paiute", "Great Basin",
+        svec1("Great Basin"), svec2("Middle Ages", "Modern"),
+        1000, LIVING,
+        "The Northern Paiute (Numu) of the Great Basin; Wovoka received in 1889 the vision that became the Ghost Dance, which spread across the plains within a year and was met with the suppression that ended at Wounded Knee in 1890"));
 
         vec_push(history_vec, history_map_new("Incarnate Sage", "Ancient Greece",
         svec2("Ancient Greece", "Ancient China"), svec2("Classical Antiquity", "Zhou Dynasty"),

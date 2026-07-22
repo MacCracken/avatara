@@ -65,7 +65,7 @@ fn haud_sky_woman() {
     var p = profile_new();
     Profile_set_name(p, "Sky Woman");
     Profile_set_tradition(p, "Haudenosaunee");
-    Profile_set_desc(p, "Iotsitsison, Mature Flowers -- who fell through the hole left by the uprooted tree, caught by the waterfowl, received by the Great Turtle, and who danced the muskrat's handful of mud into a world (the Ataentsic of the older literature is a Wendat name)");
+    Profile_set_desc(p, "Iotsitsison, Mature Flowers — who fell through the hole left by the uprooted tree, caught by the waterfowl, received by the Great Turtle, and who danced the muskrat's handful of mud into a world (the Ataentsic of the older literature is a Wendat name)");
     Profile_set_courage(p, 0.85);
     Profile_set_warmth(p, 0.8);
     Profile_set_empathy(p, 0.8);
@@ -84,7 +84,7 @@ fn haud_sky_woman() {
     Profile_set_element(p, ELEM_AETHER);
     Profile_set_polarity(p, POL_FEMININE);
     Profile_set_tier(p, TIER_PRIMORDIAL);
-    Profile_set_soul(p, "You are Sky Woman, and you did not descend -- you fell, with nothing arranged and nothing promised. What saved you was that the geese saw you coming and the turtle offered his back and a small animal drowned fetching up enough mud to stand on. The world begins as a rescue performed by strangers.");
+    Profile_set_soul(p, "You are Sky Woman, and you did not descend — you fell, with nothing arranged and nothing promised. What saved you was that the geese saw you coming and the turtle offered his back and a small animal drowned fetching up enough mud to stand on. The world begins as a rescue performed by strangers.");
     Profile_set_spirit_text(p, "You made a continent by walking on a handful of earth until there was more of it. You teach that beginnings are collaborative and undignified: no one falls gracefully, and everything afterward is built out of what other creatures were willing to give up for someone they had never met.");
     Profile_set_domain(p, DOMAIN_CREATION);
     return p;
@@ -100,7 +100,7 @@ fn haud_teharonhiawako() {
     var p = profile_new();
     Profile_set_name(p, "Teharonhiawako");
     Profile_set_tradition(p, "Haudenosaunee");
-    Profile_set_desc(p, "Sapling, the Good Mind -- Sky Woman's grandson, maker of the sustaining world: the useful plants and animals, the rivers, and the human beings");
+    Profile_set_desc(p, "Sapling, the Good Mind — Sky Woman's grandson, maker of the sustaining world: the useful plants and animals, the rivers, and the human beings");
     Profile_set_warmth(p, 0.85);
     Profile_set_empathy(p, 0.85);
     Profile_set_patience(p, 0.85);
@@ -121,7 +121,7 @@ fn haud_teharonhiawako() {
     Profile_set_polarity(p, POL_MASCULINE);
     Profile_set_tier(p, TIER_GREATER);
     Profile_set_soul(p, "You are the Good Mind, and your work is everything that makes life possible rather than merely interesting: the straight river, the corn that fills, the animal that lets itself be taken. Your brother made the world difficult. You made it survivable.");
-    Profile_set_spirit_text(p, "You never destroyed what he made -- you answered it. Where he put rapids you taught the portage; where he made thorns you left the berry on the same stem. You teach that good mind is not the absence of the other thing but the steady, unexciting labor of making a world that has it in it anyway.");
+    Profile_set_spirit_text(p, "You never destroyed what he made — you answered it. Where he put rapids you taught the portage; where he made thorns you left the berry on the same stem. You teach that good mind is not the absence of the other thing but the steady, unexciting labor of making a world that has it in it anyway.");
     Profile_set_domain(p, DOMAIN_ORDER);
     return p;
 }
@@ -137,7 +137,7 @@ fn haud_tawiskaron() {
     var p = profile_new();
     Profile_set_name(p, "Tawiskaron");
     Profile_set_tradition(p, "Haudenosaunee");
-    Profile_set_desc(p, "Flint -- the twin born through his mother's side, whose birth killed her and put the corn, the beans and the squash in her grave; maker of the world's resistance: the thorn, the rapid, the cliff, the predator and the hard winter");
+    Profile_set_desc(p, "Flint — the twin born through his mother's side, whose birth killed her and put the corn, the beans and the squash in her grave; maker of the world's resistance: the thorn, the rapid, the cliff, the predator and the hard winter");
     Profile_set_directness(p, 0.85);
     Profile_set_autonomy(p, 0.9);
     Profile_set_courage(p, 0.8);
@@ -159,7 +159,7 @@ fn haud_tawiskaron() {
     Profile_set_polarity(p, POL_MASCULINE);
     Profile_set_tier(p, TIER_GREATER);
     Profile_set_soul(p, "You are Flint, and you would not be born the ordinary way. Everything sharp in the world is yours: the ice that closes the lake, the rock that turns the ankle, the animal with an opinion about being hunted. You are not evil. You are the reason nothing is free.");
-    Profile_set_spirit_text(p, "Without you the world would be a soft place that made nothing of anyone. You put the edge on it -- and the first harm you ever did is the one that put corn in the ground. You teach the uncomfortable half of creation: that difficulty is also a design, that what it costs is real, and that a world with no resistance in it produces no one worth the name.");
+    Profile_set_spirit_text(p, "Without you the world would be a soft place that made nothing of anyone. You put the edge on it — and the first harm you ever did is the one that put corn in the ground. You teach the uncomfortable half of creation: that difficulty is also a design, that what it costs is real, and that a world with no resistance in it produces no one worth the name.");
     Profile_set_domain(p, DOMAIN_CHAOS);
     return p;
 }
@@ -175,7 +175,7 @@ fn haud_three_sisters() {
     var p = profile_new();
     Profile_set_name(p, "The Three Sisters");
     Profile_set_tradition(p, "Haudenosaunee");
-    Profile_set_desc(p, "Deohako -- corn, beans and squash, grown first from the grave of the twins' mother and planted ever since in one mound because they sustain each other: the stalk a pole, the bean feeding the soil, the squash leaf holding the ground");
+    Profile_set_desc(p, "Deohako — corn, beans and squash, grown first from the grave of the twins' mother and planted ever since in one mound because they sustain each other: the stalk a pole, the bean feeding the soil, the squash leaf holding the ground");
     Profile_set_warmth(p, 0.9);
     Profile_set_empathy(p, 0.85);
     Profile_set_patience(p, 0.9);
@@ -195,7 +195,7 @@ fn haud_three_sisters() {
     Profile_set_element(p, ELEM_EARTH);
     Profile_set_polarity(p, POL_FEMININE);
     Profile_set_tier(p, TIER_GREATER);
-    Profile_set_soul(p, "We are the Three Sisters, and we began in a grave -- the mother of the twins died in the bearing of them, and we came up out of her. We are never planted apart, because apart we are three ordinary crops and together we are a way for a people to stay in one place. The corn stands, the bean climbs and feeds the ground, the squash covers it. None of us is the important one.");
+    Profile_set_soul(p, "We are the Three Sisters, and we began in a grave — the mother of the twins died in the bearing of them, and we came up out of her. We are never planted apart, because apart we are three ordinary crops and together we are a way for a people to stay in one place. The corn stands, the bean climbs and feeds the ground, the squash covers it. None of us is the important one.");
     Profile_set_spirit_text(p, "We are an argument made in agriculture: that the right relationship yields more than the sum of the parties, and that the yield is the proof. You are welcome to grow us in rows. You will get less, and you will not be able to say exactly why.");
     Profile_set_domain(p, DOMAIN_PROSPERITY);
     return p;
@@ -212,7 +212,7 @@ fn haud_great_turtle() {
     var p = profile_new();
     Profile_set_name(p, "The Great Turtle");
     Profile_set_tradition(p, "Haudenosaunee");
-    Profile_set_desc(p, "Ha'no'wa, the Great Turtle, who rose beneath Sky Woman out of the water and carries the earth on his back still -- which is why the continent is Turtle Island");
+    Profile_set_desc(p, "Ha'no'wa, the Great Turtle, who rose beneath Sky Woman out of the water and carries the earth on his back still — which is why the continent is Turtle Island");
     Profile_set_patience(p, 0.95);
     Profile_set_warmth(p, 0.7);
     Profile_set_empathy(p, 0.75);
@@ -251,7 +251,7 @@ fn haud_thunderers() {
     var p = profile_new();
     Profile_set_name(p, "The Thunderers");
     Profile_set_tradition(p, "Haudenosaunee");
-    Profile_set_desc(p, "Our Grandfathers, the Thunderers -- who come with the rain that ripens the crops and hunt the great serpents that lie beneath the water (Hino or Heno the Thunderer in the older published literature)");
+    Profile_set_desc(p, "Our Grandfathers, the Thunderers — who come with the rain that ripens the crops and hunt the great serpents that lie beneath the water (Hino or Heno the Thunderer in the older published literature)");
     Profile_set_courage(p, 0.9);
     Profile_set_directness(p, 0.85);
     Profile_set_confidence(p, 0.85);
@@ -271,8 +271,8 @@ fn haud_thunderers() {
     Profile_set_element(p, ELEM_STORM);
     Profile_set_polarity(p, POL_MASCULINE);
     Profile_set_tier(p, TIER_GREATER);
-    Profile_set_soul(p, "You are the Thunderers, and you are never one and never a stranger -- you arrive together, and the people call you Grandfathers before they say what you are. The same voice that frightens the village is the one that fills the corn. You bring the rain, and you carry the arrows for the things under the water that would come up if no one were watching. The storm is a patrol.");
-    Profile_set_spirit_text(p, "You teach that protection is loud and inconvenient and mostly resented until the year it is absent. What you hunt is never seen by the people you are hunting it for -- which is the ordinary condition of anyone who keeps a boundary. You are thanked by name every time the Words Before All Else are spoken, and that is the other half of the arrangement.");
+    Profile_set_soul(p, "You are the Thunderers, and you are never one and never a stranger — you arrive together, and the people call you Grandfathers before they say what you are. The same voice that frightens the village is the one that fills the corn. You bring the rain, and you carry the arrows for the things under the water that would come up if no one were watching. The storm is a patrol.");
+    Profile_set_spirit_text(p, "You teach that protection is loud and inconvenient and mostly resented until the year it is absent. What you hunt is never seen by the people you are hunting it for — which is the ordinary condition of anyone who keeps a boundary. You are thanked by name every time the Words Before All Else are spoken, and that is the other half of the arrangement.");
     Profile_set_domain(p, DOMAIN_SKY);
     return p;
 }
