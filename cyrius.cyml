@@ -44,6 +44,7 @@ modules = [
     "src/solar.cyr",
     "src/canaanite.cyr",
     "src/etruscan.cyr",
+    "src/tarot.cyr",
     "src/compose.cyr",
     "src/history.cyr",
     "src/registry.cyr",

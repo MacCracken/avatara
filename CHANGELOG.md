@@ -7,6 +7,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.9.0] — 2026-07-22
+
+**Tarot Major Arcana** — the 22 trumps as archetypes, bridged to the Tree of Life: **374 → 396 archetypes,
+27 → 28 traditions**. The Major Arcana are not deities but archetypal stages of the soul (the Fool's
+Journey, 0 → XXI). In the Hermetic Qabalah of the Golden Dawn each trump is a *path* on the Tree of Life —
+one of the 22 lines joining the 10 Sephiroth (`kabbalah.cyr`), keyed to a Hebrew letter. This is avatara's
+first module to bridge two existing systems.
+
+### Added
+- **`src/tarot.cyr` — the 22 Major Arcana** (new "Tarot" tradition): The Fool (0) through The World (XXI),
+  each a full `ArchetypeProfile` with traits grounded in Rider–Waite–Smith / Golden Dawn symbolism. All are
+  `TIER_COSMIC`, mirroring the Sephiroth they connect. Domains span the set (e.g. Death→`DEATH`,
+  The Sun→`SUN`, Wheel of Fortune→`FATE`, Justice→`ORDER`, The Empress→`NATURE`); 0 unspecified.
+- **Kabbalah bridge API** — every trump carries its Golden Dawn "32 Paths of Wisdom" attribution:
+  - `tarot_hebrew_letter(i)` (Aleph … Tav), `tarot_path(i)` (path number 11–32), and
+    `tarot_path_upper(i)` / `tarot_path_lower(i)` (the two `Sephira` enum values, from `kabbalah.cyr`, the
+    path joins).
+  - `tarot_for_path(path)` (inverse of `tarot_path`; a Sephira-range or out-of-range number → −1) and
+    `tarot_connects(i, seph)` ("which trumps meet at this Sephira?").
+  - `all_tarot()` / `tarot_count()` (22), `tarot_by_index(i)`, `tarot_index_by_name(name)`.
+  - Numbering follows the RWS/Golden Dawn convention (VIII = Strength/Teth/Leo, XI = Justice/Lamed/Libra),
+    with orthodox letter attributions (not Crowley's Heh/Tzaddi swap).
+- **History**: a 28th mapping (`Tarot`) — 15th-c. Italian tarocchi through the Golden Dawn (1888)
+  Tree-of-Life synthesis, a living tradition; `mapping_count()` 27 → 28.
+- Wired into all build roots, the registry, and the `[lib]` dist bundle. 34 new tests (82 → 116
+  assertions); 1 new benchmark (`tarot/all_22`, 49 → 50).
+
+### Verification
+- The 22 (letter → path → Sephiroth-pair) attributions were cross-checked against the Golden Dawn canon by
+  independent adversarial review (three canon checkers, zero discrepancies). One initial mislabeling was
+  corrected pre-release: Strength's domain `WAR` → `NATURE` — the card is gentle fortitude, not martial,
+  and `WAR` is properly The Chariot's.
+
+### Notes
+- Additive, non-breaking: existing archetypes, traditions, the 320-byte `ArchetypeProfile` layout, and all
+  prior APIs are unchanged.
+
+### Benchmarks
+- 50/50 recorded for 2.9.0 (see `bench-history.csv`); `tarot/all_22` added (~13 ns, in line with the other
+  cached `all_*` collections). No regressions relative to the 2.8.1 baseline across the shared 49 benches.
+
 ## [2.8.1] — 2026-07-22
 
 Toolchain maintenance release — no source changes.

@@ -33,6 +33,7 @@ include "src/vodou.cyr"
 include "src/solar.cyr"
 include "src/canaanite.cyr"
 include "src/etruscan.cyr"
+include "src/tarot.cyr"
 include "src/compose.cyr"
 include "src/history.cyr"
 include "src/registry.cyr"
@@ -212,7 +213,7 @@ fn main() {
     # ================================================================
     # History: mapped traditions count
     # ================================================================
-    assert_eq(mapping_count(), 27, "27 history mappings");
+    assert_eq(mapping_count(), 28, "28 history mappings");
 
     # ================================================================
     # History: all mapped traditions resolve
@@ -311,8 +312,8 @@ fn main() {
     var leap = lookup_in("Solar", "Bissextus");
     assert_eq(is_ok(leap), 1, "Bissextus (the leap quarter) exists");
     assert_eq(prof_domain(result_unwrap(leap)), DOMAIN_ORDER, "Bissextus -> ORDER");
-    # 366 (solar year) + 8 (Canaanite + Etruscan) = 374
-    assert_eq(profile_count(), 374, "374 archetypes");
+    # 366 (solar year) + 8 (Canaanite + Etruscan) + 22 (Tarot) = 396
+    assert_eq(profile_count(), 396, "396 archetypes");
 
     # ================================================================
     # Canaanite & Etruscan (2.7.0 micro-traditions)
@@ -323,6 +324,75 @@ fn main() {
     assert_eq(prof_domain(result_unwrap(lookup("Menrva"))), DOMAIN_WISDOM, "Menrva -> WISDOM");
     assert_eq(vec_len(by_tradition("Canaanite")), 4, "Canaanite tradition has 4");
     assert_eq(vec_len(by_tradition("Etruscan")), 4, "Etruscan tradition has 4");
+
+    # ================================================================
+    # Tarot Major Arcana (2.9.0) — 22 trumps as Tree-of-Life paths
+    # ================================================================
+    assert_eq(tarot_count(), 22, "22 Major Arcana");
+    assert_eq(vec_len(by_tradition("Tarot")), 22, "Tarot tradition has 22");
+    # registry lookup reaches the trumps
+    assert_eq(is_ok(lookup("The Fool")), 1, "The Fool exists");
+    assert_eq(streq(prof_tradition(result_unwrap(lookup("The Fool"))), "Tarot"), 1, "The Fool is Tarot");
+    # domain spot-checks
+    assert_eq(prof_domain(result_unwrap(lookup("Death"))), DOMAIN_DEATH, "Death -> DEATH");
+    assert_eq(prof_domain(result_unwrap(lookup("The Sun"))), DOMAIN_SUN, "The Sun -> SUN");
+    assert_eq(prof_domain(result_unwrap(lookup("Wheel of Fortune"))), DOMAIN_FATE, "Wheel of Fortune -> FATE");
+    assert_eq(prof_domain(result_unwrap(lookup("Justice"))), DOMAIN_ORDER, "Justice -> ORDER");
+    assert_eq(prof_domain(result_unwrap(lookup("The Empress"))), DOMAIN_NATURE, "The Empress -> NATURE");
+    # all 22 trumps are cosmic-tier (mirroring the Sephiroth they bridge)
+    var tarot_tier_ok = 1;
+    var tv = all_tarot();
+    for (var ti = 0; ti < vec_len(tv); ti = ti + 1) {
+        if (prof_tier(vec_get(tv, ti)) != TIER_COSMIC) { tarot_tier_ok = 0; }
+    }
+    assert_eq(tarot_tier_ok, 1, "all Tarot trumps are cosmic-tier");
+    # --- Kabbalah bridge: Golden Dawn path attributions ---
+    assert_eq(tarot_path(ARCANA_FOOL), 11, "Fool = path 11");
+    assert_eq(tarot_path(ARCANA_WORLD), 32, "World = path 32");
+    assert_eq(streq(tarot_hebrew_letter(ARCANA_FOOL), "Aleph"), 1, "Fool letter = Aleph");
+    assert_eq(streq(tarot_hebrew_letter(ARCANA_WORLD), "Tav"), 1, "World letter = Tav");
+    # Fool's path (11) joins Kether and Chokmah
+    assert_eq(tarot_path_upper(ARCANA_FOOL), SEPH_KETHER, "Fool path upper = Kether");
+    assert_eq(tarot_path_lower(ARCANA_FOOL), SEPH_CHOKMAH, "Fool path lower = Chokmah");
+    # Golden Dawn / RWS convention: VIII = Strength (Teth), XI = Justice (Lamed)
+    assert_eq(tarot_index_by_name("Strength"), 8, "Strength is trump VIII");
+    assert_eq(tarot_index_by_name("Justice"), 11, "Justice is trump XI");
+    assert_eq(streq(tarot_hebrew_letter(ARCANA_STRENGTH), "Teth"), 1, "Strength letter = Teth");
+    assert_eq(streq(tarot_hebrew_letter(ARCANA_JUSTICE), "Lamed"), 1, "Justice letter = Lamed");
+    # Justice (path 22, Lamed) connects Gevurah and Tiphareth
+    assert_eq(tarot_connects(ARCANA_JUSTICE, SEPH_GEVURAH), 1, "Justice touches Gevurah");
+    assert_eq(tarot_connects(ARCANA_JUSTICE, SEPH_TIPHARETH), 1, "Justice touches Tiphareth");
+    assert_eq(tarot_connects(ARCANA_JUSTICE, SEPH_MALKUTH), 0, "Justice does not touch Malkuth");
+    # tarot_for_path is the inverse of tarot_path; Sephira-range / OOB numbers -> -1
+    assert_eq(tarot_for_path(11), ARCANA_FOOL, "path 11 -> Fool");
+    assert_eq(tarot_for_path(32), ARCANA_WORLD, "path 32 -> World");
+    assert_eq(tarot_for_path(10), 0 - 1, "path 10 (a Sephira) -> -1");
+    assert_eq(tarot_for_path(33), 0 - 1, "path 33 (out of range) -> -1");
+    # round-trip path <-> index over all 22
+    var tarot_roundtrip_ok = 1;
+    for (var pi = 0; pi < 22; pi = pi + 1) {
+        if (tarot_for_path(tarot_path(pi)) != pi) { tarot_roundtrip_ok = 0; }
+    }
+    assert_eq(tarot_roundtrip_ok, 1, "path<->index round-trips for all 22 trumps");
+    # each trump's path joins two DISTINCT sephiroth, both in 0..9
+    var tarot_paths_ok = 1;
+    for (var qi = 0; qi < 22; qi = qi + 1) {
+        var up = tarot_path_upper(qi);
+        var lo = tarot_path_lower(qi);
+        if (up == lo) { tarot_paths_ok = 0; }
+        if (up < 0) { tarot_paths_ok = 0; }
+        if (up > 9) { tarot_paths_ok = 0; }
+        if (lo < 0) { tarot_paths_ok = 0; }
+        if (lo > 9) { tarot_paths_ok = 0; }
+    }
+    assert_eq(tarot_paths_ok, 1, "all 22 paths join two distinct sephiroth (0..9)");
+    # by-index and by-name helpers
+    assert_eq(streq(prof_name(tarot_by_index(0)), "The Fool"), 1, "tarot_by_index(0) = The Fool");
+    assert_eq(tarot_by_index(0 - 1), 0, "tarot_by_index(-1) = 0 (null)");
+    assert_eq(tarot_index_by_name("Death"), 13, "index_by_name Death = 13");
+    assert_eq(tarot_index_by_name("nope"), 0 - 1, "index_by_name unknown = -1");
+    # history: Tarot resolves a context
+    assert_neq(context_for_tradition("Tarot"), 0, "Tarot resolves history context");
 
     # ================================================================
     # Aspects (role derivation from the personality vector) — aspect.cyr

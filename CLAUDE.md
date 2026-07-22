@@ -6,7 +6,7 @@
 
 - **Language**: Cyrius (ported from Rust in v2.0)
 - **License**: GPL-3.0-only
-- **Version**: SemVer 2.8.1
+- **Version**: SemVer 2.9.0
 - **Compiler**: cyrius >= 6.4.69 (pinned in `cyrius.cyml` `[package].cyrius`)
 
 ## Consumers
@@ -20,11 +20,12 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/types.cyr` — ArchetypeProfile layout (320 bytes), TraitWeights (15 f64), ModuleEmphasis (14 f64), enums (BreathAffinity, GrowthDirection, Element, Polarity, CosmicTier, Domain)
 - `src/error.cyr` — AvataraError enum codes, validation
 - `src/compose.cyr` — archetype composition: weighted blending of multiple profiles
-- `src/history.cyr` — 27 tradition-to-history mappings (civilization, era, temporal range, notes)
+- `src/history.cyr` — 28 tradition-to-history mappings (civilization, era, temporal range, notes)
 - `src/registry.cyr` — lookup by name, enumeration, query/filter API (includes history-based queries)
 - `src/affinity.cyr` — affinity scoring, similarity search, cross-tradition matching, conflict detection
 - `src/shadow.cyr` — shadow aspect: `shadow(profile)` (involutive inversion), `is_shadow_of(a, b)`
 - `src/kabbalah.cyr` — Tree of Life: 10 Sephiroth
+- `src/tarot.cyr` — 22 Tarot Major Arcana as the 22 Tree-of-Life paths (bridges `kabbalah`): each trump carries its Hebrew letter, path number (11–32), and the two Sephiroth its path connects (`tarot_path`, `tarot_path_upper/lower`, `tarot_for_path`, `tarot_connects`); Golden Dawn attribution, VIII=Strength/XI=Justice
 - `src/angelic.cyr` — 9 angelic orders, 7 archangels
 - `src/hindu.cyr` — Trimurti, 11 Devas, 10 Avatars of Vishnu
 - `src/olympian.cyr` — 15 Greek deities (12 Olympians + Hades, Hestia, Persephone)
@@ -50,8 +51,8 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/etruscan.cyr` — 4 Etruscan deities (Tinia, Uni, Menrva, Voltumna)
 - `src/incarnate.cyr` — 56 incarnate divine figures (Hindu, Buddhist, Mystic, Taoist, Indigenous, Sage)
 - `src/logging.cyr` — sakshi logging init
-- `tests/avatara.tcyr` — integration test suite (82 assertions)
-- `tests/avatara.bcyr` — benchmarks (49)
+- `tests/avatara.tcyr` — integration test suite (116 assertions)
+- `tests/avatara.bcyr` — benchmarks (50)
 - `programs/traditions.cyr` — example: explore archetypes
 - `programs/compose.cyr` — example: blend traditions
 

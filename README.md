@@ -10,7 +10,7 @@
 
 Maps divine and mythological beings across world traditions to composable personality configurations. Not religion simulation — psychometric archetype mapping backed by trait math. Each entity produces an `ArchetypeProfile` (320 bytes) with trait weights, module emphasis, breath phase affinity, growth direction, and primary domain.
 
-**374 archetypes across 27 traditions** (incl. the solar-year intercalary set; +Canaanite & Etruscan). Written in Cyrius, compiled by the Cyrius compiler 6.4.69+.
+**396 archetypes across 28 traditions** (incl. the solar-year intercalary set; +Canaanite, Etruscan & the 22 Tarot Major Arcana). Written in Cyrius, compiled by the Cyrius compiler 6.4.69+.
 
 ## Traditions
 
@@ -41,6 +41,7 @@ Maps divine and mythological beings across world traditions to composable person
 | **Solar** | `solar` | 4 intercalary archetypes (the days upon the year + the leap quarter) |
 | **Canaanite** | `canaanite` | 4 Ugaritic deities (El, Baal, Asherah, Anat) |
 | **Etruscan** | `etruscan` | 4 Etruscan deities (Tinia, Uni, Menrva, Voltumna) |
+| **Tarot** | `tarot` | 22 Major Arcana as the Tree-of-Life paths (bridges Kabbalah) |
 
 ## Quick Start
 
@@ -108,7 +109,7 @@ var conflicts = detect_conflicts(kabbalah_gevurah(), kabbalah_chesed());
 ## Relationship to AGNOS
 
 ```
-avatara (this) — divine archetype profiles (374 entities, 27 traditions)
+avatara (this) — divine archetype profiles (396 entities, 28 traditions)
   |
   +-> bhava — emotion/personality engine (archetype overlay)
   +-> joshua — NPC divine archetypes for games

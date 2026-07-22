@@ -5,7 +5,7 @@
 # Each tradition maps to one or more civilizations, eras, and a temporal
 # range — the period during which the tradition's theology was actively forming.
 #
-# 27 tradition-to-history mappings with scholarly historical notes.
+# 28 tradition-to-history mappings with scholarly historical notes.
 
 # --- TraditionMapping layout ---
 # Each mapping: tradition name, primary civ, civ names (vec), era names (vec),
@@ -212,6 +212,11 @@ fn all_mappings() {
         svec2("Ghana Empire", "Songhai Empire"), svec1("Middle Ages"),
         1600, LIVING,
         "Haitian Vodou synthesized West African (primarily Fon and Yoruba) spiritual traditions with Taino and Catholic elements during the colonial period; a living religion of the African diaspora, central to the Haitian Revolution (1791-1804) and Haitian national identity"));
+
+        vec_push(history_vec, history_map_new("Tarot", "Renaissance Italy",
+        svec3("Renaissance Italy", "Kingdom of France", "British Empire"), svec2("Renaissance", "Modern"),
+        1440, LIVING,
+        "The Major Arcana appear as the trump suit of 15th-century Italian tarocchi (Visconti-Sforza decks, c. 1440s Milan); the esoteric reading was developed by Court de Gebelin (1781) and Eliphas Levi, who first mapped the 22 trumps to the 22 Hebrew letters and the Kabbalah, and systematized by the Hermetic Order of the Golden Dawn (1888) into the Tree-of-Life path attributions used here; the Rider-Waite-Smith deck (1909) fixed the modern imagery. A living divinatory and initiatory tradition"));
 
         history_init_done = 1;
     }

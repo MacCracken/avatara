@@ -8,8 +8,11 @@
 - **2.5.x** — architecture: `Result<T, E>` error model (2.5.0); shadow aspect (2.5.1); `domain` field, all 362 archetypes assigned (2.5.2); native `#derive` `struct Profile` migration (2.5.3); security audit + CWE-690 `xalloc` hardening (2.5.4).
 - **2.6.0** — The Solar Year: 25th "Solar" tradition (intercalary archetypes), landing at **366 archetypes (365 + the leap quarter)**.
 - **2.7.0** — Canaanite & Etruscan micro-traditions (El/Baal/Asherah/Anat; Tinia/Uni/Menrva/Voltumna) → **374 archetypes, 27 traditions**.
+- **2.8.0** — Role aspects: trait-derived role facets (`src/aspect.cyr`) — every one of the 374 archetypes gains selectable roles derived from its personality vector, with no per-archetype authoring. Purely additive; no profile or API behavior changed.
+- **2.9.0** — Tarot Major Arcana (`src/tarot.cyr`): the 22 trumps as archetypes, each a *path* on the Tree of Life bridging the Kabbalah module (Hebrew letter + path number 11–32 + the two Sephiroth it joins; Golden Dawn attribution) → **396 archetypes, 28 traditions**. First module to bridge two existing systems.
+- **Toolchain maintenance** — 2.7.2 (pin 6.1.34 → 6.2.11) and 2.8.1 (6.2.11 → 6.4.69): vendored stdlib re-synced to the pinned snapshot, benches recorded, no source changes.
 
-The minors below sequence the former demand-gated backlog toward a 3.0.0 consolidation.
+The minors below sequence the former demand-gated backlog toward a 3.0.0 consolidation. (Role aspects took the original 2.8.0 slot, so the Tarot → overlays sequence shifted up one minor; Tarot has now shipped as 2.9.0.)
 
 ## Planned — minors to 3.0.0
 
@@ -17,10 +20,9 @@ Each is additive and non-breaking (new archetypes / traditions / an additive
 overlay layer). Historical-accuracy rule stands throughout: established
 scholarly correspondences only, no inventions.
 
-- **v2.8.0 — Tarot Major Arcana** — 22 archetypes, mapped to the 22 Tree-of-Life paths (bridges the existing Kabbalah module).
-- **v2.9.0 — I Ching** — 64 hexagram archetypes.
-- **v2.10.0 — World-traditions completion** — Aboriginal Australian, Native American (specific nations), Inuit; plus the deferred Polynesian / Slavic / Celtic additions (Pele/Kanaloa aspects, Mokosh aspects/Rod, Ogma/Miach/Airmed).
-- **v2.11.0 — Archetype overlays** — the first cross-cutting layer *on top of* the archetype profiles: Enneagram (9 types) and the Jungian set (Hero, Shadow, Anima/Animus, Self, Trickster — composes with the existing `shadow()`). Additive new API; profiles unchanged.
+- **v2.10.0 — I Ching** — 64 hexagram archetypes.
+- **v2.11.0 — World-traditions completion** — Aboriginal Australian, Native American (specific nations), Inuit; plus the deferred Polynesian / Slavic / Celtic additions (Pele/Kanaloa aspects, Mokosh aspects/Rod, Ogma/Miach/Airmed).
+- **v2.12.0 — Archetype overlays** — the first cross-cutting layer *on top of* the archetype profiles: Enneagram (9 types) and the Jungian set (Hero, Shadow, Anima/Animus, Self, Trickster — composes with the existing `shadow()`). Additive new API; profiles unchanged.
 
 ## v3.0.0 — Consolidation (breaking)
 
@@ -29,7 +31,7 @@ The major bump banks the API cleanups deferred through 2.x:
 - Migrate `cross_tradition_match` / `find_mapping` from `0`-on-not-found to `Option` (the absence-vs-error distinction noted in 2.5.0).
 - Drop the `prof_*` compat shims — consumers move to the derived `Profile_*` accessors (shims have eased the transition since 2.5.3).
 - Retire the public `ProfLayout` offset enum from the consumer surface (internal-only).
-- Formalize the overlay subsystem (2.11.0) as first-class API. The "archetype + overlay engine" identity for v3.
+- Formalize the overlay subsystem (2.12.0) as first-class API. The "archetype + overlay engine" identity for v3.
 
 ## Declined
 
