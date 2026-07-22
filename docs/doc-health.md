@@ -48,7 +48,7 @@ Two findings are worth carrying forward as method:
 
 | Doc | Last touched | Status | Notes |
 |-----|--------------|--------|-------|
-| `docs/development/roadmap.md` | 2026-07-22 | ✅ Fresh | Shipped through 2.14.0. The Aboriginal Australian arc is **closed** — six candidates researched, six refused, each ground recorded. Nothing scheduled before v3.0.0. Community engagement is the only thing that can reopen the arc, and it is not a research task. |
+| `docs/development/roadmap.md` | 2026-07-22 | ✅ Fresh | **Forward-looking only, as its own header always promised** — the Shipped section and the closed/resolved blocks were removed (158 → 87 lines) once verified duplicated in CHANGELOG.md, `src/aboriginal.cyr` and ADR-010. Nothing scheduled before v3.0.0. The Aboriginal arc is retained only as a *blocked* item, reduced to the one thing that can move it: five named bodies nobody has written to. `incarnate_indigenous_*` renaming moved into the v3.0.0 list where it belongs. |
 | `docs/development/state.md` | — | ❓ Open | Not split out; volatile state lives in CLAUDE.md + roadmap. Adopt vidya's `state.md` split only if CLAUDE.md churn warrants. |
 
 ## Architecture

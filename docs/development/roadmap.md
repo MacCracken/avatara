@@ -2,148 +2,72 @@
 
 > avatara — forward-looking milestones only. Shipped work lives in [CHANGELOG.md](../../CHANGELOG.md).
 
-## Shipped
+## Planned
 
-- **2.4.x** — toolchain + hardening + language modernization: cyrius 3.10.0 → 6.0.40, `cyrius.cyml` manifest, modern CI/release, dist bundle, bench-on-every-release; NULL/overflow hardening; `+=`/`match` adoption; stdlib `f64_le`/`f64_ge`; spirit-emphasis (`PROF_SPIRIT`) collision fix.
-- **2.5.x** — architecture: `Result<T, E>` error model (2.5.0); shadow aspect (2.5.1); `domain` field, all 362 archetypes assigned (2.5.2); native `#derive` `struct Profile` migration (2.5.3); security audit + CWE-690 `xalloc` hardening (2.5.4).
-- **2.6.0** — The Solar Year: 25th "Solar" tradition (intercalary archetypes), landing at **366 archetypes (365 + the leap quarter)**.
-- **2.7.0** — Canaanite & Etruscan micro-traditions (El/Baal/Asherah/Anat; Tinia/Uni/Menrva/Voltumna) → **374 archetypes, 27 traditions**.
-- **2.8.0** — Role aspects: trait-derived role facets (`src/aspect.cyr`) — every one of the 374 archetypes gains selectable roles derived from its personality vector, with no per-archetype authoring. Purely additive; no profile or API behavior changed.
-- **2.9.0** — Tarot Major Arcana (`src/tarot.cyr`): the 22 trumps as archetypes, each a *path* on the Tree of Life bridging the Kabbalah module (Hebrew letter + path number 11–32 + the two Sephiroth it joins; Golden Dawn attribution) → **396 archetypes, 28 traditions**. First module to bridge two existing systems.
-- **2.10.0** — I Ching (`src/iching.cyr`): the 64 hexagrams of the King Wen sequence, each carrying its six lines and its two constituent trigrams (bagua), with element derived from the upper trigram and polarity from the yang-line balance → **460 archetypes, 29 traditions**. All 64 trigram pairings occur exactly once — a bijection the suite pins.
-- **2.10.1** — performance: `similar_to()` switched from sort-then-trim to bounded top-k selection, removing an O(N²) insertion sort over the whole registry (`affinity/similar_to_5` 809 → 73 µs, −91%). Identical results and ordering; the cost no longer grows with N².
-- **2.11.0** — World-traditions completion, organised as **named nations** rather than pan-continental buckets: Inuit (10), Lakota (10), Haudenosaunee (6), Anishinaabe (6), and a deliberately scoped Aboriginal Australian set (5, each attributed to its people); plus the outstanding Celtic healers Miach and Airmed → **499 archetypes, 34 traditions**. White Buffalo Calf Woman and Deganawidah remain in the existing "Indigenous" incarnate tradition and are not duplicated. Restricted Dreaming material is excluded by design — see the `aboriginal.cyr` header and the 2.11.x arc below.
-- **2.12.0** — World traditions, part 2: the three items the 2.11.0 review deferred. The pan-ethnic `"Indigenous"` label is retired — White Buffalo Calf Woman, the Peacemaker, Quanah Parker and Wovoka now carry Lakota, Haudenosaunee, Comanche and Northern Paiute (which also fixed an orphaned history mapping that had filed all four under the Tonga Empire). The seven Grandfather Teachings (Nizhwaaswi Gagiikwewin) join `anishinaabe.cyr`, restoring the balance lost when the wiindigoo was dropped. Separators normalised to the em dash codebase-wide → **504 archetypes, 35 traditions**.
-- **2.14.0** — The Aboriginal Australian expansion **did not happen, and that is the release.** Six figures were researched against a prior desk pass that had called five shippable; all six were refused (see the arc below). What shipped is the change that was gating them — per-people tradition strings (`Kunwinjku`, `Kulin`, `Gunaikurnai`) replacing the continent-wide `"Aboriginal Australian"`, with `traditions_for_civilization("Aboriginal Australia")` preserving the continent-wide query — plus four factual corrections the research found in already-shipped content, and a `history.cyr` integrity fix found while making the split: five mappings named traditions no profile carried and five traditions resolved to no mapping, now both zero and both walked by test → **504 archetypes, 37 traditions**.
-- **2.13.1** — Design rulings recorded: traditions and typologies are mutually exclusive (a typology may only ever be an overlay, enforced by test), and `shadow()`/`compose()` stay uniform across every tradition with no per-figure opt-out. No archetypes, no API change.
-- **2.13.0** — Archetype overlays (`src/overlay.cyr`): the first layer sitting *on top of* the archetypes rather than beside them. Enneagram (9 types, 3 centres, wings) and the Jungian set (Hero, Shadow, Anima/Animus, Self, Trickster), all derived from the profile's own weights. `jungian_shadow_form()` composes with the existing `shadow()`. No archetypes added — `profile_count()` stays 504.
-- **Toolchain maintenance** — 2.7.2 (pin 6.1.34 → 6.2.11) and 2.8.1 (6.2.11 → 6.4.69) as standalone maintenance releases; 2.10.0 carried 6.4.69 → 6.4.70 and 2.11.0 carried 6.4.70 → 6.4.71. Vendored stdlib re-resolved to the pinned snapshot each time, benches recorded.
+**Nothing is scheduled before 3.0.0.** v2.14.0 was the last planned minor. Everything remaining is
+either breaking (3.0.0, below), additive but unscheduled (backlog), or blocked on something no code
+change resolves.
 
-The minors below sequence the former demand-gated backlog toward a 3.0.0 consolidation. (Role aspects took the original 2.8.0 slot, so the Tarot → overlays sequence shifted up one minor; Tarot shipped as 2.9.0 and I Ching as 2.10.0.)
+## Blocked — Aboriginal Australian depth
 
-## Planned — minors to 3.0.0
+The arc closed at v2.14.0 with **six candidates researched and six refused**; the grounds are recorded
+in the `src/aboriginal.cyr` header and the 2.14.0 CHANGELOG entry, and the standing rules are ADR-010.
+None of that is revisited here. What matters going forward is the single reason the arc cannot move:
 
-Each is additive and non-breaking (new archetypes / traditions / an additive
-overlay layer). Historical-accuracy rule stands throughout: established
-scholarly correspondences only, no inventions.
+**The constraint is engagement, not research, and the two are not substitutes.** Desk research
+establishes that material is *already public*, which is checkable. It cannot establish that a people
+*consents to this particular use*, which is what review is for. No community is engaged with this
+project. The refusal that makes this concrete is the Waugal: its sourcing is excellent — roughly a
+thousand words in named Noongar Elders' own voices — and SWALSC's published terms require written
+permission for "modification, distribution or publication", which is precisely what a GPL-3.0 library
+that ships a profile and inverts it through `shadow()` does. More research cannot answer that. Asking
+can.
 
-**Nothing is currently scheduled before 3.0.0.** v2.14.0 was the last planned minor, and it closed the
-Aboriginal Australian arc by establishing that the arc cannot advance on research at all — only on
-engagement (below). The remaining work is either breaking (3.0.0) or additive-unscheduled (backlog).
+Five bodies publish contact details, and nobody has written to any of them:
+
+| body | question |
+|---|---|
+| SWALSC | Written consent for the Waugal, whose terms expressly cover modification and distribution |
+| GLaWAC | Whether more of the Borun and Tuk account may be published, and on what terms |
+| Injalak Arts | Reuse terms for Namarrkon — their site states none, so shipping would rest on silence |
+| Barkandji Native Title Group | The Barkandji-preferred spelling, Ngatyi vs Ngatji, which their own publications split on |
+| Jali LALC / the Dirawong Trust | Dirawong, the one borderline candidate never assessed to conclusion |
+
+If a community engages, the gate reopens and everything carried is revisable at their direction,
+including removal.
 
 ## Backlog — additive, unscheduled
 
-### The v2.14.0 arc — Aboriginal Australian depth
-
-**CLOSED at v2.14.0. The answer was no, six times.** Two research rounds ran: a desk pass
-(2026-07-22, five angles, 159 figure assessments) that judged six figures shippable, and a
-deeper verification round that put each through live retrieval plus two independent sceptics
-with orthogonal lenses. **Every one of the six was refused.** The desk pass was not sloppy —
-its factual claims almost all verified — it just asked shallower questions than shipping
-requires. The refusals, kept in the `aboriginal.cyr` header so they are not re-litigated:
-
-| figure | prior verdict | outcome | ground |
-|---|---|---|---|
-| **Goorialla** (Lardil) | strongest candidate | **excluded** | Not the Lardil rainbow serpent — that is **Thuwathu**. Goorialla is Roughsey's 1975 book, fusing Gulf material into Cape York repertoires. Belongs to a book, not a people. |
-| **Borun** (Gunaikurnai) | shippable | **excluded** | Best channel in the module, ~150 published words behind it, one paragraph recirculated across eight sites. False positive #2, as predicted. |
-| **Tuk** (Gunaikurnai) | shippable | **excluded** | ~95 words. Performs no action, speaks no word, makes no decision in any source retrieved. |
-| **Waugal** (Noongar) | shippable | **excluded pending consent** | The opposite of under-sourced: SWALSC publishes ~1,000 words in named Elders' voices — *and* publishes terms requiring written permission for "modification, distribution or publication", which is what this library does. |
-| **Namarrkon** (Kunwinjku) | shippable | **excluded** | The two-channel case collapsed under measurement: Marrawuddi shares 232 five-grams with the 2009 settler-curatorial Samstag text (89%, 39-word run, inherits its typo); Injalak shares zero. One channel, 102 words — less than Borun. |
-| **Ngatyi** (Barkandji) | gated on spelling | **excluded, reason corrected** | The old reason ("park interpretation") was false — the channel is excellent. Real grounds: the custodian's express restriction on conduct and speech, and a name its own custodians spell two ways. |
-
-**The generalisable finding**, worth more than the verdicts: *an Aboriginal-owned publisher does
-not make the words it reprints a community voice.* Marrawuddi is Mirarr-owned and was reprinting
-a settler curator who describes himself in the document as "an outsider who lived in Arnhem Land",
-under a first-page warning that some of its information was "potentially inaccurate or generic or
-stereotyped". Channel ownership was checked; text provenance was not. Check both.
-
-**What would change the answer is not more research.** Three bodies publish contact details —
-SWALSC, GLaWAC and Injalak Arts — and nobody has written to any of them. Desk research can
-establish that material is public, which is checkable; it cannot establish that a people consents
-to this particular use, which is what review is for. That is now the binding constraint on this
-arc, and no code change substitutes for it.
-
-**SHIPPED at v2.14.0 — the per-people tradition split.**  Set `tradition`
-to the people — Kunwinjku, Kulin, Gunaikurnai, Lardil, Noongar — rather than one continent-wide
-"Aboriginal Australian" string. It fixes a real artifact rather than relabelling one — `cross_tradition_match()` returns exactly one
-best match per tradition string, so the library currently asserts "the Aboriginal Australian
-equivalent of Thor is X". Split per people it returns a Kunwinjku match and a Gunaikurnai match
-separately, which is true. Discoverability is preserved through the civilization field, which
-already existed: `traditions_for_civilization("Aboriginal Australia")` gathers all three. Cost, as
-estimated and as it turned out: `by_tradition()` is a plain `streq` and is free; `history.cyr`
-needs one mapping per people; `tests/avatara.tcyr` pins the count, the `all_traditions()` presence
-and the history context; `all_traditions()` output shape changes for every consumer; `dist/` must be
-regenerated. A deliberate minor with a CHANGELOG entry, not a drive-by edit. Do **not** add a
-`people` field — `ArchetypeProfile` is a fixed 40-field / 320-byte layout with a pinned assertion
-test and a committed dist bundle.
-
-**RESOLVED — `shadow()` and `compose()` stay uniform.** No source pass raised this; it was
-found in the code. `shadow()` emits a profile named "Shadow of <name>" with every trait
-inverted and polarity flipped, and `compose()` blends across traditions by weight — so the
-library will generate "Shadow of Borun", and will flip Tuk, the mother of the five
-Gunaikurnai clans, from feminine to masculine. No channel cited anywhere in the survey
-contemplated that, and it already applies to the four figures carried today. **Decision: no
-per-figure opt-out.** These operations apply evenly across every tradition in the library,
-and the `aboriginal.cyr` header now states plainly that a consumer generating shadow or
-composed forms is doing something no cited source anticipated and should decide for itself
-whether that suits its use. A library that silently exempts some archetypes from its own
-machinery is harder to reason about than one that applies it evenly and says so. **This
-clears the gate on the expansion below.**
-
-**Also settled (2.13.1): traditions and typologies are mutually exclusive.** A tradition is a
-people's own account of who its figures are and earns archetypes, a `tradition` string, a
-history mapping and a place in `profile_count()`. A typology — the Enneagram, Jung's set,
-anything like them — is a modern analytic grid and may only ever be an overlay. The Enneagram
-will not become a tradition with nine archetypes. A test enforces it, walked over the
-`OverlaySystem` registry so a system registered later is covered without a test edit.
-
-That extensibility is the point rather than a side effect: overlays do not hardlock meaning.
-Interpretation moves, and new systems will want to be laid over traditions this library already
-carries. Because overlays derive and store nothing, adding one touches no archetype, and several
-readings may sit over the same figure disagreeing with each other. A new overlay system is
-therefore always available as an answer — a typology becoming a tradition never is.
-
-**STILL BLOCKED — community review**, and after v2.14.0 this is the *only* thing standing between
-the arc and any further movement. Desk research established that material is *already public*,
-which is checkable. It cannot establish that a people *consents to this particular use*, which is
-what review is for, and no community is engaged with this project. Two courtesy emails are the only
-open research actions: the Barkandji Native Title Group (Ngatyi spelling) and Jali LALC or the
-Dirawong Trust (Dirawong). If a community ever engages, the gate reopens and everything here is
-revisable at their direction, including removal.
-
-**Two false-positive patterns, now encoded in the module header.** (1) Joint-management and
-land-agreement material — park interpretive signage, plans of management, ILUAs — is land
-administration with Aboriginal participation, not a people publishing in its own voice; this alone
-sank Warramurrungundji, Almudj, Bolung, Gurangatch and Mirragan, Akurra and Gulaga. (2) Thin
-community-published material must not be padded to fill the 15-trait struct; an impeccable channel
-with three sentences behind it is a reason to ask that community for more, never to write it
-yourself.
-
-### Carried over from the 2.11.0 review
-
-All three items shipped in 2.12.0: the `"Indigenous"` re-attribution, the Seven Grandfather
-Teachings, and the separator normalisation. One follow-on remains:
-
-- **`incarnate_indigenous_*` function names are now stale.** The four figures no longer carry
-  an "Indigenous" tradition, but their constructor names and the `all_incarnate_indigenous()`
-  collection still say so. Renaming them is a breaking API change and belongs in v3.0.0.
-
-### Other additive options not yet assigned to a version:
-
-- **Tarot de Marseille attribution** — expose the older Tarot de Marseille numbering/attribution as an *alternative* view of the 22 trumps, **alongside — not replacing — the shipped Rider–Waite–Smith / Golden Dawn one** (`src/tarot.cyr`). The TdM predates the Golden Dawn esoteric overlay and differs notably: **VIII = Justice, XI = Strength (Force)** (the reverse of the shipped VIII Strength / XI Justice), plus its own pre-Golden-Dawn iconography and the earlier Éliphas Lévi / Oswald Wirth letter attributions. The shipped `tarot_*` data and the Kabbalah path bridge stay canonical; this would add a parallel layer (e.g. `tarot_marseille_number(i)` and/or a variant attribution accessor) so a consumer can select the deck tradition appropriate to its use. No change to existing profiles, API, or the Tree-of-Life bridge.
+- **Tarot de Marseille attribution** — expose the older Tarot de Marseille numbering/attribution as an
+  *alternative* view of the 22 trumps, **alongside — not replacing — the shipped Rider–Waite–Smith /
+  Golden Dawn one** (`src/tarot.cyr`). The TdM predates the Golden Dawn esoteric overlay and differs
+  notably: **VIII = Justice, XI = Strength (Force)** (the reverse of the shipped VIII Strength / XI
+  Justice), plus its own pre-Golden-Dawn iconography and the earlier Éliphas Lévi / Oswald Wirth
+  letter attributions. The shipped `tarot_*` data and the Kabbalah path bridge stay canonical; this
+  would add a parallel layer (e.g. `tarot_marseille_number(i)` and/or a variant attribution accessor)
+  so a consumer can select the deck tradition appropriate to its use. No change to existing profiles,
+  API, or the Tree-of-Life bridge.
 
 ## v3.0.0 — Consolidation (breaking)
 
 The major bump banks the API cleanups deferred through 2.x:
 
-- Migrate `cross_tradition_match` / `find_mapping` from `0`-on-not-found to `Option` (the absence-vs-error distinction noted in 2.5.0).
-- Drop the `prof_*` compat shims — consumers move to the derived `Profile_*` accessors (shims have eased the transition since 2.5.3).
+- Migrate `cross_tradition_match` / `find_mapping` from `0`-on-not-found to `Option` (the
+  absence-vs-error distinction noted in 2.5.0).
+- Drop the `prof_*` compat shims — consumers move to the derived `Profile_*` accessors (shims have
+  eased the transition since 2.5.3).
 - Retire the public `ProfLayout` offset enum from the consumer surface (internal-only).
-- Formalize the overlay subsystem (shipped 2.13.0) as first-class API. The "archetype + overlay engine" identity for v3.
+- Formalize the overlay subsystem (shipped 2.13.0) as first-class API. The "archetype + overlay
+  engine" identity for v3.
+- **Rename `incarnate_indigenous_*`.** The four figures stopped carrying an `"Indigenous"` tradition
+  in 2.12.0, but their constructor names and the `all_incarnate_indigenous()` collection still say so.
+  Renaming is breaking, which is why it waited for this bump.
 
 ## Declined
 
-- **Affinity-graph caching** — a pointer-keyed cross-tradition cache regressed the bench (`cross_tradition_match` 49µs → 945µs); the construct-then-query access pattern misses a pointer-keyed cache. Revisit only with a non-pointer-keyed (index/name-based), bench-proven design.
+- **Affinity-graph caching** — a pointer-keyed cross-tradition cache regressed the bench
+  (`cross_tradition_match` 49µs → 945µs); the construct-then-query access pattern misses a
+  pointer-keyed cache. Revisit only with a non-pointer-keyed (index/name-based), bench-proven design.
 
 ## Dependencies for Consumer Integration
 
@@ -156,3 +80,8 @@ The major bump banks the API cleanups deferred through 2.x:
 | kiran (game entities) | Planned | Via joshua |
 | agnosai (agent personalities) | Planned | Direct consumption |
 | sankhya (ancient sciences) | Planned | Shared `IncarnateSage` / Vedic bridge |
+
+> **Note for consumers at v2.14.0:** the Aboriginal figures' `tradition` strings changed from the
+> single `"Aboriginal Australian"` to `Kunwinjku`, `Kulin` and `Gunaikurnai`. Anything reading
+> `prof_tradition()` or `all_traditions()` for those figures needs updating;
+> `traditions_for_civilization("Aboriginal Australia")` gathers all three.
