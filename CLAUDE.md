@@ -6,7 +6,7 @@
 
 - **Language**: Cyrius (ported from Rust in v2.0)
 - **License**: GPL-3.0-only
-- **Version**: SemVer 2.13.1
+- **Version**: SemVer 2.14.0
 - **Compiler**: cyrius >= 6.4.71 (pinned in `cyrius.cyml` `[package].cyrius`)
 
 ## Consumers
@@ -16,11 +16,12 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 ## Architecture
 
 - `src/lib.cyr` — public API: includes all modules
-- `src/main.cyr` — smoke test (~10 core-subsystem checks)
+- `src/main.cyr` — smoke test (6 checks: profile count, tradition count, lookup, compose, affinity, history)
 - `src/types.cyr` — ArchetypeProfile layout (320 bytes), TraitWeights (15 f64), ModuleEmphasis (14 f64), enums (BreathAffinity, GrowthDirection, Element, Polarity, CosmicTier, Domain)
 - `src/error.cyr` — AvataraError enum codes, validation
+- `src/aspect.cyr` — role aspects: universal roles DERIVED from the trait weights, no per-archetype authoring (added 2.8.0). Like `shadow` and `overlay`, it reads off a finished profile and stores nothing
 - `src/compose.cyr` — archetype composition: weighted blending of multiple profiles
-- `src/history.cyr` — 35 tradition-to-history mappings (civilization, era, temporal range, notes)
+- `src/history.cyr` — 37 tradition-to-history mappings (civilization, era, temporal range, notes). A test walks both directions: no mapping may name a tradition with no profiles, and every tradition carried must resolve a context
 - `src/registry.cyr` — lookup by name, enumeration, query/filter API (includes history-based queries)
 - `src/affinity.cyr` — affinity scoring, similarity search, cross-tradition matching, conflict detection
 - `src/shadow.cyr` — shadow aspect: `shadow(profile)` (involutive inversion), `is_shadow_of(a, b)`
@@ -56,9 +57,9 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/lakota.cyr` — 10 Lakota wakan powers (Wakan Tanka, Inyan, Skan, Wakinyan, Iktomi)
 - `src/haudenosaunee.cyr` — 6 Six Nations figures (Sky Woman, the twins, Three Sisters, Great Turtle)
 - `src/anishinaabe.cyr` — 5 Anishinaabe manidoog + the 7 Grandfather Teachings (Nizhwaaswi Gagiikwewin), carried by their Ojibwe names as cosmic-tier principles; the wiindigoo is deliberately not carried — see module header
-- `src/aboriginal.cyr` — 4 widely published Aboriginal Australian figures, each attributed to its people; restricted Dreaming material deliberately excluded (see module header)
+- `src/aboriginal.cyr` — 4 figures of three Aboriginal Australian peoples, carried under their own peoples' tradition strings (Kunwinjku, Kulin, Gunaikurnai), not a continent-wide label; `traditions_for_civilization("Aboriginal Australia")` gathers them. Restricted Dreaming material deliberately excluded, and the v2.14.0 survey's six refusals are recorded with their reasons (see module header)
 - `src/logging.cyr` — sakshi logging init
-- `tests/avatara.tcyr` — integration test suite (273 assertions)
+- `tests/avatara.tcyr` — integration test suite (295 assertions)
 - `tests/avatara.bcyr` — benchmarks (60)
 - `programs/traditions.cyr` — example: explore archetypes
 - `programs/compose.cyr` — example: blend traditions

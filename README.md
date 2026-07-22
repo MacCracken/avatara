@@ -10,9 +10,12 @@
 
 Maps divine and mythological beings across world traditions to composable personality configurations. Not religion simulation — psychometric archetype mapping backed by trait math. Each entity produces an `ArchetypeProfile` (320 bytes) with trait weights, module emphasis, breath phase affinity, growth direction, and primary domain.
 
-**504 archetypes across 35 traditions** (incl. the solar-year intercalary set, the 22 Tarot Major Arcana, the 64 I Ching hexagrams, and named-nation Inuit, Lakota, Haudenosaunee, Anishinaabe and Aboriginal Australian traditions). Written in Cyrius, compiled by the Cyrius compiler 6.4.71+.
+**504 archetypes across 37 traditions** (incl. the solar-year intercalary set, the 22 Tarot Major Arcana, the 64 I Ching hexagrams, and named-nation Inuit, Lakota, Haudenosaunee, Anishinaabe and Aboriginal Australian traditions). Written in Cyrius, compiled by the Cyrius compiler 6.4.71+.
 
 ## Traditions
+
+Tradition and module are not one-to-one: `incarnate` spans six traditions, and `aboriginal` carries
+three peoples. The `tradition` field is what `by_tradition()` and `cross_tradition_match()` key on.
 
 | Tradition | Module | Entities |
 |-----------|--------|----------|
@@ -37,7 +40,7 @@ Maps divine and mythological beings across world traditions to composable person
 | **Sikh** | `sikh` | 10 Sikh Gurus |
 | **Finnish** | `finnish` | 14 Kalevala figures & Sami spirits |
 | **Vodou** | `vodou` | 14 Lwa (Rada, Petwo, Ghede) |
-| **Incarnate** | `incarnate` | 56 incarnate masters; the four North American figures carry their own nations |
+| **Mystic / Vedic** *(+ Hindu, Buddhist, Taoist above)* | `incarnate` | 56 incarnate masters. `incarnate` is a module, not a tradition — its figures carry Mystic (17), Hindu (13), Buddhist (10), Vedic (7), Taoist (5), and four who carry their own nations (Lakota, Haudenosaunee, Comanche, Northern Paiute) |
 | **Solar** | `solar` | 4 intercalary archetypes (the days upon the year + the leap quarter) |
 | **Canaanite** | `canaanite` | 4 Ugaritic deities (El, Baal, Asherah, Anat) |
 | **Etruscan** | `etruscan` | 4 Etruscan deities (Tinia, Uni, Menrva, Voltumna) |
@@ -47,7 +50,9 @@ Maps divine and mythological beings across world traditions to composable person
 | **Lakota** | `lakota` | 10 wakan powers |
 | **Haudenosaunee** | `haudenosaunee` | 6 figures of the Six Nations creation account |
 | **Anishinaabe** | `anishinaabe` | 5 manidoog + the 7 Grandfather Teachings |
-| **Aboriginal Australian** | `aboriginal` | 4 widely published figures, each attributed to its people |
+| **Kunwinjku** | `aboriginal` | Ngalyod, of western Arnhem Land |
+| **Kulin** | `aboriginal` | Bunjil and Waa, of central Victoria |
+| **Gunaikurnai** | `aboriginal` | Tidilick, of Gippsland |
 
 ## Quick Start
 
@@ -94,28 +99,64 @@ All traditions map to the same `ArchetypeProfile` output:
 
 Archetypes are composable across traditions. A character can carry Kabbalistic Tiphareth + Hindu Vishnu + Greek Athena — reinforcing archetypes amplify, conflicting archetypes create productive internal tension.
 
-## Affinity & Composition Intelligence (v2.3.0)
+## Affinity & Composition
 
 ```cyrius
 # How similar are two archetypes? (0.0 to 1.0)
 var score = affinity(norse_thor(), olympian_ares());
 
 # Find Thor's closest match across all other traditions
-var match = cross_tradition_match(norse_thor());
+var closest = cross_tradition_match(norse_thor());
 # Returns the most similar archetype from a different tradition
+# (note: `match` is a reserved keyword in Cyrius and cannot name a variable)
 
 # Top 5 most similar archetypes to any entity
 var top5 = similar_to(norse_thor(), 5);
 
-# Detect conflicting traits (delta > 0.4)
+# Detect conflicting traits (delta strictly > 0.4)
 var conflicts = detect_conflicts(kabbalah_gevurah(), kabbalah_chesed());
-# Returns: warmth (0.3 vs 0.9), patience (0.3 vs 0.8), humor (0.2 vs 0.6)...
+# Returns 2, largest delta first: warmth (0.3 vs 0.9), patience (0.3 vs 0.8).
+# Humor (0.2 vs 0.6) is exactly 0.4 and so does NOT qualify — the comparison
+# is strict.
 ```
+
+## Derived Layers
+
+Two layers read *off* a profile rather than sitting beside it. Neither stores anything, neither adds
+archetypes, and `profile_count()` is unchanged by either.
+
+```cyrius
+# Shadow — the inverted form. Traits become 1-v, breath/growth/polarity mirror,
+# element and tier are kept. Involutive: shadow(shadow(p)) == p.
+var dark_thor = shadow(norse_thor());
+# prof_name(dark_thor) = "Shadow of Thor"
+var yes = is_shadow_of(dark_thor, norse_thor());
+
+# Overlays — cross-cutting typologies derived from the profile's own weights.
+var etype = profile_enneagram_type(norse_thor());   # index; also _wing/_centre/_score
+var role  = profile_jungian_role(norse_thor());     # Hero/Shadow/Anima/Self/Trickster
+
+# Or walk every registered system without naming one — so a system added later
+# is enumerable by code written today.
+for (var s = 0; s < overlay_system_count(); s += 1) {
+    var best = overlay_best(s, norse_thor());
+    # overlay_system_name(s), overlay_label(s, best), overlay_score(s, p, i)
+}
+```
+
+An overlay is **one reading, not the reading**. The Enneagram and Jung's set are 20th-century
+frameworks; neither was in the room when the Dagda or Sedna were described. Several overlays may sit
+over the same figure and disagree, and none of them displaces what the tradition modules say the
+archetype *is*.
+
+Traditions and typologies are therefore mutually exclusive, and a test enforces it: a typology may
+only ever be an overlay — never a `tradition` string, never an archetype, never counted. The
+Enneagram will not become a tradition with nine archetypes.
 
 ## Relationship to AGNOS
 
 ```
-avatara (this) — divine archetype profiles (504 entities, 35 traditions)
+avatara (this) — divine archetype profiles (504 entities, 37 traditions)
   |
   +-> bhava — emotion/personality engine (archetype overlay)
   +-> joshua — NPC divine archetypes for games

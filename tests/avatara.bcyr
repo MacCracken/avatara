@@ -299,7 +299,7 @@ for (var i = 0; i < N; i = i + 1) { all_anishinaabe(); }
 bench_batch_stop(b, N);
 bench_report(b);
 
-b = bench_new("aboriginal/all_5");
+b = bench_new("aboriginal/all_4");
 bench_batch_start(b);
 for (var i = 0; i < N; i = i + 1) { all_aboriginal(); }
 bench_batch_stop(b, N);

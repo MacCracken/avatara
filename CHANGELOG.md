@@ -7,6 +7,84 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.14.0] — 2026-07-22
+
+The Aboriginal Australian expansion this version was planned around **did not happen**, and that is the
+release. Six figures were researched against a prior desk pass that had called five of them shippable;
+every one was refused. What shipped instead is the structural change that was gating them, four factual
+corrections the research turned up in already-shipped content, and a data-integrity fix in `history.cyr`
+found while making the first change.
+
+### Changed
+- **Aboriginal figures now carry their own peoples' tradition strings** — `Kunwinjku`, `Kulin` and
+  `Gunaikurnai` replace the single continent-wide `"Aboriginal Australian"`. This fixes a real artifact
+  rather than relabelling one: `cross_tradition_match()` returns one best match per tradition string, so
+  the library previously answered "what is the Aboriginal Australian equivalent of Thor?" with a single
+  figure — a sentence no Aboriginal person would write. It now returns a Kunwinjku match and a Gunaikurnai
+  match separately, which is true. **Nothing is lost**: each people's `history.cyr` mapping lists
+  `"Aboriginal Australia"` among its civilizations, so `traditions_for_civilization("Aboriginal Australia")`
+  still gathers all three. The continent is a place these peoples share, not a tradition any belongs to,
+  and the two fields now draw exactly that distinction. Each people is also dated to its own country —
+  Kunwinjku to the ~50,000-year regional floor, Kulin to Murrup Tamboore (~31,000 BP), Gunaikurnai to
+  Cloggs Cave (~25,000 cal BP) — where one continent-wide date had stood for all.
+  **Consumers reading `prof_tradition()` or `all_traditions()` for these figures must update.**
+- **`history.cyr` and the registry now agree in both directions, enforced by test.** Five mappings named
+  traditions no profile carried — `"Incarnate Hindu"`, `"Incarnate Buddhist"`, `"Incarnate Mystic"`,
+  `"Incarnate Taoist"`, `"Incarnate Sage"` — the same orphan class as the `"Incarnate Indigenous"` mapping
+  fixed in 2.12.0, which was never swept for. `"Incarnate Sage"` described Pythagoras, Socrates, Confucius
+  and Adi Shankara, none of whom this library carries. In the other direction five tradition strings carried
+  profiles that resolved to no mapping at all, so `context_for_tradition()` returned `0` for 19 archetypes.
+  `"Incarnate Mystic"` was rekeyed to `"Mystic"` (17 profiles), the three redundant duplicates and the
+  aspirational `"Incarnate Sage"` were dropped, and `Vedic`, `Canaanite`, `Etruscan` and `Solar` gained
+  mappings. The new test walks both directions rather than pinning a count, so a new tradition or mapping is
+  covered the moment it is added.
+
+### Fixed
+- **`Goorialla` was attributed to the Lardil and is not theirs.** The Lardil rainbow serpent is **Thuwathu**,
+  published by the Lardil's own art centre and their shire; Goorialla is the serpent of Goobalathaldin Dick
+  Roughsey's *The Rainbow Serpent* (1975), which the Australian Dictionary of Biography records as fusing
+  Gulf material into Cape York repertoires. He belongs to a book, not to a people.
+- **The Waugal citation rested on a false positive the file itself defines.** The module credited Noongar
+  interpretation "at Kings Park" — Botanic Gardens and Parks Authority material, a WA government authority,
+  i.e. this file's own false positive #1 cited as support. Replaced with the South West Aboriginal Land and
+  Sea Council's own channel, whose lead form is **Waugal**.
+- **The GLaWAC Elder-approval statement was over-read**, and it was the strongest consent claim in the file.
+  It was described as approving the stories "for use". It reads that *the spelling* has been approved, to
+  ensure consistent public material — approval of **orthography**, silent on content and on third-party
+  reuse. Corrected wherever it was relied on.
+- **The stated reason for excluding Ngatyi was false.** The file said the material was park interpretation.
+  It is not — Badger Bates is a Barkandji Elder and a Native Title Group director publishing in the first
+  person. Ngatyi stays excluded on two real grounds: the custodian's express restriction on conduct and
+  speech at Ngatyi places, and a name its own custodians spell two ways, which a name-keyed library cannot
+  hold. A wrong exclusion reason invites the next survey to re-litigate from a wrong premise.
+- The benchmark label `aboriginal/all_5` counted five figures where the module has four, since 2.11.0.
+- `history.cyr`'s header claimed 34 mappings; it had 35 before this release and has 37 after.
+
+### Not added, and why
+Recorded in the `aboriginal.cyr` header rather than dropped, because "we looked and did not add" is a result:
+- **Goorialla** — belongs to a book rather than a people; this library attributes to peoples, not authors.
+- **Borun** and **Tuk** — the best channel cited anywhere in the module (the Gunaikurnai RAP in its own
+  voice) with ~150 and ~95 published words behind it, one paragraph recirculated across eight sites. Tuk
+  performs no action, speaks no word and makes no decision in any source retrieved. This is the module's own
+  false-positive #2 arriving exactly as predicted.
+- **Waugal** — refused for the *opposite* of the usual reason, and must not be recorded as under-sourced:
+  SWALSC publishes ~1,000 words in named Noongar Elders' own voices, and publishes terms requiring written
+  permission for "modification, distribution or publication". A GPL-3.0 library that ships a profile and
+  inverts it through `shadow()` is both, named in terms. Excluded pending written consent nobody has sought.
+- **Namarrkon** — the case rested on two independent Aboriginal-owned channels. Measured against the 2009
+  settler-curatorial Samstag text: Injalak Arts shares **zero** five-word sequences with it, but Marrawuddi
+  shares **232** — 89% of its content, longest common run 39 words, inheriting the curator's typo and his
+  "in this painting" deixis applied to a different painting. Marrawuddi is the settler text copy-edited; an
+  Aboriginal-owned publisher does not make the words it reprints a community voice. One channel and 102 words
+  survived — less than Borun, already refused.
+- **Ngatyi** — see Fixed, above.
+
+### Notes
+- No new archetypes: **504 across 37 traditions** (35 → 37 from the split).
+- 22 new tests (273 → 295), including both-direction negative controls for the two new invariants.
+- Community review remains **blocked** and is now the binding constraint rather than a formality: three
+  bodies publish contact details, and nobody has written to any of them. No code change substitutes for it.
+
 ## [2.13.1] — 2026-07-22
 
 Two design rulings recorded and enforced, plus the API change one of them implied. No archetypes and no

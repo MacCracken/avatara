@@ -1,12 +1,30 @@
-# aboriginal.cyr -- Aboriginal Australian: 4 widely published figures.
+# aboriginal.cyr -- 4 figures of three Aboriginal Australian peoples, carried
+# under their own peoples' names: Kunwinjku, Kulin, Gunaikurnai.
 #
 # SCOPE AND LIMITS -- READ FIRST.
 #
 # "Aboriginal Australian" is a convenience label, not a theology. Aboriginal
 # Australia is 250+ nations with distinct languages, distinct Law and distinct
 # Dreaming narratives; there is no shared pantheon, and no figure below speaks
-# for the continent. Each entity is therefore attributed to the specific people
-# it belongs to, in both the comment and the `desc` field.
+# for the continent.
+#
+# THE TRADITION STRING IS THE PEOPLE, not the continent. Until v2.14.0 every
+# figure here carried the tradition "Aboriginal Australian", which made the
+# library assert things that are not true. `cross_tradition_match()` returns
+# one best match per tradition string, so the library answered the question
+# "what is the Aboriginal Australian equivalent of Thor?" with a single figure
+# — a sentence no Aboriginal person would write. Split per people it returns a
+# Kunwinjku match and a Gunaikurnai match separately, which is the truth.
+# Nothing is lost by the split: each people's `history.cyr` mapping lists
+# "Aboriginal Australia" among its civilizations, so
+# traditions_for_civilization("Aboriginal Australia") still gathers them all.
+# The continent is a place these peoples share, not a tradition any of them
+# belongs to, and that is exactly the distinction the two fields now draw.
+#
+# One caveat carried openly: Kunwinjku is a dialect of Bininj Kunwok, and
+# speakers call themselves Bininj. "Kunwinjku" is the form this module and its
+# cited art-centre channel use, and the Bininj Kunwok Regional Language and
+# Culture Centre — the body that would settle it — has not been asked.
 #
 # Much Dreaming material is restricted: secret-sacred, or open only to
 # initiated people, or to one gender, or to one clan, and some of what sits in
@@ -43,6 +61,68 @@
 # access is the clearest signal there is. The sourcing improved and the answer
 # is still no.
 #
+# THE v2.14.0 SURVEY ADDED NOTHING, AND THAT IS THE FINDING. Six figures were
+# researched to be added here — Goorialla, Borun, Tuk, Waugal, Namarrkon and
+# Ngatyi — against a prior desk pass that had called five of them shippable.
+# Every one was refused, each on its own ground, and the grounds are recorded
+# because "we looked and did not add" is a result worth keeping. Two of the six
+# failed on CHANNEL: Goorialla belongs to a book rather than to a people (see
+# the Ngalyod comment), and Ngatyi's name is unsettled among its own custodians
+# (above). Two failed on CONTENT, and they are this file's own false positive
+# #2 arriving exactly as predicted: BORUN and TUK come through the best channel
+# cited anywhere here — the Gunaikurnai RAP publishing in its own voice — and
+# behind it sit about 150 published words for Borun and about 95 for Tuk, the
+# same paragraph recirculated across eight sites. Borun's whole published life
+# is an itinerary; Tuk performs no action, speaks no word and makes no decision
+# in any source retrieved. A 15-trait profile of Tuk would be almost entirely
+# authored here, which is the thing this file promises not to do.
+#
+# The WAUGAL is the one that matters most, and it is refused for the opposite
+# of the usual reason. Its sourcing is excellent — the South West Aboriginal
+# Land and Sea Council publishes roughly a thousand words in the first-person
+# words of named Noongar Elders — so this is not a "not enough sources" case
+# and must not be recorded as one. SWALSC publishes terms: no part may be
+# reproduced or re-used "including reproduction, sale, modification,
+# distribution or publication" without written permission, and "no reproduction
+# of Noongar cultural and intellectual property is permitted without prior
+# negotiation and informed consent". A GPL-3.0 library that ships a profile and
+# then inverts it through `shadow()` is modification and distribution, named in
+# terms. The Waugal is excluded pending written consent from SWALSC, which
+# nobody has sought. Their contact details are published; the asking is a human
+# act and no code change can substitute for it.
+#
+# NAMARRKON, the Lightning Man, came closest, and the reason he failed is the
+# most reusable finding of the survey. The case for him was that TWO
+# independent Aboriginal-owned channels carried him: Injalak Arts, the
+# Kunwinjku-governed centre at Gunbalanya that already underwrites Ngalyod, and
+# Marrawuddi Arts, owned by Mirarr Traditional Owners. Both texts were
+# retrieved and compared against a third — the Max Hart collection extended
+# texts (Samstag Museum, University of Adelaide, 2009), written by a settler
+# curator who describes herself in it as "an outsider who lived in Arnhem
+# Land", and which warns on its own first page that some of its information was
+# "potentially inaccurate or generic or stereotyped".
+#
+# Injalak's text shares ZERO five-word sequences with the curatorial text and
+# tells a different account entirely. Marrawuddi's shares 232 of them, 89% of
+# its own content, with a longest common run of 39 consecutive words; it
+# inherits the curator's typo and his exhibition deixis "in this painting",
+# applied to a different painting. Marrawuddi is not a Mirarr account of
+# Namarrkon. It is the settler text, copy-edited. An Aboriginal-owned publisher
+# does not make the words it reprints a community voice, and being able to
+# measure that is worth more than the verdict it produced here.
+#
+# What survived was one channel and 102 words. Borun was refused at ~150 words
+# through a better channel and Tuk at ~95, so shipping Namarrkon would quietly
+# overturn a refusal this file made two versions earlier. Injalak's site states
+# no reuse terms at all — only "Copyright © Injalak Arts", which reserves
+# rights rather than granting them — so it has not said no, it has said
+# nothing, and silence buys less than the Waugal's express terms would have.
+# And Injalak's own description closes on "Namarrkon is also a guardian of the
+# laws", which is a jurisdiction over a living people's operative Law: encoded
+# as a trait it becomes blendable, matchable, and — since `shadow()` is total
+# over the registry — invertible into a distributable Kunwinjku Law-guardian
+# whose lawfulness has been set to 1-v. Excluded.
+#
 # TWO WORKED EXAMPLES IN THE OTHER DIRECTIONS, kept here because each defeats a
 # tempting shortcut. ULURU has maximum public circulation and an express written
 # refusal — Parks Australia states it cannot give permission for ICIP use, so
@@ -66,10 +146,32 @@
 #
 # NAMED BUT NOT INSTANTIATED. English collapses many distinct beings of distinct
 # peoples into one "Rainbow Serpent". Almudj (Kundjeyhmi) and Bolung (Jawoyn)
-# are two more, and Ngatyi (Barkandji) another; they are named here so the
-# flattening is visible, and deliberately not given profiles, because the
-# material carrying them is park interpretation rather than publication by
-# those peoples. Citing is not instantiating.
+# are two more; they are named here so the flattening is visible, and are not
+# given profiles, because the material carrying them is park interpretation
+# rather than publication by those peoples. Citing is not instantiating.
+#
+# NGATYI (Barkandji) WAS LISTED WITH THEM ON A REASON THAT IS FALSE, and the
+# correction is recorded rather than quietly applied, because a wrong exclusion
+# reason invites the next survey to re-litigate from a wrong premise. This file
+# said the material carrying Ngatyi was park interpretation. It is not, and the
+# channel is among the best cited anywhere in this module: Badger Bates is a
+# Barkandji Elder and a director of the Barkandji Native Title Group, speaking
+# in the first person in a signed Royal Commission statement and in transcript
+# beside his own work; David Doyle and Aunty Barbara Quayle are Barkindji
+# co-authors of peer-reviewed work; the PBC publishes on its own domain.
+#
+# Ngatyi is excluded for two better reasons. First, the custodian has stated a
+# restriction and it is about speech and conduct, not sourcing — of the places
+# where the Ngatyi live, Bates says "we don't swim there and we don't make a
+# lot of noise", and extends it to outsiders: "we tell everyone, doesn't matter
+# what colour you are, don't swim where the Ngatyi live. Leave it alone."
+# Second, the name is genuinely unsettled in the community's own publications
+# — the Barkandji Native Title Group's website and Bates's own sworn statement
+# write Ngatji; his 2022 artwork title and the Barkindji-authored scholarship
+# write Ngatyi — and this library is name-keyed through `lookup()`, so it
+# cannot hold a name its own custodians spell two ways. There is no Paakantyi
+# language authority publishing a canonical orthography to appeal to. That is a
+# question for the Barkandji, and nobody has asked them.
 #
 # WHAT THIS LIBRARY DOES TO A PROFILE ONCE IT EXISTS. `shadow()` emits a
 # "Shadow of <name>" with every trait inverted and polarity flipped, and
@@ -84,8 +186,9 @@
 # should decide for itself whether that is appropriate to its use.
 #
 # Sources: Taungurung Land and Waters Council (a Registered Aboriginal Party) on
-# Bunjil and Waang; Gunaikurnai Land and Waters Aboriginal Corporation, under an
-# express Elder-approval statement, on Tidilick; Injalak Arts and Maningrida
+# Bunjil and Waang; Gunaikurnai Land and Waters Aboriginal Corporation, whose
+# Elders have approved the spelling carried here (and no more than that — see
+# the Tidilick comment), on Tidilick; Injalak Arts and Maningrida
 # Arts & Culture, Aboriginal-owned art centres, and decades of Kunwinjku bark
 # painting in public collections, on Ngalyod; Australian Museum and state museum
 # public education material; AIATSIS published resources.
@@ -106,17 +209,35 @@ enum AboriginalFigure {
 # public collections for decades.
 #
 # English groups many separate beings under the single label "the Rainbow
-# Serpent". They are not one being with many names. Two others are public in
-# the same way and belong to their own peoples: the Wagyl of the Noongar
-# (southwest), who made the Derbarl Yerrigan (Swan River) and is interpreted
-# for the public by Noongar people on the river and at Kings Park; and
-# Goorialla of the Lardil (Mornington Island), carried into Australian school
-# curricula by Dick Roughsey's Lardil-authored The Rainbow Serpent (1975).
-# Neither is a variant of Ngalyod, and the profile below is not theirs.
+# Serpent". They are not one being with many names — and two corrections to an
+# earlier version of this comment demonstrate the point better than the rule
+# states it, so both are kept here rather than quietly fixed.
+#
+# The WAUGAL of the Noongar (southwest) made the Derbarl Yerrigan. This file
+# once credited that account to Noongar interpretation "on the river and at
+# Kings Park". Kings Park interpretation is Botanic Gardens and Parks Authority
+# material — a Western Australian government authority — which is this file's
+# own false positive #1, cited here as support. The genuine channel is the
+# South West Aboriginal Land and Sea Council's Kaartdijin Noongar site, whose
+# lead form is Waugal (Waakal, Wagyl, Wawgal, Woggal and Waagal are listed
+# there as variants), carrying the first-person words of named Noongar Elders.
+#
+# GOORIALLA IS NOT THE LARDIL RAINBOW SERPENT, and this file said he was. The
+# Lardil rainbow serpent is THUWATHU, published by the Lardil's own art centre
+# and by their shire, and his is a different story: he refuses his sister
+# shelter in the rain, her baby dies, she burns his humpy, and the burned
+# serpent thrashes out the channel that cuts Mornington Island in two.
+# Goorialla is the serpent of Goobalathaldin Dick Roughsey's *The Rainbow
+# Serpent* (1975) — a Lardil man's own telling, but one the Australian
+# Dictionary of Biography records as fusing Gulf material into Cape York
+# repertoires. He belongs to a book, not to a people, which is why he is not
+# below: this library attributes figures to peoples, not to authors.
+#
+# Neither being is a variant of Ngalyod, and the profile below is not theirs.
 fn abor_ngalyod() {
     var p = profile_new();
     Profile_set_name(p, "Ngalyod");
-    Profile_set_tradition(p, "Aboriginal Australian");
+    Profile_set_tradition(p, "Kunwinjku");
     Profile_set_desc(p, "Kunwinjku (western Arnhem Land) — the great serpent of water and country, who cut the rivers and waterholes travelling, and to whom disturbed water still answers");
     Profile_set_patience(p, 0.85);
     Profile_set_autonomy(p, 0.9);
@@ -156,7 +277,7 @@ fn abor_ngalyod() {
 fn abor_bunjil() {
     var p = profile_new();
     Profile_set_name(p, "Bunjil");
-    Profile_set_tradition(p, "Aboriginal Australian");
+    Profile_set_tradition(p, "Kulin");
     Profile_set_desc(p, "Kulin nation (central Victoria) — the eaglehawk creator who made the land, the trees, the animals and the first people, gave them Law, and rose into the sky where he remains a star and watches over them");
     Profile_set_confidence(p, 0.9);
     Profile_set_creativity(p, 0.9);
@@ -203,7 +324,7 @@ fn abor_bunjil() {
 fn abor_waa() {
     var p = profile_new();
     Profile_set_name(p, "Waa");
-    Profile_set_tradition(p, "Aboriginal Australian");
+    Profile_set_tradition(p, "Kulin");
     Profile_set_desc(p, "Kulin nation — the crow, Bunjil's counterpart and the other moiety; trickster, culture hero and ancestral being, who got hold of fire by cunning and put it into the hands of the people");
     Profile_set_humor(p, 0.85);
     Profile_set_curiosity(p, 0.85);
@@ -239,11 +360,20 @@ fn abor_waa() {
 #
 # SOURCING: the Gunaikurnai Land and Waters Aboriginal Corporation — the
 # Registered Aboriginal Party and native title holder — publishes this on its
-# Stories & Songlines page under an express statement that the stories have
-# been approved for use by the Elders and Knowledge Holders. That is the only
-# explicit Elder-approval statement behind any figure in this module, and it is
-# followed here in both spelling and attribution: GLaWAC writes Tidilick, and
-# attributes it to Gunaikurnai alone. An earlier version of this entry read
+# Stories & Songlines page, now at gunaikurnai.org (glawac.com.au redirects).
+#
+# AN EARLIER VERSION OF THIS COMMENT OVER-READ THAT PAGE, and the correction
+# matters more than the entry does. It called GLaWAC's note "an express
+# statement that the stories have been approved for use by the Elders and
+# Knowledge Holders", and called it the only explicit Elder-approval statement
+# behind any figure in this module — treating it as the strongest consent
+# signal the file had. What the page actually says is that "the spelling of
+# those which appear on this website has been approved for use by the Elders
+# and Knowledge Holders to ensure balanced and consistent public material is
+# provided". That approves ORTHOGRAPHY. It says nothing about the content, and
+# nothing whatever about third-party reuse. So what is followed here is the
+# thing actually approved: GLaWAC writes Tidilick, and attributes it to
+# Gunaikurnai alone. An earlier version of this entry read
 # "Gunai/Kurnai and other southeastern peoples" — the 19th-century printed
 # versions (Brough Smyth 1878, Curr, Howitt, Bulmer) are settler-collected, and
 # spreading the story across unnamed "southeastern peoples" on their authority
@@ -251,7 +381,7 @@ fn abor_waa() {
 fn abor_tidilick() {
     var p = profile_new();
     Profile_set_name(p, "Tidilick");
-    Profile_set_tradition(p, "Aboriginal Australian");
+    Profile_set_tradition(p, "Gunaikurnai");
     Profile_set_desc(p, "Gunaikurnai (Gippsland) — the frog who woke thirsty and drank every river and waterhole dry, and who could not be fought or argued with, only made to laugh; widely published as Tiddalik, spelled Tidilick by GLaWAC");
     Profile_set_humor(p, 0.5);
     Profile_set_confidence(p, 0.7);

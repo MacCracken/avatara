@@ -3,6 +3,12 @@
 **Status**: Accepted
 **Date**: 2026-03-31
 
+> **Superseded by [ADR-006](006-cyrius-port.md).** Cyrius has no `#[non_exhaustive]`. Enums are plain
+> integer constants, so adding a variant cannot break a downstream `match` the way it could in Rust, and
+> the forward-compatibility problem this ADR solves does not arise in the same form. The intent — that
+> new variants are additive and consumers must tolerate unknown values — is still honoured, by
+> convention and by the `_COUNT` sentinel each enum carries.
+
 ## Context
 
 Theological and mythological traditions are living systems. New entities may be added (e.g., discovering a new inscription that reveals a previously unknown deity), and existing categorizations may be refined. If downstream consumers match exhaustively on our enums, adding a variant becomes a breaking change.

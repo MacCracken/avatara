@@ -5,7 +5,7 @@
 # Each tradition maps to one or more civilizations, eras, and a temporal
 # range — the period during which the tradition's theology was actively forming.
 #
-# 34 tradition-to-history mappings with scholarly historical notes.
+# 37 tradition-to-history mappings with scholarly historical notes.
 
 # --- TraditionMapping layout ---
 # Each mapping: tradition name, primary civ, civ names (vec), era names (vec),
@@ -69,7 +69,7 @@ fn svec3(a, b, c) { var v = vec_new(); vec_push(v, a); vec_push(v, b); vec_push(
 fn svec4(a, b, c, d) { var v = vec_new(); vec_push(v, a); vec_push(v, b); vec_push(v, c); vec_push(v, d); return v; }
 fn svec5(a, b, c, d, e) { var v = vec_new(); vec_push(v, a); vec_push(v, b); vec_push(v, c); vec_push(v, d); vec_push(v, e); return v; }
 
-# --- Build all 34 mappings ---
+# --- Build all 37 mappings ---
 
 var history_vec = 0;
 var history_init_done = 0;
@@ -173,25 +173,10 @@ fn all_mappings() {
         1469, LIVING,
         "Founded by Guru Nanak (1469) in the Punjab during Mughal rule; ten Gurus shaped theology, scripture (Guru Granth Sahib), and martial tradition (Khalsa, 1699); living tradition with 30 million adherents"));
 
-        vec_push(history_vec, history_map_new("Incarnate Hindu", "Indus Valley",
-        svec2("Indus Valley", "Maratha Empire"), svec3("Vedic Period", "Gupta Period", "Mughal Period"),
-        (0-500), LIVING,
-        "Hindu saints, yogis, and reformers -- incarnate masters who shaped living Hinduism from Adi Shankara through Ramakrishna and Vivekananda"));
-
-        vec_push(history_vec, history_map_new("Incarnate Buddhist", "Indus Valley",
-        svec2("Indus Valley", "Ancient China"), svec2("Maurya Period", "Tang Dynasty"),
-        (0-300), LIVING,
-        "Buddhist masters who transmitted dharma across Asia -- Nagarjuna, Bodhidharma, Padmasambhava, Milarepa -- bridging Indian origins with Chinese, Tibetan, and Japanese forms"));
-
-        vec_push(history_vec, history_map_new("Incarnate Mystic", "Persian Empire",
-        svec2("Persian Empire", "Ottoman Empire"), svec1("Middle Ages"),
+        vec_push(history_vec, history_map_new("Mystic", "Persian Empire",
+        svec2("Persian Empire", "Ottoman Empire"), svec2("Middle Ages", "Modern"),
         800, LIVING,
-        "Sufi and cross-tradition mystics -- Rumi, Ibn Arabi, Kabir, Meister Eckhart -- who transcended sectarian boundaries to articulate direct experiential union with the divine"));
-
-        vec_push(history_vec, history_map_new("Incarnate Taoist", "Ancient China",
-        svec1("Ancient China"), svec3("Han Dynasty", "Tang Dynasty", "Song Dynasty"),
-        (0-400), LIVING,
-        "Taoist sages and alchemists -- Zhang Daoling, Ge Hong, Sun Simiao -- who developed inner alchemy, medicine, and monastic traditions"));
+        "Sufi, Christian, Jewish and cross-tradition mystics -- Rumi, Ibn Arabi, Meister Eckhart, Hildegard of Bingen, Teresa of Avila, Isaac Luria, the Baal Shem Tov -- who articulated direct experiential union with the divine across sectarian boundaries; the strand runs from the desert fathers to Thomas Merton in the 20th century"));
 
         vec_push(history_vec, history_map_new("Comanche", "Great Plains",
         svec1("Great Plains"), svec2("Middle Ages", "Modern"),
@@ -202,11 +187,6 @@ fn all_mappings() {
         svec1("Great Basin"), svec2("Middle Ages", "Modern"),
         1000, LIVING,
         "The Northern Paiute (Numu) of the Great Basin; Wovoka received in 1889 the vision that became the Ghost Dance, which spread across the plains within a year and was met with the suppression that ended at Wounded Knee in 1890"));
-
-        vec_push(history_vec, history_map_new("Incarnate Sage", "Ancient Greece",
-        svec2("Ancient Greece", "Ancient China"), svec2("Classical Antiquity", "Zhou Dynasty"),
-        (0-600), LIVING,
-        "Philosopher-sages of the Axial Age and beyond -- Pythagoras, Socrates, Confucius -- who laid the foundations of rational and ethical inquiry"));
 
         vec_push(history_vec, history_map_new("Finnish", "Viking/Norse",
         svec1("Viking/Norse"), svec2("Iron Age", "Middle Ages"),
@@ -248,10 +228,51 @@ fn all_mappings() {
         900, LIVING,
         "Ojibwe, Odawa and Potawatomi -- the Council of Three Fires. The migration west from the eastern seaboard to the Great Lakes is recorded in the Seven Fires oral history and on the birchbark scrolls of the Midewiwin as set down by Edward Benton-Banai in *The Mishomis Book*; a living tradition across the Great Lakes and the northern plains"));
 
-        vec_push(history_vec, history_map_new("Aboriginal Australian", "Aboriginal Australia",
-        svec1("Aboriginal Australia"), svec2("Deep Time", "Modern"),
-        (0-65000), LIVING,
-        "Aboriginal Australians have occupied the continent for at least 65,000 years, the longest continuous living cultures on earth, across 250+ nations with distinct languages and Law; there is no shared pantheon and the Dreaming is not a past era but an ongoing reality. The figures carried here are limited to those established in public, community-involved material"));
+        # Aboriginal Australia is carried as one mapping PER PEOPLE, not one
+        # continent-wide mapping. There is no shared pantheon and no continental
+        # authority; 250+ nations hold distinct languages and distinct Law. Each
+        # mapping below lists "Aboriginal Australia" among its civilizations, so
+        # traditions_for_civilization("Aboriginal Australia") still gathers them
+        # all -- the continent is a place these peoples share, not a tradition
+        # any of them belongs to.
+        vec_push(history_vec, history_map_new("Kunwinjku", "Arnhem Land",
+        svec2("Aboriginal Australia", "Arnhem Land"), svec2("Deep Time", "Modern"),
+        (0-50000), LIVING,
+        "Kunwinjku is one of six mutually intelligible dialects of Bininj Kunwok, spoken across western Arnhem Land from Kakadu east to the Mann and Liverpool rivers; speakers call themselves Bininj, and the older ethnographic spelling Gunwinggu is disused. Community-governed institutions carry the culture directly: the Bininj Kunwok Regional Language and Culture Centre at Jabiru, Aboriginal-owned Injalak Arts at Gunbalanya, and Warddeken Land Management on the plateau. The escarpment rock-art and bark-painting tradition is continuous rather than revived. The date given is the uncontested floor for the region: Madjedbebe was published in 2017 as occupied 65,000 years ago, but it lies on neighbouring Mirarr country and that figure is contested on stratigraphic grounds where the ~50,000-year floor is not"));
+
+        vec_push(history_vec, history_map_new("Kulin", "Kulin Nation",
+        svec2("Aboriginal Australia", "Kulin Nation"), svec2("Deep Time", "Modern"),
+        (0-31000), LIVING,
+        "The Kulin is a confederacy of five language-owning nations of central Victoria -- Wurundjeri Woi-wurrung, Bunurong, Taungurung, Wadawurrung and Dja Dja Wurrung -- holding country from Port Phillip and Western Port north-west up the Loddon and north-east up the Goulburn. Kulin names an alliance, not a single authority: each nation speaks for itself through its own body, and all five are Registered Aboriginal Parties under Victoria's Aboriginal Heritage Act 2006. Occupation is dated at Murrup Tamboore on Wurundjeri Woi-wurrung country, where a hearth at the Maribyrnong-Dry Creek junction gave a radiocarbon age of about 31,000 years BP"));
+
+        vec_push(history_vec, history_map_new("Gunaikurnai", "Gippsland",
+        svec2("Aboriginal Australia", "Gippsland"), svec2("Deep Time", "Modern"),
+        (0-25000), LIVING,
+        "Gunaikurnai hold Gippsland from Warragul east to the Snowy River and from the Great Divide south to the coast, in five clans -- Brataualung, Brayakaulung, Brabralung, Tatungalung and Krauatungalung. Gunaikurnai Land and Waters Aboriginal Corporation (GLaWAC) is their Registered Aboriginal Party, appointed 2008, and the native title holding body under the Federal Court consent determination of 22 October 2010. Cloggs Cave, on Krauatungalung Country near Buchan, has confirmed occupation by about 25,000 cal BP; re-excavation with GLaWAC established that a practice recorded in Gippsland in the 1880s was already being carried out there at the end of the last ice age"));
+
+        # Four traditions below carried profiles but no mapping until v2.14.0,
+        # so context_for_tradition() returned 0 for 19 archetypes. A test now
+        # asserts both directions: no mapping without profiles, no tradition
+        # without a mapping.
+        vec_push(history_vec, history_map_new("Vedic", "Indus Valley",
+        svec1("Indus Valley"), svec2("Bronze Age", "Vedic Period"),
+        (0-1500), LIVING,
+        "The Saptarishi, the seven great rishis to whom the hymns of the Rigveda were revealed -- Kashyapa, Atri, Vashishtha, Vishvamitra, Gautama, Jamadagni and Bharadvaja. Composed orally c. 1500-1200 BCE and transmitted without writing for a millennium; the gotra lineages by which many Hindu families still reckon descent are named for them, so the tradition is living rather than antiquarian"));
+
+        vec_push(history_vec, history_map_new("Canaanite", "Phoenicia",
+        svec2("Phoenicia", "Mesopotamia"), svec2("Bronze Age", "Iron Age"),
+        (0-2000), 400,
+        "The Ugaritic pantheon, recovered from the tablets found at Ras Shamra in 1929 and dating to the 14th-12th centuries BCE; El, Baal, Asherah and Anat are the West Semitic background against which the Hebrew Bible was written, and several survive in it as rivals or as epithets. Ugarit fell c. 1190 BCE but Canaanite religion continued in Phoenician and Punic form until Christianisation"));
+
+        vec_push(history_vec, history_map_new("Etruscan", "Roman Republic",
+        svec2("Roman Republic", "Roman Empire"), svec2("Iron Age", "Classical Antiquity"),
+        (0-900), 400,
+        "The Etruscans of central Italy, whose language is still only partly understood and whose gods Rome absorbed wholesale -- Tinia, Uni and Menrva became the Capitoline Triad. Politically extinguished by Rome by 27 BCE, but the Etrusca disciplina of divination outlasted the civilisation: haruspices were consulted officially until the practice was banned at the end of the 4th century CE"));
+
+        vec_push(history_vec, history_map_new("Solar", "Ancient Egypt",
+        svec4("Ancient Egypt", "Maya", "Aztec Empire", "Roman Republic"), svec3("Bronze Age", "Classical Antiquity", "Modern"),
+        (0-2900), LIVING,
+        "Not a people's tradition but a structural one: the days that do not fit the year. A 365-day count leaves five days over and a quarter-day besides, and four civilisations named the remainder rather than hiding it -- the Egyptian epagomenai (from the Old Kingdom civil calendar, c. 2900 BCE), the Maya Wayeb, the Aztec nemontemi, and the Roman bissextus of the Julian reform of 46 BCE, which survives as the leap day still in use"));
 
         history_init_done = 1;
     }

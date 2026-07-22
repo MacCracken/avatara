@@ -11,34 +11,47 @@
                     +----------------------------------------------+
                     |                                              |
                     |  +----------------------------------------+  |
-                    |  |        34 Tradition Modules (504)       |  |
+                    |  |   32 tradition modules -> 504           |  |
+                    |  |         archetypes, 37 traditions       |  |
                     |  |  kabbalah  angelic  hindu  olympian     |  |
                     |  |  norse  egyptian  buddhist  celtic      |  |
                     |  |  mesopotamian  shinto  aztec  maya      |  |
                     |  |  yoruba  zoroastrian  taoist            |  |
                     |  |  polynesian  slavic  jain  sikh         |  |
                     |  |  finnish  vodou                         |  |
-                    |  |  incarnate (6 sub-traditions, 56)       |  |
+                    |  |  incarnate (56; Mystic/Vedic/Hindu/     |  |
+                    |  |    Buddhist/Taoist + 4 named nations)   |  |
                     |  |  solar (intercalary: 365 + the quarter) |  |
                     |  |  canaanite  etruscan                    |  |
                     |  |  tarot (Tree-of-Life paths, Kabbalah)   |  |
                     |  |  iching (64 hexagrams, 8 trigrams)      |  |
                     |  |  inuit  lakota  haudenosaunee           |  |
-                    |  |  anishinaabe  aboriginal                |  |
+                    |  |  anishinaabe                            |  |
+                    |  |  aboriginal (Kunwinjku/Kulin/           |  |
+                    |  |    Gunaikurnai -- 1 module, 3 peoples)  |  |
                     |  +-------------------+--------------------+  |
                     |                      |                       |
                     |  +-------------------v--------------------+  |
                     |  |       ArchetypeProfile (320 bytes)      |  |
                     |  |  15 traits + 14 emphasis + breath       |  |
-                    |  |  + growth + element + polarity           |  |
-                    |  |  + tier + soul/spirit text               |  |
+                    |  |  + growth + element + polarity          |  |
+                    |  |  + tier + domain + soul/spirit text     |  |
                     |  +-------------------+--------------------+  |
+                    |             |                    |           |
+                    |  +----------v----------+  +------v-------+   |
+                    |  | derived FROM the    |  |  registry    |   |
+                    |  | profile, stored     |  |  lookup      |   |
+                    |  | nowhere:            |  |  query       |   |
+                    |  |   aspect  (roles)   |  |  by_tradition|   |
+                    |  |   shadow  (inverse) |  +--------------+   |
+                    |  |   overlay (typology)|                     |
+                    |  +---------------------+                     |
                     |                      |                       |
-                    |  +--------+------+------+  +-----------+    |
-                    |  | compose | hist | affi |  | registry  |    |
-                    |  | blend   | 27   | nity |  | lookup    |    |
-                    |  | weight  | maps | sim  |  | query     |    |
-                    |  +---------+------+------+  +-----------+    |
+                    |  +--------+------+------+                    |
+                    |  | compose | hist | affi |                   |
+                    |  | blend   | 37   | nity |                   |
+                    |  | weight  | maps | sim  |                   |
+                    |  +---------+------+------+                   |
                     +---------------------+------------------------+
                                           |
                     +---------------------v------------------------+
@@ -65,15 +78,16 @@ Avatara produces plain f64/enum outputs. It does not depend on bhava — bhava c
 3. `all_*()` collection functions cache profiles on first call (lazy-init pattern)
 4. `compose()` blends multiple profiles with weighted averaging
 5. `registry::all_profiles()` aggregates all traditions into a single cached vec
-6. `query_*()` functions filter profiles by trait, breath, growth, element, polarity, tier, civilization, era, year
-7. `affinity()` scores similarity between profiles; `similar_to()` finds nearest neighbors; `cross_tradition_match()` maps across traditions; `detect_conflicts()` identifies trait tensions
-8. Consumer (bhava, joshua, etc.) receives plain f64/enum output via profile accessors
+6. `query_*()` functions filter profiles by trait, breath, growth, element, polarity, tier, domain, civilization, era, year
+7. `affinity()` scores similarity between profiles; `similar_to()` finds nearest neighbors (bounded top-k, O(N*k)); `cross_tradition_match()` maps across traditions; `detect_conflicts()` identifies trait tensions
+8. Derived layers read *off* a finished profile and store nothing: `aspect.cyr` (trait-derived roles), `shadow.cyr` (`shadow()`, the involutive inversion), `overlay.cyr` (Enneagram and Jungian typologies, walked through the `OverlaySystem` registry). None of them adds archetypes, so `profile_count()` is unaffected by any of them
+9. Consumer (bhava, joshua, etc.) receives plain f64/enum output via profile accessors
 
 ## Type System
 
 All values are i64. f64 trait/emphasis weights stored as IEEE 754 bit patterns. Use f64_* builtins for arithmetic and comparison.
 
-- `ArchetypeProfile` is a `#derive(accessors) struct Profile` (40 i64 fields = 320 bytes); `profile_new()` allocates via `xalloc` with defaults (traits=0.5, emphasis=0.5, domain=UNSPECIFIED)
+- `ArchetypeProfile` is a `#derive(accessors) struct Profile` (40 i64 fields = 320 bytes, `domain` last at offset 312); `profile_new()` allocates via `xalloc` — checked allocation that aborts on OOM (ADR-009) — with defaults (traits=0.5, emphasis=0.5, breath=LATE_EXHALE, growth=DIFFERENTIATE, domain=UNSPECIFIED)
 - Profile fields accessed via the generated `Profile_*` accessors (`prof_*` shims delegate to them); the `ProfLayout` offset constants are retained for loop-based range code
 - Enums are integer constants (BREATH_UNITY=0, GROWTH_DIFFERENTIATE=0, etc.)
 - Strings are null-terminated C string pointers

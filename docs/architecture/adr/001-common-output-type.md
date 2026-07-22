@@ -3,6 +3,11 @@
 **Status**: Accepted
 **Date**: 2026-03-31
 
+> **Mechanism superseded by [ADR-006](006-cyrius-port.md) and [ADR-008](008-native-struct-migration.md); the decision stands.** The single shared output type is still the design, but it is no longer a Rust
+> trait. `ArchetypeProfile` is a `#derive(accessors) struct Profile` (40 i64 fields, 320 bytes) returned
+> by per-entity constructor functions; there is no `Archetype` trait and no `fn profile(&self)`. Read the
+> Rust below as the reasoning, not as the current API.
+
 ## Context
 
 Avatara maps divine and mythological beings from 20+ traditions to personality profiles. Each tradition has radically different theological structures — the Kabbalistic Tree of Life is nothing like the Yoruba Orisha system, which is nothing like the Jain Tirthankara lineage.

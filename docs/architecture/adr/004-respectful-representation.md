@@ -1,7 +1,13 @@
 # ADR-004: Respectful Representation of Living Traditions
 
-**Status**: Accepted
+**Status**: Accepted; **point 6 superseded by [ADR-010](010-named-nation-representation.md)** (2026-07-22)
 **Date**: 2026-03-31
+
+> **Point 6 no longer describes this library.** It decided that Aboriginal Australian and broad
+> "Native American" traditions would not be codified. Since v2.11.0 they are — as *named nations*
+> (Inuit, Lakota, Haudenosaunee, Anishinaabe, Kunwinjku, Kulin, Gunaikurnai), under a per-figure
+> sourcing standard rather than a blanket exclusion. The reasoning, and the rules that replaced it,
+> are in ADR-010. The rest of this record stands and is left as written.
 
 ## Context
 

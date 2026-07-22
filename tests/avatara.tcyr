@@ -220,7 +220,34 @@ fn main() {
     # ================================================================
     # History: mapped traditions count
     # ================================================================
-    assert_eq(mapping_count(), 35, "35 history mappings");
+    assert_eq(mapping_count(), 37, "37 history mappings");
+    # INVARIANT (v2.14.0): history and registry agree in BOTH directions. Before
+    # this release five mappings named traditions no profile carried ("Incarnate
+    # Hindu" and four others -- the same orphan class as the "Incarnate
+    # Indigenous" mapping fixed in 2.12.0), and five tradition strings carried
+    # profiles no mapping resolved, so context_for_tradition() returned 0 for 19
+    # archetypes. Checked by walking, not by pinning a number, so a new tradition
+    # or mapping is covered the moment it is added.
+    var orphan_maps = 0;
+    var hms = all_mappings();
+    for (var hi = 0; hi < vec_len(hms); hi = hi + 1) {
+        if (vec_len(by_tradition(map_tradition(vec_get(hms, hi)))) == 0) { orphan_maps = orphan_maps + 1; }
+    }
+    assert_eq(orphan_maps, 0, "no history mapping names a tradition without profiles");
+    var unmapped_trads = 0;
+    var htrads = all_traditions();
+    for (var hj = 0; hj < vec_len(htrads); hj = hj + 1) {
+        if (context_for_tradition(vec_get(htrads, hj)) == 0) { unmapped_trads = unmapped_trads + 1; }
+    }
+    assert_eq(unmapped_trads, 0, "every tradition carried resolves a history context");
+    # The traditions that gained a mapping in 2.14.0 resolve, and are dated.
+    assert_neq(context_for_tradition("Mystic"), 0, "Mystic resolves (17 profiles, was orphaned)");
+    assert_neq(context_for_tradition("Vedic"), 0, "Vedic resolves (the Saptarishi)");
+    assert_neq(context_for_tradition("Solar"), 0, "Solar resolves (the intercalary days)");
+    assert_neq(context_for_tradition("Canaanite"), 0, "Canaanite resolves");
+    assert_neq(context_for_tradition("Etruscan"), 0, "Etruscan resolves");
+    assert_eq(ctx_end(context_for_tradition("Etruscan")), 400, "Etruscan is not a living tradition");
+    assert_eq(ctx_end(context_for_tradition("Vedic")), LIVING, "Vedic is living (gotra lineages)");
 
     # ================================================================
     # History: all mapped traditions resolve
@@ -528,12 +555,16 @@ fn main() {
     assert_eq(lakota_count(), 10, "10 Lakota powers");
     assert_eq(haudenosaunee_count(), 6, "6 Haudenosaunee figures");
     assert_eq(anishinaabe_count(), 12, "5 Anishinaabe manidoog + 7 teachings");
-    assert_eq(aboriginal_count(), 4, "4 Aboriginal Australian figures");
+    assert_eq(aboriginal_count(), 4, "4 figures across 3 Aboriginal Australian peoples");
     assert_eq(vec_len(by_tradition("Inuit")), 10, "Inuit tradition has 10");
     assert_eq(vec_len(by_tradition("Lakota")), 11, "Lakota tradition has 11 (incl. White Buffalo Calf Woman)");
     assert_eq(vec_len(by_tradition("Haudenosaunee")), 7, "Haudenosaunee tradition has 7 (incl. the Peacemaker)");
     assert_eq(vec_len(by_tradition("Anishinaabe")), 12, "Anishinaabe tradition has 12");
-    assert_eq(vec_len(by_tradition("Aboriginal Australian")), 4, "Aboriginal Australian tradition has 4");
+    # v2.14.0: per-people tradition strings, not one continent-wide bucket.
+    assert_eq(vec_len(by_tradition("Kunwinjku")), 1, "Kunwinjku tradition has 1 (Ngalyod)");
+    assert_eq(vec_len(by_tradition("Kulin")), 2, "Kulin tradition has 2 (Bunjil, Waa)");
+    assert_eq(vec_len(by_tradition("Gunaikurnai")), 1, "Gunaikurnai tradition has 1 (Tidilick)");
+    assert_eq(vec_len(by_tradition("Aboriginal Australian")), 0, "no continent-wide Aboriginal bucket remains");
     # each is a distinct named-nation tradition, not one pan-indigenous bucket
     var wt = all_traditions();
     var found_inuit = 0; var found_lakota = 0; var found_haud = 0;
@@ -544,13 +575,26 @@ fn main() {
         if (streq(wn, "Lakota") == 1) { found_lakota = 1; }
         if (streq(wn, "Haudenosaunee") == 1) { found_haud = 1; }
         if (streq(wn, "Anishinaabe") == 1) { found_anish = 1; }
-        if (streq(wn, "Aboriginal Australian") == 1) { found_abor = 1; }
+        if (streq(wn, "Kunwinjku") == 1) { found_abor = 1; }
     }
     assert_eq(found_inuit, 1, "has Inuit");
     assert_eq(found_lakota, 1, "has Lakota");
     assert_eq(found_haud, 1, "has Haudenosaunee");
     assert_eq(found_anish, 1, "has Anishinaabe");
-    assert_eq(found_abor, 1, "has Aboriginal Australian");
+    assert_eq(found_abor, 1, "has Kunwinjku");
+    # The continent is a place these peoples share, not a tradition any of them
+    # belongs to: the civilization field is what gathers them, so the split
+    # costs nothing in discoverability.
+    var auscivs = traditions_for_civilization("Aboriginal Australia");
+    assert_eq(vec_len(auscivs), 3, "Aboriginal Australia gathers 3 peoples");
+    var saw_kun = 0; var saw_kul = 0; var saw_gun = 0;
+    for (var ai = 0; ai < vec_len(auscivs); ai = ai + 1) {
+        var an = vec_get(auscivs, ai);
+        if (streq(an, "Kunwinjku") == 1) { saw_kun = 1; }
+        if (streq(an, "Kulin") == 1) { saw_kul = 1; }
+        if (streq(an, "Gunaikurnai") == 1) { saw_gun = 1; }
+    }
+    assert_eq(saw_kun + saw_kul + saw_gun, 3, "all three peoples reachable by civilization");
     # domain spot-checks
     assert_eq(prof_domain(result_unwrap(lookup("Sedna"))), DOMAIN_SEA, "Sedna -> SEA");
     assert_eq(prof_domain(result_unwrap(lookup("Sila"))), DOMAIN_TRANSCENDENCE, "Sila -> TRANSCENDENCE");
@@ -597,11 +641,22 @@ fn main() {
     assert_neq(context_for_tradition("Lakota"), 0, "Lakota resolves history context");
     assert_neq(context_for_tradition("Haudenosaunee"), 0, "Haudenosaunee resolves history context");
     assert_neq(context_for_tradition("Anishinaabe"), 0, "Anishinaabe resolves history context");
-    assert_neq(context_for_tradition("Aboriginal Australian"), 0, "Aboriginal Australian resolves history context");
-    # the Aboriginal mapping reaches back 65,000 years and is still living
-    var abor_ctx = context_for_tradition("Aboriginal Australian");
-    assert_eq(ctx_start(abor_ctx) < (0 - 60000), 1, "Aboriginal Australian starts before 60,000 BCE");
-    assert_eq(ctx_end(abor_ctx), LIVING, "Aboriginal Australian is a living tradition");
+    # Each people resolves its own history context, dated to its own country.
+    assert_neq(context_for_tradition("Kunwinjku"), 0, "Kunwinjku resolves history context");
+    assert_neq(context_for_tradition("Kulin"), 0, "Kulin resolves history context");
+    assert_neq(context_for_tradition("Gunaikurnai"), 0, "Gunaikurnai resolves history context");
+    var kun_ctx = context_for_tradition("Kunwinjku");
+    var kul_ctx = context_for_tradition("Kulin");
+    var gun_ctx = context_for_tradition("Gunaikurnai");
+    assert_eq(ctx_start(kun_ctx) < (0 - 40000), 1, "Kunwinjku starts before 40,000 BCE");
+    assert_eq(ctx_start(kul_ctx) < (0 - 30000), 1, "Kulin starts before 30,000 BCE (Murrup Tamboore)");
+    assert_eq(ctx_start(gun_ctx) < (0 - 20000), 1, "Gunaikurnai starts before 20,000 BCE (Cloggs Cave)");
+    assert_eq(ctx_end(kun_ctx), LIVING, "Kunwinjku is a living tradition");
+    assert_eq(ctx_end(kul_ctx), LIVING, "Kulin is a living tradition");
+    assert_eq(ctx_end(gun_ctx), LIVING, "Gunaikurnai is a living tradition");
+    # Dated to their own country, so the three differ -- the point of the split.
+    assert_neq(ctx_start(kun_ctx), ctx_start(kul_ctx), "peoples carry distinct dates");
+    assert_neq(ctx_start(kul_ctx), ctx_start(gun_ctx), "peoples carry distinct dates");
 
     # ================================================================
     # Aspects (role derivation from the personality vector) — aspect.cyr

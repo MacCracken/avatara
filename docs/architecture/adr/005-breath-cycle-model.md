@@ -32,8 +32,8 @@ Seven phases modeled as exhalation (unity → form) and inhalation (form → uni
 ## Consequences
 
 - Most deities cluster at LateExhale (fully manifest) — this is correct but reduces discriminatory power among manifest gods
-- Supreme beings (Olodumare, Ahura Mazda) map to Unity
-- Primordial beings (Tiamat, Papatuanuku) map to EarlyExhale
+- Supreme beings (Olodumare) map to Unity
+- Primordial beings (Papatuanuku) map to EarlyExhale — as does Ahura Mazda, an emanating creator rather than an undifferentiated source. Tiamat, the primordial waters before separation, maps to Unity
 - Dying/returning gods (Baldur, Dumuzid, Osiris) map to EarlyInhale
 - Buddhist enlightened beings map to LateInhale (approaching dissolution)
-- The model is asymmetric: exhale intensity increases linearly, inhale decreases non-linearly — this is intentional, reflecting the idea that creation is gradual but manifestation peaks sharply
+- The model is asymmetric, and the exhale is the non-linear half: intensity accelerates toward manifestation (Unity 0.0, EarlyExhale 0.15, MidExhale 0.5, LateExhale 1.0 — steps of 0.15, 0.35, 0.5), while the inhale decays more evenly from the peak (1.0, 0.8, 0.4, 0.1) — this is intentional, reflecting the idea that creation is gradual but manifestation peaks sharply
