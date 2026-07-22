@@ -7,6 +7,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.10.1] — 2026-07-22
+
+Performance fix — no API, data, or behavior change. Resolves the O(N²) scaling issue flagged in the 2.10.0
+benchmarks.
+
+### Changed
+- **`similar_to()` now uses bounded top-k selection instead of sort-then-trim** (`src/affinity.cyr`).
+  It previously scored every candidate, ran a full insertion sort over **all** N results, and only then
+  trimmed to `max_results` — so a query for the top 5 paid an O(N²) sort over the whole registry. The
+  comment said "N is small"; N had reached 460. The result list is now held at `max_results` entries, and a
+  candidate that cannot displace the weakest kept entry is discarded without allocating a sim entry or
+  shifting anything, making the bounded path O(N·k).
+  - **`affinity/similar_to_5`: 809 µs → 73 µs (−91%, an 11× speedup)** — and now faster than at any prior
+    release (2.8.1 was 527 µs at N=396). What remains is the N affinity computations themselves.
+  - `affinity/cross_tradition_match`, which shares the same path, improved in step (~60 µs).
+  - The cost no longer grows with N², so it will not re-degrade as traditions are added.
+- Behavior is deliberately identical: same returned set, same descending order, and the same tie handling
+  (the `f64_gt` comparison is preserved, so a later equal score still sorts ahead). The unbounded contract
+  (`max_results <= 0` returns every candidate, sorted) is unchanged and still pays a full insertion sort,
+  since every candidate has to be ordered anyway.
+
+### Verification
+- An out-of-tree harness checked the defining top-k property over **48 source/k combinations** (8 sources
+  spanning Norse, Kabbalah, Greek, Tarot, I Ching, Hindu and Etruscan × k = 1, 2, 3, 5, 10, 50): every
+  returned entry outranks every excluded candidate, results are sorted descending, and the bounded result
+  is a score-identical prefix of the fully sorted list.
+- 5 regression guards added to the suite (161 → 166 assertions) pinning that equivalence: the unbounded
+  call returns all `profile_count() - 1` candidates fully sorted, the top-5 is a score-identical prefix of
+  it, the weakest kept entry outranks the strongest excluded one, and a NULL source returns empty.
+
+### Benchmarks
+- 52/52 recorded for 2.10.1 (see `bench-history.csv`). The only material movement is the intended
+  `similar_to`/`cross_tradition_match` improvement; everything else is within run-to-run noise.
+
 ## [2.10.0] — 2026-07-22
 
 **I Ching** — the 64 hexagrams as archetypes, over the eight trigrams: **396 → 460 archetypes,

@@ -259,6 +259,29 @@ fn main() {
     var sim = similar_to(norse_thor(), 5);
     assert_eq(vec_len(sim), 5, "similar_to returns 5");
     assert_eq(f64_ge(sim_score(vec_get(sim, 0)), sim_score(vec_get(sim, 4))), 1, "sim sorted desc");
+    # Bounded top-k selection (2.10.1) must stay equivalent to sort-then-trim:
+    # every kept entry outranks every excluded candidate, and the bounded result
+    # is a prefix of the fully sorted list.
+    var sim_full = similar_to(norse_thor(), 0);
+    assert_eq(vec_len(sim_full), profile_count() - 1, "unbounded similar_to returns every candidate");
+    var sim_sorted_ok = 1;
+    for (var si = 1; si < vec_len(sim_full); si = si + 1) {
+        if (f64_gt(sim_score(vec_get(sim_full, si)), sim_score(vec_get(sim_full, si - 1))) == 1) {
+            sim_sorted_ok = 0;
+        }
+    }
+    assert_eq(sim_sorted_ok, 1, "unbounded similar_to fully sorted descending");
+    var sim_prefix_ok = 1;
+    for (var pj = 0; pj < vec_len(sim); pj = pj + 1) {
+        if (f64_eq(sim_score(vec_get(sim, pj)), sim_score(vec_get(sim_full, pj))) != 1) {
+            sim_prefix_ok = 0;
+        }
+    }
+    assert_eq(sim_prefix_ok, 1, "top-5 is a score-identical prefix of the full sort");
+    # the weakest kept entry outranks the strongest excluded candidate
+    assert_eq(f64_ge(sim_score(vec_get(sim, 4)), sim_score(vec_get(sim_full, 5))), 1,
+              "weakest kept >= strongest excluded (true top-k)");
+    assert_eq(vec_len(similar_to(0, 5)), 0, "similar_to(NULL) is empty");
 
     # ================================================================
     # Cross-tradition match: different tradition

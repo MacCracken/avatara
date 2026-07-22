@@ -71,51 +71,67 @@ fn sim_score(s)   { return load64(s + SIM_SCORE); }
 # Returns a vec of sim entries sorted by descending affinity.
 # Excludes the source profile itself (by name match).
 # max_results <= 0 means "unlimited" (return all, sorted). NULL source -> empty.
+#
+# Selection is BOUNDED rather than sort-then-trim: the result list is held at
+# max_results entries, and a candidate that cannot displace the weakest kept
+# entry is dropped without allocating a sim entry or shifting anything. The
+# bounded case therefore costs O(N*k) instead of the O(N^2) full insertion sort
+# this replaced (2.10.1) — at N=460, k=5 that is ~2.3k shift operations rather
+# than ~53k, and it no longer degrades as traditions are added. The returned
+# set, its ordering, and tie behavior (a later equal score still sorts ahead)
+# are unchanged. The unbounded case still pays a full insertion sort, since
+# every candidate has to be ordered anyway.
 fn similar_to(source, max_results) {
     var results = vec_new();
     if (source == 0) { return results; }
     var profiles = all_profiles();
     var n = vec_len(profiles);
     var src_name = prof_name(source);
+    var src_trad = prof_tradition(source);
+
+    # cap > 0 bounds the list; cap < 0 means keep everything (max_results <= 0).
+    var cap = max_results;
+    if (cap <= 0) { cap = 0 - 1; }
 
     for (var i = 0; i < n; i += 1) {
         var p = vec_get(profiles, i);
         # Skip self
         if (streq(prof_name(p), src_name) == 1) {
-            if (streq(prof_tradition(p), prof_tradition(source)) == 1) {
+            if (streq(prof_tradition(p), src_trad) == 1) {
                 continue;
             }
         }
         var score = affinity(source, p);
-        vec_push(results, sim_new(p, score));
-    }
 
-    # Sort by score descending (simple insertion sort — N is small)
-    var rn = vec_len(results);
-    for (var i = 1; i < rn; i += 1) {
-        var key = vec_get(results, i);
-        var key_score = sim_score(key);
-        var j = i - 1;
-        while (j >= 0) {
-            var jentry = vec_get(results, j);
-            if (f64_gt(sim_score(jentry), key_score) == 1) {
+        # The list is full and this candidate loses to the weakest kept entry:
+        # it can never place, so skip it before allocating or shifting.
+        var rn = vec_len(results);
+        if (cap > 0) {
+            if (rn >= cap) {
+                if (f64_gt(sim_score(vec_get(results, rn - 1)), score) == 1) {
+                    continue;
+                }
+            }
+        }
+
+        # Insert into descending position, shifting weaker entries right. The
+        # f64_gt test (not f64_ge) preserves the previous tie order.
+        var entry = sim_new(p, score);
+        vec_push(results, entry);
+        var j = vec_len(results) - 1;
+        while (j > 0) {
+            var prev = vec_get(results, j - 1);
+            if (f64_gt(sim_score(prev), score) == 1) {
                 break;
             }
-            # Shift jentry right (swap j and j+1)
-            vec_set(results, j + 1, jentry);
+            vec_set(results, j, prev);
             j -= 1;
         }
-        vec_set(results, j + 1, key);
-    }
+        vec_set(results, j, entry);
 
-    # Trim to max_results
-    if (max_results > 0) {
-        if (rn > max_results) {
-            var trimmed = vec_new();
-            for (var i = 0; i < max_results; i += 1) {
-                vec_push(trimmed, vec_get(results, i));
-            }
-            return trimmed;
+        # Hold the list at the cap.
+        if (cap > 0) {
+            if (vec_len(results) > cap) { vec_pop(results); }
         }
     }
     return results;

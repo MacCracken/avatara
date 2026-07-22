@@ -6,7 +6,7 @@
 
 - **Language**: Cyrius (ported from Rust in v2.0)
 - **License**: GPL-3.0-only
-- **Version**: SemVer 2.10.0
+- **Version**: SemVer 2.10.1
 - **Compiler**: cyrius >= 6.4.70 (pinned in `cyrius.cyml` `[package].cyrius`)
 
 ## Consumers
@@ -52,7 +52,7 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/etruscan.cyr` — 4 Etruscan deities (Tinia, Uni, Menrva, Voltumna)
 - `src/incarnate.cyr` — 56 incarnate divine figures (Hindu, Buddhist, Mystic, Taoist, Indigenous, Sage)
 - `src/logging.cyr` — sakshi logging init
-- `tests/avatara.tcyr` — integration test suite (161 assertions)
+- `tests/avatara.tcyr` — integration test suite (166 assertions)
 - `tests/avatara.bcyr` — benchmarks (52)
 - `programs/traditions.cyr` — example: explore archetypes
 - `programs/compose.cyr` — example: blend traditions
@@ -69,7 +69,7 @@ All values are i64. f64 trait/emphasis weights stored as IEEE 754 bit patterns. 
 - Compose: `compose(weighted_vec)` — weighted blending; returns `Result` (`Ok(profile)` / `Err(ERR_INVALID_PARAMETER)`)
 - Errors: `Result<T, E>` from `lib/result.cyr` (`is_ok` / `is_err_result` / `result_unwrap` / `err_code_of`); `validate_profile(p)` returns `Result`. `AvataraError` codes are the `Err` payload. Internal range predicates (`require_unit_range`/`require_all_unit_range`) stay bare-int (loop-hot)
 - History: `context_for_tradition()`, `traditions_for_civilization()`, `traditions_active_at()`, `traditions_for_era()`
-- Affinity: `affinity()`, `similar_to()`, `cross_tradition_match()`, `cross_tradition_matches()`, `detect_conflicts()`, `is_incompatible()`
+- Affinity: `affinity()`, `similar_to()`, `cross_tradition_match()`, `cross_tradition_matches()`, `detect_conflicts()`, `is_incompatible()`. `similar_to(src, k)` uses bounded top-k selection (O(N·k)) — do not reintroduce a full sort before trimming; `k <= 0` still means "all, sorted"
 - Shadow: `shadow(profile)` — inverted form (traits→1−v, breath/growth/polarity mirrored, element/tier kept); involutive; `is_shadow_of(a, b)`
 - Domain: every archetype has a `Domain` (primary sphere, offset 312); `prof_domain(p)`, `query_domain(domain)`, `query_count_domain(domain)`
 
