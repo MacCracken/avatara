@@ -22,12 +22,12 @@
 # comparing archetypes across traditions; they are not a Haudenosaunee claim
 # about who outranks whom.
 #
-# NOTE: the Peacemaker and the founding of the Great Law are deliberately not
-# included here. That narrative carries its own telling protocols -- designated
-# reciters, condolence context, season -- and in many communities his personal
-# name is reserved for ceremonial use, which is why the title is used here.
-# `incarnate.cyr` does carry the figure, but under the personal name and under
-# a pan-ethnic "Indigenous" label; correcting both is tracked on the roadmap.
+# NOTE: the founding of the Great Law is deliberately not narrated here. That
+# account carries its own telling protocols -- designated reciters, condolence
+# context, season -- and in many communities the Peacemaker's personal name is
+# reserved for ceremonial use. The figure himself is carried in `incarnate.cyr`,
+# under the title rather than the name and under the Haudenosaunee tradition;
+# both were corrected in 2.12.0.
 #
 # Names are transliterated to ASCII per the codebase convention; the Six
 # Nations use different forms of each name in their own languages, and the

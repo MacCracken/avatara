@@ -1,6 +1,6 @@
 # avatara.bcyr -- Benchmarks for avatara
 #
-# 57 benchmarks covering all traditions, sub-groups, registry, compose, history.
+# 60 benchmarks covering all traditions, sub-groups, registry, compose, history.
 # Matches and exceeds Rust Criterion suite (29 benchmarks).
 
 # Stdlib auto-included via cyrius.toml
@@ -43,13 +43,15 @@ include "src/compose.cyr"
 include "src/history.cyr"
 include "src/registry.cyr"
 include "src/affinity.cyr"
+include "src/shadow.cyr"
+include "src/overlay.cyr"
 include "src/logging.cyr"
 
 var N = 1000;
 var b = 0;
 
 alloc_init();
-println("=== avatara benchmarks (57 benches) ===");
+println("=== avatara benchmarks (60 benches) ===");
 
 # ================================================================
 # Tier 1: Single profile creation
@@ -423,6 +425,32 @@ println("--- tier 6: affinity ---");
 var aff_a = kabbalah_tiphareth();
 var aff_b = norse_thor();
 
+# ================================================================
+# Tier 7: Overlays (derived, no allocation)
+# ================================================================
+println("");
+println("--- tier 7: overlays ---");
+
+var ov_src = kabbalah_tiphareth();
+
+b = bench_new("overlay/enneagram_score");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { profile_enneagram_score(ov_src, ENN_CHALLENGER); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("overlay/enneagram_type");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { profile_enneagram_type(ov_src); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("overlay/jungian_role");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { profile_jungian_role(ov_src); }
+bench_batch_stop(b, N);
+bench_report(b);
+
 b = bench_new("affinity/score_pair");
 bench_batch_start(b);
 for (var i = 0; i < N; i = i + 1) { affinity(aff_a, aff_b); }
@@ -448,5 +476,5 @@ bench_batch_stop(b, N);
 bench_report(b);
 
 println("");
-println("=== 57 benchmarks complete ===");
+println("=== 60 benchmarks complete ===");
 syscall(SYS_EXIT, 0);

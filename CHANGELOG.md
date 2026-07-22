@@ -7,6 +7,54 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.13.0] — 2026-07-22
+
+**Archetype overlays** — the first layer in this library that sits *on top of* the archetypes rather than
+beside them. A tradition module answers "who is this?"; an overlay answers "what shape is this, in a system
+that was not built for it?" — what Enneagram type Thor reads as, which Jungian role Iktomi is playing.
+Additive API only: **no archetypes added, `profile_count()` stays 504**, the 320-byte layout is untouched,
+and the registry does not know overlays exist.
+
+### Added
+- **`src/overlay.cyr`** — two overlay families, both index-stable so the API can grow without breaking.
+  Everything is derived from the profile's own trait and emphasis weights, following the `aspect.cyr`
+  precedent: no per-archetype authoring, no state.
+- **Enneagram** — nine types, three centres, wings:
+  - `enneagram_count()` (9), `enneagram_number(i)` (1-9), `enneagram_name/title(i)`,
+    `enneagram_core_desire(i)` / `enneagram_core_fear(i)`, `enneagram_index_by_name(name)`.
+  - `enneagram_centre(i)` with `centre_name(c)` / `centre_emotion(c)` — gut/anger (8,9,1), heart/shame
+    (2,3,4), head/fear (5,6,7); the three centres partition the nine types exactly 3/3/3, test-pinned.
+  - `enneagram_wing_low(i)` / `enneagram_wing_high(i)` — the types are a **ring**, so 1's low wing is 9 and
+    9's high wing is 1. The ring's symmetry (my high wing's low wing is me) is test-pinned.
+  - `profile_enneagram_score(p, i)`, `profile_enneagram_type(p)`, `profile_enneagram_wing(p)`,
+    `profile_enneagram_centre(p)`.
+- **Jungian** — `jungian_count()` (5), `jungian_name/title/desc(i)`, `jungian_index_by_name(name)`,
+  `profile_jungian_score(p, i)`, `profile_jungian_role(p)`, for Hero, Shadow, Anima/Animus, Self, Trickster.
+- **The composition point with `shadow.cyr`.** The SHADOW overlay and `shadow()` are two different things and
+  the module says so: `profile_jungian_score(p, JUNG_SHADOW)` scores how much p *already expresses* shadow
+  qualities — the cold, withheld, adversarial register — while `jungian_shadow_form(p)` returns
+  `shadow(p)`, a *different archetype* named "Shadow of <p>". Scoring high on the overlay is a property of p;
+  the shadow form is a construction. Pinned by `is_shadow_of(jungian_shadow_form(p), p)`.
+- 31 new tests (210 → 241) and 3 benchmarks (57 → 60). The load-bearing assertion runs every overlay score
+  for **every one of the 504 archetypes** and checks it stays in 0.0-1.0, plus that each archetype's reported
+  wing is genuinely adjacent to its dominant type and its reported centre is that type's centre.
+
+### Notes
+- **What an overlay score is not.** The module header states it: this is a projection of one system onto
+  another, not a diagnosis, and not a claim that a tradition recognises the category. The Enneagram is a
+  20th-century typology and Jung's archetypes are 20th-century psychology; neither was in the room when the
+  Dagda or Sedna were described. The trait mapping each type reads is documented in the source rather than
+  hidden — it is a defensible reading, not the only possible one.
+- `tests/avatara.bcyr` and both example programs gained `shadow.cyr`, which they had not previously included,
+  since `overlay.cyr` depends on it.
+- Overlays are deliberately **not** archetypes: no registry block, no history mapping, no tradition. A test
+  pins `profile_count() == 504` in the overlay section specifically to keep that true.
+
+### Benchmarks
+- 60/60 recorded for 2.13.0. The overlay path is pure derivation with no allocation:
+  `overlay/enneagram_score` ~16 ns for a single type, `overlay/jungian_role` ~73 ns across 5,
+  `overlay/enneagram_type` ~120 ns across all 9. No regressions elsewhere.
+
 ## [2.12.1] — 2026-07-22
 
 Sourcing corrections to `src/aboriginal.cyr`, found by the desk research done for the v2.14.0 arc. No

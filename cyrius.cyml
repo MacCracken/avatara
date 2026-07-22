@@ -56,6 +56,7 @@ modules = [
     "src/registry.cyr",
     "src/affinity.cyr",
     "src/shadow.cyr",
+    "src/overlay.cyr",
     "src/logging.cyr",
     "src/lib.cyr",
 ]

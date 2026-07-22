@@ -14,6 +14,7 @@
 - **2.10.1** — performance: `similar_to()` switched from sort-then-trim to bounded top-k selection, removing an O(N²) insertion sort over the whole registry (`affinity/similar_to_5` 809 → 73 µs, −91%). Identical results and ordering; the cost no longer grows with N².
 - **2.11.0** — World-traditions completion, organised as **named nations** rather than pan-continental buckets: Inuit (10), Lakota (10), Haudenosaunee (6), Anishinaabe (6), and a deliberately scoped Aboriginal Australian set (5, each attributed to its people); plus the outstanding Celtic healers Miach and Airmed → **499 archetypes, 34 traditions**. White Buffalo Calf Woman and Deganawidah remain in the existing "Indigenous" incarnate tradition and are not duplicated. Restricted Dreaming material is excluded by design — see the `aboriginal.cyr` header and the 2.11.x arc below.
 - **2.12.0** — World traditions, part 2: the three items the 2.11.0 review deferred. The pan-ethnic `"Indigenous"` label is retired — White Buffalo Calf Woman, the Peacemaker, Quanah Parker and Wovoka now carry Lakota, Haudenosaunee, Comanche and Northern Paiute (which also fixed an orphaned history mapping that had filed all four under the Tonga Empire). The seven Grandfather Teachings (Nizhwaaswi Gagiikwewin) join `anishinaabe.cyr`, restoring the balance lost when the wiindigoo was dropped. Separators normalised to the em dash codebase-wide → **504 archetypes, 35 traditions**.
+- **2.13.0** — Archetype overlays (`src/overlay.cyr`): the first layer sitting *on top of* the archetypes rather than beside them. Enneagram (9 types, 3 centres, wings) and the Jungian set (Hero, Shadow, Anima/Animus, Self, Trickster), all derived from the profile's own weights. `jungian_shadow_form()` composes with the existing `shadow()`. No archetypes added — `profile_count()` stays 504.
 - **Toolchain maintenance** — 2.7.2 (pin 6.1.34 → 6.2.11) and 2.8.1 (6.2.11 → 6.4.69) as standalone maintenance releases; 2.10.0 carried 6.4.69 → 6.4.70 and 2.11.0 carried 6.4.70 → 6.4.71. Vendored stdlib re-resolved to the pinned snapshot each time, benches recorded.
 
 The minors below sequence the former demand-gated backlog toward a 3.0.0 consolidation. (Role aspects took the original 2.8.0 slot, so the Tarot → overlays sequence shifted up one minor; Tarot shipped as 2.9.0 and I Ching as 2.10.0.)
@@ -24,7 +25,6 @@ Each is additive and non-breaking (new archetypes / traditions / an additive
 overlay layer). Historical-accuracy rule stands throughout: established
 scholarly correspondences only, no inventions.
 
-- **v2.13.0 — Archetype overlays** — the first cross-cutting layer *on top of* the archetype profiles: Enneagram (9 types) and the Jungian set (Hero, Shadow, Anima/Animus, Self, Trickster — composes with the existing `shadow()`). Additive new API; profiles unchanged.
 - **v2.14.0 — Aboriginal Australian depth** — widen `src/aboriginal.cyr` beyond the four figures 2.11.0
   shipped, on the basis of documented public, community-involved sourcing. See the arc below for what is
   established and what is blocked.
@@ -119,7 +119,7 @@ The major bump banks the API cleanups deferred through 2.x:
 - Migrate `cross_tradition_match` / `find_mapping` from `0`-on-not-found to `Option` (the absence-vs-error distinction noted in 2.5.0).
 - Drop the `prof_*` compat shims — consumers move to the derived `Profile_*` accessors (shims have eased the transition since 2.5.3).
 - Retire the public `ProfLayout` offset enum from the consumer surface (internal-only).
-- Formalize the overlay subsystem (2.13.0) as first-class API. The "archetype + overlay engine" identity for v3.
+- Formalize the overlay subsystem (shipped 2.13.0) as first-class API. The "archetype + overlay engine" identity for v3.
 
 ## Declined
 

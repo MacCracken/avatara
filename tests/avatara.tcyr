@@ -45,6 +45,7 @@ include "src/history.cyr"
 include "src/registry.cyr"
 include "src/affinity.cyr"
 include "src/shadow.cyr"
+include "src/overlay.cyr"
 include "src/logging.cyr"
 
 fn main() {
@@ -620,6 +621,108 @@ fn main() {
     assert_eq(profile_dominant_aspect(ap), 5, "empathy strongest -> aspect 5 (mediator)");
     assert_eq(f64_gt(profile_aspect_weight(ap, 5), profile_aspect_weight(ap, 0)), 1, "aspect_weight reads the trait (empathy > curiosity)");
     assert_eq(profile_dominant_aspect(0), 0, "null profile -> aspect 0 (safe default)");
+
+    # ================================================================
+    # Overlays (2.13.0) — Enneagram + Jungian, derived over the profile
+    # ================================================================
+    assert_eq(enneagram_count(), 9, "9 Enneagram types");
+    assert_eq(centre_count(), 3, "3 centres");
+    assert_eq(jungian_count(), 5, "5 Jungian roles");
+    # overlays are NOT archetypes: they add nothing to the registry
+    assert_eq(profile_count(), 504, "overlays do not change the archetype count");
+    # numbering and naming
+    assert_eq(enneagram_number(ENN_REFORMER), 1, "index 0 -> type 1");
+    assert_eq(enneagram_number(ENN_PEACEMAKER), 9, "index 8 -> type 9");
+    assert_eq(enneagram_number(9), 0 - 1, "out-of-range number = -1");
+    assert_eq(streq(enneagram_name(ENN_CHALLENGER), "challenger"), 1, "type 8 name");
+    assert_eq(enneagram_index_by_name("investigator"), ENN_INVESTIGATOR, "index_by_name investigator");
+    assert_eq(enneagram_index_by_name("nope"), 0 - 1, "index_by_name unknown = -1");
+    assert_eq(jungian_index_by_name("trickster"), JUNG_TRICKSTER, "index_by_name trickster");
+    # the nine types are a RING: 1's low wing is 9, and 9's high wing is 1
+    assert_eq(enneagram_wing_low(ENN_REFORMER), ENN_PEACEMAKER, "type 1 low wing wraps to 9");
+    assert_eq(enneagram_wing_high(ENN_PEACEMAKER), ENN_REFORMER, "type 9 high wing wraps to 1");
+    var ring_ok = 1;
+    for (var ei = 0; ei < 9; ei = ei + 1) {
+        var wl = enneagram_wing_low(ei);
+        var wh = enneagram_wing_high(ei);
+        if (wl == ei) { ring_ok = 0; }
+        if (wh == ei) { ring_ok = 0; }
+        if (wl == wh) { ring_ok = 0; }
+        if (wl < 0) { ring_ok = 0; }
+        if (wh < 0) { ring_ok = 0; }
+        # the ring is symmetric: my high wing's low wing is me
+        if (enneagram_wing_low(wh) != ei) { ring_ok = 0; }
+    }
+    assert_eq(ring_ok, 1, "wings form a symmetric 9-ring with no self-adjacency");
+    # the three centres partition the nine types exactly 3/3/3
+    var gut = 0; var heart = 0; var head = 0; var centre_ok = 1;
+    for (var ci = 0; ci < 9; ci = ci + 1) {
+        var c = enneagram_centre(ci);
+        if (c == CENTRE_GUT) { gut = gut + 1; }
+        if (c == CENTRE_HEART) { heart = heart + 1; }
+        if (c == CENTRE_HEAD) { head = head + 1; }
+        if (c < 0) { centre_ok = 0; }
+    }
+    assert_eq(centre_ok, 1, "every type has a centre");
+    assert_eq(gut, 3, "gut centre holds 3 types");
+    assert_eq(heart, 3, "heart centre holds 3 types");
+    assert_eq(head, 3, "head centre holds 3 types");
+    assert_eq(streq(centre_emotion(CENTRE_HEAD), "fear"), 1, "head centre organised around fear");
+    # every score, for every archetype, stays in 0.0-1.0 — the load-bearing invariant
+    var ov_range_ok = 1;
+    var ov_dom_ok = 1;
+    var allp = all_profiles();
+    for (var oi = 0; oi < vec_len(allp); oi = oi + 1) {
+        var op = vec_get(allp, oi);
+        for (var ot = 0; ot < 9; ot = ot + 1) {
+            var sc = profile_enneagram_score(op, ot);
+            if (f64_lt(sc, 0.0) == 1) { ov_range_ok = 0; }
+            if (f64_gt(sc, 1.0) == 1) { ov_range_ok = 0; }
+        }
+        for (var oj = 0; oj < 5; oj = oj + 1) {
+            var js = profile_jungian_score(op, oj);
+            if (f64_lt(js, 0.0) == 1) { ov_range_ok = 0; }
+            if (f64_gt(js, 1.0) == 1) { ov_range_ok = 0; }
+        }
+        var dt = profile_enneagram_type(op);
+        if (dt < 0) { ov_dom_ok = 0; }
+        if (dt > 8) { ov_dom_ok = 0; }
+        # the reported wing must actually be adjacent to the dominant type
+        var dw = profile_enneagram_wing(op);
+        if (dw != enneagram_wing_low(dt)) {
+            if (dw != enneagram_wing_high(dt)) { ov_dom_ok = 0; }
+        }
+        # the reported centre must be the dominant type's centre
+        if (profile_enneagram_centre(op) != enneagram_centre(dt)) { ov_dom_ok = 0; }
+        var jr = profile_jungian_role(op);
+        if (jr < 0) { ov_dom_ok = 0; }
+        if (jr > 4) { ov_dom_ok = 0; }
+    }
+    assert_eq(ov_range_ok, 1, "all overlay scores in 0.0-1.0 across every archetype");
+    assert_eq(ov_dom_ok, 1, "dominant type/wing/centre and Jungian role are consistent for every archetype");
+    # the derivation actually discriminates: a maxed trait moves its type
+    var ovp = profile_new();
+    Profile_set_directness(ovp, 1.0);
+    Profile_set_courage(ovp, 1.0);
+    Profile_set_autonomy(ovp, 1.0);
+    assert_eq(profile_enneagram_type(ovp), ENN_CHALLENGER, "direct/brave/autonomous reads as type 8");
+    var ovp2 = profile_new();
+    Profile_set_empathy(ovp2, 1.0);
+    Profile_set_warmth(ovp2, 1.0);
+    Profile_set_relationship(ovp2, 1.0);
+    assert_eq(profile_enneagram_type(ovp2), ENN_HELPER, "empathic/warm/relational reads as type 2");
+    # shadow composition: the overlay SCORES shadow qualities, shadow() CONSTRUCTS the inversion
+    var ovthor = norse_thor();
+    var ovshade = jungian_shadow_form(ovthor);
+    assert_neq(ovshade, 0, "jungian_shadow_form returns a profile");
+    assert_eq(is_shadow_of(ovshade, ovthor), 1, "jungian_shadow_form(p) is shadow.cyr's shadow of p");
+    assert_eq(streq(prof_tradition(ovshade), "Norse"), 1, "the constructed shadow keeps the tradition");
+    # null safety throughout
+    assert_eq(f64_eq(profile_enneagram_score(0, ENN_HELPER), 0.0), 1, "null profile scores 0.0");
+    assert_eq(profile_enneagram_type(0), 0, "null profile -> type index 0 (safe default)");
+    assert_eq(profile_enneagram_wing(0), 0 - 1, "null profile has no wing");
+    assert_eq(profile_jungian_role(0), 0, "null profile -> Jungian role 0");
+    assert_eq(jungian_shadow_form(0), 0, "null profile has no shadow form");
 
     return assert_summary();
 }

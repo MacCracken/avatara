@@ -19,12 +19,11 @@
 # theology or about the standing of one power against another.
 #
 # White Buffalo Calf Woman, who brought the chanunpa and the seven rites, is
-# already carried in `incarnate.cyr`, where she and three other figures from
-# three other nations sit under a single "Indigenous" tradition label. That
-# pan-ethnic bucket predates this module and is inconsistent with the
-# named-nation approach used here; re-attributing those four to their own
-# nations is tracked on the roadmap rather than done in passing. She is not
-# duplicated here. Wohpe, whom Walker counts among the associate powers, is
+# already carried in `incarnate.cyr` and is not duplicated here. She carries the
+# Lakota tradition there: the pan-ethnic "Indigenous" label that used to hold her
+# and three figures from three other nations was retired in 2.12.0, and all four
+# now carry their own nations. Wohpe, whom Walker counts among the associate
+# powers, is
 # identified with her in that same material and so has no separate entry.
 #
 # The Wakinyan entry below is the Thunderbeings themselves and nothing more.
