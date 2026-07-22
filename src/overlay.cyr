@@ -27,9 +27,29 @@
 # nine archetypes, and neither will Jung's set; that would put a 20th-century
 # framework on the same shelf as the Sephiroth and the Orishas, which is a
 # category error the registry should never be asked to hold. A test enforces
-# this: no tradition string and no archetype name may equal an overlay label.
+# this: no tradition string and no archetype name may equal an overlay label or
+# an overlay system's name, walked over the registry so new systems are covered
+# the moment they are registered.
 #
-# TWO OVERLAY FAMILIES, both index-stable so the API can grow without breaking:
+# MEANING IS NOT HARDLOCKED HERE, and that is the point of the layer. An overlay
+# is one reading, not the reading. Interpretation moves — scholarship revises,
+# schools disagree, and systems that do not exist yet will want to be laid over
+# figures this library already carries. Because overlays derive from the profile
+# and store nothing, a new system is added without touching a single archetype,
+# and several may sit over the same figure at once disagreeing with each other.
+# Thor reads as some Enneagram type AND some Jungian role AND whatever comes
+# next; none of those readings displaces the others, and none of them is what
+# Thor is. What the archetype *is* lives in the tradition modules, authored from
+# that tradition's own sources. Everything here is commentary on it, and
+# commentary is allowed to be plural and to be wrong.
+#
+# OVERLAY FAMILIES are registered in the `OverlaySystem` enum below, and the
+# generic API (`overlay_system_count/name`, `overlay_label_count/label`,
+# `overlay_score`, `overlay_best`) walks that registry rather than naming any
+# one family. Consumers can enumerate every reading available for a profile
+# without knowing which systems exist; adding a system means one enum entry and
+# a branch in five dispatch functions, and the exclusivity test then covers it
+# automatically. Both families are index-stable so the API can grow unbroken:
 #   Enneagram  — nine types, three centres, wings.
 #   Jungian    — Hero, Shadow, Anima/Animus, Self, Trickster.
 #
@@ -76,6 +96,16 @@ enum Jungian {
     JUNG_SELF = 3;
     JUNG_TRICKSTER = 4;
     JUNG_COUNT = 5;
+}
+
+# --- The overlay registry -----------------------------------------------------
+# Every overlay family this library knows. The generic API below walks this, so
+# a new system becomes enumerable everywhere by registering here. Values are
+# index-stable: append, never renumber.
+enum OverlaySystem {
+    OVL_ENNEAGRAM = 0;
+    OVL_JUNGIAN = 1;
+    OVL_SYSTEM_COUNT = 2;
 }
 
 # --- Small f64 helpers (weights are IEEE 754 bit patterns) --------------------
@@ -385,4 +415,61 @@ fn profile_jungian_role(p) {
 fn jungian_shadow_form(p) {
     if (p == 0) { return 0; }
     return shadow(p);
+}
+
+# --- Generic overlay API ------------------------------------------------------
+# Walk the registry without naming a family. `overlay_score(s, p, i)` is the one
+# call a consumer needs to read every system's take on a profile:
+#   for s in 0..overlay_system_count():
+#     for i in 0..overlay_label_count(s): overlay_score(s, p, i)
+# Unknown systems return "unknown"/0/0.0 rather than trapping — an out-of-range
+# system is a caller bug, not a reason to abort a scoring loop.
+
+fn overlay_system_count() { return OVL_SYSTEM_COUNT; }
+
+# overlay_system_name(s): the family's name, as it appears to consumers.
+fn overlay_system_name(s) {
+    if (s == OVL_ENNEAGRAM) { return "Enneagram"; }
+    if (s == OVL_JUNGIAN) { return "Jungian"; }
+    return "unknown";
+}
+
+# overlay_label_count(s): how many labels family s offers.
+fn overlay_label_count(s) {
+    if (s == OVL_ENNEAGRAM) { return ENN_COUNT; }
+    if (s == OVL_JUNGIAN) { return JUNG_COUNT; }
+    return 0;
+}
+
+# overlay_label(s, i): label i of family s (the lowercase key form).
+fn overlay_label(s, i) {
+    if (s == OVL_ENNEAGRAM) { return enneagram_name(i); }
+    if (s == OVL_JUNGIAN) { return jungian_name(i); }
+    return "unknown";
+}
+
+# overlay_score(s, p, i): how strongly p reads as label i of family s (0.0-1.0).
+fn overlay_score(s, p, i) {
+    if (s == OVL_ENNEAGRAM) { return profile_enneagram_score(p, i); }
+    if (s == OVL_JUNGIAN) { return profile_jungian_score(p, i); }
+    return 0.0;
+}
+
+# overlay_best(s, p): p's dominant label index in family s. Ties to the lowest
+# index; 0 for a null profile, matching the per-family functions.
+fn overlay_best(s, p) {
+    if (s == OVL_ENNEAGRAM) { return profile_enneagram_type(p); }
+    if (s == OVL_JUNGIAN) { return profile_jungian_role(p); }
+    return 0;
+}
+
+# overlay_system_by_name(name): index of the family named `name`; -1 if none.
+fn overlay_system_by_name(name) {
+    if (name == 0) { return 0 - 1; }
+    var i = 0;
+    while (i < OVL_SYSTEM_COUNT) {
+        if (streq(overlay_system_name(i), name) == 1) { return i; }
+        i = i + 1;
+    }
+    return 0 - 1;
 }

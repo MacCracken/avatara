@@ -91,8 +91,14 @@ clears the gate on the expansion below.**
 people's own account of who its figures are and earns archetypes, a `tradition` string, a
 history mapping and a place in `profile_count()`. A typology — the Enneagram, Jung's set,
 anything like them — is a modern analytic grid and may only ever be an overlay. The Enneagram
-will not become a tradition with nine archetypes. A test enforces it: no tradition string and
-no archetype name may equal an overlay label.
+will not become a tradition with nine archetypes. A test enforces it, walked over the
+`OverlaySystem` registry so a system registered later is covered without a test edit.
+
+That extensibility is the point rather than a side effect: overlays do not hardlock meaning.
+Interpretation moves, and new systems will want to be laid over traditions this library already
+carries. Because overlays derive and store nothing, adding one touches no archetype, and several
+readings may sit over the same figure disagreeing with each other. A new overlay system is
+therefore always available as an answer — a typology becoming a tradition never is.
 
 **STILL BLOCKED — community review.** Desk research established that material is *already public*,
 which is checkable. It cannot establish that a people *consents to this particular use*, which is

@@ -6,10 +6,10 @@ timer. Modeled on cyrius/vidya `doc-health.md`.
 
 Buckets: ✅ Fresh · 🟡 Stale (needs a pass) · 🔵 Dated artifact (frozen on purpose) · ❓ Open question
 
-_Last swept: 2026-07-22 (v2.13.1 — traditions/typologies exclusivity enforced; shadow-compose uniformity settled)._
+_Last swept: 2026-07-22 (v2.13.1 — traditions/typologies exclusivity enforced registry-wide; generic overlay API)._
 
 Ground truth at this sweep: **504 archetypes, 35 traditions**; version **2.13.1**;
-cyrius pin **6.4.71**; 244 integration tests; 60 benchmarks; `ArchetypeProfile`
+cyrius pin **6.4.71**; 273 integration tests; 60 benchmarks; `ArchetypeProfile`
 = 320-byte `#derive` struct.
 
 ## Structural docs
@@ -17,8 +17,8 @@ cyrius pin **6.4.71**; 244 integration tests; 60 benchmarks; `ArchetypeProfile`
 | Doc | Last touched | Status | Notes |
 |-----|--------------|--------|-------|
 | `README.md` | 2026-07-22 | ✅ Fresh | 504/35, compiler 6.4.71; tradition table lists all 32 modules incl. Tarot, I Ching and the five named-nation world traditions; Quick Start examples on the `Result` API (lookup/compose unwrap). |
-| `CHANGELOG.md` | 2026-07-22 | ✅ Fresh | Entries through 2.13.1 (design rulings recorded); `[Unreleased]` points at the roadmap (minors → 3.0.0). |
-| `CLAUDE.md` | 2026-07-22 | ✅ Fresh | Version 2.13.1, compiler 6.4.71; main.cyr=smoke / tcyr=244 / bcyr=60; all tradition modules incl. tarot/iching/inuit/lakota/haudenosaunee/anishinaabe/aboriginal + struct/Result/domain/shadow/xalloc API. |
+| `CHANGELOG.md` | 2026-07-22 | ✅ Fresh | Entries through 2.13.1 (design rulings + generic overlay registry); `[Unreleased]` points at the roadmap (minors → 3.0.0). |
+| `CLAUDE.md` | 2026-07-22 | ✅ Fresh | Version 2.13.1, compiler 6.4.71; main.cyr=smoke / tcyr=273 / bcyr=60; all tradition modules incl. tarot/iching/inuit/lakota/haudenosaunee/anishinaabe/aboriginal + struct/Result/domain/shadow/xalloc API. |
 | `CONTRIBUTING.md` / `SECURITY.md` / `CODE_OF_CONDUCT.md` | — | ✅ Fresh | No version/count/API content. |
 | `cyrius.cyml` | 2026-07-22 | ✅ Fresh | Pin 6.4.71; `result` in stdlib deps, `json` dropped (removed from stdlib in 6.1.x, unused); `[lib]` distlib section incl. `overlay.cyr`, the five world-tradition modules, and iching/tarot/solar/canaanite/etruscan/shadow. Vendored `lib/` re-resolved clean from scratch (declared subset + transitive = 29 files). |
 

@@ -24,7 +24,7 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/registry.cyr` — lookup by name, enumeration, query/filter API (includes history-based queries)
 - `src/affinity.cyr` — affinity scoring, similarity search, cross-tradition matching, conflict detection
 - `src/shadow.cyr` — shadow aspect: `shadow(profile)` (involutive inversion), `is_shadow_of(a, b)`
-- `src/overlay.cyr` — archetype overlays: cross-cutting typologies DERIVED over the profile, not archetypes (no registry/history entry, `profile_count()` unaffected). Enneagram (9 types, 3 centres, wings — the types are a ring) and Jungian (Hero/Shadow/Anima/Self/Trickster). `jungian_shadow_form(p)` is the composition point with `shadow.cyr`: the SHADOW overlay scores what p expresses, `shadow(p)` constructs a different archetype
+- `src/overlay.cyr` — archetype overlays: cross-cutting typologies DERIVED over the profile, not archetypes (no registry/history entry, `profile_count()` unaffected). Enneagram (9 types, 3 centres, wings — the types are a ring) and Jungian (Hero/Shadow/Anima/Self/Trickster), both registered in the `OverlaySystem` enum. Overlays are **plural readings, not definitions**: several may sit over the same figure and disagree, and a new system is added without touching any archetype. `jungian_shadow_form(p)` is the composition point with `shadow.cyr`: the SHADOW overlay scores what p expresses, `shadow(p)` constructs a different archetype
 - `src/kabbalah.cyr` — Tree of Life: 10 Sephiroth
 - `src/tarot.cyr` — 22 Tarot Major Arcana as the 22 Tree-of-Life paths (bridges `kabbalah`): each trump carries its Hebrew letter, path number (11–32), and the two Sephiroth its path connects (`tarot_path`, `tarot_path_upper/lower`, `tarot_for_path`, `tarot_connects`); Golden Dawn attribution, VIII=Strength/XI=Justice
 - `src/iching.cyr` — 64 I Ching hexagrams (King Wen sequence) over the eight trigrams (bagua): each hexagram carries its number, six lines, and two constituent trigrams (`iching_code` packs lower*8+upper; `iching_lower/upper/line/number/yang_count`, `iching_for_trigrams`, `trigram_name/image/attribute/family/element`). Element derives from the upper trigram, polarity from the yang-line balance; all 64 trigram pairings occur exactly once (bijection, test-pinned)
@@ -58,7 +58,7 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/anishinaabe.cyr` — 5 Anishinaabe manidoog + the 7 Grandfather Teachings (Nizhwaaswi Gagiikwewin), carried by their Ojibwe names as cosmic-tier principles; the wiindigoo is deliberately not carried — see module header
 - `src/aboriginal.cyr` — 4 widely published Aboriginal Australian figures, each attributed to its people; restricted Dreaming material deliberately excluded (see module header)
 - `src/logging.cyr` — sakshi logging init
-- `tests/avatara.tcyr` — integration test suite (244 assertions)
+- `tests/avatara.tcyr` — integration test suite (273 assertions)
 - `tests/avatara.bcyr` — benchmarks (60)
 - `programs/traditions.cyr` — example: explore archetypes
 - `programs/compose.cyr` — example: blend traditions
@@ -78,7 +78,7 @@ All values are i64. f64 trait/emphasis weights stored as IEEE 754 bit patterns. 
 - Affinity: `affinity()`, `similar_to()`, `cross_tradition_match()`, `cross_tradition_matches()`, `detect_conflicts()`, `is_incompatible()`. `similar_to(src, k)` uses bounded top-k selection (O(N·k)) — do not reintroduce a full sort before trimming; `k <= 0` still means "all, sorted"
 - Shadow: `shadow(profile)` — inverted form (traits→1−v, breath/growth/polarity mirrored, element/tier kept); involutive; `is_shadow_of(a, b)`
 - Domain: every archetype has a `Domain` (primary sphere, offset 312); `prof_domain(p)`, `query_domain(domain)`, `query_count_domain(domain)`
-- Overlays: `profile_enneagram_type/wing/centre/score(p)`, `profile_jungian_role/score(p)`, `jungian_shadow_form(p)`. Derived, never stored; adding an overlay must not change `profile_count()`
+- Overlays: `profile_enneagram_type/wing/centre/score(p)`, `profile_jungian_role/score(p)`, `jungian_shadow_form(p)`. Derived, never stored; adding an overlay must not change `profile_count()`. Generic registry API — `overlay_system_count/name/by_name`, `overlay_label_count/label`, `overlay_score(s,p,i)`, `overlay_best(s,p)` — enumerates every registered system without naming one; out-of-range systems degrade (`"unknown"`/0/0.0), they do not trap
 
 ## Key Principles
 
@@ -93,7 +93,9 @@ All values are i64. f64 trait/emphasis weights stored as IEEE 754 bit patterns. 
   anything like them) is a modern analytic grid and may only ever exist as an **overlay** — derived over
   the profile, never instantiated as archetypes, never given a `tradition` string, never counted in
   `profile_count()`. `src/overlay.cyr` is the sanctioned form. Do not add typology types as archetypes;
-  a test enforces this
+  a test enforces this, walking the `OverlaySystem` registry so a system registered later is covered
+  automatically. Overlays do not hardlock meaning: they are readings, plural and revisable, and new
+  systems may be laid over traditions already carried — which is exactly why they derive and store nothing
 
 ## Versioning & Benchmarking
 

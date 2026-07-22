@@ -726,22 +726,54 @@ fn main() {
     # INVARIANT: traditions and typologies are mutually exclusive. A typology may
     # only ever be an overlay -- never a tradition, never an archetype, never
     # counted. This guards the category rather than trusting discipline.
+    # Walked over the overlay REGISTRY, not a hardcoded label list: a system
+    # registered later is covered the moment it is added, without editing this.
     var excl_ok = 1;
     var xtrads = all_traditions();
     var xprofs = all_profiles();
-    for (var xi = 0; xi < 14; xi = xi + 1) {
-        var label = jungian_name(xi - 9);
-        if (xi < 9) { label = enneagram_name(xi); }
-        for (var xt = 0; xt < vec_len(xtrads); xt = xt + 1) {
-            if (streq(vec_get(xtrads, xt), label) == 1) { excl_ok = 0; }
+    var xs = 0;
+    while (xs < overlay_system_count()) {
+        var nlab = overlay_label_count(xs);
+        var xi = 0 - 1;
+        while (xi < nlab) {
+            # xi == -1 checks the system's own name; 0..n-1 check its labels.
+            var label = overlay_system_name(xs);
+            if (xi >= 0) { label = overlay_label(xs, xi); }
+            var xt = 0;
+            while (xt < vec_len(xtrads)) {
+                if (streq(vec_get(xtrads, xt), label) == 1) { excl_ok = 0; }
+                xt = xt + 1;
+            }
+            var xp = 0;
+            while (xp < vec_len(xprofs)) {
+                if (streq(prof_name(vec_get(xprofs, xp)), label) == 1) { excl_ok = 0; }
+                xp = xp + 1;
+            }
+            assert_eq(vec_len(by_tradition(label)), 0, "overlay label is not a tradition");
+            xi = xi + 1;
         }
-        for (var xp = 0; xp < vec_len(xprofs); xp = xp + 1) {
-            if (streq(prof_name(vec_get(xprofs, xp)), label) == 1) { excl_ok = 0; }
-        }
+        xs = xs + 1;
     }
     assert_eq(excl_ok, 1, "no typology label is a tradition or an archetype name");
-    assert_eq(vec_len(by_tradition("Enneagram")), 0, "Enneagram is not a tradition");
-    assert_eq(vec_len(by_tradition("Jungian")), 0, "Jungian is not a tradition");
+    assert_eq(overlay_system_count(), 2, "two overlay systems registered");
+
+    # Generic API agrees with the per-family functions it dispatches to.
+    var gp = result_unwrap(lookup("Thor"));
+    assert_eq(overlay_label_count(OVL_ENNEAGRAM), enneagram_count(), "enneagram label count via registry");
+    assert_eq(overlay_label_count(OVL_JUNGIAN), jungian_count(), "jungian label count via registry");
+    assert_eq(streq(overlay_label(OVL_ENNEAGRAM, 0), enneagram_name(0)), 1, "generic label == enneagram_name");
+    assert_eq(streq(overlay_label(OVL_JUNGIAN, JUNG_TRICKSTER), "trickster"), 1, "generic label == jungian_name");
+    assert_eq(f64_eq(overlay_score(OVL_ENNEAGRAM, gp, 3), profile_enneagram_score(gp, 3)), 1, "generic score == enneagram score");
+    assert_eq(f64_eq(overlay_score(OVL_JUNGIAN, gp, 0), profile_jungian_score(gp, 0)), 1, "generic score == jungian score");
+    assert_eq(overlay_best(OVL_ENNEAGRAM, gp), profile_enneagram_type(gp), "generic best == enneagram type");
+    assert_eq(overlay_best(OVL_JUNGIAN, gp), profile_jungian_role(gp), "generic best == jungian role");
+    assert_eq(overlay_system_by_name("Jungian"), OVL_JUNGIAN, "system lookup by name");
+    assert_eq(overlay_system_by_name("Astrology"), 0 - 1, "unregistered system -> -1");
+    # Out-of-range systems degrade, they do not trap: a scoring loop survives.
+    assert_eq(overlay_label_count(99), 0, "unknown system has no labels");
+    assert_eq(overlay_best(99, gp), 0, "unknown system best -> 0");
+    assert_eq(f64_eq(overlay_score(99, gp, 0), 0.0), 1, "unknown system scores 0.0");
+    assert_eq(streq(overlay_system_name(99), "unknown"), 1, "unknown system name");
 
     return assert_summary();
 }

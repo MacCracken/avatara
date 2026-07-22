@@ -9,8 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.13.1] — 2026-07-22
 
-Two design rulings recorded, one of them enforced by test. No archetypes, no API surface, no behaviour
-change — this release exists so that two decisions stop living only in conversation.
+Two design rulings recorded and enforced, plus the API change one of them implied. No archetypes and no
+behaviour change — this release exists so that two decisions stop living only in conversation, and so the
+overlay layer is shaped like what it claims to be.
 
 ### Changed
 - **Traditions and typologies are mutually exclusive, and a test now enforces it.** A tradition is a
@@ -30,7 +31,27 @@ change — this release exists so that two decisions stop living only in convers
   than one that is uniform and documents the consequence. `src/aboriginal.cyr`'s header now states that a
   consumer generating shadow or composed forms is doing something no cited source anticipated and should
   decide for itself whether that suits its use.
-- 3 new tests (241 → 244).
+- **New: a generic overlay API, because overlays are readings and readings are plural.** Overlay families
+  are now registered in an `OverlaySystem` enum, and `overlay_system_count()`, `overlay_system_name(s)`,
+  `overlay_system_by_name(name)`, `overlay_label_count(s)`, `overlay_label(s, i)`, `overlay_score(s, p, i)`
+  and `overlay_best(s, p)` walk that registry without naming a family. A consumer can enumerate every
+  reading available for a profile without knowing which systems exist. Out-of-range systems degrade to
+  `"unknown"`/`0`/`0.0` rather than trapping — an unknown system is a caller bug, not a reason to abort a
+  scoring loop. Purely additive; every per-family function is unchanged.
+- **The exclusivity test is now registry-driven rather than a hardcoded label list.** It walks
+  `OverlaySystem`, checking each system's own name *and* each of its labels against every tradition string,
+  every archetype name, and `by_tradition()`. A system registered later is covered the moment it is added,
+  with no test edit — which matters precisely because new overlay systems are expected. Verified by
+  mutation: renaming the Jungian system to "Norse", and the `trickster` label to "Iktomi", each fail the
+  suite; reverting restores it.
+- **Recorded: overlays do not hardlock meaning.** Interpretation moves — scholarship revises, schools
+  disagree, and systems that do not exist yet will want to be laid over figures already carried here.
+  Because overlays derive from the profile and store nothing, a new system costs no archetype edits, and
+  several may sit over one figure disagreeing with each other. Thor reads as some Enneagram type *and* some
+  Jungian role *and* whatever comes next; none of those displaces the others and none of them is what Thor
+  is. What an archetype *is* lives in the tradition modules, authored from that tradition's own sources;
+  everything in `overlay.cyr` is commentary, and commentary is allowed to be plural and to be wrong.
+- 32 new tests (241 → 273).
 
 ### Notes
 - This **clears the gate on v2.14.0**. The one remaining prerequisite before the Aboriginal expansion is the
