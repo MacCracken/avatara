@@ -6,8 +6,8 @@
 
 - **Language**: Cyrius (ported from Rust in v2.0)
 - **License**: GPL-3.0-only
-- **Version**: SemVer 2.8.0
-- **Compiler**: cyrius >= 6.2.11 (pinned in `cyrius.cyml` `[package].cyrius`)
+- **Version**: SemVer 2.8.1
+- **Compiler**: cyrius >= 6.4.69 (pinned in `cyrius.cyml` `[package].cyrius`)
 
 ## Consumers
 
@@ -50,7 +50,7 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/etruscan.cyr` — 4 Etruscan deities (Tinia, Uni, Menrva, Voltumna)
 - `src/incarnate.cyr` — 56 incarnate divine figures (Hindu, Buddhist, Mystic, Taoist, Indigenous, Sage)
 - `src/logging.cyr` — sakshi logging init
-- `tests/avatara.tcyr` — integration test suite (71 assertions)
+- `tests/avatara.tcyr` — integration test suite (82 assertions)
 - `tests/avatara.bcyr` — benchmarks (49)
 - `programs/traditions.cyr` — example: explore archetypes
 - `programs/compose.cyr` — example: blend traditions

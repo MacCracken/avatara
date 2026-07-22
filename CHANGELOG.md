@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.8.1] — 2026-07-22
+
+Toolchain maintenance release — no source changes.
+
+### Changed
+- **Toolchain pin bumped 6.2.11 → 6.4.69** (`cyrius.cyml` `[package].cyrius`). Vendored `lib/` was
+  re-resolved cleanly from scratch against the 6.4.69 snapshot: the local dir was wiped and repopulated
+  via `cyrius deps` (the CI gate), which resolves clean (exit 0) with all 16 `[deps] stdlib` entries
+  present in the new snapshot — no declared dependency was dropped, so `[deps]` needed no edit. The
+  resolve now vendors the declared-subset-plus-transitive set (29 `.cyr` files) rather than the whole
+  snapshot; 68 unused modules left over from a prior `--full` vendor (`async*`, `tls_native_*`, `regex`,
+  `http`, `net`, `regression*`, `thread*`, etc. — none referenced by avatara) were pruned, eliminating
+  the stale-leftover class that can mask a clean-resolve failure locally.
+- No source changes: `dist/avatara.cyr` was regenerated (`cyrius distlib`) and differs from 2.8.0 only in
+  its `# Version:` header; the regen is idempotent (byte-stable). Full build, smoke test, and the
+  integration suite (82 assertions) pass under 6.4.69.
+
+### Benchmarks
+- 49/49 recorded for 2.8.1 (see `bench-history.csv`). No regressions relative to the 2.7.2 baseline — the
+  first re-benchmarked release since then. The persistent `kabbalah/single_profile` codegen creep flagged
+  under 6.1.34/6.2.11 has **reversed** sharply: ~490 ns → ~286 ns (−42%). Other measurable paths also
+  improved (`history/context_for_tradition` 273→192 ns, `history/traditions_active_at` 932→686 ns,
+  `affinity/similar_to_5` 571→527 µs). The handful of upward blips (`compose/three_traditions`,
+  `registry/lookup_by_name`, `history/traditions_for_civ`) sit in the µs-quantized band the harness rounds
+  to whole microseconds (e.g. 2000→2409 ns is "2 µs → 2.4 µs" rounding), and the sub-25 ns `all_*`
+  collection benches swing within integer-ns run-to-run noise — neither is a real regression.
+
 ## [2.8.0] — 2026-07-09
 
 **Role aspects** — derive an archetype's roles from its personality vector. An archetype is a personality
