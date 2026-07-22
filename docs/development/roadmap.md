@@ -14,6 +14,7 @@
 - **2.10.1** — performance: `similar_to()` switched from sort-then-trim to bounded top-k selection, removing an O(N²) insertion sort over the whole registry (`affinity/similar_to_5` 809 → 73 µs, −91%). Identical results and ordering; the cost no longer grows with N².
 - **2.11.0** — World-traditions completion, organised as **named nations** rather than pan-continental buckets: Inuit (10), Lakota (10), Haudenosaunee (6), Anishinaabe (6), and a deliberately scoped Aboriginal Australian set (5, each attributed to its people); plus the outstanding Celtic healers Miach and Airmed → **499 archetypes, 34 traditions**. White Buffalo Calf Woman and Deganawidah remain in the existing "Indigenous" incarnate tradition and are not duplicated. Restricted Dreaming material is excluded by design — see the `aboriginal.cyr` header and the 2.11.x arc below.
 - **2.12.0** — World traditions, part 2: the three items the 2.11.0 review deferred. The pan-ethnic `"Indigenous"` label is retired — White Buffalo Calf Woman, the Peacemaker, Quanah Parker and Wovoka now carry Lakota, Haudenosaunee, Comanche and Northern Paiute (which also fixed an orphaned history mapping that had filed all four under the Tonga Empire). The seven Grandfather Teachings (Nizhwaaswi Gagiikwewin) join `anishinaabe.cyr`, restoring the balance lost when the wiindigoo was dropped. Separators normalised to the em dash codebase-wide → **504 archetypes, 35 traditions**.
+- **2.13.1** — Design rulings recorded: traditions and typologies are mutually exclusive (a typology may only ever be an overlay, enforced by test), and `shadow()`/`compose()` stay uniform across every tradition with no per-figure opt-out. No archetypes, no API change.
 - **2.13.0** — Archetype overlays (`src/overlay.cyr`): the first layer sitting *on top of* the archetypes rather than beside them. Enneagram (9 types, 3 centres, wings) and the Jungian set (Hero, Shadow, Anima/Animus, Self, Trickster), all derived from the profile's own weights. `jungian_shadow_form()` composes with the existing `shadow()`. No archetypes added — `profile_count()` stays 504.
 - **Toolchain maintenance** — 2.7.2 (pin 6.1.34 → 6.2.11) and 2.8.1 (6.2.11 → 6.4.69) as standalone maintenance releases; 2.10.0 carried 6.4.69 → 6.4.70 and 2.11.0 carried 6.4.70 → 6.4.71. Vendored stdlib re-resolved to the pinned snapshot each time, benches recorded.
 
@@ -37,7 +38,8 @@ scholarly correspondences only, no inventions.
 pass, 159 figure assessments). Results below. The defects it found in already-shipped entries
 were fixed in 2.12.1; Baiame moved from held to a stated exclusion in the same release.
 
-**Shippable on the research alone — six profiles, in this order and not before step 4:**
+**Shippable on the research alone — six profiles, once the per-people split lands (the one
+remaining gate, below):**
 - **Goorialla** (Lardil, Mornington Island) — the strongest candidate in the survey, and the only
   one clearing the bar on its strongest limb: authored and illustrated by Goobalathaldin Dick
   Roughsey, a Lardil man, in *The Rainbow Serpent* (1975), CBCA Picture Book of the Year, still in
@@ -45,8 +47,8 @@ were fixed in 2.12.1; Baiame moved from held to a stated exclusion in the same r
   Dick Roughsey", not as "the Lardil Law".
 - **Borun** (pelican) and **Tuk** (musk duck), Gunaikurnai — two profiles, carried as a pair
   because the account *is* their meeting. GLaWAC's own Stories & Songlines page under its express
-  Elder-approval statement. Blocked behind the shadow() decision below: they are the apical
-  ancestors of every living Gunaikurnai person.
+  Elder-approval statement. Note that they are the apical ancestors of every
+  living Gunaikurnai person, and the uniform-machinery decision below applies to them.
 - **Wagyl** (Noongar) — Whadjuk Noongar public interpretation on the Derbarl Yerrigan and at
   Kings Park.
 - **Namarrkon**, the Lightning Man (Kunwinjku) — same Aboriginal-owned art-centre channel as Ngalyod.
@@ -72,17 +74,25 @@ regenerated. A deliberate minor with a CHANGELOG entry, not a drive-by edit. Do 
 `people` field — `ArchetypeProfile` is a fixed 40-field / 320-byte layout with a pinned assertion
 test and a committed dist bundle.
 
-**OPEN DECISION — `shadow()` and `compose()`.** No source pass raised this; it was found in the
-code. `shadow()` emits a profile named "Shadow of <name>" with every trait inverted and polarity
-flipped; `compose()` blends across traditions by weight. So the library will generate "Shadow of
-Borun", and will flip Tuk — the mother of the five Gunaikurnai clans — from feminine to masculine.
-No channel cited anywhere in the survey contemplated that: not GLaWAC's Elder approval, not an art
-centre's product text. **This already applies to the four figures carried today**, so it is not an
-argument about expansion; it is an argument that the library must state what it does to a profile
-once one exists, and possibly opt some profiles out of `shadow()` and `compose()` at code level.
-Options: (a) do nothing and document it; (b) an opt-out flag honoured by `shadow()`/`compose()`;
-(c) restrict the inversion to trait values and leave name and polarity alone. This is the single
-most substantive gap in the module's ethical apparatus and it is the maintainer's call.
+**RESOLVED — `shadow()` and `compose()` stay uniform.** No source pass raised this; it was
+found in the code. `shadow()` emits a profile named "Shadow of <name>" with every trait
+inverted and polarity flipped, and `compose()` blends across traditions by weight — so the
+library will generate "Shadow of Borun", and will flip Tuk, the mother of the five
+Gunaikurnai clans, from feminine to masculine. No channel cited anywhere in the survey
+contemplated that, and it already applies to the four figures carried today. **Decision: no
+per-figure opt-out.** These operations apply evenly across every tradition in the library,
+and the `aboriginal.cyr` header now states plainly that a consumer generating shadow or
+composed forms is doing something no cited source anticipated and should decide for itself
+whether that suits its use. A library that silently exempts some archetypes from its own
+machinery is harder to reason about than one that applies it evenly and says so. **This
+clears the gate on the expansion below.**
+
+**Also settled (2.13.1): traditions and typologies are mutually exclusive.** A tradition is a
+people's own account of who its figures are and earns archetypes, a `tradition` string, a
+history mapping and a place in `profile_count()`. A typology — the Enneagram, Jung's set,
+anything like them — is a modern analytic grid and may only ever be an overlay. The Enneagram
+will not become a tradition with nine archetypes. A test enforces it: no tradition string and
+no archetype name may equal an overlay label.
 
 **STILL BLOCKED — community review.** Desk research established that material is *already public*,
 which is checkable. It cannot establish that a people *consents to this particular use*, which is

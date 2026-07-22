@@ -18,6 +18,17 @@
 # was in the room when the Dagda or Sedna were described. Consumers wanting the
 # archetype's own self-understanding should read `domain`, `soul` and `spirit`.
 #
+# TRADITIONS AND TYPOLOGIES ARE MUTUALLY EXCLUSIVE, and this file is the line
+# between them. A tradition is a people's own account of who its figures are; it
+# earns archetypes, a `tradition` string, a history mapping and a place in
+# `profile_count()`. A typology is a modern analytic grid laid over other
+# people's figures from outside, and it gets none of those — it lives here, as
+# derivation, and nowhere else. The Enneagram will not become a tradition with
+# nine archetypes, and neither will Jung's set; that would put a 20th-century
+# framework on the same shelf as the Sephiroth and the Orishas, which is a
+# category error the registry should never be asked to hold. A test enforces
+# this: no tradition string and no archetype name may equal an overlay label.
+#
 # TWO OVERLAY FAMILIES, both index-stable so the API can grow without breaking:
 #   Enneagram  — nine types, three centres, wings.
 #   Jungian    — Hero, Shadow, Anima/Animus, Self, Trickster.

@@ -71,14 +71,17 @@
 # material carrying them is park interpretation rather than publication by
 # those peoples. Citing is not instantiating.
 #
-# OPEN QUESTION — WHAT THIS LIBRARY DOES TO A PROFILE ONCE IT EXISTS. `shadow()`
-# emits a "Shadow of <name>" with every trait inverted and polarity flipped, and
+# WHAT THIS LIBRARY DOES TO A PROFILE ONCE IT EXISTS. `shadow()` emits a
+# "Shadow of <name>" with every trait inverted and polarity flipped, and
 # `compose()` blends profiles across traditions by weight. No channel cited for
-# any figure here contemplated that. It applies to all four figures below, not
-# only to any future addition, and it is a code question rather than a research
-# one — see the v2.14.0 arc on the roadmap. It is recorded here because a header
-# that lists its sourcing scruples while staying silent on what the library then
-# does with the result is only half honest.
+# any figure here contemplated that, and it applies to all four figures below
+# rather than only to future additions. The decision taken is that these
+# operations stay uniform across every tradition in the library — no per-figure
+# opt-out — because a library that silently exempts some archetypes from its own
+# machinery is harder to reason about than one that applies it evenly and says
+# so. This paragraph is that saying-so: a consumer generating shadow or composed
+# forms of the figures below is doing something no cited source anticipated, and
+# should decide for itself whether that is appropriate to its use.
 #
 # Sources: Taungurung Land and Waters Council (a Registered Aboriginal Party) on
 # Bunjil and Waang; Gunaikurnai Land and Waters Aboriginal Corporation, under an

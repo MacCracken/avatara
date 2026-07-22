@@ -723,6 +723,25 @@ fn main() {
     assert_eq(profile_enneagram_wing(0), 0 - 1, "null profile has no wing");
     assert_eq(profile_jungian_role(0), 0, "null profile -> Jungian role 0");
     assert_eq(jungian_shadow_form(0), 0, "null profile has no shadow form");
+    # INVARIANT: traditions and typologies are mutually exclusive. A typology may
+    # only ever be an overlay -- never a tradition, never an archetype, never
+    # counted. This guards the category rather than trusting discipline.
+    var excl_ok = 1;
+    var xtrads = all_traditions();
+    var xprofs = all_profiles();
+    for (var xi = 0; xi < 14; xi = xi + 1) {
+        var label = jungian_name(xi - 9);
+        if (xi < 9) { label = enneagram_name(xi); }
+        for (var xt = 0; xt < vec_len(xtrads); xt = xt + 1) {
+            if (streq(vec_get(xtrads, xt), label) == 1) { excl_ok = 0; }
+        }
+        for (var xp = 0; xp < vec_len(xprofs); xp = xp + 1) {
+            if (streq(prof_name(vec_get(xprofs, xp)), label) == 1) { excl_ok = 0; }
+        }
+    }
+    assert_eq(excl_ok, 1, "no typology label is a tradition or an archetype name");
+    assert_eq(vec_len(by_tradition("Enneagram")), 0, "Enneagram is not a tradition");
+    assert_eq(vec_len(by_tradition("Jungian")), 0, "Jungian is not a tradition");
 
     return assert_summary();
 }

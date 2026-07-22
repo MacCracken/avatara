@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.13.1] — 2026-07-22
+
+Two design rulings recorded, one of them enforced by test. No archetypes, no API surface, no behaviour
+change — this release exists so that two decisions stop living only in conversation.
+
+### Changed
+- **Traditions and typologies are mutually exclusive, and a test now enforces it.** A tradition is a
+  people's own account of who its figures are: it earns archetypes, a `tradition` string, a history mapping
+  and a place in `profile_count()`. A typology — the Enneagram, Jung's set, anything of that kind — is a
+  modern analytic grid laid over other people's figures from outside, and gets none of those. It may only
+  ever exist as an overlay in `src/overlay.cyr`. The Enneagram will not become a tradition with nine
+  archetypes; that would put a 20th-century framework on the same shelf as the Sephiroth and the Orishas.
+  The new assertion checks that no tradition string and no archetype name equals any of the 14 overlay
+  labels, and that `by_tradition("Enneagram")` and `by_tradition("Jungian")` are both empty. Recorded in
+  CLAUDE.md § Key Principles and in the `overlay.cyr` header.
+- **`shadow()` and `compose()` stay uniform across every tradition — no per-figure opt-out.** The v2.14.0
+  research surfaced that `shadow()` emits a "Shadow of <name>" with inverted traits and flipped polarity,
+  and that this would apply to figures like Borun and Tuk, the apical ancestors of every living Gunaikurnai
+  person. No cited channel contemplated that. The decision is to apply the machinery evenly and say so
+  rather than exempt some archetypes silently: a library with quiet exceptions is harder to reason about
+  than one that is uniform and documents the consequence. `src/aboriginal.cyr`'s header now states that a
+  consumer generating shadow or composed forms is doing something no cited source anticipated and should
+  decide for itself whether that suits its use.
+- 3 new tests (241 → 244).
+
+### Notes
+- This **clears the gate on v2.14.0**. The one remaining prerequisite before the Aboriginal expansion is the
+  per-people tradition split, which is a code change with its own CHANGELOG entry — not a drive-by edit.
+- Community review for v2.14.0 remains **blocked**; that is unchanged and unrelated.
+
 ## [2.13.0] — 2026-07-22
 
 **Archetype overlays** — the first layer in this library that sits *on top of* the archetypes rather than

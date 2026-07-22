@@ -6,7 +6,7 @@
 
 - **Language**: Cyrius (ported from Rust in v2.0)
 - **License**: GPL-3.0-only
-- **Version**: SemVer 2.13.0
+- **Version**: SemVer 2.13.1
 - **Compiler**: cyrius >= 6.4.71 (pinned in `cyrius.cyml` `[package].cyrius`)
 
 ## Consumers
@@ -58,7 +58,7 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/anishinaabe.cyr` — 5 Anishinaabe manidoog + the 7 Grandfather Teachings (Nizhwaaswi Gagiikwewin), carried by their Ojibwe names as cosmic-tier principles; the wiindigoo is deliberately not carried — see module header
 - `src/aboriginal.cyr` — 4 widely published Aboriginal Australian figures, each attributed to its people; restricted Dreaming material deliberately excluded (see module header)
 - `src/logging.cyr` — sakshi logging init
-- `tests/avatara.tcyr` — integration test suite (241 assertions)
+- `tests/avatara.tcyr` — integration test suite (244 assertions)
 - `tests/avatara.bcyr` — benchmarks (60)
 - `programs/traditions.cyr` — example: explore archetypes
 - `programs/compose.cyr` — example: blend traditions
@@ -88,6 +88,12 @@ All values are i64. f64 trait/emphasis weights stored as IEEE 754 bit patterns. 
 - f64 values in 0.0-1.0 range for all traits and emphases
 - Historically and theologically accurate — real traditions, real correspondences
 - Respectful representation — these are living traditions for billions of people
+- **Traditions and typologies are mutually exclusive.** A tradition is a people's own account of who its
+  figures are and lives in `registry`/`history` with real archetypes. A typology (Enneagram, Jungian, and
+  anything like them) is a modern analytic grid and may only ever exist as an **overlay** — derived over
+  the profile, never instantiated as archetypes, never given a `tradition` string, never counted in
+  `profile_count()`. `src/overlay.cyr` is the sanctioned form. Do not add typology types as archetypes;
+  a test enforces this
 
 ## Versioning & Benchmarking
 
