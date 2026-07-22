@@ -1,6 +1,6 @@
 # avatara.bcyr -- Benchmarks for avatara
 #
-# 50 benchmarks covering all traditions, sub-groups, registry, compose, history.
+# 52 benchmarks covering all traditions, sub-groups, registry, compose, history.
 # Matches and exceeds Rust Criterion suite (29 benchmarks).
 
 # Stdlib auto-included via cyrius.toml
@@ -33,6 +33,7 @@ include "src/solar.cyr"
 include "src/canaanite.cyr"
 include "src/etruscan.cyr"
 include "src/tarot.cyr"
+include "src/iching.cyr"
 include "src/compose.cyr"
 include "src/history.cyr"
 include "src/registry.cyr"
@@ -43,7 +44,7 @@ var N = 1000;
 var b = 0;
 
 alloc_init();
-println("=== avatara benchmarks (50 benches) ===");
+println("=== avatara benchmarks (52 benches) ===");
 
 # ================================================================
 # Tier 1: Single profile creation
@@ -267,6 +268,18 @@ for (var i = 0; i < N; i = i + 1) { all_tarot(); }
 bench_batch_stop(b, N);
 bench_report(b);
 
+b = bench_new("iching/all_64");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_iching(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("iching/for_trigrams");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { iching_for_trigrams(TRIGRAM_LI, TRIGRAM_KAN); }
+bench_batch_stop(b, N);
+bench_report(b);
+
 # ================================================================
 # Tier 3: Registry
 # ================================================================
@@ -400,5 +413,5 @@ bench_batch_stop(b, N);
 bench_report(b);
 
 println("");
-println("=== 50 benchmarks complete ===");
+println("=== 52 benchmarks complete ===");
 syscall(SYS_EXIT, 0);

@@ -34,6 +34,7 @@ include "src/solar.cyr"
 include "src/canaanite.cyr"
 include "src/etruscan.cyr"
 include "src/tarot.cyr"
+include "src/iching.cyr"
 include "src/compose.cyr"
 include "src/history.cyr"
 include "src/registry.cyr"
@@ -213,7 +214,7 @@ fn main() {
     # ================================================================
     # History: mapped traditions count
     # ================================================================
-    assert_eq(mapping_count(), 28, "28 history mappings");
+    assert_eq(mapping_count(), 29, "29 history mappings");
 
     # ================================================================
     # History: all mapped traditions resolve
@@ -312,8 +313,8 @@ fn main() {
     var leap = lookup_in("Solar", "Bissextus");
     assert_eq(is_ok(leap), 1, "Bissextus (the leap quarter) exists");
     assert_eq(prof_domain(result_unwrap(leap)), DOMAIN_ORDER, "Bissextus -> ORDER");
-    # 366 (solar year) + 8 (Canaanite + Etruscan) + 22 (Tarot) = 396
-    assert_eq(profile_count(), 396, "396 archetypes");
+    # 366 (solar year) + 8 (Canaanite + Etruscan) + 22 (Tarot) + 64 (I Ching) = 460
+    assert_eq(profile_count(), 460, "460 archetypes");
 
     # ================================================================
     # Canaanite & Etruscan (2.7.0 micro-traditions)
@@ -393,6 +394,103 @@ fn main() {
     assert_eq(tarot_index_by_name("nope"), 0 - 1, "index_by_name unknown = -1");
     # history: Tarot resolves a context
     assert_neq(context_for_tradition("Tarot"), 0, "Tarot resolves history context");
+
+    # ================================================================
+    # I Ching (2.10.0) — 64 hexagrams over the eight trigrams
+    # ================================================================
+    assert_eq(iching_count(), 64, "64 hexagrams");
+    assert_eq(trigram_count(), 8, "8 trigrams");
+    assert_eq(vec_len(by_tradition("I Ching")), 64, "I Ching tradition has 64");
+    # trigram value IS its 3-line code, bottom line as MSB
+    assert_eq(TRIGRAM_KUN, 0, "Kun = 000 = 0");
+    assert_eq(TRIGRAM_QIAN, 7, "Qian = 111 = 7");
+    assert_eq(trigram_line(TRIGRAM_ZHEN, 1), 1, "Zhen (100) bottom line yang");
+    assert_eq(trigram_line(TRIGRAM_ZHEN, 3), 0, "Zhen (100) top line yin");
+    assert_eq(streq(trigram_image(TRIGRAM_GEN), "Mountain"), 1, "Gen image = Mountain");
+    assert_eq(streq(trigram_family(TRIGRAM_QIAN), "Father"), 1, "Qian family = Father");
+    assert_eq(trigram_element(TRIGRAM_LI), ELEM_FIRE, "Li element = FIRE");
+    # King Wen numbering
+    assert_eq(iching_number(HEX_01_QIAN), 1, "index 0 -> King Wen 1");
+    assert_eq(iching_number(HEX_64_WEI_JI), 64, "index 63 -> King Wen 64");
+    # canonical compositions (upper over lower)
+    assert_eq(iching_lower(HEX_11_TAI), TRIGRAM_QIAN, "Tai lower = Qian (Heaven)");
+    assert_eq(iching_upper(HEX_11_TAI), TRIGRAM_KUN, "Tai upper = Kun (Earth over Heaven)");
+    assert_eq(iching_lower(HEX_12_PI), TRIGRAM_KUN, "Pi lower = Kun");
+    assert_eq(iching_upper(HEX_12_PI), TRIGRAM_QIAN, "Pi upper = Qian (Heaven over Earth)");
+    assert_eq(iching_lower(HEX_63_JI_JI), TRIGRAM_LI, "Ji Ji lower = Li");
+    assert_eq(iching_upper(HEX_63_JI_JI), TRIGRAM_KAN, "Ji Ji upper = Kan (Water over Fire)");
+    assert_eq(iching_lower(HEX_64_WEI_JI), TRIGRAM_KAN, "Wei Ji lower = Kan");
+    assert_eq(iching_upper(HEX_64_WEI_JI), TRIGRAM_LI, "Wei Ji upper = Li (Fire over Water)");
+    # the eight doubled hexagrams have lower == upper
+    var doubled = 0;
+    for (var di = 0; di < 64; di = di + 1) {
+        if (iching_lower(di) == iching_upper(di)) { doubled = doubled + 1; }
+    }
+    assert_eq(doubled, 8, "exactly 8 doubled hexagrams");
+    assert_eq(iching_lower(HEX_29_KAN), iching_upper(HEX_29_KAN), "Kan is doubled");
+    assert_eq(iching_lower(HEX_52_GEN), iching_upper(HEX_52_GEN), "Gen is doubled");
+    # BIJECTION: every one of the 8x8 trigram pairings occurs exactly once
+    var bijection_ok = 1;
+    for (var lo = 0; lo < 8; lo = lo + 1) {
+        for (var up = 0; up < 8; up = up + 1) {
+            var hx = iching_for_trigrams(lo, up);
+            if (hx < 0) { bijection_ok = 0; }
+            if (hx >= 0) {
+                if (iching_lower(hx) != lo) { bijection_ok = 0; }
+                if (iching_upper(hx) != up) { bijection_ok = 0; }
+            }
+        }
+    }
+    assert_eq(bijection_ok, 1, "all 64 trigram pairings map to a hexagram (bijection)");
+    # line access agrees with the trigram decomposition, and yang counts are sane
+    var lines_ok = 1;
+    for (var li = 0; li < 64; li = li + 1) {
+        for (var lp = 1; lp <= 3; lp = lp + 1) {
+            if (iching_line(li, lp) != trigram_line(iching_lower(li), lp)) { lines_ok = 0; }
+            if (iching_line(li, lp + 3) != trigram_line(iching_upper(li), lp)) { lines_ok = 0; }
+        }
+        var yc = iching_yang_count(li);
+        if (yc < 0) { lines_ok = 0; }
+        if (yc > 6) { lines_ok = 0; }
+    }
+    assert_eq(lines_ok, 1, "lines 1-6 decompose to lower/upper trigrams for all 64");
+    assert_eq(iching_yang_count(HEX_01_QIAN), 6, "The Creative is six yang lines");
+    assert_eq(iching_yang_count(HEX_02_KUN), 0, "The Receptive is six yin lines");
+    # the DOCUMENTED derivation rules actually hold across all 64
+    var elem_rule_ok = 1;
+    var pol_rule_ok = 1;
+    var tier_ok = 1;
+    var iv = all_iching();
+    for (var ri = 0; ri < vec_len(iv); ri = ri + 1) {
+        var hp = vec_get(iv, ri);
+        if (prof_element(hp) != trigram_element(iching_upper(ri))) { elem_rule_ok = 0; }
+        if (prof_tier(hp) != TIER_COSMIC) { tier_ok = 0; }
+        var y = iching_yang_count(ri);
+        if (y >= 4) { if (prof_polarity(hp) != POL_MASCULINE) { pol_rule_ok = 0; } }
+        if (y <= 2) { if (prof_polarity(hp) != POL_FEMININE) { pol_rule_ok = 0; } }
+        if (y == 3) { if (prof_polarity(hp) != POL_ANDROGYNOUS) { pol_rule_ok = 0; } }
+    }
+    assert_eq(elem_rule_ok, 1, "element == upper trigram's element for all 64");
+    assert_eq(pol_rule_ok, 1, "polarity follows the yang-line balance for all 64");
+    assert_eq(tier_ok, 1, "all 64 hexagrams are cosmic-tier");
+    # lookup helpers and domain spot-checks
+    assert_eq(streq(prof_name(iching_by_number(1)), "The Creative"), 1, "hexagram 1 = The Creative");
+    assert_eq(streq(prof_name(iching_by_number(64)), "Before Completion"), 1, "hexagram 64 = Before Completion");
+    assert_eq(iching_index_by_name("Modesty"), 14, "Modesty is index 14 (hexagram 15)");
+    assert_eq(iching_index_by_name("nope"), 0 - 1, "index_by_name unknown = -1");
+    assert_eq(prof_domain(result_unwrap(lookup("The Creative"))), DOMAIN_CREATION, "The Creative -> CREATION");
+    assert_eq(prof_domain(result_unwrap(lookup("The Receptive"))), DOMAIN_NATURE, "The Receptive -> NATURE");
+    assert_eq(prof_domain(result_unwrap(lookup("Keeping Still"))), DOMAIN_TRANSCENDENCE, "Keeping Still -> TRANSCENDENCE");
+    assert_eq(prof_domain(result_unwrap(lookup("The Well"))), DOMAIN_HEARTH, "The Well -> HEARTH");
+    # out-of-range behavior
+    assert_eq(iching_by_index(0 - 1), 0, "iching_by_index(-1) = 0 (null)");
+    assert_eq(iching_by_index(64), 0, "iching_by_index(64) = 0 (null)");
+    assert_eq(iching_code(64), 0 - 1, "iching_code out of range = -1");
+    assert_eq(iching_line(0, 7), 0 - 1, "line position 7 = -1");
+    assert_eq(iching_for_trigrams(0 - 1, 0), 0 - 1, "for_trigrams bad lower = -1");
+    assert_eq(iching_for_trigrams(0, 8), 0 - 1, "for_trigrams bad upper = -1");
+    # history
+    assert_neq(context_for_tradition("I Ching"), 0, "I Ching resolves history context");
 
     # ================================================================
     # Aspects (role derivation from the personality vector) — aspect.cyr

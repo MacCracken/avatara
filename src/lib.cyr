@@ -6,7 +6,7 @@
 # mapping across traditions. All traditions map to the same
 # ArchetypeProfile output — composable across cultures.
 #
-# 396 archetypes across 28 traditions.
+# 460 archetypes across 29 traditions.
 #
 # Modules:
 #   types      - TraitWeights, ModuleEmphasis, ArchetypeProfile, enums
@@ -32,6 +32,7 @@
 #   sikh       - 10 Sikh Gurus
 #   incarnate  - 44+ incarnate divine figures
 #   tarot      - 22 Major Arcana (Tree-of-Life paths, bridging Kabbalah)
+#   iching     - 64 hexagrams (King Wen sequence, bridging the eight trigrams)
 #   compose    - weighted blending of profiles
 #   registry   - lookup, enumeration, query filters
 #   logging    - sakshi logging init
@@ -67,6 +68,7 @@ include "src/solar.cyr"
 include "src/canaanite.cyr"
 include "src/etruscan.cyr"
 include "src/tarot.cyr"
+include "src/iching.cyr"
 include "src/compose.cyr"
 include "src/history.cyr"
 include "src/registry.cyr"

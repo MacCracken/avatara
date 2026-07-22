@@ -5,7 +5,7 @@
 # Each tradition maps to one or more civilizations, eras, and a temporal
 # range — the period during which the tradition's theology was actively forming.
 #
-# 28 tradition-to-history mappings with scholarly historical notes.
+# 29 tradition-to-history mappings with scholarly historical notes.
 
 # --- TraditionMapping layout ---
 # Each mapping: tradition name, primary civ, civ names (vec), era names (vec),
@@ -217,6 +217,11 @@ fn all_mappings() {
         svec3("Renaissance Italy", "Kingdom of France", "British Empire"), svec2("Renaissance", "Modern"),
         1440, LIVING,
         "The Major Arcana appear as the trump suit of 15th-century Italian tarocchi (Visconti-Sforza decks, c. 1440s Milan); the esoteric reading was developed by Court de Gebelin (1781) and Eliphas Levi, who first mapped the 22 trumps to the 22 Hebrew letters and the Kabbalah, and systematized by the Hermetic Order of the Golden Dawn (1888) into the Tree-of-Life path attributions used here; the Rider-Waite-Smith deck (1909) fixed the modern imagery. A living divinatory and initiatory tradition"));
+
+        vec_push(history_vec, history_map_new("I Ching", "Ancient China",
+        svec1("Ancient China"), svec3("Zhou Dynasty", "Han Dynasty", "Song Dynasty"),
+        (0-1000), LIVING,
+        "The Zhou Yi, oldest of the Chinese classics: its sixty-four hexagram texts were compiled in the Western Zhou (c. 1000-750 BCE) out of a much older milfoil divination practice; the Ten Wings commentaries (Warring States through Han) made it the first of the Five Classics and the shared cosmological root of both Confucian and Taoist thought, and the Song Neo-Confucians (Zhu Xi) reworked it again; still consulted as both oracle and philosophical text"));
 
         history_init_done = 1;
     }

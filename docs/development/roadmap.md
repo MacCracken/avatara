@@ -10,9 +10,10 @@
 - **2.7.0** — Canaanite & Etruscan micro-traditions (El/Baal/Asherah/Anat; Tinia/Uni/Menrva/Voltumna) → **374 archetypes, 27 traditions**.
 - **2.8.0** — Role aspects: trait-derived role facets (`src/aspect.cyr`) — every one of the 374 archetypes gains selectable roles derived from its personality vector, with no per-archetype authoring. Purely additive; no profile or API behavior changed.
 - **2.9.0** — Tarot Major Arcana (`src/tarot.cyr`): the 22 trumps as archetypes, each a *path* on the Tree of Life bridging the Kabbalah module (Hebrew letter + path number 11–32 + the two Sephiroth it joins; Golden Dawn attribution) → **396 archetypes, 28 traditions**. First module to bridge two existing systems.
-- **Toolchain maintenance** — 2.7.2 (pin 6.1.34 → 6.2.11) and 2.8.1 (6.2.11 → 6.4.69): vendored stdlib re-synced to the pinned snapshot, benches recorded, no source changes.
+- **2.10.0** — I Ching (`src/iching.cyr`): the 64 hexagrams of the King Wen sequence, each carrying its six lines and its two constituent trigrams (bagua), with element derived from the upper trigram and polarity from the yang-line balance → **460 archetypes, 29 traditions**. All 64 trigram pairings occur exactly once — a bijection the suite pins.
+- **Toolchain maintenance** — 2.7.2 (pin 6.1.34 → 6.2.11) and 2.8.1 (6.2.11 → 6.4.69) as standalone maintenance releases; 2.10.0 also carried the pin 6.4.69 → 6.4.70. Vendored stdlib re-resolved to the pinned snapshot each time, benches recorded.
 
-The minors below sequence the former demand-gated backlog toward a 3.0.0 consolidation. (Role aspects took the original 2.8.0 slot, so the Tarot → overlays sequence shifted up one minor; Tarot has now shipped as 2.9.0.)
+The minors below sequence the former demand-gated backlog toward a 3.0.0 consolidation. (Role aspects took the original 2.8.0 slot, so the Tarot → overlays sequence shifted up one minor; Tarot shipped as 2.9.0 and I Ching as 2.10.0.)
 
 ## Planned — minors to 3.0.0
 
@@ -20,13 +21,20 @@ Each is additive and non-breaking (new archetypes / traditions / an additive
 overlay layer). Historical-accuracy rule stands throughout: established
 scholarly correspondences only, no inventions.
 
-- **v2.10.0 — I Ching** — 64 hexagram archetypes.
 - **v2.11.0 — World-traditions completion** — Aboriginal Australian, Native American (specific nations), Inuit; plus the deferred Polynesian / Slavic / Celtic additions (Pele/Kanaloa aspects, Mokosh aspects/Rod, Ogma/Miach/Airmed).
 - **v2.12.0 — Archetype overlays** — the first cross-cutting layer *on top of* the archetype profiles: Enneagram (9 types) and the Jungian set (Hero, Shadow, Anima/Animus, Self, Trickster — composes with the existing `shadow()`). Additive new API; profiles unchanged.
 
 ## Backlog — additive, unscheduled
 
 Additive options not yet assigned to a version:
+
+- **Top-k selection in `similar_to()`** — `src/affinity.cyr` sorts **all** N candidates with an insertion
+  sort (O(N²)) before trimming to `max_results`; the comment "N is small" no longer holds. Measured at
+  2.10.0: `affinity/similar_to_5` 585 → 811 µs when N went 396 → 460, and 460²/396² = 1.35 matches the
+  +38% almost exactly, so the cost is the sort, not the affinity math. Replacing the full sort with a
+  bounded top-k partial selection makes it O(N·k) — for k=5 that is ~2.3k operations instead of ~53k, and
+  it removes a cost that otherwise worsens with every tradition added (v2.11.0 world-traditions next).
+  Results are identical; only the ordering work changes. Pure performance, no API change.
 
 - **Tarot de Marseille attribution** — expose the older Tarot de Marseille numbering/attribution as an *alternative* view of the 22 trumps, **alongside — not replacing — the shipped Rider–Waite–Smith / Golden Dawn one** (`src/tarot.cyr`). The TdM predates the Golden Dawn esoteric overlay and differs notably: **VIII = Justice, XI = Strength (Force)** (the reverse of the shipped VIII Strength / XI Justice), plus its own pre-Golden-Dawn iconography and the earlier Éliphas Lévi / Oswald Wirth letter attributions. The shipped `tarot_*` data and the Kabbalah path bridge stay canonical; this would add a parallel layer (e.g. `tarot_marseille_number(i)` and/or a variant attribution accessor) so a consumer can select the deck tradition appropriate to its use. No change to existing profiles, API, or the Tree-of-Life bridge.
 

@@ -10,7 +10,7 @@
 
 Maps divine and mythological beings across world traditions to composable personality configurations. Not religion simulation — psychometric archetype mapping backed by trait math. Each entity produces an `ArchetypeProfile` (320 bytes) with trait weights, module emphasis, breath phase affinity, growth direction, and primary domain.
 
-**396 archetypes across 28 traditions** (incl. the solar-year intercalary set; +Canaanite, Etruscan & the 22 Tarot Major Arcana). Written in Cyrius, compiled by the Cyrius compiler 6.4.69+.
+**460 archetypes across 29 traditions** (incl. the solar-year intercalary set, the 22 Tarot Major Arcana, and the 64 I Ching hexagrams). Written in Cyrius, compiled by the Cyrius compiler 6.4.70+.
 
 ## Traditions
 
@@ -42,6 +42,7 @@ Maps divine and mythological beings across world traditions to composable person
 | **Canaanite** | `canaanite` | 4 Ugaritic deities (El, Baal, Asherah, Anat) |
 | **Etruscan** | `etruscan` | 4 Etruscan deities (Tinia, Uni, Menrva, Voltumna) |
 | **Tarot** | `tarot` | 22 Major Arcana as the Tree-of-Life paths (bridges Kabbalah) |
+| **I Ching** | `iching` | 64 hexagrams (King Wen sequence) over the eight trigrams |
 
 ## Quick Start
 
@@ -109,7 +110,7 @@ var conflicts = detect_conflicts(kabbalah_gevurah(), kabbalah_chesed());
 ## Relationship to AGNOS
 
 ```
-avatara (this) — divine archetype profiles (396 entities, 28 traditions)
+avatara (this) — divine archetype profiles (460 entities, 29 traditions)
   |
   +-> bhava — emotion/personality engine (archetype overlay)
   +-> joshua — NPC divine archetypes for games
@@ -122,7 +123,7 @@ avatara produces plain f64/enum outputs. It does not depend on bhava — bhava c
 
 ## Build
 
-Requires the Cyrius compiler 6.4.69+ (pinned in `cyrius.cyml`).
+Requires the Cyrius compiler 6.4.70+ (pinned in `cyrius.cyml`).
 
 ```sh
 # Resolve dependencies

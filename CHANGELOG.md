@@ -7,6 +7,72 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.10.0] — 2026-07-22
+
+**I Ching** — the 64 hexagrams as archetypes, over the eight trigrams: **396 → 460 archetypes,
+28 → 29 traditions**. The Zhou Yi reads the world as sixty-four *situations* — not deities but archetypal
+configurations of change — each a six-line figure built from two of the eight trigrams (bagua). Structurally
+this parallels 2.9.0's Tarot: where the trumps bridge the Sephiroth, the hexagrams bridge the trigrams.
+
+### Added
+- **`src/iching.cyr` — the 64 hexagrams** (new "I Ching" tradition), King Wen sequence, The Creative (1)
+  through Before Completion (64), each a full `ArchetypeProfile` with traits grounded in the Wilhelm/Baynes
+  reading. The profile `name` is the English name — toneless pinyin is ambiguous (Qian, Kun, Bi, Lu, Yi and
+  Jian each name *two* hexagrams), so it cannot be the unique key; number, pinyin and trigram image live in
+  `desc`, and the constructors are numbered (`iching_hex01` .. `iching_hex64`).
+- **Trigram bridge API** — a trigram's enum value *is* its three-line code (bottom line as MSB):
+  `TRIGRAM_KUN`=0 (000) … `TRIGRAM_QIAN`=7 (111), so decoding is arithmetic rather than a table.
+  - `iching_code(i)` packs the composition as `lower*8 + upper` (one auditable line per hexagram);
+    `iching_lower/upper(i)`, `iching_line(i, pos)` (pos 1-6 from the bottom), `iching_number(i)` (1-64),
+    `iching_yang_count(i)`, and `iching_for_trigrams(lower, upper)` (total inverse).
+  - `trigram_name/image/attribute/family/element(t)` and `trigram_line(t, pos)`, `trigram_count()` (8).
+  - `all_iching()` / `iching_count()` (64), `iching_by_index(i)`, `iching_by_number(n)`,
+    `iching_index_by_name(name)`.
+- **Uniform derivation rules**, documented in the module header and pinned by tests across all 64: element
+  is the *upper* trigram's element; polarity follows the yang-line balance (>=4 masculine, <=2 feminine,
+  3 androgynous — yielding 22/22/20, the system's own symmetry); tier is `TIER_COSMIC` throughout, as for
+  the Sephiroth and the Tarot paths.
+- **History**: a 29th mapping (`I Ching`) — Western Zhou Zhou Yi through the Ten Wings and the Song
+  Neo-Confucian commentaries, a living tradition; `mapping_count()` 28 → 29.
+- Wired into all build roots, both example programs, the registry, and the `[lib]` dist bundle. 45 new
+  tests (116 → 161 assertions); 2 new benchmarks (`iching/all_64`, `iching/for_trigrams`, 50 → 52).
+
+### Changed
+- **Toolchain pin bumped 6.4.69 → 6.4.70** (`cyrius.cyml` `[package].cyrius`), folded into this release.
+  Vendored `lib/` was wiped and re-resolved from scratch via `cyrius deps` (the CI gate, exit 0); all 16
+  declared `[deps] stdlib` entries are present and the 6.4.69 → 6.4.70 snapshot delta is empty for the
+  declared subset — nothing added, nothing dropped.
+
+### Verification
+- The King Wen table (number, name, both trigrams, six lines) was produced independently three times and
+  cross-checked: **zero disagreements**, and every row's line pattern decoded to its named trigrams. The
+  transcription into `iching_code()` was then diffed deterministically against that table — all 64 match.
+  This closes the blind spot the bijection test cannot see: a *transposition* between two hexagrams would
+  still be a perfect bijection.
+- Adversarial symbolic review of all 64 profiles (four reviewers plus a technical pass) raised five
+  findings, of which one survived: hexagram 49 Ge (Revolution) was assigned `DOMAIN_CHAOS`, corrected to
+  `DOMAIN_FATE`. *Geming* is the changing of the mandate (*ming*) — one order replacing another, not order
+  dissolving; the Judgment carries the four cardinal virtues and the Image is order-establishing, and the
+  label contradicted the profile's own spirit text. `DOMAIN_CHAOS` is now reserved for the genuinely
+  dysfunctional situations (3, 12, 23, 28, 38).
+
+### Notes
+- Additive, non-breaking: existing archetypes, traditions, the 320-byte `ArchetypeProfile` layout, and all
+  prior APIs are unchanged.
+
+### Benchmarks
+- 52/52 recorded for 2.10.0 (see `bench-history.csv`). New: `iching/all_64` (~31 ns, in line with the other
+  cached `all_*` collections) and `iching/for_trigrams` (~1.2 µs — an O(64) scan over the composition table).
+- **Two registry-wide scans are reproducibly slower**, and the cause is *not* the compiler bump:
+  `affinity/similar_to_5` 585 → 811 µs (+38%) and `history/query_civilization` 40.8 → 51 µs (+26%).
+  `similar_to()` sorts **all** N candidates with an insertion sort before trimming to the top 5, so its cost
+  grows with N²; N went 396 → 460, and 460²/396² = 1.35 — which accounts for the +38% almost exactly. The
+  `query_*` filters are linear scans over the larger registry.
+- The compiler bump itself is clean: `kabbalah/single_profile` is N-independent and sits at 317–376 ns
+  across re-runs, statistically unchanged from 2.9.0's 361 ns — no codegen regression under 6.4.70.
+- **Known scaling issue (backlogged)**: the O(N²) sort in `similar_to()` will degrade with every tradition
+  added. The fix is a top-k partial selection (O(N·k)); see the roadmap Backlog.
+
 ## [2.9.0] — 2026-07-22
 
 **Tarot Major Arcana** — the 22 trumps as archetypes, bridged to the Tree of Life: **374 → 396 archetypes,

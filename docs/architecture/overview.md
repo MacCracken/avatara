@@ -11,7 +11,7 @@
                     +----------------------------------------------+
                     |                                              |
                     |  +----------------------------------------+  |
-                    |  |        28 Tradition Modules (396)       |  |
+                    |  |        29 Tradition Modules (460)       |  |
                     |  |  kabbalah  angelic  hindu  olympian     |  |
                     |  |  norse  egyptian  buddhist  celtic      |  |
                     |  |  mesopotamian  shinto  aztec  maya      |  |
@@ -22,6 +22,7 @@
                     |  |  solar (intercalary: 365 + the quarter) |  |
                     |  |  canaanite  etruscan                    |  |
                     |  |  tarot (Tree-of-Life paths, Kabbalah)   |  |
+                    |  |  iching (64 hexagrams, 8 trigrams)      |  |
                     |  +-------------------+--------------------+  |
                     |                      |                       |
                     |  +-------------------v--------------------+  |
