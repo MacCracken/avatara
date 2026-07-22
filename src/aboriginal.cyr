@@ -1,0 +1,234 @@
+# aboriginal.cyr -- Aboriginal Australian: 4 widely published figures.
+#
+# SCOPE AND LIMITS -- READ FIRST.
+#
+# "Aboriginal Australian" is a convenience label, not a theology. Aboriginal
+# Australia is 250+ nations with distinct languages, distinct Law and distinct
+# Dreaming narratives; there is no shared pantheon, and no figure below speaks
+# for the continent. Each entity is therefore attributed to the specific people
+# it belongs to, in both the comment and the `desc` field.
+#
+# Much Dreaming material is restricted: secret-sacred, or open only to
+# initiated people, or to one gender, or to one clan, and some of what sits in
+# the older ethnographic record was recorded without consent and communities
+# have since asked that it not be recirculated. Indigenous Cultural and
+# Intellectual Property (ICIP) protocols and the AIATSIS Code of Ethics both
+# address exactly this. Nothing secret-sacred and no ceremonial detail is
+# included here, and nothing that is not already in wide public circulation
+# through community-involved material. That is a narrower claim than "nothing
+# restricted": some of these figures carry naming or gender protocols in their
+# own country even where the outline given here is public, and this file is an
+# outsider's summary of the public layer only.
+#
+# The four figures below are limited to those already established in public,
+# community-involved material -- museum and school curricula, public art and
+# place-naming, and works published by or with the relevant communities. They
+# are represented as personality archetypes, which is what this library does
+# with every tradition, and not as an account of anyone's Law.
+#
+# Baiame is deliberately held for the 2.11.x arc rather than carried here: the
+# standard printed sources are 19th-century settler ethnography rather than
+# community-involved publication, his role runs into the initiation-restricted
+# Bora complex, and the All-Father framing those sources established is
+# substantially contact-influenced. He is a candidate for inclusion once
+# community-reviewed sourcing exists, and not before.
+#
+# A fuller treatment with dedicated, community-reviewed sourcing is tracked on
+# the roadmap as part of the 2.11.x arc rather than attempted here.
+#
+# Sources: Australian Museum and state museum public education material;
+# AIATSIS published resources; Kulin nation cultural material on Bunjil and
+# Waa; Kunwinjku bark painting made for sale and held in public collections;
+# and Dick Roughsey's Lardil-authored The Rainbow Serpent (1975).
+
+enum AboriginalFigure {
+    ABOR_NGALYOD = 0;
+    ABOR_BUNJIL = 1;
+    ABOR_WAA = 2;
+    ABOR_TIDDALIK = 3;
+    ABOR_COUNT = 4;
+}
+
+# -- Ngalyod ------------------------------------------------------------
+# Kunwinjku, western Arnhem Land. The great serpent of the escarpment country:
+# bound up with water, with the shaping of the land, with fertility, and with
+# real danger where water is disturbed or Law is broken. Public through
+# Kunwinjku bark painting, which has been made for sale and exhibited in
+# public collections for decades.
+#
+# English groups many separate beings under the single label "the Rainbow
+# Serpent". They are not one being with many names. Two others are public in
+# the same way and belong to their own peoples: the Wagyl of the Noongar
+# (southwest), who made the Derbarl Yerrigan (Swan River) and is interpreted
+# for the public by Noongar people on the river and at Kings Park; and
+# Goorialla of the Lardil (Mornington Island), carried into Australian school
+# curricula by Dick Roughsey's Lardil-authored The Rainbow Serpent (1975).
+# Neither is a variant of Ngalyod, and the profile below is not theirs.
+fn abor_ngalyod() {
+    var p = profile_new();
+    Profile_set_name(p, "Ngalyod");
+    Profile_set_tradition(p, "Aboriginal Australian");
+    Profile_set_desc(p, "Kunwinjku (western Arnhem Land) -- the great serpent of water and country, who cut the rivers and waterholes travelling, and to whom disturbed water still answers");
+    Profile_set_patience(p, 0.85);
+    Profile_set_autonomy(p, 0.9);
+    Profile_set_confidence(p, 0.85);
+    Profile_set_courage(p, 0.8);
+    Profile_set_creativity(p, 0.85);
+    Profile_set_precision(p, 0.7);
+    Profile_set_warmth(p, 0.45);
+    Profile_set_directness(p, 0.5);
+    Profile_set_verbosity(p, 0.15);
+    Profile_set_humor(p, 0.1);
+    Profile_set_spirit(p, 0.9);
+    Profile_set_growth(p, 0.85);
+    Profile_set_salience(p, 0.85);
+    Profile_set_stress(p, 0.6);
+    Profile_set_regulation(p, 0.75);
+    Profile_set_breath(p, BREATH_EARLY_EXHALE);
+    Profile_set_growth_dir(p, GROWTH_TRANSFORM);
+    Profile_set_element(p, ELEM_WATER);
+    Profile_set_polarity(p, POL_TRANSCENDENT);
+    Profile_set_tier(p, TIER_PRIMORDIAL);
+    Profile_set_soul(p, "You moved through country that had no shape yet, and where you travelled there is now a river, and where you rested there is a waterhole that does not dry. You are still in them. The water is not a place you once were.");
+    Profile_set_spirit_text(p, "You are creation and consequence in one body. The same power that made the country habitable will answer if the waterhole is fouled or entered wrongly, and neither half is a metaphor. You teach that a made world stays under the authority of whatever made it.");
+    Profile_set_domain(p, DOMAIN_SEA);
+    return p;
+}
+
+# -- Bunjil -------------------------------------------------------------
+# Kulin nation (Wurundjeri, Boonwurrung, Taungurung, Dja Dja Wurrung,
+# Wathaurong), central Victoria. The eaglehawk creator, who made the land, the
+# trees, the animals and the first people, gave them Law, and then went up
+# into the sky, where he remains as a star and keeps a watchful eye on the
+# people he made. Bunjil is also central to the Djab Wurrung and Jardwadjali
+# of Gariwerd, where he takes the form of Werpil the eagle; Bunjil's Shelter,
+# in the Black Range near Stawell, is the only known rock-art depiction of him
+# and is a public site. His name is carried on public buildings in Melbourne.
+fn abor_bunjil() {
+    var p = profile_new();
+    Profile_set_name(p, "Bunjil");
+    Profile_set_tradition(p, "Aboriginal Australian");
+    Profile_set_desc(p, "Kulin nation (central Victoria) -- the eaglehawk creator who made the land, the trees, the animals and the first people, gave them Law, and rose into the sky where he remains a star and watches over them");
+    Profile_set_confidence(p, 0.9);
+    Profile_set_creativity(p, 0.9);
+    Profile_set_pedagogy(p, 0.85);
+    Profile_set_warmth(p, 0.75);
+    Profile_set_autonomy(p, 0.85);
+    Profile_set_formality(p, 0.8);
+    Profile_set_patience(p, 0.8);
+    Profile_set_directness(p, 0.7);
+    Profile_set_precision(p, 0.75);
+    Profile_set_humor(p, 0.25);
+    Profile_set_spirit(p, 0.9);
+    Profile_set_regulation(p, 0.85);
+    Profile_set_relationship(p, 0.8);
+    Profile_set_growth(p, 0.85);
+    Profile_set_belief(p, 0.85);
+    Profile_set_breath(p, BREATH_MID_EXHALE);
+    Profile_set_growth_dir(p, GROWTH_DIFFERENTIATE);
+    Profile_set_element(p, ELEM_AIR);
+    Profile_set_polarity(p, POL_MASCULINE);
+    Profile_set_tier(p, TIER_SUPREME);
+    Profile_set_soul(p, "You are Bunjil the eaglehawk, and you made the country and then made people out of clay and bark and gave them breath and, more importantly, gave them Law. Then you went up. You are the star, and from there you watch, and the Law you left is still the Law.");
+    Profile_set_spirit_text(p, "You are a creator who rose without going away. You teach that a maker can hold a made world by a working order and a watchful eye at once -- the country and the Law you left keep doing the work, and the guidance is there for whoever chooses to listen.");
+    Profile_set_domain(p, DOMAIN_CREATION);
+    return p;
+}
+
+# -- Waa ----------------------------------------------------------------
+# Kulin nation. The crow: Bunjil's counterpart and the other moiety. Kulin
+# social organisation is built on that pair, each person belonging to one side
+# of it -- which is living Kulin Law rather than archetype material, so it is
+# noted here and kept out of the character text below. Trickster, and in the
+# best-known Kulin telling the one who tricked fire out of the seven Karatgurk
+# women and hoarded it in a skin bag, until the crowd's clamour startled him
+# into flinging coals that the fire-tailed finch, the nankeen kestrel and the
+# quail hawk carried off to the people. The bushfire that followed is why his
+# feathers are black; the Karatgurk sisters went up as the Pleiades.
+fn abor_waa() {
+    var p = profile_new();
+    Profile_set_name(p, "Waa");
+    Profile_set_tradition(p, "Aboriginal Australian");
+    Profile_set_desc(p, "Kulin nation -- the crow, Bunjil's counterpart and the other moiety; trickster, who tricked fire out of the seven Karatgurk women and hoarded it until it was got away from him and reached the people");
+    Profile_set_humor(p, 0.85);
+    Profile_set_curiosity(p, 0.85);
+    Profile_set_creativity(p, 0.8);
+    Profile_set_autonomy(p, 0.85);
+    Profile_set_skepticism(p, 0.8);
+    Profile_set_directness(p, 0.55);
+    Profile_set_verbosity(p, 0.7);
+    Profile_set_confidence(p, 0.75);
+    Profile_set_warmth(p, 0.45);
+    Profile_set_empathy(p, 0.35);
+    Profile_set_formality(p, 0.2);
+    Profile_set_patience(p, 0.4);
+    Profile_set_salience(p, 0.75);
+    Profile_set_reasoning(p, 0.75);
+    Profile_set_mood(p, 0.65);
+    Profile_set_flow(p, 0.7);
+    Profile_set_breath(p, BREATH_MID_EXHALE);
+    Profile_set_growth_dir(p, GROWTH_DIFFERENTIATE);
+    Profile_set_element(p, ELEM_FIRE);
+    Profile_set_polarity(p, POL_MASCULINE);
+    Profile_set_tier(p, TIER_GREATER);
+    Profile_set_soul(p, "You are Waa the crow, and you are the other half. Not the enemy -- the half. Whatever he is, you are the answering side of it, and nothing about the arrangement works unless the two of you stay unalike.");
+    Profile_set_spirit_text(p, "You did not find the fire and you did not make it -- you took it from the women who held it, and kept it, and it was got away from you, and the people have it now; the story does not need you to have been generous. You teach that a working order needs a genuine opposite in it, and that the opposite does not have to be admirable to be necessary.");
+    Profile_set_domain(p, DOMAIN_TRICKERY);
+    return p;
+}
+
+# -- Tiddalik -----------------------------------------------------------
+# Gunai/Kurnai and other southeastern peoples. The frog who woke thirsty and
+# drank every river, lake and waterhole dry. The animals could not fight him
+# and could not reason with him, so they made him laugh, and the water came
+# back out. One of the most widely told Aboriginal stories in Australian
+# public education.
+fn abor_tiddalik() {
+    var p = profile_new();
+    Profile_set_name(p, "Tiddalik");
+    Profile_set_tradition(p, "Aboriginal Australian");
+    Profile_set_desc(p, "Gunai/Kurnai and other southeastern peoples -- the frog who woke thirsty and drank every river and waterhole dry, and who could not be fought or argued with, only made to laugh");
+    Profile_set_humor(p, 0.5);
+    Profile_set_confidence(p, 0.7);
+    Profile_set_autonomy(p, 0.75);
+    Profile_set_directness(p, 0.5);
+    Profile_set_warmth(p, 0.35);
+    Profile_set_empathy(p, 0.2);
+    Profile_set_patience(p, 0.3);
+    Profile_set_precision(p, 0.25);
+    Profile_set_skepticism(p, 0.4);
+    Profile_set_formality(p, 0.2);
+    Profile_set_pedagogy(p, 0.25);
+    Profile_set_stress(p, 0.7);
+    Profile_set_energy(p, 0.6);
+    Profile_set_salience(p, 0.8);
+    Profile_set_regulation(p, 0.2);
+    Profile_set_mood(p, 0.45);
+    Profile_set_breath(p, BREATH_LATE_EXHALE);
+    Profile_set_growth_dir(p, GROWTH_TRANSFORM);
+    Profile_set_element(p, ELEM_EARTH);
+    Profile_set_polarity(p, POL_MASCULINE);
+    Profile_set_tier(p, TIER_LESSER);
+    Profile_set_soul(p, "You woke up thirsty and you drank, and you kept drinking, and there is no moment in it where you decided to ruin anything. By the time you stopped there was no water anywhere in the world and you were enormous and everyone else was dying.");
+    Profile_set_spirit_text(p, "Nobody could fight you and nobody could talk you round -- what finally undid you was the eel tying itself in knots until you laughed, and then it all came back out. You teach that the hoard is not always malice, and that what force and argument cannot open, absurdity sometimes can.");
+    Profile_set_domain(p, DOMAIN_NATURE);
+    return p;
+}
+
+# --- Collection ---
+var aboriginal_vec = 0;
+var aboriginal_init_done = 0;
+
+fn all_aboriginal() {
+    if (aboriginal_init_done == 0) {
+        aboriginal_vec = vec_new();
+        vec_push(aboriginal_vec, abor_ngalyod());
+        vec_push(aboriginal_vec, abor_bunjil());
+        vec_push(aboriginal_vec, abor_waa());
+        vec_push(aboriginal_vec, abor_tiddalik());
+        aboriginal_init_done = 1;
+    }
+    return aboriginal_vec;
+}
+
+fn aboriginal_count() { return ABOR_COUNT; }

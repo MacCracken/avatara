@@ -1,5 +1,5 @@
 # avatara — Divine Archetype Engine
-# 29 traditions, 460 archetypes (see VERSION for release)
+# 34 traditions, 497 archetypes (see VERSION for release)
 
 # Stdlib auto-included via cyrius.cyml
 
@@ -33,6 +33,11 @@ include "src/canaanite.cyr"
 include "src/etruscan.cyr"
 include "src/tarot.cyr"
 include "src/iching.cyr"
+include "src/inuit.cyr"
+include "src/lakota.cyr"
+include "src/haudenosaunee.cyr"
+include "src/anishinaabe.cyr"
+include "src/aboriginal.cyr"
 include "src/compose.cyr"
 include "src/history.cyr"
 include "src/registry.cyr"

@@ -6,8 +6,8 @@
 
 - **Language**: Cyrius (ported from Rust in v2.0)
 - **License**: GPL-3.0-only
-- **Version**: SemVer 2.10.1
-- **Compiler**: cyrius >= 6.4.70 (pinned in `cyrius.cyml` `[package].cyrius`)
+- **Version**: SemVer 2.11.0
+- **Compiler**: cyrius >= 6.4.71 (pinned in `cyrius.cyml` `[package].cyrius`)
 
 ## Consumers
 
@@ -20,7 +20,7 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/types.cyr` — ArchetypeProfile layout (320 bytes), TraitWeights (15 f64), ModuleEmphasis (14 f64), enums (BreathAffinity, GrowthDirection, Element, Polarity, CosmicTier, Domain)
 - `src/error.cyr` — AvataraError enum codes, validation
 - `src/compose.cyr` — archetype composition: weighted blending of multiple profiles
-- `src/history.cyr` — 29 tradition-to-history mappings (civilization, era, temporal range, notes)
+- `src/history.cyr` — 34 tradition-to-history mappings (civilization, era, temporal range, notes)
 - `src/registry.cyr` — lookup by name, enumeration, query/filter API (includes history-based queries)
 - `src/affinity.cyr` — affinity scoring, similarity search, cross-tradition matching, conflict detection
 - `src/shadow.cyr` — shadow aspect: `shadow(profile)` (involutive inversion), `is_shadow_of(a, b)`
@@ -34,7 +34,7 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/egyptian.cyr` — 16 principal deities
 - `src/buddhist.cyr` — 7 Bodhisattvas, 5 Dhyani Buddhas
 - `src/mesopotamian.cyr` — 14 Sumerian/Babylonian deities
-- `src/celtic.cyr` — 15 Tuatha De Danann & Insular Celtic deities
+- `src/celtic.cyr` — 17 Tuatha De Danann & Insular Celtic deities (incl. the healers Miach & Airmed)
 - `src/shinto.cyr` — 15 Japanese Kami
 - `src/aztec.cyr` — 14 Aztec (Mexica) deities
 - `src/maya.cyr` — 12 Maya deities
@@ -51,9 +51,14 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/canaanite.cyr` — 4 Canaanite/Ugaritic deities (El, Baal, Asherah, Anat)
 - `src/etruscan.cyr` — 4 Etruscan deities (Tinia, Uni, Menrva, Voltumna)
 - `src/incarnate.cyr` — 56 incarnate divine figures (Hindu, Buddhist, Mystic, Taoist, Indigenous, Sage)
+- `src/inuit.cyr` — 10 Inuit spirits and powers (Sedna, Nanuq, Sila, the animal-masters)
+- `src/lakota.cyr` — 10 Lakota wakan powers (Wakan Tanka, Inyan, Skan, Wakinyan, Iktomi)
+- `src/haudenosaunee.cyr` — 6 Six Nations figures (Sky Woman, the twins, Three Sisters, Great Turtle)
+- `src/anishinaabe.cyr` — 5 Anishinaabe manidoog (Gichi-Manidoo, Nanabozho, Nokomis, Mishipeshu, Animikii); the wiindigoo is deliberately not carried — see module header
+- `src/aboriginal.cyr` — 4 widely published Aboriginal Australian figures, each attributed to its people; restricted Dreaming material deliberately excluded (see module header)
 - `src/logging.cyr` — sakshi logging init
-- `tests/avatara.tcyr` — integration test suite (166 assertions)
-- `tests/avatara.bcyr` — benchmarks (52)
+- `tests/avatara.tcyr` — integration test suite (199 assertions)
+- `tests/avatara.bcyr` — benchmarks (57)
 - `programs/traditions.cyr` — example: explore archetypes
 - `programs/compose.cyr` — example: blend traditions
 

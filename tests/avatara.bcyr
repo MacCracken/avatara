@@ -1,6 +1,6 @@
 # avatara.bcyr -- Benchmarks for avatara
 #
-# 52 benchmarks covering all traditions, sub-groups, registry, compose, history.
+# 57 benchmarks covering all traditions, sub-groups, registry, compose, history.
 # Matches and exceeds Rust Criterion suite (29 benchmarks).
 
 # Stdlib auto-included via cyrius.toml
@@ -34,6 +34,11 @@ include "src/canaanite.cyr"
 include "src/etruscan.cyr"
 include "src/tarot.cyr"
 include "src/iching.cyr"
+include "src/inuit.cyr"
+include "src/lakota.cyr"
+include "src/haudenosaunee.cyr"
+include "src/anishinaabe.cyr"
+include "src/aboriginal.cyr"
 include "src/compose.cyr"
 include "src/history.cyr"
 include "src/registry.cyr"
@@ -44,7 +49,7 @@ var N = 1000;
 var b = 0;
 
 alloc_init();
-println("=== avatara benchmarks (52 benches) ===");
+println("=== avatara benchmarks (57 benches) ===");
 
 # ================================================================
 # Tier 1: Single profile creation
@@ -268,6 +273,36 @@ for (var i = 0; i < N; i = i + 1) { all_tarot(); }
 bench_batch_stop(b, N);
 bench_report(b);
 
+b = bench_new("inuit/all_10");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_inuit(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("lakota/all_10");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_lakota(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("haudenosaunee/all_6");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_haudenosaunee(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("anishinaabe/all_6");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_anishinaabe(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("aboriginal/all_5");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { all_aboriginal(); }
+bench_batch_stop(b, N);
+bench_report(b);
+
 b = bench_new("iching/all_64");
 bench_batch_start(b);
 for (var i = 0; i < N; i = i + 1) { all_iching(); }
@@ -413,5 +448,5 @@ bench_batch_stop(b, N);
 bench_report(b);
 
 println("");
-println("=== 52 benchmarks complete ===");
+println("=== 57 benchmarks complete ===");
 syscall(SYS_EXIT, 0);

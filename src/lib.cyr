@@ -6,7 +6,7 @@
 # mapping across traditions. All traditions map to the same
 # ArchetypeProfile output — composable across cultures.
 #
-# 460 archetypes across 29 traditions.
+# 497 archetypes across 34 traditions.
 #
 # Modules:
 #   types      - TraitWeights, ModuleEmphasis, ArchetypeProfile, enums
@@ -33,6 +33,11 @@
 #   incarnate  - 44+ incarnate divine figures
 #   tarot      - 22 Major Arcana (Tree-of-Life paths, bridging Kabbalah)
 #   iching     - 64 hexagrams (King Wen sequence, bridging the eight trigrams)
+#   inuit      - 10 Arctic spirits and powers
+#   lakota     - 10 wakan powers
+#   haudenosaunee - 6 figures of the Six Nations creation account
+#   anishinaabe - 5 manidoog of the Great Lakes
+#   aboriginal - 4 widely published Aboriginal Australian figures
 #   compose    - weighted blending of profiles
 #   registry   - lookup, enumeration, query filters
 #   logging    - sakshi logging init
@@ -69,6 +74,11 @@ include "src/canaanite.cyr"
 include "src/etruscan.cyr"
 include "src/tarot.cyr"
 include "src/iching.cyr"
+include "src/inuit.cyr"
+include "src/lakota.cyr"
+include "src/haudenosaunee.cyr"
+include "src/anishinaabe.cyr"
+include "src/aboriginal.cyr"
 include "src/compose.cyr"
 include "src/history.cyr"
 include "src/registry.cyr"

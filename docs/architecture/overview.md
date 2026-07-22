@@ -11,7 +11,7 @@
                     +----------------------------------------------+
                     |                                              |
                     |  +----------------------------------------+  |
-                    |  |        29 Tradition Modules (460)       |  |
+                    |  |        34 Tradition Modules (497)       |  |
                     |  |  kabbalah  angelic  hindu  olympian     |  |
                     |  |  norse  egyptian  buddhist  celtic      |  |
                     |  |  mesopotamian  shinto  aztec  maya      |  |
@@ -23,6 +23,8 @@
                     |  |  canaanite  etruscan                    |  |
                     |  |  tarot (Tree-of-Life paths, Kabbalah)   |  |
                     |  |  iching (64 hexagrams, 8 trigrams)      |  |
+                    |  |  inuit  lakota  haudenosaunee           |  |
+                    |  |  anishinaabe  aboriginal                |  |
                     |  +-------------------+--------------------+  |
                     |                      |                       |
                     |  +-------------------v--------------------+  |

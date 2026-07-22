@@ -118,6 +118,26 @@ fn all_profiles() {
         v = all_iching();
         for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
 
+        # Inuit (10 spirits and powers of the Arctic)
+        v = all_inuit();
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
+
+        # Lakota (10 wakan powers)
+        v = all_lakota();
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
+
+        # Haudenosaunee (6 figures of the Six Nations creation account)
+        v = all_haudenosaunee();
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
+
+        # Anishinaabe (5 manidoog of the Great Lakes)
+        v = all_anishinaabe();
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
+
+        # Aboriginal Australian (4 widely published figures, per-people attributed)
+        v = all_aboriginal();
+        for (var i = 0; i < vec_len(v); i += 1) { vec_push(registry_vec, vec_get(v, i)); }
+
         registry_init_done = 1;
     }
     return registry_vec;

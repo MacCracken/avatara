@@ -7,6 +7,77 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.11.0] — 2026-07-22
+
+**World traditions** — organised as **named nations** rather than pan-continental buckets:
+**462 → 497 archetypes, 29 → 34 traditions**. Adding Indigenous North American and Aboriginal Australian
+material differs in kind from adding Norse or Greek: both carry *active* community protocols around
+restricted knowledge (ICIP, the AIATSIS Code of Ethics, nation-specific telling and naming rules), and a
+single "Native American" or "Aboriginal Australian" label flattens 500+ and 250+ distinct nations
+respectively. The scope below reflects that.
+
+### Added
+- **`src/inuit.cyr`** (10) — Sedna, Nanuq, Sila, Torngarsoak, Pinga, Anningaaq, Malina, Amarok,
+  Tekkeitsertok, Qailertetang. Animal-masters and conditions of the world rather than sovereigns.
+- **`src/lakota.cyr`** (10) — Wakan Tanka, Inyan, Maka, Skan, Wi, Hanwi, Tate, Wakinyan, Tatanka, Iktomi.
+- **`src/haudenosaunee.cyr`** (6) — Sky Woman, Teharonhiawako, Tawiskaron, the Three Sisters, the Great
+  Turtle, the Thunderers.
+- **`src/anishinaabe.cyr`** (5) — Gichi-Manidoo, Nanabozho, Nokomis, Mishipeshu, Animikii.
+- **`src/aboriginal.cyr`** (4) — the Rainbow Serpent, Bunjil, Waa, Tiddalik; each attributed to the people
+  it belongs to, limited to figures already established in public, community-involved material.
+- **`src/celtic.cyr`** gains **Miach** and **Airmed** (15 → 17), completing the Dian Cecht arc from the
+  *Cath Maige Tuired* — the last genuinely outstanding item from the roadmap's "deferred additions" (Slavic
+  Mokosh/Rod, Polynesian Pele/Kanaloa and Celtic Ogma were already present).
+- **History**: five new mappings (29 → 34), including an Aboriginal Australian entry reaching back 65,000
+  years and still living.
+- 33 new tests (166 → 199 assertions); 5 new benchmarks (52 → 57).
+
+### Changed
+- **Toolchain pin bumped 6.4.70 → 6.4.71**; `lib/` wiped and re-resolved via `cyrius deps` (exit 0), all 16
+  declared stdlib entries present, snapshot delta empty for the declared subset.
+
+### Deliberately excluded
+Two figures were authored, reviewed, and then removed rather than shipped:
+- **The wiindigoo** is not carried. Every profile in this library is a *speakable persona* that consumers
+  instantiate and voice; in many Anishinaabe communities the wiindigoo is named with care, rarely outside
+  winter and not casually in the first person. That is a restriction this format cannot keep, so the figure
+  is left out rather than handled badly.
+- **Baiame** is held for the 2.11.x arc. Its standard sources are 19th-century settler ethnography rather
+  than community-involved publication, "gave the Law and the ceremonies" points at initiation-restricted
+  Bora material, and the All-Father framing is substantially contact-influenced.
+
+### Verification
+A cultural-accuracy and protocol review (one reviewer per module, plus dedicated sensitivity and technical
+passes) returned **46 confirmed findings — 3 critical, 20 major, 23 minor**. All were addressed. The three
+criticals are worth recording, because each was a case of a module's own disclaimer not matching its
+contents:
+- **Wakinyan** carried heyoka mechanics in `desc` and `spirit_text`. Heyoka is a ceremonial obligation
+  conferred by a community following a thunder dream — not a temperament and never self-identified into.
+  Because consumers read those fields as a personality specification, this built precisely the
+  self-identification vector the 1993 Lakota Summit V Declaration objects to. The mechanics were removed;
+  the header now states plainly what heyoka is and that this library does not represent it.
+- **The Rainbow Serpent** listed Yurlunggur and Julunggul as Yolngu synonyms. They are the Wawilak Sisters'
+  ancestral beings, tied to the Djungguwan and Kunapipi complexes — restricted, initiate- and
+  gender-limited. That one line falsified the module's own "nothing restricted is included here" claim.
+  Removed; the remaining names (Ngalyod, Wagyl, Goorialla) now state *why* each is public, and the header's
+  absolute claim was narrowed to what is actually defensible.
+- **The Wiindigoo** entry warned about careless naming inside a voice built to be spoken as. Removed (above).
+Also corrected: **"Hah-nu-nah"** (a Little Water Society ceremonial name — Converse's own footnote says so;
+the everyday word is Ha'no'wa); **Waa's** soul stating living Kulin marriage Law as divine speech;
+**Tekkeitsertok's** attribution; **Malina's** and **Hanwi's** narratives, both of which had been inverted;
+and **Qailertetang**, which is a masked *pair* at the fall Sedna feast rather than one androgynous figure.
+
+### Notes
+- Additive, non-breaking: existing archetypes, traditions, the 320-byte layout and all prior APIs unchanged.
+- Three review items were deliberately carried to the roadmap rather than fixed in passing: re-attributing
+  the incarnate `"Indigenous"` bucket to named nations, the Anishinaabe selection balance after the
+  wiindigoo removal, and the ` -- ` / em-dash separator split.
+
+### Benchmarks
+- 57/57 recorded for 2.11.0. The five new `all_*` collection benches land at 5-11 ns, in line with the rest.
+  No regressions: `similar_to_5` holds its 2.10.1 improvement at the larger N, which is the top-k fix doing
+  what it was meant to do.
+
 ## [2.10.1] — 2026-07-22
 
 Performance fix — no API, data, or behavior change. Resolves the O(N²) scaling issue flagged in the 2.10.0

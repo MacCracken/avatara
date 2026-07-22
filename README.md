@@ -10,7 +10,7 @@
 
 Maps divine and mythological beings across world traditions to composable personality configurations. Not religion simulation — psychometric archetype mapping backed by trait math. Each entity produces an `ArchetypeProfile` (320 bytes) with trait weights, module emphasis, breath phase affinity, growth direction, and primary domain.
 
-**460 archetypes across 29 traditions** (incl. the solar-year intercalary set, the 22 Tarot Major Arcana, and the 64 I Ching hexagrams). Written in Cyrius, compiled by the Cyrius compiler 6.4.70+.
+**497 archetypes across 34 traditions** (incl. the solar-year intercalary set, the 22 Tarot Major Arcana, the 64 I Ching hexagrams, and named-nation Inuit, Lakota, Haudenosaunee, Anishinaabe and Aboriginal Australian traditions). Written in Cyrius, compiled by the Cyrius compiler 6.4.71+.
 
 ## Traditions
 
@@ -24,7 +24,7 @@ Maps divine and mythological beings across world traditions to composable person
 | **Egyptian** | `egyptian` | 16 principal deities |
 | **Buddhist** | `buddhist` | 7 Bodhisattvas, 5 Dhyani Buddhas |
 | **Mesopotamian** | `mesopotamian` | 14 Sumerian/Babylonian deities |
-| **Celtic** | `celtic` | 15 Tuatha De Danann & Insular Celtic deities |
+| **Celtic** | `celtic` | 17 Tuatha De Danann & Insular Celtic deities |
 | **Shinto** | `shinto` | 15 Japanese Kami |
 | **Aztec** | `aztec` | 14 Aztec (Mexica) deities |
 | **Maya** | `maya` | 12 Maya deities |
@@ -43,6 +43,11 @@ Maps divine and mythological beings across world traditions to composable person
 | **Etruscan** | `etruscan` | 4 Etruscan deities (Tinia, Uni, Menrva, Voltumna) |
 | **Tarot** | `tarot` | 22 Major Arcana as the Tree-of-Life paths (bridges Kabbalah) |
 | **I Ching** | `iching` | 64 hexagrams (King Wen sequence) over the eight trigrams |
+| **Inuit** | `inuit` | 10 Arctic spirits and animal-masters |
+| **Lakota** | `lakota` | 10 wakan powers |
+| **Haudenosaunee** | `haudenosaunee` | 6 figures of the Six Nations creation account |
+| **Anishinaabe** | `anishinaabe` | 5 manidoog of the Great Lakes |
+| **Aboriginal Australian** | `aboriginal` | 4 widely published figures, each attributed to its people |
 
 ## Quick Start
 
@@ -110,7 +115,7 @@ var conflicts = detect_conflicts(kabbalah_gevurah(), kabbalah_chesed());
 ## Relationship to AGNOS
 
 ```
-avatara (this) — divine archetype profiles (460 entities, 29 traditions)
+avatara (this) — divine archetype profiles (497 entities, 34 traditions)
   |
   +-> bhava — emotion/personality engine (archetype overlay)
   +-> joshua — NPC divine archetypes for games
@@ -123,7 +128,7 @@ avatara produces plain f64/enum outputs. It does not depend on bhava — bhava c
 
 ## Build
 
-Requires the Cyrius compiler 6.4.70+ (pinned in `cyrius.cyml`).
+Requires the Cyrius compiler 6.4.71+ (pinned in `cyrius.cyml`).
 
 ```sh
 # Resolve dependencies

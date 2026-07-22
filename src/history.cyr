@@ -5,7 +5,7 @@
 # Each tradition maps to one or more civilizations, eras, and a temporal
 # range — the period during which the tradition's theology was actively forming.
 #
-# 29 tradition-to-history mappings with scholarly historical notes.
+# 34 tradition-to-history mappings with scholarly historical notes.
 
 # --- TraditionMapping layout ---
 # Each mapping: tradition name, primary civ, civ names (vec), era names (vec),
@@ -69,7 +69,7 @@ fn svec3(a, b, c) { var v = vec_new(); vec_push(v, a); vec_push(v, b); vec_push(
 fn svec4(a, b, c, d) { var v = vec_new(); vec_push(v, a); vec_push(v, b); vec_push(v, c); vec_push(v, d); return v; }
 fn svec5(a, b, c, d, e) { var v = vec_new(); vec_push(v, a); vec_push(v, b); vec_push(v, c); vec_push(v, d); vec_push(v, e); return v; }
 
-# --- Build all 27 mappings ---
+# --- Build all 34 mappings ---
 
 var history_vec = 0;
 var history_init_done = 0;
@@ -222,6 +222,31 @@ fn all_mappings() {
         svec1("Ancient China"), svec3("Zhou Dynasty", "Han Dynasty", "Song Dynasty"),
         (0-1000), LIVING,
         "The Zhou Yi, oldest of the Chinese classics: its sixty-four hexagram texts were compiled in the Western Zhou (c. 1000-750 BCE) out of a much older milfoil divination practice; the Ten Wings commentaries (Warring States through Han) made it the first of the Five Classics and the shared cosmological root of both Confucian and Taoist thought, and the Song Neo-Confucians (Zhu Xi) reworked it again; still consulted as both oracle and philosophical text"));
+
+        vec_push(history_vec, history_map_new("Inuit", "Inuit Nunangat",
+        svec2("Inuit Nunangat", "Greenland"), svec2("Middle Ages", "Modern"),
+        1000, LIVING,
+        "Thule culture, ancestral to today's Inuit, spread east from Alaska across the Arctic around 1000 CE, carrying the cosmology later recorded by Franz Boas and Knud Rasmussen; a living tradition across Inuit Nunangat, Greenland and Alaska, articulated today as Inuit Qaujimajatuqangit"));
+
+        vec_push(history_vec, history_map_new("Lakota", "Great Plains",
+        svec1("Great Plains"), svec2("Middle Ages", "Modern"),
+        1500, LIVING,
+        "The Lakota, westernmost of the Oceti Sakowin (Seven Council Fires), moved from the woodlands onto the northern plains and, with the horse from the early 1700s, became its dominant people; the cosmology was systematized in print in the early 20th century and is carried in living ceremony -- the Sun Dance and the seven rites of the chanunpa"));
+
+        vec_push(history_vec, history_map_new("Haudenosaunee", "Northeastern Woodlands",
+        svec1("Northeastern Woodlands"), svec2("Middle Ages", "Modern"),
+        1142, LIVING,
+        "The Confederacy of five nations -- Mohawk, Oneida, Onondaga, Cayuga, Seneca -- joined by the Tuscarora in 1722; its founding is dated anywhere from 1142 to the late 1500s depending on the source, and it persists as a governing body. The Sky Woman creation account and the Great Law of Peace have been taught continuously"));
+
+        vec_push(history_vec, history_map_new("Anishinaabe", "Great Lakes",
+        svec1("Great Lakes"), svec2("Middle Ages", "Modern"),
+        900, LIVING,
+        "Ojibwe, Odawa and Potawatomi -- the Council of Three Fires. The migration west from the eastern seaboard to the Great Lakes is recorded in the Seven Fires oral history and on the birchbark scrolls of the Midewiwin as set down by Edward Benton-Banai in *The Mishomis Book*; a living tradition across the Great Lakes and the northern plains"));
+
+        vec_push(history_vec, history_map_new("Aboriginal Australian", "Aboriginal Australia",
+        svec1("Aboriginal Australia"), svec2("Deep Time", "Modern"),
+        (0-65000), LIVING,
+        "Aboriginal Australians have occupied the continent for at least 65,000 years, the longest continuous living cultures on earth, across 250+ nations with distinct languages and Law; there is no shared pantheon and the Dreaming is not a past era but an ongoing reality. The figures carried here are limited to those established in public, community-involved material"));
 
         history_init_done = 1;
     }
