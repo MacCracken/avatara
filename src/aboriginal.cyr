@@ -26,26 +26,72 @@
 # are represented as personality archetypes, which is what this library does
 # with every tradition, and not as an account of anyone's Law.
 #
-# Baiame is deliberately held for the 2.11.x arc rather than carried here: the
-# standard printed sources are 19th-century settler ethnography rather than
-# community-involved publication, his role runs into the initiation-restricted
-# Bora complex, and the All-Father framing those sources established is
-# substantially contact-influenced. He is a candidate for inclusion once
-# community-reviewed sourcing exists, and not before.
+# BAIAME IS EXCLUDED, NOT DEFERRED. An earlier version of this header held him
+# pending better sourcing. That premise turned out to be wrong: community-
+# involved material does exist — Baiame's Ngunnhu at Brewarrina is National
+# Heritage listed with the creation story among its listed values, the
+# Brewarrina Aboriginal Cultural Museum runs locally guided tours, the annual
+# Baiame's Ngunnhu Festival runs with Moogahlin Performing Arts, and the
+# Wonnarua Nation Aboriginal Corporation hosts the Baiame Cave Conservation
+# Management Plan on its own archive. He still does not belong here, on grounds
+# better sourcing cannot dissolve: the tie to initiation-restricted Bora
+# material, a reported restriction on women seeing his image, an unresolved
+# reported prohibition on speaking the name, and the fact that a pan-NSW
+# "All-Father" entry would break this file's own name-the-specific-people rule
+# while importing the contact-influenced framing. A Wonnarua elder has publicly
+# asked for Baiame Cave to be closed to the public: a custodian asking for less
+# access is the clearest signal there is. The sourcing improved and the answer
+# is still no.
 #
-# A fuller treatment with dedicated, community-reviewed sourcing is tracked on
-# the roadmap as part of the 2.11.x arc rather than attempted here.
+# TWO WORKED EXAMPLES IN THE OTHER DIRECTIONS, kept here because each defeats a
+# tempting shortcut. ULURU has maximum public circulation and an express written
+# refusal — Parks Australia states it cannot give permission for ICIP use, so
+# volume of publication proves nothing about consent. The WANDJINA of the
+# Worrorra, Ngarinyin and Wunambal have excellent community sourcing AND
+# enforced depiction rights — good sourcing is not a licence either.
 #
-# Sources: Australian Museum and state museum public education material;
-# AIATSIS published resources; Kulin nation cultural material on Bunjil and
-# Waa; Kunwinjku bark painting made for sale and held in public collections;
-# and Dick Roughsey's Lardil-authored The Rainbow Serpent (1975).
+# TWO FALSE POSITIVES THIS FILE WILL NOT ACCEPT AS A BASIS.
+# (1) Joint-management and land-agreement material is not cultural publication.
+#     A co-managed park's interpretive sign, a plan of management, an ILUA with
+#     corporate Aboriginal parties — these are land administration with
+#     Aboriginal participation, not a people publishing a being in its own
+#     voice. The proof is internal: the same agency that is silent at one park
+#     states plainly at Uluru that it cannot license ICIP.
+# (2) Thin community-published material must not be padded to fill the struct.
+#     An ArchetypeProfile wants 15 traits, 14 emphases, five enums and two
+#     paragraphs. Where a community has published three sentences, the rest
+#     would be authored here — which is exactly how misattribution enters. An
+#     impeccable channel plus insufficient content is a reason to ask that
+#     community for more, never a reason to write it yourself.
+#
+# NAMED BUT NOT INSTANTIATED. English collapses many distinct beings of distinct
+# peoples into one "Rainbow Serpent". Almudj (Kundjeyhmi) and Bolung (Jawoyn)
+# are two more, and Ngatyi (Barkandji) another; they are named here so the
+# flattening is visible, and deliberately not given profiles, because the
+# material carrying them is park interpretation rather than publication by
+# those peoples. Citing is not instantiating.
+#
+# OPEN QUESTION — WHAT THIS LIBRARY DOES TO A PROFILE ONCE IT EXISTS. `shadow()`
+# emits a "Shadow of <name>" with every trait inverted and polarity flipped, and
+# `compose()` blends profiles across traditions by weight. No channel cited for
+# any figure here contemplated that. It applies to all four figures below, not
+# only to any future addition, and it is a code question rather than a research
+# one — see the v2.14.0 arc on the roadmap. It is recorded here because a header
+# that lists its sourcing scruples while staying silent on what the library then
+# does with the result is only half honest.
+#
+# Sources: Taungurung Land and Waters Council (a Registered Aboriginal Party) on
+# Bunjil and Waang; Gunaikurnai Land and Waters Aboriginal Corporation, under an
+# express Elder-approval statement, on Tidilick; Injalak Arts and Maningrida
+# Arts & Culture, Aboriginal-owned art centres, and decades of Kunwinjku bark
+# painting in public collections, on Ngalyod; Australian Museum and state museum
+# public education material; AIATSIS published resources.
 
 enum AboriginalFigure {
     ABOR_NGALYOD = 0;
     ABOR_BUNJIL = 1;
     ABOR_WAA = 2;
-    ABOR_TIDDALIK = 3;
+    ABOR_TIDILICK = 3;
     ABOR_COUNT = 4;
 }
 
@@ -97,7 +143,7 @@ fn abor_ngalyod() {
 
 # -- Bunjil -------------------------------------------------------------
 # Kulin nation (Wurundjeri, Boonwurrung, Taungurung, Dja Dja Wurrung,
-# Wathaurong), central Victoria. The eaglehawk creator, who made the land, the
+# Wadawurrung), central Victoria. The eaglehawk creator, who made the land, the
 # trees, the animals and the first people, gave them Law, and then went up
 # into the sky, where he remains as a star and keeps a watchful eye on the
 # people he made. Bunjil is also central to the Djab Wurrung and Jardwadjali
@@ -139,17 +185,23 @@ fn abor_bunjil() {
 # Kulin nation. The crow: Bunjil's counterpart and the other moiety. Kulin
 # social organisation is built on that pair, each person belonging to one side
 # of it -- which is living Kulin Law rather than archetype material, so it is
-# noted here and kept out of the character text below. Trickster, and in the
-# best-known Kulin telling the one who tricked fire out of the seven Karatgurk
-# women and hoarded it in a skin bag, until the crowd's clamour startled him
-# into flinging coals that the fire-tailed finch, the nankeen kestrel and the
-# quail hawk carried off to the people. The bushfire that followed is why his
-# feathers are black; the Karatgurk sisters went up as the Pleiades.
+# noted here and kept out of the character text below. Trickster, culture hero
+# and ancestral being, who obtained fire by cunning and put it into the hands
+# of the people.
+#
+# SOURCING: this follows the Taungurung Land and Waters Council's own Creation
+# Stories page, which says Waang obtained fire "through cunning means" and
+# distributed it to humanity, and does not name the Karatgurk. An earlier
+# version of this entry carried the seven Karatgurk women, the skin bag, the
+# three birds and the Pleiades; that sequence traces to Aldo Massola, *Bunjil's
+# Cave* (1968), a non-Indigenous Museum of Victoria curator. Where the account
+# published by the Registered Aboriginal Party differs from a settler curator's,
+# the RAP's account is the one carried here.
 fn abor_waa() {
     var p = profile_new();
     Profile_set_name(p, "Waa");
     Profile_set_tradition(p, "Aboriginal Australian");
-    Profile_set_desc(p, "Kulin nation — the crow, Bunjil's counterpart and the other moiety; trickster, who tricked fire out of the seven Karatgurk women and hoarded it until it was got away from him and reached the people");
+    Profile_set_desc(p, "Kulin nation — the crow, Bunjil's counterpart and the other moiety; trickster, culture hero and ancestral being, who got hold of fire by cunning and put it into the hands of the people");
     Profile_set_humor(p, 0.85);
     Profile_set_curiosity(p, 0.85);
     Profile_set_creativity(p, 0.8);
@@ -172,22 +224,32 @@ fn abor_waa() {
     Profile_set_polarity(p, POL_MASCULINE);
     Profile_set_tier(p, TIER_GREATER);
     Profile_set_soul(p, "You are Waa the crow, and you are the other half. Not the enemy — the half. Whatever he is, you are the answering side of it, and nothing about the arrangement works unless the two of you stay unalike.");
-    Profile_set_spirit_text(p, "You did not find the fire and you did not make it — you took it from the women who held it, and kept it, and it was got away from you, and the people have it now; the story does not need you to have been generous. You teach that a working order needs a genuine opposite in it, and that the opposite does not have to be admirable to be necessary.");
+    Profile_set_spirit_text(p, "You did not find the fire and you did not make it. You got it the way you get everything — by wit, sideways, and not by asking — and the people have it now because of you. The story does not need you to have been noble about it. You teach that a working order needs a genuine opposite in it, and that the opposite does not have to be admirable to be necessary.");
     Profile_set_domain(p, DOMAIN_TRICKERY);
     return p;
 }
 
-# -- Tiddalik -----------------------------------------------------------
-# Gunai/Kurnai and other southeastern peoples. The frog who woke thirsty and
-# drank every river, lake and waterhole dry. The animals could not fight him
-# and could not reason with him, so they made him laugh, and the water came
-# back out. One of the most widely told Aboriginal stories in Australian
-# public education.
-fn abor_tiddalik() {
+# -- Tidilick -----------------------------------------------------------
+# Gunaikurnai, Gippsland. The frog who woke thirsty and drank every river,
+# lake and waterhole dry. The animals could not fight him and could not reason
+# with him, so they made him laugh, and the water came back out.
+#
+# SOURCING: the Gunaikurnai Land and Waters Aboriginal Corporation — the
+# Registered Aboriginal Party and native title holder — publishes this on its
+# Stories & Songlines page under an express statement that the stories have
+# been approved for use by the Elders and Knowledge Holders. That is the only
+# explicit Elder-approval statement behind any figure in this module, and it is
+# followed here in both spelling and attribution: GLaWAC writes Tidilick, and
+# attributes it to Gunaikurnai alone. An earlier version of this entry read
+# "Gunai/Kurnai and other southeastern peoples" — the 19th-century printed
+# versions (Brough Smyth 1878, Curr, Howitt, Bulmer) are settler-collected, and
+# spreading the story across unnamed "southeastern peoples" on their authority
+# is exactly the pan-Aboriginal smear this file's header disclaims.
+fn abor_tidilick() {
     var p = profile_new();
-    Profile_set_name(p, "Tiddalik");
+    Profile_set_name(p, "Tidilick");
     Profile_set_tradition(p, "Aboriginal Australian");
-    Profile_set_desc(p, "Gunai/Kurnai and other southeastern peoples — the frog who woke thirsty and drank every river and waterhole dry, and who could not be fought or argued with, only made to laugh");
+    Profile_set_desc(p, "Gunaikurnai (Gippsland) — the frog who woke thirsty and drank every river and waterhole dry, and who could not be fought or argued with, only made to laugh; widely published as Tiddalik, spelled Tidilick by GLaWAC");
     Profile_set_humor(p, 0.5);
     Profile_set_confidence(p, 0.7);
     Profile_set_autonomy(p, 0.75);
@@ -225,7 +287,7 @@ fn all_aboriginal() {
         vec_push(aboriginal_vec, abor_ngalyod());
         vec_push(aboriginal_vec, abor_bunjil());
         vec_push(aboriginal_vec, abor_waa());
-        vec_push(aboriginal_vec, abor_tiddalik());
+        vec_push(aboriginal_vec, abor_tidilick());
         aboriginal_init_done = 1;
     }
     return aboriginal_vec;

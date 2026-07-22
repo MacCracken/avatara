@@ -7,6 +7,62 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.12.1] — 2026-07-22
+
+Sourcing corrections to `src/aboriginal.cyr`, found by the desk research done for the v2.14.0 arc. No
+archetypes added or removed; three entries carried defects and one exclusion was resting on a false premise.
+
+### Fixed
+- **Waa no longer carries the Karatgurk fire sequence.** The seven Karatgurk women, the skin bag, the three
+  birds, the blackened feathers and the Pleiades were load-bearing in the entry comment, the `desc` and the
+  `spirit_text`. That sequence traces to Aldo Massola, *Bunjil's Cave* (1968) — a non-Indigenous Museum of
+  Victoria curator. The **Taungurung Land and Waters Council**, the Registered Aboriginal Party, publishes on
+  its own Creation Stories page that Waang obtained fire "through cunning means" and distributes it to
+  humanity, and does not name the Karatgurk at all. Where the RAP's account differs from a settler curator's,
+  the RAP's account is what this library carries. The entry now follows Taungurung and says so.
+- **Tidilick** — renamed from "Tiddalik" and re-attributed to **Gunaikurnai alone**. The **Gunaikurnai Land
+  and Waters Aboriginal Corporation** publishes it under an express statement that its stories are approved
+  for use by the Elders and Knowledge Holders — the only explicit Elder approval behind any figure in the
+  module — and GLaWAC spells it Tidilick and attributes it to Gunaikurnai. The old "Gunai/Kurnai and other
+  southeastern peoples" hedge rested on settler collectors (Brough Smyth 1878, Curr, Howitt, Bulmer) and was
+  precisely the pan-Aboriginal smear the file's own header disclaims. `desc` notes the common spelling so the
+  figure stays findable; the enum member is now `ABOR_TIDILICK`.
+- **Bunjil** — "Wathaurong" corrected to **Wadawurrung**, the corporation's own spelling.
+
+### Changed
+- **Baiame moved from deferred to a stated exclusion.** The old header held him pending better sourcing.
+  That premise was false: community-involved material does exist (Baiame's Ngunnhu is National Heritage
+  listed with the creation story in its listed values; the Brewarrina Aboriginal Cultural Museum runs guided
+  tours; the Baiame's Ngunnhu Festival runs with Moogahlin Performing Arts; the Wonnarua Nation Aboriginal
+  Corporation hosts the Baiame Cave management plan). He is still excluded, on grounds sourcing cannot
+  dissolve — the Bora initiation tie, a reported restriction on women seeing the image, an unresolved
+  reported prohibition on speaking the name, and a pan-NSW "All-Father" entry breaking the file's own
+  name-the-specific-people rule. A Wonnarua elder has publicly asked for Baiame Cave to be closed to the
+  public. *The sourcing improved and the answer is still no* — which is a more useful thing for the header to
+  record than a deferral.
+- **The header now states its exclusion reasoning**, including two worked examples that defeat tempting
+  shortcuts (**Uluru**: maximum public circulation plus an express refusal — Parks Australia states it cannot
+  license ICIP, so volume of publication proves nothing about consent; **Wandjina**: excellent community
+  sourcing plus enforced depiction rights — good sourcing is not a licence either), and two false-positive
+  patterns it will not accept as a basis (joint-management/land-agreement material read as cultural
+  publication; thin community material padded out to fill the 15-trait struct).
+- **Almudj (Kundjeyhmi), Bolung (Jawoyn) and Ngatyi (Barkandji) are named but not instantiated** — so the
+  flattening English performs with the single label "Rainbow Serpent" is visible, without giving profiles to
+  figures whose public carriage is park interpretation rather than publication by those peoples. Citing is
+  not instantiating.
+
+### Notes
+- **An open question is now recorded in the header rather than left implicit**: `shadow()` emits a
+  "Shadow of <name>" with inverted traits and flipped polarity, and `compose()` blends across traditions. No
+  channel cited for any figure contemplated that, and it applies to the four figures already carried. It is a
+  code question, not a research one, and it is the gating decision for the v2.14.0 arc — see the roadmap.
+- The v2.14.0 arc on the roadmap now carries the full research result: six profiles shippable on the research
+  alone (Goorialla, Borun and Tuk, Wagyl, Namarrkon, and Ngatyi behind a spelling confirmation), seven at
+  borderline, everything else excluded — and the per-people tradition split identified as the gate that must
+  land *before* any expansion.
+- Community review remains **blocked**: desk research can establish that material is already public, which is
+  checkable; it cannot establish that a people consents to this particular use.
+
 ## [2.12.0] — 2026-07-22
 
 **World traditions, part 2** — the three items the 2.11.0 cultural-accuracy review deferred rather than

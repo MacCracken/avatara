@@ -25,25 +25,79 @@ overlay layer). Historical-accuracy rule stands throughout: established
 scholarly correspondences only, no inventions.
 
 - **v2.13.0 — Archetype overlays** — the first cross-cutting layer *on top of* the archetype profiles: Enneagram (9 types) and the Jungian set (Hero, Shadow, Anima/Animus, Self, Trickster — composes with the existing `shadow()`). Additive new API; profiles unchanged.
+- **v2.14.0 — Aboriginal Australian depth** — widen `src/aboriginal.cyr` beyond the four figures 2.11.0
+  shipped, on the basis of documented public, community-involved sourcing. See the arc below for what is
+  established and what is blocked.
 
 ## Backlog — additive, unscheduled
 
-### The 2.11.x arc — Aboriginal Australian depth
+### The v2.14.0 arc — Aboriginal Australian depth
 
-2.11.0 shipped a deliberately narrow Aboriginal Australian set: five figures already
-established in public, community-involved material, each attributed to its people, with
-restricted Dreaming material excluded. Two follow-ups are queued behind that, in order:
+**Desk research is complete** (2026-07-22, five research angles plus an adversarial provenance
+pass, 159 figure assessments). Results below. The defects it found in already-shipped entries
+were fixed in 2.12.1; Baiame moved from held to a stated exclusion in the same release.
 
-- **v2.11.x — dedicated, community-reviewed sourcing.** Before any expansion, establish
-  proper references: AIATSIS-published resources, the relevant land councils' and cultural
-  centres' own material, and ideally review by or with the communities whose figures are
-  represented. ICIP protocols are the governing consideration, not a formality. This is the
-  gate on the item below rather than a nice-to-have alongside it.
-- **v2.11.x — fuller coverage, gated on the above.** With sourcing established, widen from
-  five figures toward 10-14 and, where the material supports it, split per-people rather
-  than carrying one "Aboriginal Australian" tradition label. Not to be attempted from the
-  older ethnographic record alone — a good deal of it was recorded without consent, and
-  communities have asked that parts of it not be recirculated.
+**Shippable on the research alone — six profiles, in this order and not before step 4:**
+- **Goorialla** (Lardil, Mornington Island) — the strongest candidate in the survey, and the only
+  one clearing the bar on its strongest limb: authored and illustrated by Goobalathaldin Dick
+  Roughsey, a Lardil man, in *The Rainbow Serpent* (1975), CBCA Picture Book of the Year, still in
+  print, in primary curricula via Reading Australia. Attribute as "as published by Goobalathaldin
+  Dick Roughsey", not as "the Lardil Law".
+- **Borun** (pelican) and **Tuk** (musk duck), Gunaikurnai — two profiles, carried as a pair
+  because the account *is* their meeting. GLaWAC's own Stories & Songlines page under its express
+  Elder-approval statement. Blocked behind the shadow() decision below: they are the apical
+  ancestors of every living Gunaikurnai person.
+- **Wagyl** (Noongar) — Whadjuk Noongar public interpretation on the Derbarl Yerrigan and at
+  Kings Park.
+- **Namarrkon**, the Lightning Man (Kunwinjku) — same Aboriginal-owned art-centre channel as Ngalyod.
+- **Ngatyi** (Barkandji), one paired entry — gated on confirming the Barkandji-preferred spelling
+  with the Barkandji Native Title Group, because "Ngatji" is also a Ngarrindjeri word for a totemic
+  relation and this library is name-keyed through `lookup()`.
+
+Seven more sit at borderline behind a specific nameable step and must not be assumed to convert:
+Budj Bim and Dirawong are the two likeliest; Ngurunderi, Tjilbruke, Akurra, the Mimih and the
+Wurundjeri Birrarung trio are weaker. Everything else assessed is excluded.
+
+**Step 4 is the gate, and it is a code change: the per-people tradition split.** Set `tradition`
+to the people — Kunwinjku, Kulin, Gunaikurnai, Lardil, Noongar — rather than one continent-wide
+"Aboriginal Australian" string. Do this *before* expanding, because the arithmetic runs the wrong
+way: four entries under one continent-wide label is a rounding error, ten is a pantheon. It also
+fixes a real artifact rather than relabelling one — `cross_tradition_match()` returns exactly one
+best match per tradition string, so the library currently asserts "the Aboriginal Australian
+equivalent of Thor is X". Split per people and it returns a Kunwinjku match and a Gunaikurnai match
+separately, which is true. Cost: `by_tradition()` is a plain `streq` and is free; `history.cyr`
+needs one mapping per people; `tests/avatara.tcyr` pins the count, the `all_traditions()` presence
+and the history context; `all_traditions()` output shape changes for every consumer; `dist/` must be
+regenerated. A deliberate minor with a CHANGELOG entry, not a drive-by edit. Do **not** add a
+`people` field — `ArchetypeProfile` is a fixed 40-field / 320-byte layout with a pinned assertion
+test and a committed dist bundle.
+
+**OPEN DECISION — `shadow()` and `compose()`.** No source pass raised this; it was found in the
+code. `shadow()` emits a profile named "Shadow of <name>" with every trait inverted and polarity
+flipped; `compose()` blends across traditions by weight. So the library will generate "Shadow of
+Borun", and will flip Tuk — the mother of the five Gunaikurnai clans — from feminine to masculine.
+No channel cited anywhere in the survey contemplated that: not GLaWAC's Elder approval, not an art
+centre's product text. **This already applies to the four figures carried today**, so it is not an
+argument about expansion; it is an argument that the library must state what it does to a profile
+once one exists, and possibly opt some profiles out of `shadow()` and `compose()` at code level.
+Options: (a) do nothing and document it; (b) an opt-out flag honoured by `shadow()`/`compose()`;
+(c) restrict the inversion to trait values and leave name and polarity alone. This is the single
+most substantive gap in the module's ethical apparatus and it is the maintainer's call.
+
+**STILL BLOCKED — community review.** Desk research established that material is *already public*,
+which is checkable. It cannot establish that a people *consents to this particular use*, which is
+what review is for, and no community is engaged with this project. Two courtesy emails are the only
+open research actions: the Barkandji Native Title Group (Ngatyi spelling) and Jali LALC or the
+Dirawong Trust (Dirawong). If a community ever engages, the gate reopens and everything here is
+revisable at their direction, including removal.
+
+**Two false-positive patterns, now encoded in the module header.** (1) Joint-management and
+land-agreement material — park interpretive signage, plans of management, ILUAs — is land
+administration with Aboriginal participation, not a people publishing in its own voice; this alone
+sank Warramurrungundji, Almudj, Bolung, Gurangatch and Mirragan, Akurra and Gulaga. (2) Thin
+community-published material must not be padded to fill the 15-trait struct; an impeccable channel
+with three sentences behind it is a reason to ask that community for more, never to write it
+yourself.
 
 ### Carried over from the 2.11.0 review
 
