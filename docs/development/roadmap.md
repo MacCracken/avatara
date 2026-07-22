@@ -24,6 +24,12 @@ scholarly correspondences only, no inventions.
 - **v2.11.0 — World-traditions completion** — Aboriginal Australian, Native American (specific nations), Inuit; plus the deferred Polynesian / Slavic / Celtic additions (Pele/Kanaloa aspects, Mokosh aspects/Rod, Ogma/Miach/Airmed).
 - **v2.12.0 — Archetype overlays** — the first cross-cutting layer *on top of* the archetype profiles: Enneagram (9 types) and the Jungian set (Hero, Shadow, Anima/Animus, Self, Trickster — composes with the existing `shadow()`). Additive new API; profiles unchanged.
 
+## Backlog — additive, unscheduled
+
+Additive options not yet assigned to a version:
+
+- **Tarot de Marseille attribution** — expose the older Tarot de Marseille numbering/attribution as an *alternative* view of the 22 trumps, **alongside — not replacing — the shipped Rider–Waite–Smith / Golden Dawn one** (`src/tarot.cyr`). The TdM predates the Golden Dawn esoteric overlay and differs notably: **VIII = Justice, XI = Strength (Force)** (the reverse of the shipped VIII Strength / XI Justice), plus its own pre-Golden-Dawn iconography and the earlier Éliphas Lévi / Oswald Wirth letter attributions. The shipped `tarot_*` data and the Kabbalah path bridge stay canonical; this would add a parallel layer (e.g. `tarot_marseille_number(i)` and/or a variant attribution accessor) so a consumer can select the deck tradition appropriate to its use. No change to existing profiles, API, or the Tree-of-Life bridge.
+
 ## v3.0.0 — Consolidation (breaking)
 
 The major bump banks the API cleanups deferred through 2.x:

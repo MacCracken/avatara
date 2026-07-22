@@ -26,7 +26,7 @@ cyrius pin **6.4.69**; 116 integration tests; 50 benchmarks; `ArchetypeProfile`
 
 | Doc | Last touched | Status | Notes |
 |-----|--------------|--------|-------|
-| `docs/development/roadmap.md` | 2026-07-22 | ✅ Fresh | Shipped through 2.9.0 (Tarot Major Arcana); remaining minors v2.10.0 (I Ching), v2.11.0 (world-traditions), v2.12.0 (overlays) → v3.0.0 consolidation; affinity-graph declined. |
+| `docs/development/roadmap.md` | 2026-07-22 | ✅ Fresh | Shipped through 2.9.0 (Tarot Major Arcana); remaining minors v2.10.0 (I Ching), v2.11.0 (world-traditions), v2.12.0 (overlays) → v3.0.0 consolidation; Backlog: additive Tarot de Marseille attribution (alongside, not replacing, RWS/Golden Dawn); affinity-graph declined. |
 | `docs/development/state.md` | — | ❓ Open | Not split out; volatile state lives in CLAUDE.md + roadmap Dependencies table. Adopt vidya's `state.md` split only if CLAUDE.md churn warrants. |
 
 ## Architecture
