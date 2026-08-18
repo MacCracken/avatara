@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.14.1] — 2026-08-17
+
+### Changed
+
+- **Cyrius pin `6.4.71` -> `6.5.27`** (2026-08-17, ecosystem-wide ML/AI-arc realign ahead of
+  the arc reopening). `cyrius lib sync --full` re-vendored the whole version-matched stdlib
+  snapshot, clearing the toolchain-drift and `./lib/ shadows version-pinned` warnings.
+  Suite **295/295**, identical to the pre-bump baseline.
+
 ## [2.14.0] — 2026-07-22
 
 The Aboriginal Australian expansion this version was planned around **did not happen**, and that is the
