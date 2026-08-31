@@ -23,7 +23,10 @@ permission for "modification, distribution or publication", which is precisely w
 that ships a profile and inverts it through `shadow()` does. More research cannot answer that. Asking
 can.
 
-Six bodies publish contact details, and nobody has written to any of them:
+Six bodies publish contact details, and nobody has written to any of them. Per-figure provenance,
+verbatim published terms and consent status are tabulated in
+[sourcing-register.md](sourcing-register.md), which carries the same six as a request-for-information
+plan — one letter per body rather than per figure:
 
 | body | question |
 |---|---|
@@ -32,9 +35,16 @@ Six bodies publish contact details, and nobody has written to any of them:
 | Injalak Arts | Reuse terms for Namarrkon — their site states none, so shipping would rest on silence |
 | Barkandji Native Title Group | The Barkandji-preferred spelling, Ngatyi vs Ngatji, which their own publications split on |
 | Jali LALC / the Dirawong Trust | Dirawong, the one borderline candidate never assessed to conclusion |
-| **TLaWC** | **Consent for Bunjil and Waa, whose cited channel publishes an express ICIP notice** |
+| **Wurundjeri Woi-wurrung (WWCHAC)** | **Consent for Bunjil and Waa. Their own plan lists an ICIP policy as due in 2026, so the ask is partly about timing** |
 
-**The TLaWC notice is new at v2.14.5 and it is the most concrete of these.** The Taungurung Land and
+**Re-sourced at v2.14.7, and the ICIP question moved with it.** Bunjil and Waa were cited to TLaWC
+until 2.14.7; both are now cited to the Wurundjeri Woi-wurrung RAP, whose account is own-voice and
+textually independent where TLaWC's reproduces Wikipedia. WWCHAC publishes no reuse terms at all and
+lists an ICIP policy as a 2026 action, so the block did not go away — it changed shape, from an express
+restriction to a declared gap. Silence is not permission. The original finding is kept below because
+the reasoning is what matters.
+
+**The TLaWC notice was found at v2.14.5 and was the most concrete of these.** The Taungurung Land and
 Waters Council — this library's cited channel for *both* Bunjil and Waa — publishes an Indigenous
 Cultural and Intellectual Property notice reading "You may only deal with the content of this website
 with the prior written consent of TLaWC, the copyright owner and/or the Traditional Custodians of that

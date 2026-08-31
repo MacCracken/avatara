@@ -51,6 +51,7 @@ Two findings are worth carrying forward as method:
 | Doc | Last touched | Status | Notes |
 |-----|--------------|--------|-------|
 | `docs/development/roadmap.md` | 2026-07-22 | ✅ Fresh | **Forward-looking only, as its own header always promised** — the Shipped section and the closed/resolved blocks were removed (158 → 87 lines) once verified duplicated in CHANGELOG.md, `src/aboriginal.cyr` and ADR-010. Nothing scheduled before v3.0.0. The Aboriginal arc is retained only as a *blocked* item, reduced to the one thing that can move it: five named bodies nobody has written to. `incarnate_indigenous_*` renaming moved into the v3.0.0 list where it belongs. |
+| `docs/development/sourcing-register.md` | 2026-08-31 | ✅ Fresh | **New at 2.14.7.** Per-figure sourcing provenance, verbatim reuse terms and consent status for the four shipped Aboriginal figures and the six refused, plus the request-for-information plan. Built from existing findings rather than new research — the knowledge was real but scattered across `src/aboriginal.cyr` and three CHANGELOG entries, so each pass rediscovered it. Makes two things visible that prose did not: not one shipped figure rests on anything resembling a licence, and the module refuses to *add* under terms it continues to *ship* under. 38 figures in the other four high-protocol modules are not yet entered. |
 | `docs/development/state.md` | — | ❓ Open | Not split out; volatile state lives in CLAUDE.md + roadmap. Adopt vidya's `state.md` split only if CLAUDE.md churn warrants. |
 
 ## Architecture

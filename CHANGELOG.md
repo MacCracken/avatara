@@ -7,6 +7,114 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.14.7] — 2026-08-31
+
+Two stale benchmark labels, a sourcing register, and the re-sourcing that register was built to make
+possible — which immediately caught a shipped figure carrying the wrong characterisation. Non-breaking:
+no archetype, tradition string, count or API change. `profile_count()` **503**, `all_traditions()`
+**41**, suite **368/368**.
+
+### Fixed
+
+- **Two benchmark labels undercounted their modules.** `celtic/all_15` benchmarks a module of **17**
+  (the Miach and Airmed additions were never reflected) and `incarnate/all_51` a module of **56**. Now
+  `celtic/all_17` and `incarnate/all_56`. Same defect class as the `aboriginal/all_5` label that
+  counted five figures against a module of four from 2.11.0 until 2.14.0.
+  **This breaks per-benchmark continuity in `bench-history.csv`** for those two rows back to 2.4.0: the
+  CSV is keyed on the label, so the old and new names are separate series. Recorded here rather than
+  fixed silently, because a reader comparing releases will otherwise see two rows appear from nothing
+  and two stop dead. The old rows are left in place; nothing is rewritten.
+
+### Fixed — cultural protocol
+
+- **Bunjil and Waa were cited to the wrong channel, and one of them shipped the wrong figure entirely.**
+  Both were sourced to the Taungurung Land and Waters Council. TLaWC is a Registered Aboriginal Party
+  and the citation was not wrong about that — but it was wrong about provenance twice over, and about
+  authority once. Both are now cited to the **Wurundjeri Woi-wurrung Cultural Heritage Aboriginal
+  Corporation**, the RAP of the people who *are* of Waa's moiety, and whom TLaWC's own page credits the
+  story to.
+  - **The provenance.** TLaWC's *Bundjil* section shares 24% of its five-word sequences with Wikipedia's
+    "Bunjil" — longest run **54 consecutive words**, sitting inside the paragraph TLaWC heads "A
+    Taungurung story of Bundjil", and present in Wikipedia seven months before TLaWC's earliest
+    snapshot. Its *Waang* section is the 79% already established at 2.14.5. The Wurundjeri, Wadawurrung
+    and Dja Dja Wurrung accounts score **0%, 0% and 0%**.
+  - **It was never TLaWC's text anyway.** "Made the first people", "clay and bark" and "gave them
+    breath" match the Wurundjeri account almost verbatim and appear **nowhere** on TLaWC's page;
+    "watches over them" matches Wadawurrung. The one detail unique to TLaWC — that Bunjil's star is
+    Altair — is not carried here. So re-citing Bunjil changes **no shipped text**; it was a citation
+    error independent of any question about terms.
+  - **A channel that did not exist at the last pass.** WWCHAC's *Whole of Country Plan 2025–2035* is
+    dated 2026-01-13 — after both the v2.14.0 survey and the v2.14.5 audit — and carries ~960 own-voice
+    words on Bunjil and ~400 on Waa, quoting named Elders and the ancestor **William Barak** directly.
+    It was invisible to page-level crawling: all 51 pages of the site sitemap mention Waa zero times,
+    because the material is inside a PDF. Worth recording as a method finding — a channel can be
+    excellent and undiscoverable at the same time.
+- **Waa shipped Wikipedia's characterisation wearing a Registered Aboriginal Party's citation.** Every
+  Kulin body that characterises him calls him a **protector**. Wurundjeri: "Bunjil and Waa … were also
+  protectors and guardians", and "Waa was the protector of humans, warning of enemies approaching and
+  guiding his people to safety", with Barak quoted — "It is very good and never touches anyone to hurt
+  them." DJAARA: "protector of the rivers and waterways." Bunurong: "Waa the protector, the Crow."
+  The word **"trickster" appears in none of them.** It is the opening line of the Wikipedia article that
+  TLaWC reproduces at 79%.
+  What shipped was `desc` "trickster and ancestral being", `DOMAIN_TRICKERY`, `ELEM_FIRE`, humor 0.85,
+  empathy 0.35, warmth 0.45. Corrected under **ADR-010 rule 6** — the body's account wins over the
+  settler-derived one — to protector and guardian, `DOMAIN_HEARTH`, `ELEM_AIR`, humor 0.4, empathy 0.8,
+  warmth 0.75, patience 0.65, skepticism 0.55, with `soul` and `spirit_text` rewritten to the watching-
+  and-warning role. `ELEM_FIRE` was left behind by 2.14.5's removal of the fire narrative and had
+  nothing supporting it; the four Kulin nations publish four **mutually incompatible** fire accounts,
+  which is its own reason not to carry one.
+  Non-breaking: the name, tradition string and `profile_count()` are unchanged.
+- **Re-citing is not consent, and the block did not go away — it changed shape.** WWCHAC publishes **no
+  reuse terms at all**, and its own plan lists "ICIP policy developed 2026" as a pending action, so the
+  silence is a *declared gap* rather than a settled position. Wadawurrung and Dja Dja Wurrung both
+  publish express restrictive terms materially like SWALSC's over the Waugal. The Federation of
+  Victorian Traditional Owner Corporations was checked and **not used** — a rule 4 false positive, an
+  Aboriginal-governed body reprinting Brough-Smyth (1878) with the footnotes still attached. And the
+  name is unsettled across the four RAPs — Wurundjeri "Bunjil", Wadawurrung "Bundjil", DJAARA
+  "Bundjiyl", TLaWC "Bundjil" — which is the Ngatyi/Ngatji problem one level up, with no
+  confederacy-wide authority to appeal to because Kulin is an alliance, not a single authority.
+
+### Added
+
+- **`docs/development/sourcing-register.md`** — per-figure sourcing provenance, verbatim reuse terms
+  and consent status for the four shipped Aboriginal Australian figures and the six refused, plus a
+  request-for-information plan.
+  **It is built from existing findings, not new research.** The knowledge was real but scattered across
+  `src/aboriginal.cyr` comments and three CHANGELOG entries, so each pass rediscovered it: the v2.14.5
+  audit re-derived the TLaWC provenance question from scratch, and TLaWC's ICIP notice sat unnoticed for
+  two releases despite being live since February 2024.
+  Two things become visible that prose was hiding:
+  - **Not one of the four shipped figures rests on anything resembling a licence.** Every channel either
+    restricts reuse outright (TLaWC's ICIP notice), reserves rights without granting them (Injalak's
+    bare `Copyright ©`), or approves material as *its own* public material rather than licensing it
+    (GLaWAC's Elder approval). Individually each was known; together they are a pattern.
+  - **A standing asymmetry, now recorded rather than resolved.** The module *refused to add* the Waugal
+    over SWALSC's express terms, and *refused* Namarrkon partly over Injalak's silence — while
+    continuing to *ship* Bunjil and Waa under TLaWC's express terms and Ngalyod under that same Injalak
+    silence. The defensible version is that declining to add costs nothing whereas removal erases a
+    people's creator figure from a library carrying everyone else's. But ADR-010 rule 5 says in terms
+    that "good sourcing is not a licence", so it is not a clean fit, and it is logged as an open tension
+    instead of written up as settled.
+- **A `consent` field, and every row reads `never-asked`.** ADR-010 rule 8 already said desk research
+  cannot establish consent; making it a per-figure status rather than a paragraph means the ceiling is
+  visible instead of implied. No amount of third-party or online research moves a row to `cleared` —
+  only a body answering does, which is why the register ends in a request-for-information plan of one
+  letter per body rather than per figure.
+- The register also carries the **six refusals with their grounds**, so a later pass does not
+  re-research a closed question, and the two worked examples that defeat tempting shortcuts: **Uluru**
+  (maximum public circulation *and* an express written refusal — volume proves nothing about consent)
+  and the **Wandjina** (excellent community sourcing *and* restriction — good sourcing is not a licence).
+
+### Known and deferred
+
+- **38 figures are not yet entered** — `inuit` (10), `lakota` (10), `haudenosaunee` (6), `anishinaabe`
+  (12). Their provenance *was* checked at v2.14.5 directly against Boas, Rasmussen and Converse and
+  found sound; it was simply never written down. The density gap is the argument: `aboriginal` carries
+  ~2.5 sourcing statements per figure after three dedicated reviews, the other four average **0.15**.
+- **No row has been re-checked against a body's current terms since the date noted.** Terms change, and
+  the TLaWC notice is the proof — it appeared and went unnoticed here for two releases.
+
+
 ## [2.14.6] — 2026-08-31
 
 The two items 2.14.5 deferred, plus the Slavic entry comments its header promised. **Breaking**, in the

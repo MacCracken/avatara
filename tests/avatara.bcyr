@@ -137,7 +137,7 @@ for (var i = 0; i < N; i = i + 1) { all_mesopotamian(); }
 bench_batch_stop(b, N);
 bench_report(b);
 
-b = bench_new("celtic/all_15");
+b = bench_new("celtic/all_17");
 bench_batch_start(b);
 for (var i = 0; i < N; i = i + 1) { all_celtic(); }
 bench_batch_stop(b, N);
@@ -233,7 +233,7 @@ for (var i = 0; i < N; i = i + 1) { all_incarnate_taoist(); }
 bench_batch_stop(b, N);
 bench_report(b);
 
-b = bench_new("incarnate/all_51");
+b = bench_new("incarnate/all_56");
 bench_batch_start(b);
 for (var i = 0; i < N; i = i + 1) { all_incarnate(); }
 bench_batch_stop(b, N);
