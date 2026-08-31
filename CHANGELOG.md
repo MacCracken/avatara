@@ -7,6 +7,104 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.14.6] — 2026-08-31
+
+The two items 2.14.5 deferred, plus the Slavic entry comments its header promised. **Breaking**, in the
+same narrow way: `prof_tradition()` changes for 17 profiles. `profile_count()` stays **503**;
+`all_traditions()` **39 -> 41**. Suite 338 -> 368.
+
+### ⚠ Breaking
+
+- **`"Mystic"` is no longer a tradition string.** Its 17 figures now carry `"Christian"` (9), `"Sufi"`
+  (6) and `"Jewish"` (2). `by_tradition("Mystic")` returns empty — but `overlay_system_by_name("Mystic")`
+  now resolves, which is the point.
+
+### Changed
+
+- **"Mystic" was never a tradition, and it is now what it always was: an overlay.** This is the rule
+  CLAUDE.md states — traditions and typologies are mutually exclusive — caught being broken by the
+  library itself. A tradition is a people's own account of who its figures are; "Mystic" named a *mode
+  of practice*, and every one of the 17 held a position inside a named religion, several a formal
+  office. Hildegard of Bingen and Teresa of Ávila are Doctors of the Universal Church; the string filed
+  them under neither Christianity nor anything they would have recognised.
+  The counter-argument was tested before acting on it, because v2.14.0 had *deliberately* rekeyed
+  `"Incarnate Mystic"` to `"Mystic"` and re-litigating a recorded decision needs grounds. It does not
+  survive: `incarnate` already gives 39 of its 56 figures their real religion, so the Mystic group was
+  the module's sole exception rather than its pattern. The library's other non-ethnic strings —
+  Kabbalah, Tarot, I Ching, Angelic, Solar — each key on a **closed structural system** (10 Sephiroth,
+  22 paths, 64 hexagrams, 9 orders, 4 intercalary remainders), not on historical persons.
+  **`"Sufi"` rather than `"Islamic"` is deliberate**: all six transmit within Sufism specifically, and a
+  bare `"Islamic"` string holding only mystics would misrepresent Islam exactly the way `"Mystic"`
+  misrepresented all three religions it spanned. `"Christian"` and `"Jewish"` go the other way for the
+  opposite reason — no single current name covers nine figures spanning Benedictine, Dominican,
+  Franciscan, Carmelite, anchoritic, hesychast and Trappist, or two spanning Lurianic Kabbalah and
+  Hasidism, so the confession is the honest label. The rule is *the most specific named tradition that
+  actually covers the figures*.
+- **And "Mystic" comes back, in the sanctioned form.** A new `MYSTIC` system in the `OverlaySystem`
+  registry, with five modes — apophatic, kataphatic, unitive, devotional, ascetic — each keyed on the
+  spirit emphasis plus two differentiators. The frame is standard rather than invented: apophatic and
+  kataphatic are Pseudo-Dionysius's *via negativa* and *via positiva*; the unitive, devotional and
+  ascetic groupings follow Underhill (1911) and Stace (1960).
+  **This is strictly more than the string could do.** It derives over all 503 profiles instead of
+  labelling 17, so Ramakrishna, Kabir, Mirabai, Milarepa, Machig Labdrön, Sun Bu'er and Rabia score on
+  one scale without any of them being relabelled — the cross-tradition statement `"Mystic"` only
+  gestured at. It stores nothing and `profile_count()` is unmoved, which a test pins.
+  **Ordering was forced, and it is worth recording:** the overlay could not be added first. The
+  exclusivity test forbids a tradition string that *contains* a registered system's name, so registering
+  `MYSTIC` while `"Mystic"` was still a tradition would have failed the suite — the invariant repaired
+  at 2.14.3 doing exactly its job.
+- **Four living people are no longer given a second-person script.** Amma (b. 1953), Mother Meera
+  (b. 1960), the Dalai Lama (the 14th, b. 1935) and the Karmapa (an office; the 17th recognition is
+  disputed between two living claimants) had `soul` and `spirit_text` written as *"You are…"* — a line a
+  consumer hands to an agent to speak. That register suits a deity, a mythic being, or a person long
+  dead. It does not suit someone alive to be misquoted, and a GPL-3.0 library ships those sentences to
+  anyone who asks. All four now carry third-person archetype description. **A rule, not a per-figure
+  exemption**: it applies to any living figure added later, and a test asserts none of the four contains
+  a second-person opening.
+  **The machinery is not exempted**, per ADR-010 rule 9 — `shadow()` still returns "Shadow of Amma" and
+  `compose()` still blends them, and a test pins that too. The alternative of a per-figure opt-out inside
+  `shadow()` was considered and refused: a quiet exception is precisely what rule 9 exists to forbid.
+  The consequence is documented in the module header instead, and consent has not been sought from any
+  of the four — the honest status is blocked, not "public enough to proceed".
+- **The Karmapa entry described an office as a person.** Its `spirit_text` claimed "the accumulated
+  wisdom of seventeen incarnations"; the 17th recognition is disputed between two separately recognised
+  and separately enthroned living claimants. The `desc` now says so.
+- **Rod and Jarilo carry the contested-attestation comments the 2.14.4 Slavic header promised.** Jarilo
+  has no medieval attestation under that name — the record is 19th-century South Slavic spring-festival
+  material read back into a pantheon, with Gerovit/Jarovit at Wolgast (Life of Otto of Bamberg) as the
+  one genuinely medieval anchor, and the identification an inference. Rod and the *rozhanitsy* appear
+  almost entirely in anti-pagan sermon literature; Rybakov built a supreme creator-god from it, while
+  Klejn and Zubov argue the sermons calque Byzantine astrological vocabulary about birth-fate. Both are
+  carried as the archetypes their words personify, not as attested deities — the same marking Lada got
+  at 2.14.4 and the Buddha avatar got per ADR-004 point 3.
+
+### Testing
+
+- **338 -> 368 assertions.** The Mystic split, the MYSTIC overlay including its store-nothing property,
+  and the living-persons rule each get their own.
+
+### Benchmarks
+
+- **Suite total +2.5%, and it is the workload that grew, not the code.** Effectively all of it is
+  `history/context_all_traditions` at 36434 -> 40546 ns (+11.3%). That benchmark walks every tradition
+  calling `context_for_tradition()`, which linearly scans every mapping — so it is **O(traditions x
+  mappings)**, and both went 39 -> 41. The predicted cost of the split alone is 41²/39² = **+10.5%**,
+  against +11.3% measured. Nothing in the scan path changed.
+  The other µs-scale rows are flat or noise: `by_tradition` +1.2%, `similar_to_5` +1.0%,
+  `cross_tradition_match` +0.1%, `query_courage_0.9` −3.3%.
+  Worth noting for later: this row is now the one benchmark that grows quadratically with tradition
+  count, so it is the one to watch as traditions are added — a linear index over mappings would flatten
+  it if it ever matters.
+
+### Known and deferred
+
+- `incarnate_mystic_*` and `incarnate_indigenous_*` still carry retired labels as function-name
+  prefixes. Renaming is breaking and stays scheduled for **3.0.0**, where the roadmap already has it.
+- The `incarnate/all_51` and `celtic/all_15` benchmark labels undercount their modules (56 and 17).
+  Renaming breaks per-benchmark continuity in `bench-history.csv` back to 2.4.0, so it wants its own
+  decision rather than a silent fix.
+
+
 ## [2.14.5] — 2026-08-31
 
 Third and last of the sweep-and-repair releases, and **the breaking one**. Named-nation representation

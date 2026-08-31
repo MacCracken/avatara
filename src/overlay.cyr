@@ -98,6 +98,31 @@ enum Jungian {
     JUNG_COUNT = 5;
 }
 
+# --- Mystic: the modes of mystical practice -----------------------------------
+# "Mystic" was a TRADITION string over 17 figures until 2.14.6, which was the
+# error this file exists to prevent: it named a mode of practice, not a people
+# or a transmission lineage, and each of the 17 held a position inside a named
+# religion. Rekeyed to Christian/Sufi/Jewish, it comes back here in the
+# sanctioned form -- derived, storing nothing, and applying to all 503 profiles
+# rather than 17, which is the cross-tradition statement the string only
+# gestured at. Ramakrishna, Kabir, Mirabai, Milarepa, Machig Labdron, Sun Bu'er
+# and Rabia now score together without any of them being relabelled.
+#
+# The five modes are the standard comparative frame, not an invention:
+# apophatic and kataphatic are Pseudo-Dionysius's via negativa and via
+# positiva; the unitive, devotional and ascetic groupings follow Underhill
+# (Mysticism, 1911) and Stace (Mysticism and Philosophy, 1960). Like every
+# overlay these are a reading, plural and revisable -- several may sit over one
+# figure and disagree.
+enum Mystic {
+    MYS_APOPHATIC = 0;
+    MYS_KATAPHATIC = 1;
+    MYS_UNITIVE = 2;
+    MYS_DEVOTIONAL = 3;
+    MYS_ASCETIC = 4;
+    MYS_COUNT = 5;
+}
+
 # --- The overlay registry -----------------------------------------------------
 # Every overlay family this library knows. The generic API below walks this, so
 # a new system becomes enumerable everywhere by registering here. Values are
@@ -105,7 +130,8 @@ enum Jungian {
 enum OverlaySystem {
     OVL_ENNEAGRAM = 0;
     OVL_JUNGIAN = 1;
-    OVL_SYSTEM_COUNT = 2;
+    OVL_MYSTIC = 2;
+    OVL_SYSTEM_COUNT = 3;
 }
 
 # --- Small f64 helpers (weights are IEEE 754 bit patterns) --------------------
@@ -354,6 +380,69 @@ fn jungian_desc(i) {
 
 fn jungian_count() { return JUNG_COUNT; }
 
+fn mystic_name(i) {
+    if (i == MYS_APOPHATIC) { return "apophatic"; }
+    if (i == MYS_KATAPHATIC) { return "kataphatic"; }
+    if (i == MYS_UNITIVE) { return "unitive"; }
+    if (i == MYS_DEVOTIONAL) { return "devotional"; }
+    if (i == MYS_ASCETIC) { return "ascetic"; }
+    return "unknown";
+}
+
+fn mystic_title(i) {
+    if (i == MYS_APOPHATIC) { return "The Way of Unknowing"; }
+    if (i == MYS_KATAPHATIC) { return "The Way of Vision"; }
+    if (i == MYS_UNITIVE) { return "The Way of Union"; }
+    if (i == MYS_DEVOTIONAL) { return "The Way of Love"; }
+    if (i == MYS_ASCETIC) { return "The Way of Discipline"; }
+    return "Unknown";
+}
+
+fn mystic_count() { return MYS_COUNT; }
+
+# profile_mystic_score(p, i): how strongly p expresses mystical mode i (0.0-1.0).
+# Every mode keys on the spirit emphasis -- without it none of these is mysticism
+# -- plus two differentiators.
+fn profile_mystic_score(p, i) {
+    if (p == 0) { return 0.0; }
+    # Apophatic -- the via negativa: what cannot be said, and is not explained
+    if (i == MYS_APOPHATIC) {
+        return ov_mean3(load64(p + PROF_SPIRIT), ov_inv(load64(p + PROF_VERBOSITY)), ov_inv(load64(p + PROF_DIRECTNESS)));
+    }
+    # Kataphatic -- the via positiva: vision, image, the divine made picturable
+    if (i == MYS_KATAPHATIC) {
+        return ov_mean3(load64(p + PROF_SPIRIT), load64(p + PROF_CREATIVITY), load64(p + PROF_INTUITION));
+    }
+    # Unitive -- the self dissolved into the One
+    if (i == MYS_UNITIVE) {
+        return ov_mean3(load64(p + PROF_SPIRIT), load64(p + PROF_BELIEF), load64(p + PROF_FLOW));
+    }
+    # Devotional -- love as the path; bhakti, ishq
+    if (i == MYS_DEVOTIONAL) {
+        return ov_mean3(load64(p + PROF_SPIRIT), load64(p + PROF_WARMTH), load64(p + PROF_RELATIONSHIP));
+    }
+    # Ascetic -- discipline and renunciation, the self held under rule
+    if (i == MYS_ASCETIC) {
+        return ov_mean3(load64(p + PROF_SPIRIT), load64(p + PROF_REGULATION), load64(p + PROF_AUTONOMY));
+    }
+    return 0.0;
+}
+
+# profile_mystic_mode(p): p's dominant mystical mode. Ties to the lowest index;
+# 0 for a null profile.
+fn profile_mystic_mode(p) {
+    if (p == 0) { return 0; }
+    var best = 0;
+    var bestv = profile_mystic_score(p, 0);
+    var i = 1;
+    while (i < MYS_COUNT) {
+        var v = profile_mystic_score(p, i);
+        if (f64_gt(v, bestv) == 1) { best = i; bestv = v; }
+        i = i + 1;
+    }
+    return best;
+}
+
 # jungian_index_by_name(name): index whose jungian_name == name; -1 if none.
 fn jungian_index_by_name(name) {
     if (name == 0) { return 0 - 1; }
@@ -431,6 +520,7 @@ fn overlay_system_count() { return OVL_SYSTEM_COUNT; }
 fn overlay_system_name(s) {
     if (s == OVL_ENNEAGRAM) { return "Enneagram"; }
     if (s == OVL_JUNGIAN) { return "Jungian"; }
+    if (s == OVL_MYSTIC) { return "Mystic"; }
     return "unknown";
 }
 
@@ -438,6 +528,7 @@ fn overlay_system_name(s) {
 fn overlay_label_count(s) {
     if (s == OVL_ENNEAGRAM) { return ENN_COUNT; }
     if (s == OVL_JUNGIAN) { return JUNG_COUNT; }
+    if (s == OVL_MYSTIC) { return MYS_COUNT; }
     return 0;
 }
 
@@ -445,6 +536,7 @@ fn overlay_label_count(s) {
 fn overlay_label(s, i) {
     if (s == OVL_ENNEAGRAM) { return enneagram_name(i); }
     if (s == OVL_JUNGIAN) { return jungian_name(i); }
+    if (s == OVL_MYSTIC) { return mystic_name(i); }
     return "unknown";
 }
 
@@ -452,6 +544,7 @@ fn overlay_label(s, i) {
 fn overlay_score(s, p, i) {
     if (s == OVL_ENNEAGRAM) { return profile_enneagram_score(p, i); }
     if (s == OVL_JUNGIAN) { return profile_jungian_score(p, i); }
+    if (s == OVL_MYSTIC) { return profile_mystic_score(p, i); }
     return 0.0;
 }
 
@@ -460,6 +553,7 @@ fn overlay_score(s, p, i) {
 fn overlay_best(s, p) {
     if (s == OVL_ENNEAGRAM) { return profile_enneagram_type(p); }
     if (s == OVL_JUNGIAN) { return profile_jungian_role(p); }
+    if (s == OVL_MYSTIC) { return profile_mystic_mode(p); }
     return 0;
 }
 

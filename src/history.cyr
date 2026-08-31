@@ -5,7 +5,7 @@
 # Each tradition maps to one or more civilizations, eras, and a temporal
 # range — the period during which the tradition's theology was actively forming.
 #
-# 39 tradition-to-history mappings with scholarly historical notes.
+# 41 tradition-to-history mappings with scholarly historical notes.
 
 # --- TraditionMapping layout ---
 # Each mapping: tradition name, primary civ, civ names (vec), era names (vec),
@@ -69,7 +69,7 @@ fn svec3(a, b, c) { var v = vec_new(); vec_push(v, a); vec_push(v, b); vec_push(
 fn svec4(a, b, c, d) { var v = vec_new(); vec_push(v, a); vec_push(v, b); vec_push(v, c); vec_push(v, d); return v; }
 fn svec5(a, b, c, d, e) { var v = vec_new(); vec_push(v, a); vec_push(v, b); vec_push(v, c); vec_push(v, d); vec_push(v, e); return v; }
 
-# --- Build all 39 mappings ---
+# --- Build all 41 mappings ---
 
 var history_vec = 0;
 var history_init_done = 0;
@@ -188,10 +188,27 @@ fn all_mappings() {
         1469, LIVING,
         "Founded by Guru Nanak (1469) in the Punjab during Mughal rule; ten Gurus shaped theology, scripture (Guru Granth Sahib), and martial tradition (Khalsa, 1699); living tradition with 30 million adherents"));
 
-        vec_push(history_vec, history_map_new("Mystic", "Persian Empire",
-        svec2("Persian Empire", "Ottoman Empire"), svec2("Middle Ages", "Modern"),
-        800, LIVING,
-        "Sufi, Christian, Jewish and cross-tradition mystics -- Rumi, Ibn Arabi, Meister Eckhart, Hildegard of Bingen, Teresa of Avila, Isaac Luria, the Baal Shem Tov -- who articulated direct experiential union with the divine across sectarian boundaries; the strand runs from the desert fathers to Thomas Merton in the 20th century"));
+        # The "Mystic" tradition string was retired at 2.14.6 and its 17 figures
+        # rekeyed to the traditions they actually belonged to. "Mystic" named a
+        # mode of practice, not a people or a transmission lineage, and every
+        # one of the 17 held a position inside a named religion -- several a
+        # formal office. What it was reaching for survives in the sanctioned
+        # form, as the MYSTIC overlay in src/overlay.cyr, which derives across
+        # all 503 profiles instead of over 17.
+        vec_push(history_vec, history_map_new("Christian", "Roman Empire",
+        svec3("Roman Empire", "Byzantine Empire", "Holy Roman Empire"), svec3("Classical Antiquity", "Middle Ages", "Modern"),
+        30, LIVING,
+        "The contemplative and mystical strand within Christianity, from the Desert Fathers of Roman Egypt through the Rhineland and Iberian schools to 20th-century monasticism. It is not one lineage but several under one confession -- Benedictine (Hildegard), Dominican (Eckhart), Franciscan, Carmelite (Teresa of Avila, John of the Cross), English anchoritic (Julian of Norwich), Orthodox hesychast (Gregory Palamas) and Trappist (Merton) -- which is why the confession rather than a school name is the string. Hildegard and Teresa are Doctors of the Universal Church"));
+
+        vec_push(history_vec, history_map_new("Sufi", "Abbasid Caliphate",
+        svec3("Abbasid Caliphate", "Persian Empire", "Ottoman Empire"), svec2("Middle Ages", "Modern"),
+        750, LIVING,
+        "Tasawwuf, the mystical and ascetic tradition within Islam, from Rabia al-Adawiyya in 8th-century Basra through al-Hallaj, al-Ghazali, Attar and Ibn Arabi to the Mevlevi order that formed around Rumi. \"Sufi\" rather than \"Islamic\" is deliberate: all six figures transmit within Sufism specifically, and a bare \"Islamic\" string holding only mystics would misrepresent Islam the same way \"Mystic\" misrepresented all three religions it spanned"));
+
+        vec_push(history_vec, history_map_new("Jewish", "Judea",
+        svec3("Judea", "Ottoman Empire", "Poland-Lithuania"), svec3("Classical Antiquity", "Renaissance", "Modern"),
+        1500, LIVING,
+        "The Jewish mystical strand as carried by two figures of two distinct currents: Isaac Luria (1534-1572), whose Lurianic Kabbalah reshaped the field from Safed under Ottoman rule, and the Baal Shem Tov (c. 1698-1760), who founded Hasidism in Podolia. No single current name covers both, so the confession is the string -- the same reasoning as the Christian mapping, and the opposite of the Sufi one, where Sufism does cover all six. The separate \"Kabbalah\" tradition carries the ten Sephiroth as a structural system rather than persons"));
 
         vec_push(history_vec, history_map_new("Comanche", "Great Plains",
         svec1("Great Plains"), svec2("Middle Ages", "Modern"),

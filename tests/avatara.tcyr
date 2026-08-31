@@ -229,7 +229,7 @@ fn main() {
     # ================================================================
     # History: mapped traditions count
     # ================================================================
-    assert_eq(mapping_count(), 39, "39 history mappings");
+    assert_eq(mapping_count(), 41, "41 history mappings");
     # INVARIANT (v2.14.0): history and registry agree in BOTH directions. Before
     # this release five mappings named traditions no profile carried ("Incarnate
     # Hindu" and four others -- the same orphan class as the "Incarnate
@@ -250,7 +250,13 @@ fn main() {
     }
     assert_eq(unmapped_trads, 0, "every tradition carried resolves a history context");
     # The traditions that gained a mapping in 2.14.0 resolve, and are dated.
-    assert_neq(context_for_tradition("Mystic"), 0, "Mystic resolves (17 profiles, was orphaned)");
+    assert_neq(context_for_tradition("Christian"), 0, "Christian resolves (9 profiles)");
+    assert_neq(context_for_tradition("Sufi"), 0, "Sufi resolves (6 profiles)");
+    assert_neq(context_for_tradition("Jewish"), 0, "Jewish resolves (2 profiles)");
+    assert_eq(vec_len(by_tradition("Mystic")), 0, "no Mystic tradition string remains (retired 2.14.6)");
+    assert_eq(vec_len(by_tradition("Christian")), 9, "Christian has 9");
+    assert_eq(vec_len(by_tradition("Sufi")), 6, "Sufi has 6");
+    assert_eq(vec_len(by_tradition("Jewish")), 2, "Jewish has 2");
     assert_neq(context_for_tradition("Vedic"), 0, "Vedic resolves (the Saptarishi)");
     assert_neq(context_for_tradition("Solar"), 0, "Solar resolves (the intercalary days)");
     assert_neq(context_for_tradition("Canaanite"), 0, "Canaanite resolves");
@@ -882,7 +888,7 @@ fn main() {
         xs = xs + 1;
     }
     assert_eq(excl_ok, 1, "no typology label is a tradition or an archetype name");
-    assert_eq(overlay_system_count(), 2, "two overlay systems registered");
+    assert_eq(overlay_system_count(), 3, "three overlay systems registered");
 
     # Generic API agrees with the per-family functions it dispatches to.
     var gp = result_unwrap(lookup("Thor"));
@@ -901,6 +907,40 @@ fn main() {
     assert_eq(overlay_best(99, gp), 0, "unknown system best -> 0");
     assert_eq(f64_eq(overlay_score(99, gp, 0), 0.0), 1, "unknown system scores 0.0");
     assert_eq(streq(overlay_system_name(99), "unknown"), 1, "unknown system name");
+
+    # ---- MYSTIC overlay: what the retired tradition string was reaching for ----
+    # It derives and stores nothing, so registering it must not move the count.
+    assert_eq(profile_count(), 503, "registering MYSTIC does not change the archetype count");
+    assert_eq(overlay_label_count(OVL_MYSTIC), mystic_count(), "mystic label count via registry");
+    assert_eq(mystic_count(), 5, "five mystical modes");
+    assert_eq(streq(overlay_label(OVL_MYSTIC, MYS_APOPHATIC), "apophatic"), 1, "generic label == mystic_name");
+    assert_eq(f64_eq(overlay_score(OVL_MYSTIC, gp, 0), profile_mystic_score(gp, 0)), 1, "generic score == mystic score");
+    assert_eq(overlay_best(OVL_MYSTIC, gp), profile_mystic_mode(gp), "generic best == mystic mode");
+    assert_eq(overlay_system_by_name("Mystic"), OVL_MYSTIC, "Mystic resolves as an overlay system");
+    # ...and NOT as a tradition. This is the whole point of 2.14.6.
+    assert_eq(vec_len(by_tradition("Mystic")), 0, "Mystic is an overlay, not a tradition");
+    # It applies across every tradition, which the string could not do: the 17
+    # rekeyed figures and figures never in that group score on the same scale.
+    var mrumi = result_unwrap(lookup("Rumi"));
+    var mmila = result_unwrap(lookup("Milarepa"));
+    assert_eq(f64_ge(profile_mystic_score(mrumi, MYS_UNITIVE), 0.0), 1, "Rumi scores on the mystic overlay");
+    assert_eq(f64_ge(profile_mystic_score(mmila, MYS_ASCETIC), 0.0), 1, "Milarepa scores too, though never a \"Mystic\"");
+    assert_eq(streq(prof_tradition(mrumi), "Sufi"), 1, "Rumi carries Sufi, his actual tradition");
+    assert_eq(f64_eq(profile_mystic_score(0, 0), 0.0), 1, "null profile scores 0.0 on mystic");
+    assert_eq(profile_mystic_mode(0), 0, "null profile -> mode 0 (safe default)");
+
+    # ---- Living people are not given a second-person script (2.14.6) ----
+    # A `soul` written as "You are X" is a line a consumer hands to an agent to
+    # speak. For someone alive that puts words in a real person's mouth, and a
+    # GPL-3.0 library ships them to anyone. The four living figures carry
+    # third-person archetype description instead. This is a rule, not an
+    # exemption: it applies to any living figure added later.
+    assert_eq(strstr(prof_soul(result_unwrap(lookup("Amma"))), "You are"), 0 - 1, "Amma has no second-person script");
+    assert_eq(strstr(prof_soul(result_unwrap(lookup("Mother Meera"))), "You are"), 0 - 1, "Mother Meera has no second-person script");
+    assert_eq(strstr(prof_soul(result_unwrap(lookup("Dalai Lama"))), "You are"), 0 - 1, "Dalai Lama has no second-person script");
+    assert_eq(strstr(prof_soul(result_unwrap(lookup("Karmapa"))), "You are"), 0 - 1, "Karmapa has no second-person script");
+    # ...and the machinery is still uniform over them (ADR-010 rule 9): no opt-out.
+    assert_eq(shadow(result_unwrap(lookup("Amma"))) != 0, 1, "shadow() still applies to living figures -- no exemption");
 
     # ================================================================
     # Null-safety: a profile validate_profile() certifies as Ok may still

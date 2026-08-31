@@ -6,7 +6,7 @@
 # mapping across traditions. All traditions map to the same
 # ArchetypeProfile output — composable across cultures.
 #
-# 503 archetypes across 39 traditions.
+# 503 archetypes across 41 traditions.
 #
 # Modules:
 #   types      - TraitWeights, ModuleEmphasis, ArchetypeProfile, enums
@@ -45,11 +45,11 @@
 #   anishinaabe - 5 manidoog of the Great Lakes
 #   aboriginal - 4 figures of three Aboriginal Australian peoples
 #   compose    - weighted blending of profiles
-#   history    - 39 tradition-to-history mappings (civilization, era, range)
+#   history    - 41 tradition-to-history mappings (civilization, era, range)
 #   registry   - lookup, enumeration, query filters
 #   affinity   - affinity scoring, similarity, cross-tradition matching
 #   shadow     - shadow aspect: involutive inversion of a profile
-#   overlay    - derived typology overlays (Enneagram, Jungian); not traditions
+#   overlay    - derived typology overlays (Enneagram, Jungian, Mystic); not traditions
 #   logging    - sakshi logging init
 
 # Stdlib auto-included via cyrius.cyml

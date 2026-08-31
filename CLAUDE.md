@@ -6,7 +6,7 @@
 
 - **Language**: Cyrius (ported from Rust in v2.0)
 - **License**: GPL-3.0-only
-- **Version**: SemVer 2.14.5
+- **Version**: SemVer 2.14.6
 - **Compiler**: cyrius >= 6.5.36 (pinned in `cyrius.cyml` `[package].cyrius`)
 
 ## Consumers
@@ -21,11 +21,11 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/error.cyr` — AvataraError enum codes, validation
 - `src/aspect.cyr` — role aspects: universal roles DERIVED from the trait weights, no per-archetype authoring (added 2.8.0). Like `shadow` and `overlay`, it reads off a finished profile and stores nothing
 - `src/compose.cyr` — archetype composition: weighted blending of multiple profiles
-- `src/history.cyr` — 39 tradition-to-history mappings (civilization, era, temporal range, notes). A test walks both directions: no mapping may name a tradition with no profiles, and every tradition carried must resolve a context
+- `src/history.cyr` — 41 tradition-to-history mappings (civilization, era, temporal range, notes). A test walks both directions: no mapping may name a tradition with no profiles, and every tradition carried must resolve a context
 - `src/registry.cyr` — lookup by name, enumeration, query/filter API (includes history-based queries)
 - `src/affinity.cyr` — affinity scoring, similarity search, cross-tradition matching, conflict detection
 - `src/shadow.cyr` — shadow aspect: `shadow(profile)` (involutive inversion), `is_shadow_of(a, b)`
-- `src/overlay.cyr` — archetype overlays: cross-cutting typologies DERIVED over the profile, not archetypes (no registry/history entry, `profile_count()` unaffected). Enneagram (9 types, 3 centres, wings — the types are a ring) and Jungian (Hero/Shadow/Anima/Self/Trickster), both registered in the `OverlaySystem` enum. Overlays are **plural readings, not definitions**: several may sit over the same figure and disagree, and a new system is added without touching any archetype. `jungian_shadow_form(p)` is the composition point with `shadow.cyr`: the SHADOW overlay scores what p expresses, `shadow(p)` constructs a different archetype
+- `src/overlay.cyr` — archetype overlays: cross-cutting typologies DERIVED over the profile, not archetypes (no registry/history entry, `profile_count()` unaffected). Enneagram (9 types, 3 centres, wings — the types are a ring), Jungian (Hero/Shadow/Anima/Self/Trickster) and Mystic (apophatic/kataphatic/unitive/devotional/ascetic), all registered in the `OverlaySystem` enum. **Mystic is the worked example of the rule**: it was a `tradition` string over 17 figures until 2.14.6, was rekeyed to Christian/Sufi/Jewish, and came back here — deriving over all 503 profiles instead of labelling 17. Overlays are **plural readings, not definitions**: several may sit over the same figure and disagree, and a new system is added without touching any archetype. `jungian_shadow_form(p)` is the composition point with `shadow.cyr`: the SHADOW overlay scores what p expresses, `shadow(p)` constructs a different archetype
 - `src/kabbalah.cyr` — Tree of Life: 10 Sephiroth
 - `src/tarot.cyr` — 22 Tarot Major Arcana as the 22 Tree-of-Life paths (bridges `kabbalah`): each trump carries its Hebrew letter, path number (11–32), and the two Sephiroth its path connects (`tarot_path`, `tarot_path_upper/lower`, `tarot_for_path`, `tarot_connects`); Golden Dawn attribution, VIII=Strength/XI=Justice
 - `src/iching.cyr` — 64 I Ching hexagrams (King Wen sequence) over the eight trigrams (bagua): each hexagram carries its number, six lines, and two constituent trigrams (`iching_code` packs lower*8+upper; `iching_lower/upper/line/number/yang_count`, `iching_for_trigrams`, `trigram_name/image/attribute/family/element`). Element derives from the upper trigram, polarity from the yang-line balance; all 64 trigram pairings occur exactly once (bijection, test-pinned)
@@ -52,14 +52,14 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/solar.cyr` — 4 intercalary archetypes: the days upon the year (Wayeb, Nemontemi, Epagomenai) + the leap quarter (Bissextus) — avatara's landing at the solar year (365 + ¼)
 - `src/canaanite.cyr` — 4 Canaanite/Ugaritic deities (El, Baal, Asherah, Anat)
 - `src/etruscan.cyr` — 4 Etruscan deities (Tinia, Uni, Menrva, Voltumna)
-- `src/incarnate.cyr` — 56 incarnate divine figures (Hindu, Buddhist, Mystic, Taoist, Sage, and four North American figures re-attributed in 2.12.0 to Lakota / Haudenosaunee / Comanche / Northern Paiute — the pan-ethnic "Indigenous" label is retired)
+- `src/incarnate.cyr` — 56 incarnate divine figures carrying eleven tradition strings (Hindu 13, Buddhist 10, Christian 9, Vedic 7, Sufi 6, Taoist 5, Jewish 2, and four North American figures re-attributed in 2.12.0 to Lakota / Haudenosaunee / Comanche / Northern Paiute). Both pan-labels are retired: "Indigenous" at 2.12.0 and "Mystic" at 2.14.6; the `incarnate_mystic_*` / `incarnate_indigenous_*` prefixes survive as function names only, renamed at 3.0.0. **Four figures are living people** and carry third-person text rather than a second-person script — a rule, not an exemption
 - `src/inuit.cyr` — 10 Inuit spirits and powers (Sedna, Nanuq, Sila, the animal-masters)
 - `src/lakota.cyr` — 10 Lakota wakan powers (Wakan Tanka, Inyan, Skan, Wakinyan, Iktomi)
 - `src/haudenosaunee.cyr` — 6 Six Nations figures (Sky Woman, the twins, Three Sisters, Great Turtle)
 - `src/anishinaabe.cyr` — 5 Anishinaabe manidoog + the 7 Grandfather Teachings (Nizhwaaswi Gagiikwewin), carried by their Ojibwe names as cosmic-tier principles; the wiindigoo is deliberately not carried — see module header
 - `src/aboriginal.cyr` — 4 figures of three Aboriginal Australian peoples, carried under their own peoples' tradition strings (Kunwinjku, Kulin, Gunaikurnai), not a continent-wide label; `traditions_for_civilization("Aboriginal Australia")` gathers them. Restricted Dreaming material deliberately excluded, and the v2.14.0 survey's six refusals are recorded with their reasons (see module header)
 - `src/logging.cyr` — sakshi logging init
-- `tests/avatara.tcyr` — integration test suite (338 assertions)
+- `tests/avatara.tcyr` — integration test suite (368 assertions)
 - `tests/avatara.bcyr` — benchmarks (60)
 - `programs/traditions.cyr` — example: explore archetypes
 - `programs/compose.cyr` — example: blend traditions

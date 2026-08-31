@@ -12,14 +12,14 @@
                     |                                              |
                     |  +----------------------------------------+  |
                     |  |   32 tradition modules -> 503           |  |
-                    |  |         archetypes, 39 traditions       |  |
+                    |  |         archetypes, 41 traditions       |  |
                     |  |  kabbalah  angelic  hindu  olympian     |  |
                     |  |  norse  egyptian  buddhist  celtic      |  |
                     |  |  mesopotamian  shinto  aztec  maya      |  |
                     |  |  yoruba  zoroastrian  taoist            |  |
                     |  |  polynesian  slavic  jain  sikh         |  |
                     |  |  finnish  vodou                         |  |
-                    |  |  incarnate (56; Mystic/Vedic/Hindu/     |  |
+                    |  |  incarnate (56; Christian/Sufi/Jewish/  |  |
                     |  |    Buddhist/Taoist + 4 named nations)   |  |
                     |  |  solar (intercalary: 365 + the quarter) |  |
                     |  |  canaanite  etruscan                    |  |

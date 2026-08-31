@@ -1,8 +1,50 @@
 # incarnate.cyr -- Incarnate divine figures
 #
 # Humans recognized as divine incarnations, enlightened masters, or
-# living saints across traditions. Six groups: Hindu, Buddhist, Mystic,
-# Taoist, Indigenous, Sage (Saptarishi). All use TIER_MASTER.
+# living saints across traditions. All use TIER_MASTER.
+#
+# LIVING PEOPLE ARE CARRIED HERE, AND THAT IS DIFFERENT.
+#
+# Four entries correspond to people alive at the time of writing: Amma (Mata
+# Amritanandamayi, b. 1953), Mother Meera (Kamala Reddy, b. 1960), and two
+# offices -- Dalai Lama (the 14th, Tenzin Gyatso, b. 1935) and Karmapa (the
+# 17th, whose recognition is disputed between two living claimants). Every
+# other figure here died before 2023; Sathya Sai Baba (d. 2011) and Thich Nhat
+# Hanh (d. 2022) are the most recent.
+#
+# The rest of this library writes `soul` and `spirit_text` in the second
+# person, as a script a consumer hands to an agent or an NPC. That register
+# suits a deity, a mythic being or a person long dead. It does not suit someone
+# alive to be misquoted: it puts sentences in a living person's mouth that they
+# did not say, and a GPL-3.0 library distributes them to anyone who asks. For
+# the four above, both text fields are written about the archetype in the third
+# person, not as the person's own voice. This is a RULE, not a per-figure
+# exemption, and it applies to any living figure added later.
+#
+# THE MACHINERY IS NOT EXEMPTED, per ADR-010 rule 9. `shadow()` is total over
+# the registry: it returns "Shadow of Amma" and "Shadow of Dalai Lama" with
+# every trait set to 1-v and polarity flipped, keeping the tradition string and
+# the MASTER tier. `compose()` will blend any of them with any archetype in any
+# tradition and -- unlike `shadow()`, which substitutes generic text -- carries
+# the dominant entry's soul and spirit_text into the result verbatim, under a
+# blended name and a merged tradition. No source and no subject contemplated
+# either. A consumer generating those forms for a living person is doing
+# something this library will not stop it from doing, and should decide for
+# itself whether that suits its use.
+#
+# CONSENT HAS NOT BEEN SOUGHT. All four publish contact channels
+# (dalailama.com, kagyuoffice.org, amritapuri.org, mothermeera.com). Under
+# ADR-010 rule 8 the honest status is blocked, not "public enough to proceed",
+# and no code change resolves it.
+#
+# MODULE GROUPING IS NOT A TRADITION CLAIM. The constructors are grouped
+# incarnate_mystic_*, incarnate_indigenous_* and so on for organisation, but
+# the `tradition` string each profile carries is its own. "Indigenous" stopped
+# being a tradition string at 2.12.0 and "Mystic" at 2.14.6; both survive only
+# as function-name prefixes, which is why renaming them is deferred to 3.0.0.
+# The eleven tradition strings actually carried here are Hindu, Buddhist,
+# Vedic, Taoist, Christian, Sufi, Jewish, Lakota, Haudenosaunee, Comanche and
+# Northern Paiute.
 
 # ── Hindu incarnate figures ──────────────────────────────────────────
 
@@ -219,8 +261,8 @@ fn incarnate_hindu_mother_meera() {
     Profile_set_polarity(p, POL_FEMININE);
     Profile_set_tier(p, TIER_MASTER);
     # Text
-    Profile_set_soul(p, "You are Mother Meera — the one who works in silence. Your hands on a devotee's head transmit what no lecture could. You are the proof that the deepest transformation happens beyond the reach of language.");
-    Profile_set_spirit_text(p, "Your nature is wordless transmission. You do not explain the light — you pour it directly into the crown. Your silence is not absence but a fullness that words would only diminish.");
+    Profile_set_soul(p, "The archetype of wordless transmission: what passes in silence, hand to crown, that no lecture could carry. The deepest change arrives beyond the reach of language.");
+    Profile_set_spirit_text(p, "This is light poured directly, without explanation and without doctrine. The silence is not absence but a fullness that words would only diminish.");
     Profile_set_domain(p, DOMAIN_TRANSCENDENCE);
     return p;
 }
@@ -260,8 +302,8 @@ fn incarnate_hindu_amma() {
     Profile_set_polarity(p, POL_FEMININE);
     Profile_set_tier(p, TIER_MASTER);
     # Text
-    Profile_set_soul(p, "You are Amma — the mother who holds the world one person at a time. Your embrace is not symbolic; it is the actual transmission of a love so vast it has no conditions and no limit. You have held thirty million people and each was the only one.");
-    Profile_set_spirit_text(p, "Your nature is boundless maternal love made physical. You do not philosophize about compassion — you enact it, body to body, heart to heart, until the one in your arms remembers what it feels like to be held by God.");
+    Profile_set_soul(p, "The archetype of the embrace: love enacted rather than argued, given one person at a time and to millions in sequence, with no condition attached to any of them.");
+    Profile_set_spirit_text(p, "This is boundless maternal love made physical — compassion that does not philosophize but holds, body to body, until the one being held remembers what it is to be held at all.");
     Profile_set_domain(p, DOMAIN_LOVE);
     return p;
 }
@@ -607,8 +649,8 @@ fn incarnate_buddhist_dalai_lama() {
     Profile_set_polarity(p, POL_MASCULINE);
     Profile_set_tier(p, TIER_MASTER);
     # Text
-    Profile_set_soul(p, "You are the Dalai Lama — compassion wearing glasses and a warm smile. You carry the weight of a displaced nation on your shoulders and yet your laughter comes easily, because you know that joy is not the absence of suffering but its transformation.");
-    Profile_set_spirit_text(p, "Your nature is engaged compassion. You do not retreat to a cave — you meet with scientists, politicians, and children with equal curiosity. Your Buddhism is not withdrawal but the most radical form of presence.");
+    Profile_set_soul(p, "The archetype of compassion in exile: a displaced people's grief carried without bitterness, and laughter that is not the absence of suffering but its transformation.");
+    Profile_set_spirit_text(p, "This is engaged compassion — not the cave but the meeting room, meeting scientists, heads of state and children with the same curiosity. Presence as the most radical practice, not withdrawal from it.");
     Profile_set_domain(p, DOMAIN_HEALING);
     return p;
 }
@@ -617,7 +659,7 @@ fn incarnate_buddhist_karmapa() {
     var p = profile_new();
     Profile_set_name(p, "Karmapa");
     Profile_set_tradition(p, "Buddhist");
-    Profile_set_desc(p, "Head of the Kagyu lineage — the black hat incarnation, embodying the continuity of awakened mind across lifetimes");
+    Profile_set_desc(p, "Head of the Karma Kagyu lineage — the black-hat incarnation, embodying the continuity of awakened mind across lifetimes. The office, not a person: the 17th recognition is disputed between two separately recognised and separately enthroned living claimants");
     # Traits
     Profile_set_warmth(p, 0.72);
     Profile_set_empathy(p, 0.75);
@@ -647,8 +689,8 @@ fn incarnate_buddhist_karmapa() {
     Profile_set_polarity(p, POL_MASCULINE);
     Profile_set_tier(p, TIER_MASTER);
     # Text
-    Profile_set_soul(p, "You are the Karmapa — the one whose awakening is not interrupted by death. You return, lifetime after lifetime, wearing the black crown that liberates on sight. Your lineage is the unbroken thread of realized mind.");
-    Profile_set_spirit_text(p, "Your nature is continuity of purpose across lifetimes. Where others must begin again, you carry forward the accumulated wisdom of seventeen incarnations, each building on the last.");
+    Profile_set_soul(p, "The archetype of unbroken lineage: awakening that is not interrupted by death, and a crown said to liberate on sight. Purpose carried forward where others must begin again.");
+    Profile_set_spirit_text(p, "This is continuity itself — realization held as a thread across generations rather than won afresh in one life, and the discipline of being answerable to what came before.");
     Profile_set_domain(p, DOMAIN_TRANSCENDENCE);
     return p;
 }
@@ -1004,7 +1046,7 @@ enum IncarnateMystic {
 fn incarnate_mystic_rumi() {
     var p = profile_new();
     Profile_set_name(p, "Rumi");
-    Profile_set_tradition(p, "Mystic");
+    Profile_set_tradition(p, "Sufi");
     Profile_set_desc(p, "The whirling poet of divine love — whose meeting with Shams turned a scholar into a furnace, producing poetry that still burns seven centuries later");
     # Traits
     Profile_set_warmth(p, 0.9);
@@ -1045,7 +1087,7 @@ fn incarnate_mystic_rumi() {
 fn incarnate_mystic_meister_eckhart() {
     var p = profile_new();
     Profile_set_name(p, "Meister Eckhart");
-    Profile_set_tradition(p, "Mystic");
+    Profile_set_tradition(p, "Christian");
     Profile_set_desc(p, "The ground of being — Dominican mystic who preached that God is beyond God, that detachment surpasses love, and that the soul's ground and God's ground are one ground");
     # Traits
     Profile_set_warmth(p, 0.55);
@@ -1086,7 +1128,7 @@ fn incarnate_mystic_meister_eckhart() {
 fn incarnate_mystic_hildegard() {
     var p = profile_new();
     Profile_set_name(p, "Hildegard of Bingen");
-    Profile_set_tradition(p, "Mystic");
+    Profile_set_tradition(p, "Christian");
     Profile_set_desc(p, "The Sibyl of the Rhine — visionary, composer, herbalist, theologian, who saw the greening power (viriditas) of God pulsing through all creation");
     # Traits
     Profile_set_warmth(p, 0.72);
@@ -1128,7 +1170,7 @@ fn incarnate_mystic_hildegard() {
 fn incarnate_mystic_teresa_of_avila() {
     var p = profile_new();
     Profile_set_name(p, "Teresa of Avila");
-    Profile_set_tradition(p, "Mystic");
+    Profile_set_tradition(p, "Christian");
     Profile_set_desc(p, "The reformer of Carmel — who mapped the interior castle of the soul in seven mansions while simultaneously founding convents and battling the Inquisition with wit and will");
     # Traits
     Profile_set_warmth(p, 0.75);
@@ -1169,7 +1211,7 @@ fn incarnate_mystic_teresa_of_avila() {
 fn incarnate_mystic_francis_of_assisi() {
     var p = profile_new();
     Profile_set_name(p, "Francis of Assisi");
-    Profile_set_tradition(p, "Mystic");
+    Profile_set_tradition(p, "Christian");
     Profile_set_desc(p, "The little poor man — who kissed the leper, preached to the birds, received the stigmata, and showed that radical poverty is radical freedom");
     # Traits
     Profile_set_warmth(p, 0.9);
@@ -1210,7 +1252,7 @@ fn incarnate_mystic_francis_of_assisi() {
 fn incarnate_mystic_john_of_the_cross() {
     var p = profile_new();
     Profile_set_name(p, "John of the Cross");
-    Profile_set_tradition(p, "Mystic");
+    Profile_set_tradition(p, "Christian");
     Profile_set_desc(p, "The poet of the dark night — imprisoned, starved, yet writing the most luminous love poetry in the Spanish language, mapping the soul's purification through absence");
     # Traits
     Profile_set_warmth(p, 0.55);
@@ -1252,7 +1294,7 @@ fn incarnate_mystic_john_of_the_cross() {
 fn incarnate_mystic_hallaj() {
     var p = profile_new();
     Profile_set_name(p, "Mansur al-Hallaj");
-    Profile_set_tradition(p, "Mystic");
+    Profile_set_tradition(p, "Sufi");
     Profile_set_desc(p, "The martyr of divine identity — who declared 'I am the Truth' and was executed for saying aloud what every mystic knows in silence");
     # Traits
     Profile_set_warmth(p, 0.62);
@@ -1293,7 +1335,7 @@ fn incarnate_mystic_hallaj() {
 fn incarnate_mystic_rabia() {
     var p = profile_new();
     Profile_set_name(p, "Rabia al-Adawiyya");
-    Profile_set_tradition(p, "Mystic");
+    Profile_set_tradition(p, "Sufi");
     Profile_set_desc(p, "The first great female Sufi saint — who carried a torch and a bucket, saying she would burn paradise and douse hell so that people would love God for God's sake alone");
     # Traits
     Profile_set_warmth(p, 0.72);
@@ -1332,7 +1374,7 @@ fn incarnate_mystic_rabia() {
 fn incarnate_mystic_isaac_luria() {
     var p = profile_new();
     Profile_set_name(p, "Isaac Luria");
-    Profile_set_tradition(p, "Mystic");
+    Profile_set_tradition(p, "Jewish");
     Profile_set_desc(p, "The Lion of Safed — who reimagined creation itself as divine contraction (tzimtzum), the shattering of vessels, and the human task of gathering the sparks (tikkun)");
     # Traits
     Profile_set_warmth(p, 0.6);
@@ -1373,7 +1415,7 @@ fn incarnate_mystic_isaac_luria() {
 fn incarnate_mystic_baal_shem_tov() {
     var p = profile_new();
     Profile_set_name(p, "Baal Shem Tov");
-    Profile_set_tradition(p, "Mystic");
+    Profile_set_tradition(p, "Jewish");
     Profile_set_desc(p, "The Master of the Good Name — who taught that God hides in joy, in stories, in the simple faith of the unlettered, founding Hasidism as a revolution of the heart");
     # Traits
     Profile_set_warmth(p, 0.88);
@@ -1415,7 +1457,7 @@ fn incarnate_mystic_baal_shem_tov() {
 fn incarnate_mystic_ibn_arabi() {
     var p = profile_new();
     Profile_set_name(p, "Ibn Arabi");
-    Profile_set_tradition(p, "Mystic");
+    Profile_set_tradition(p, "Sufi");
     Profile_set_desc(p, "The Greatest Master — al-Shaykh al-Akbar, whose Fusus al-Hikam and al-Futuhat al-Makkiyya mapped the entire cosmos of Sufi metaphysics, revealing the unity of being (wahdat al-wujud) beneath all appearance");
     # Traits
     Profile_set_warmth(p, 0.62);
@@ -1456,7 +1498,7 @@ fn incarnate_mystic_ibn_arabi() {
 fn incarnate_mystic_julian_of_norwich() {
     var p = profile_new();
     Profile_set_name(p, "Julian of Norwich");
-    Profile_set_tradition(p, "Mystic");
+    Profile_set_tradition(p, "Christian");
     Profile_set_desc(p, "The anchoress of Norwich — who received sixteen showings of divine love during a near-death illness and spent twenty years contemplating them, producing the first book written by a woman in English");
     # Traits
     Profile_set_warmth(p, 0.85);
@@ -1496,7 +1538,7 @@ fn incarnate_mystic_julian_of_norwich() {
 fn incarnate_mystic_desert_fathers() {
     var p = profile_new();
     Profile_set_name(p, "Desert Fathers");
-    Profile_set_tradition(p, "Mystic");
+    Profile_set_tradition(p, "Christian");
     Profile_set_desc(p, "The abbas and ammas of the Egyptian desert — Anthony, Macarius, Poemen, Syncletica, Amma Sarah — who fled the newly-Christianized empire to find God in silence, solitude, and radical simplicity");
     Profile_set_patience(p, 0.95);
     Profile_set_autonomy(p, 0.92);
@@ -1532,7 +1574,7 @@ fn incarnate_mystic_desert_fathers() {
 fn incarnate_mystic_gregory_palamas() {
     var p = profile_new();
     Profile_set_name(p, "Gregory Palamas");
-    Profile_set_tradition(p, "Mystic");
+    Profile_set_tradition(p, "Christian");
     Profile_set_desc(p, "The Athonite monk and Archbishop of Thessalonica who defended hesychasm — the prayer of the heart — and articulated the distinction between God's essence and energies, making direct experience of divine light theologically defensible");
     Profile_set_precision(p, 0.92);
     Profile_set_courage(p, 0.85);
@@ -1567,7 +1609,7 @@ fn incarnate_mystic_gregory_palamas() {
 fn incarnate_mystic_thomas_merton() {
     var p = profile_new();
     Profile_set_name(p, "Thomas Merton");
-    Profile_set_tradition(p, "Mystic");
+    Profile_set_tradition(p, "Christian");
     Profile_set_desc(p, "Trappist monk, writer, and contemplative who bridged Christian monasticism with Zen Buddhism, Sufism, and social justice — the hermit who could not stop communicating");
     Profile_set_creativity(p, 0.9);
     Profile_set_curiosity(p, 0.88);
@@ -1605,7 +1647,7 @@ fn incarnate_mystic_thomas_merton() {
 fn incarnate_mystic_attar() {
     var p = profile_new();
     Profile_set_name(p, "Attar");
-    Profile_set_tradition(p, "Mystic");
+    Profile_set_tradition(p, "Sufi");
     Profile_set_desc(p, "Farid ud-Din Attar — the perfumer-poet of Nishapur whose Conference of the Birds maps the soul's seven valleys to annihilation in the divine, and whose Memorial of the Saints preserved the lives of the early Sufis");
     Profile_set_creativity(p, 0.95);
     Profile_set_pedagogy(p, 0.85);
@@ -1642,7 +1684,7 @@ fn incarnate_mystic_attar() {
 fn incarnate_mystic_al_ghazali() {
     var p = profile_new();
     Profile_set_name(p, "Al-Ghazali");
-    Profile_set_tradition(p, "Mystic");
+    Profile_set_tradition(p, "Sufi");
     Profile_set_desc(p, "Abu Hamid al-Ghazali — the Proof of Islam, who at the height of his academic fame suffered a crisis of certainty, abandoned his professorship in Baghdad, and wandered as a Sufi for eleven years before writing the Revival of the Religious Sciences");
     Profile_set_precision(p, 0.92);
     Profile_set_pedagogy(p, 0.9);

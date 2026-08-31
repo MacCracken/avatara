@@ -328,6 +328,18 @@ fn slavic_marzanna() {
     return p;
 }
 
+# -- Jarilo --------------------------------------------------------------
+# CONTESTED, marked like Lada. There is no medieval attestation of a Slavic
+# god named Jarilo. The name enters the record through 19th-century South
+# Slavic and Russian spring-festival material -- the Jarilo effigy carried out
+# and buried, the "Jarilo's funeral" rites -- which Romantic-era folklorists
+# read back into a pre-Christian pantheon. The one genuinely medieval anchor is
+# a different name: Gerovit / Jarovit, whose temple at Wolgast is described in
+# the twelfth-century Life of Otto of Bamberg, and whose identification with
+# the festival figure is an inference rather than a record. Ivanov and Toporov
+# made him the dying-and-returning son of the "basic myth" this module no
+# longer asserts (see the header). Carried here as the spring archetype the
+# festivals personify, not as an attested deity.
 fn slavic_jarilo() {
     var p = profile_new();
     Profile_set_name(p, "Jarilo");
@@ -424,6 +436,17 @@ fn slavic_lada() {
     return p;
 }
 
+# -- Rod -----------------------------------------------------------------
+# CONTESTED, and the most heavily criticised of the three. Rod and the
+# rozhanitsy appear almost entirely in anti-pagan sermon literature -- the
+# Slovo ob idolakh and its kin -- which denounces offerings of bread and cheese
+# to them. Rybakov built from that a supreme creator-god presiding over the
+# whole pantheon; Klejn and Zubov argue the sermons are calquing Byzantine
+# Greek astrological vocabulary, that rodu i rozhanitsam translates a formula
+# about birth-fate rather than naming a high god, and that the supreme-creator
+# reading is Rybakov's construction. The ordinary Slavic sense of rod is
+# "kin, clan, birth". Carried here as the kinship-and-generation archetype the
+# word itself carries, not as an attested creator deity.
 fn slavic_rod() {
     var p = profile_new();
     Profile_set_name(p, "Rod");
