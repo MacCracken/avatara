@@ -163,7 +163,8 @@ fn main() {
     var found_aztec = 0;
     var found_jain = 0;
     var found_sikh = 0;
-    var found_polynesian = 0;
+    var found_hawaiian = 0;
+    var found_maori = 0;
     var found_slavic = 0;
     for (var i = 0; i < vec_len(trads); i = i + 1) {
         var t = vec_get(trads, i);
@@ -174,7 +175,8 @@ fn main() {
         if (streq(t, "Aztec") == 1) { found_aztec = 1; }
         if (streq(t, "Jain") == 1) { found_jain = 1; }
         if (streq(t, "Sikh") == 1) { found_sikh = 1; }
-        if (streq(t, "Polynesian") == 1) { found_polynesian = 1; }
+        if (streq(t, "Hawaiian") == 1) { found_hawaiian = 1; }
+        if (streq(t, "Māori") == 1) { found_maori = 1; }
         if (streq(t, "Slavic") == 1) { found_slavic = 1; }
     }
     assert_eq(found_kabbalah, 1, "has Kabbalah");
@@ -184,7 +186,8 @@ fn main() {
     assert_eq(found_aztec, 1, "has Aztec");
     assert_eq(found_jain, 1, "has Jain");
     assert_eq(found_sikh, 1, "has Sikh");
-    assert_eq(found_polynesian, 1, "has Polynesian");
+    assert_eq(found_hawaiian, 1, "has Hawaiian");
+    assert_eq(found_maori, 1, "has Māori");
     assert_eq(found_slavic, 1, "has Slavic");
 
     # ================================================================
@@ -226,7 +229,7 @@ fn main() {
     # ================================================================
     # History: mapped traditions count
     # ================================================================
-    assert_eq(mapping_count(), 37, "37 history mappings");
+    assert_eq(mapping_count(), 39, "39 history mappings");
     # INVARIANT (v2.14.0): history and registry agree in BOTH directions. Before
     # this release five mappings named traditions no profile carried ("Incarnate
     # Hindu" and four others -- the same orphan class as the "Incarnate
@@ -375,8 +378,8 @@ fn main() {
     var leap = lookup_in("Solar", "Bissextus");
     assert_eq(is_ok(leap), 1, "Bissextus (the leap quarter) exists");
     assert_eq(prof_domain(result_unwrap(leap)), DOMAIN_ORDER, "Bissextus -> ORDER");
-    # 366 (solar) + 8 (Canaanite/Etruscan) + 22 (Tarot) + 64 (I Ching) + 2 (Celtic) + 42 (world traditions incl. the seven teachings) = 504
-    assert_eq(profile_count(), 504, "504 archetypes");
+    # 366 (solar) + 8 (Canaanite/Etruscan) + 22 (Tarot) + 64 (I Ching) + 2 (Celtic) + 42 (world traditions incl. the seven teachings) = 503 (Morana merged into Marzanna at 2.14.5)
+    assert_eq(profile_count(), 503, "503 archetypes");
 
     # ================================================================
     # Canaanite & Etruscan (2.7.0 micro-traditions)
@@ -591,6 +594,51 @@ fn main() {
     # The continent is a place these peoples share, not a tradition any of them
     # belongs to: the civilization field is what gathers them, so the split
     # costs nothing in discoverability.
+    # ---- Polynesia: one mapping per people, not one ocean-wide bucket ----
+    assert_eq(vec_len(by_tradition("Hawaiian")), 7, "Hawaiian tradition has 7 akua");
+    assert_eq(vec_len(by_tradition("Māori")), 5, "Māori tradition has 5 atua");
+    assert_eq(vec_len(by_tradition("Polynesian")), 0, "no ocean-wide Polynesian bucket remains");
+    assert_eq(polynesian_count(), 12, "the split moved nothing in or out of the module");
+    var polycivs = traditions_for_civilization("Polynesia");
+    assert_eq(vec_len(polycivs), 2, "Polynesia gathers 2 peoples");
+    var saw_haw = 0; var saw_mao = 0;
+    for (var pi = 0; pi < vec_len(polycivs); pi = pi + 1) {
+        var pn = vec_get(polycivs, pi);
+        if (streq(pn, "Hawaiian") == 1) { saw_haw = 1; }
+        if (streq(pn, "Māori") == 1) { saw_mao = 1; }
+    }
+    assert_eq(saw_haw + saw_mao, 2, "both peoples reachable by civilization");
+    var hawctx = context_for_tradition("Hawaiian");
+    var maoctx = context_for_tradition("Māori");
+    assert_eq(hawctx != 0, 1, "Hawaiian resolves a history context");
+    assert_eq(maoctx != 0, 1, "Māori resolves a history context");
+    assert_eq(ctx_end(hawctx), LIVING, "Hawaiian is a living tradition");
+    assert_eq(ctx_end(maoctx), LIVING, "Māori is a living tradition");
+    assert_eq(ctx_start(hawctx) != ctx_start(maoctx), 1, "peoples carry distinct dates");
+    assert_eq(streq(prof_tradition(result_unwrap(lookup("Kane"))), "Hawaiian"), 1, "Kane is Hawaiian");
+    assert_eq(streq(prof_tradition(result_unwrap(lookup("Pele"))), "Hawaiian"), 1, "Pele is Hawaiian");
+    assert_eq(streq(prof_tradition(result_unwrap(lookup("Tangaroa"))), "Māori"), 1, "Tangaroa is Māori");
+    assert_eq(streq(prof_tradition(result_unwrap(lookup("Papatuanuku"))), "Māori"), 1, "Papatuanuku is Māori");
+    # THE ONE THAT MATTERS: a cognate pair may not sit inside one tradition
+    # string. Kane/Tane, Ku/Tu, Lono/Rongo and Kanaloa/Tangaroa are one
+    # inherited figure as two peoples tell him -- and only the split lets
+    # cross_tradition_match() say so. This fails if anyone re-merges the bucket.
+    assert_eq(streq(prof_tradition(result_unwrap(lookup("Kane"))), prof_tradition(result_unwrap(lookup("Tane")))), 0, "Kane/Tane are a cognate pair, not one tradition");
+    assert_eq(streq(prof_tradition(result_unwrap(lookup("Ku"))), prof_tradition(result_unwrap(lookup("Tu")))), 0, "Ku/Tu are a cognate pair, not one tradition");
+    assert_eq(streq(prof_tradition(result_unwrap(lookup("Lono"))), prof_tradition(result_unwrap(lookup("Rongo")))), 0, "Lono/Rongo are a cognate pair, not one tradition");
+    assert_eq(streq(prof_tradition(result_unwrap(lookup("Kanaloa"))), prof_tradition(result_unwrap(lookup("Tangaroa")))), 0, "Kanaloa/Tangaroa are a cognate pair, not one tradition");
+
+    # ---- Sami is a people; "Finnish" is a nation-state ----
+    assert_eq(vec_len(by_tradition("Sami")), 1, "Sami tradition has 1 (Madderakka)");
+    assert_eq(vec_len(by_tradition("Finnish")), 13, "Finnish keeps its 13 Kalevala figures");
+    assert_eq(streq(prof_tradition(result_unwrap(lookup("Madderakka"))), "Sami"), 1, "Madderakka is Sami, not Finnish");
+    assert_eq(context_for_tradition("Sami") != 0, 1, "Sami resolves a history context");
+
+    # ---- Marzanna and Morana were one goddess carried twice ----
+    assert_eq(slavic_count(), 11, "Slavic pantheon is 11 after the merge");
+    assert_eq(is_err_result(lookup("Morana")), 1, "Morana no longer resolves (merged into Marzanna)");
+    assert_eq(is_ok(lookup("Marzanna")), 1, "Marzanna carries the merged figure");
+
     var auscivs = traditions_for_civilization("Aboriginal Australia");
     assert_eq(vec_len(auscivs), 3, "Aboriginal Australia gathers 3 peoples");
     var saw_kun = 0; var saw_kul = 0; var saw_gun = 0;
@@ -690,7 +738,7 @@ fn main() {
     assert_eq(centre_count(), 3, "3 centres");
     assert_eq(jungian_count(), 5, "5 Jungian roles");
     # overlays are NOT archetypes: they add nothing to the registry
-    assert_eq(profile_count(), 504, "overlays do not change the archetype count");
+    assert_eq(profile_count(), 503, "overlays do not change the archetype count");
     # numbering and naming
     assert_eq(enneagram_number(ENN_REFORMER), 1, "index 0 -> type 1");
     assert_eq(enneagram_number(ENN_PEACEMAKER), 9, "index 8 -> type 9");

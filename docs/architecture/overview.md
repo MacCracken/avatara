@@ -11,8 +11,8 @@
                     +----------------------------------------------+
                     |                                              |
                     |  +----------------------------------------+  |
-                    |  |   32 tradition modules -> 504           |  |
-                    |  |         archetypes, 37 traditions       |  |
+                    |  |   32 tradition modules -> 503           |  |
+                    |  |         archetypes, 39 traditions       |  |
                     |  |  kabbalah  angelic  hindu  olympian     |  |
                     |  |  norse  egyptian  buddhist  celtic      |  |
                     |  |  mesopotamian  shinto  aztec  maya      |  |

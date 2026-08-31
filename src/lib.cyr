@@ -6,7 +6,7 @@
 # mapping across traditions. All traditions map to the same
 # ArchetypeProfile output — composable across cultures.
 #
-# 504 archetypes across 37 traditions.
+# 503 archetypes across 39 traditions.
 #
 # Modules:
 #   types      - TraitWeights, ModuleEmphasis, ArchetypeProfile, enums
@@ -27,11 +27,11 @@
 #   yoruba     - 14 Yoruba/Ifa Orishas
 #   zoroastrian - 7 Amesha Spentas, 7 Zoroastrian beings
 #   taoist     - 8 Immortals, 8 celestial deities
-#   polynesian - 12 Polynesian/Hawaiian deities
-#   slavic     - 12 pre-Christian Slavic deities
+#   polynesian - 7 Hawaiian akua + 5 Maori atua (two tradition strings)
+#   slavic     - 11 pre-Christian Slavic deities
 #   jain       - 24 Tirthankaras
 #   sikh       - 10 Sikh Gurus
-#   finnish    - 14 Kalevala figures & Sami spirits
+#   finnish    - 13 Kalevala figures + 1 Sami goddess (tradition "Sami")
 #   vodou      - 14 Vodou Lwa (Rada, Petwo, Ghede)
 #   solar      - 4 intercalary archetypes (the days upon the year)
 #   canaanite  - 4 Canaanite/Ugaritic deities
@@ -45,7 +45,7 @@
 #   anishinaabe - 5 manidoog of the Great Lakes
 #   aboriginal - 4 figures of three Aboriginal Australian peoples
 #   compose    - weighted blending of profiles
-#   history    - 37 tradition-to-history mappings (civilization, era, range)
+#   history    - 39 tradition-to-history mappings (civilization, era, range)
 #   registry   - lookup, enumeration, query filters
 #   affinity   - affinity scoring, similarity, cross-tradition matching
 #   shadow     - shadow aspect: involutive inversion of a profile

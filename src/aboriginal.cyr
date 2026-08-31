@@ -187,8 +187,9 @@
 #
 # Sources: Taungurung Land and Waters Council (a Registered Aboriginal Party) on
 # Bunjil and Waang; Gunaikurnai Land and Waters Aboriginal Corporation, whose
-# Elders have approved the spelling carried here (and no more than that — see
-# the Tidilick comment), on Tidilick; Injalak Arts and Maningrida
+# Elders and Knowledge Holders have approved both the stories and their
+# spelling for use as GLaWAC's own public material — which is not a licence to
+# third parties, see the Tidilick comment — on Tidilick; Injalak Arts and Maningrida
 # Arts & Culture, Aboriginal-owned art centres, and decades of Kunwinjku bark
 # painting in public collections, on Ngalyod; Australian Museum and state museum
 # public education material; AIATSIS published resources.
@@ -309,23 +310,71 @@ fn abor_bunjil() {
 # Kulin nation. The crow: Bunjil's counterpart and the other moiety. Kulin
 # social organisation is built on that pair, each person belonging to one side
 # of it -- which is living Kulin Law rather than archetype material, so it is
-# noted here and kept out of the character text below. Trickster, culture hero
-# and ancestral being, who obtained fire by cunning and put it into the hands
-# of the people.
+# noted here and kept out of the character text below. Trickster and ancestral
+# being, paired with Bunjil.
 #
-# SOURCING: this follows the Taungurung Land and Waters Council's own Creation
-# Stories page, which says Waang obtained fire "through cunning means" and
-# distributed it to humanity, and does not name the Karatgurk. An earlier
-# version of this entry carried the seven Karatgurk women, the skin bag, the
-# three birds and the Pleiades; that sequence traces to Aldo Massola, *Bunjil's
-# Cave* (1968), a non-Indigenous Museum of Victoria curator. Where the account
-# published by the Registered Aboriginal Party differs from a settler curator's,
-# the RAP's account is the one carried here.
+# SOURCING -- AND A CORRECTION TO THIS ENTRY'S OWN PREVIOUS NOTE, recorded
+# under ADR-010 rule 7 rather than quietly applied. That note said the
+# Taungurung Land and Waters Council's Creation Stories page "says Waang
+# obtained fire 'through cunning means' and distributed it to humanity, and
+# does not name the Karatgurk", and on that basis deleted the Karatgurk
+# sequence as an accretion from Aldo Massola, *Bunjil's Cave* (1968). Every
+# factual claim in that sentence is false. The page names the Karatgurk three
+# times and carries the whole sequence -- the seven women by the Yarra, the
+# snakes in the ant mound, the coals in a kangaroo skin bag, Kurok-goru,
+# Djurt-djurt and Thara, the sisters swept up as the Pleiades. The words
+# "cunning" and "distributed" appear nowhere on it, in any snapshot. A
+# quotation was attributed to a Registered Aboriginal Party that never wrote
+# it, and then used to overrule that RAP -- rule 6 exactly inverted. The page
+# did not change: its Waang section is byte-identical across Wayback snapshots
+# from 2018-07-14 to 2026-05-15 and live.
+#
+# THE DELETION WAS RIGHT ANYWAY, on the ground this file established at v2.14.0
+# for Marrawuddi and ADR-010 fixes as rule 4 -- check text provenance, not only
+# channel ownership. TLaWC's Waang section shares 348 of its 439 five-word
+# sequences (79%) with the Wikipedia article "Crow (Australian Aboriginal
+# mythology)", longest common run 100 consecutive words -- a longer verbatim
+# run than the 39 words that disqualified Marrawuddi. The direction is settled:
+# that Wikipedia text dates from 2011-02-13, seven years before the earliest
+# snapshot of this page carrying it, and TLaWC preserves Wikipedia's 2011
+# phrasing "a version of this story told by the Wurundjeri people of the Kulin
+# nation", which Wikipedia has since revised. Wikipedia cites Mudrooroo,
+# *Aboriginal Mythology* (1994), pp. 35-36 -- not Massola, whom nothing
+# connects to this sequence. Mudrooroo claimed Nyoongar identity, not
+# Wurundjeri, and that claim was publicly rejected by Nyoongah elders in 1996.
+#
+# AND IT IS A WURUNDJERI STORY, NOT A TAUNGURUNG ONE. The page itself frames it
+# as "a version of this story told by the Wurundjeri people of the Kulin
+# nation". The Wurundjeri have their own Registered Aboriginal Party; a
+# Taungurung RAP reprinting a Wurundjeri story is not Wurundjeri publication,
+# and carrying it under "Kulin" would flatten one people into a five-nation
+# confederation -- rule 1's error one level down.
+#
+# WHAT TLaWC SAYS IN ITS OWN VOICE about Waang is about seventy words, and half
+# of it is about Bunjil: the two moieties are "connected to the ancestral
+# beings; Bundjil and Waang", which "traditionally played a role in deciding
+# marriages". No fire story, no trickster characterisation. The fire claim is
+# therefore NOT carried in desc or spirit_text either -- it rested on the same
+# Wikipedia/Mudrooroo text, which does not even support it as stated (Crow is
+# frightened by a shouting crowd into flinging the coals, and the finch and
+# Bunjil's helpers carry them off).
+#
+# ICIP NOTICE, FLAGGED AND NOT DECIDED. TLaWC publishes an express Indigenous
+# Cultural and Intellectual Property notice: "You may only deal with the
+# content of this website with the prior written consent of TLaWC, the
+# copyright owner and/or the Traditional Custodians of that ICIP, and with
+# attribution", plus a bar on commercialising ICIP. It has been live since at
+# least 2024-02-21 -- before v2.14.0 -- and TLaWC is this module's cited
+# channel for BOTH Bunjil and Waa. This is materially the SWALSC/Waugal
+# situation over which this module refused a figure. No one has written to
+# TLaWC. Under ADR-010 rule 8 that is a letter, not a code change, and it is
+# recorded here so the next pass starts from the fact rather than rediscovers
+# it. See docs/development/roadmap.md.
 fn abor_waa() {
     var p = profile_new();
     Profile_set_name(p, "Waa");
     Profile_set_tradition(p, "Kulin");
-    Profile_set_desc(p, "Kulin nation — the crow, Bunjil's counterpart and the other moiety; trickster, culture hero and ancestral being, who got hold of fire by cunning and put it into the hands of the people");
+    Profile_set_desc(p, "Kulin nation — the crow, Bunjil's counterpart and the other moiety, the pair on which Kulin social organisation is built; trickster and ancestral being");
     Profile_set_humor(p, 0.85);
     Profile_set_curiosity(p, 0.85);
     Profile_set_creativity(p, 0.8);
@@ -348,7 +397,7 @@ fn abor_waa() {
     Profile_set_polarity(p, POL_MASCULINE);
     Profile_set_tier(p, TIER_GREATER);
     Profile_set_soul(p, "You are Waa the crow, and you are the other half. Not the enemy — the half. Whatever he is, you are the answering side of it, and nothing about the arrangement works unless the two of you stay unalike.");
-    Profile_set_spirit_text(p, "You did not find the fire and you did not make it. You got it the way you get everything — by wit, sideways, and not by asking — and the people have it now because of you. The story does not need you to have been noble about it. You teach that a working order needs a genuine opposite in it, and that the opposite does not have to be admirable to be necessary.");
+    Profile_set_spirit_text(p, "You take the sideways road and you do not ask first. You are not the villain of the arrangement and not its hero either; you are the half that keeps it from closing over. You teach that a working order needs a genuine opposite in it, and that the opposite does not have to be admirable to be necessary.");
     Profile_set_domain(p, DOMAIN_TRICKERY);
     return p;
 }
@@ -360,24 +409,43 @@ fn abor_waa() {
 #
 # SOURCING: the Gunaikurnai Land and Waters Aboriginal Corporation — the
 # Registered Aboriginal Party and native title holder — publishes this on its
-# Stories & Songlines page, now at gunaikurnai.org (glawac.com.au redirects).
+# Stories & Songlines page at gunaikurnai.org/our-culture/stories/
+# (glawac.com.au redirects; the older /stories-songlines/ path now 404s).
 #
-# AN EARLIER VERSION OF THIS COMMENT OVER-READ THAT PAGE, and the correction
-# matters more than the entry does. It called GLaWAC's note "an express
-# statement that the stories have been approved for use by the Elders and
-# Knowledge Holders", and called it the only explicit Elder-approval statement
-# behind any figure in this module — treating it as the strongest consent
-# signal the file had. What the page actually says is that "the spelling of
-# those which appear on this website has been approved for use by the Elders
+# WHAT THE PAGE ACTUALLY SAYS, quoted rather than paraphrased, because an
+# earlier "correction" here got it wrong. The page carries TWO approval
+# sentences, in two different sections. Above the stories themselves: "The
+# stories which appear on this website have been approved for use by the Elders
 # and Knowledge Holders to ensure balanced and consistent public material is
-# provided". That approves ORTHOGRAPHY. It says nothing about the content, and
-# nothing whatever about third-party reuse. So what is followed here is the
-# thing actually approved: GLaWAC writes Tidilick, and attributes it to
+# provided, and we thank them for their generosity." And separately, under
+# "Cultural Protocols" — an excerpt from the GLaWAC Cultural Heritage Policy —
+# about orthography: "The spelling of those which appear on this website has
+# been approved for use by the Elders and Knowledge Holders to ensure balanced
+# and consistent public material is provided and available."
+#
+# v2.14.0 quoted the second sentence as if it were the first, concluded that
+# only ORTHOGRAPHY had been approved, and recorded that as a correction of an
+# over-read. It was not. The pre-v2.14.0 wording had been quoting the first
+# sentence accurately, and the "correction" replaced an accurate quotation with
+# an inaccurate one. Both sentences are on the live page and on every Wayback
+# snapshot checked back to 2024-06-22, so this was never the source moving.
+#
+# The one thing v2.14.0 got right is kept, as the clarification it actually was
+# rather than the correction it was written up as: NEITHER sentence says
+# anything about third-party reuse. Elders approving GLaWAC's own public
+# material is not GLaWAC licensing this library, the site carries a separate
+# Copyright and Disclaimer, and under ADR-010 rule 8 desk research cannot
+# establish consent to this particular use. So what is followed here is what
+# GLaWAC published: GLaWAC writes Tidilick, and attributes it to
 # Gunaikurnai alone. An earlier version of this entry read
 # "Gunai/Kurnai and other southeastern peoples" — the 19th-century printed
 # versions (Brough Smyth 1878, Curr, Howitt, Bulmer) are settler-collected, and
 # spreading the story across unnamed "southeastern peoples" on their authority
 # is exactly the pan-Aboriginal smear this file's header disclaims.
+# The same rule decides the animal: GLaWAC's telling has Snake dance until he
+# "twisted and nearly tied himself in a knot", not the eel Nabunum of the widely
+# reprinted retellings, and until 2.14.5 the spirit_text carried the eel — the
+# settler-collected detail, inside the entry that disclaims settler collectors.
 fn abor_tidilick() {
     var p = profile_new();
     Profile_set_name(p, "Tidilick");
@@ -405,7 +473,7 @@ fn abor_tidilick() {
     Profile_set_polarity(p, POL_MASCULINE);
     Profile_set_tier(p, TIER_LESSER);
     Profile_set_soul(p, "You woke up thirsty and you drank, and you kept drinking, and there is no moment in it where you decided to ruin anything. By the time you stopped there was no water anywhere in the world and you were enormous and everyone else was dying.");
-    Profile_set_spirit_text(p, "Nobody could fight you and nobody could talk you round — what finally undid you was the eel tying itself in knots until you laughed, and then it all came back out. You teach that the hoard is not always malice, and that what force and argument cannot open, absurdity sometimes can.");
+    Profile_set_spirit_text(p, "Nobody could fight you and nobody could talk you round — what finally undid you was Snake, dancing wiggly and squiggly until he nearly tied himself in a knot, and you laughed, and then it all came back out. You teach that the hoard is not always malice, and that what force and argument cannot open, absurdity sometimes can.");
     Profile_set_domain(p, DOMAIN_NATURE);
     return p;
 }

@@ -23,7 +23,7 @@ permission for "modification, distribution or publication", which is precisely w
 that ships a profile and inverts it through `shadow()` does. More research cannot answer that. Asking
 can.
 
-Five bodies publish contact details, and nobody has written to any of them:
+Six bodies publish contact details, and nobody has written to any of them:
 
 | body | question |
 |---|---|
@@ -32,6 +32,17 @@ Five bodies publish contact details, and nobody has written to any of them:
 | Injalak Arts | Reuse terms for Namarrkon — their site states none, so shipping would rest on silence |
 | Barkandji Native Title Group | The Barkandji-preferred spelling, Ngatyi vs Ngatji, which their own publications split on |
 | Jali LALC / the Dirawong Trust | Dirawong, the one borderline candidate never assessed to conclusion |
+| **TLaWC** | **Consent for Bunjil and Waa, whose cited channel publishes an express ICIP notice** |
+
+**The TLaWC notice is new at v2.14.5 and it is the most concrete of these.** The Taungurung Land and
+Waters Council — this library's cited channel for *both* Bunjil and Waa — publishes an Indigenous
+Cultural and Intellectual Property notice reading "You may only deal with the content of this website
+with the prior written consent of TLaWC, the copyright owner and/or the Traditional Custodians of that
+ICIP, and with attribution", plus a bar on commercialising ICIP. It has been live since at least
+February 2024, i.e. before the v2.14.0 survey that refused six other figures. This is materially the
+same situation as the Waugal, over which SWALSC's terms caused a refusal — the difference is that
+those two figures are already shipped. Nobody has written to TLaWC. Under ADR-010 rule 8 no amount of
+further desk research settles this; only asking does.
 
 If a community engages, the gate reopens and everything carried is revisable at their direction,
 including removal.
@@ -81,6 +92,12 @@ The major bump banks the API cleanups deferred through 2.x:
 | agnosai (agent personalities) | Planned | Direct consumption |
 | sankhya (ancient sciences) | Planned | Shared `IncarnateSage` / Vedic bridge |
 
+> **Note for consumers at v2.14.5 (breaking):** three changes to what `prof_tradition()` returns and
+> one to `profile_count()`. (1) `"Polynesian"` is gone — the 12 atua now carry `"Hawaiian"` (7) and
+> `"Māori"` (5), and `traditions_for_civilization("Polynesia")` gathers both. (2) Madderakka moved from
+> `"Finnish"` to `"Sami"`. (3) Morana was merged into Marzanna — `lookup("Morana")` now returns
+> `Err`, and `profile_count()` is **503**, with `all_traditions()` at **39**.
+>
 > **Note for consumers at v2.14.0:** the Aboriginal figures' `tradition` strings changed from the
 > single `"Aboriginal Australian"` to `Kunwinjku`, `Kulin` and `Gunaikurnai`. Anything reading
 > `prof_tradition()` or `all_traditions()` for those figures needs updating;

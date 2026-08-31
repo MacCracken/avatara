@@ -7,6 +7,125 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.14.5] — 2026-08-31
+
+Third and last of the sweep-and-repair releases, and **the breaking one**. Named-nation representation
+and cultural protocol, under ADR-010. `profile_count()` **504 -> 503**, `all_traditions()` **37 -> 39**,
+and three sets of `tradition` strings change. Suite 311 -> 338.
+
+### ⚠ Breaking — read this if you consume `prof_tradition()`, `by_tradition()` or `profile_count()`
+
+- **`"Polynesian"` no longer exists.** The 12 atua now carry `"Hawaiian"` (Kāne, Kū, Lono, Kanaloa,
+  Pele, Māui, Hina) and `"Māori"` (Tangaroa, Tāne, Tūmatauenga, Rongo, Papatūānuku).
+  `by_tradition("Polynesian")` returns empty; `traditions_for_civilization("Polynesia")` gathers both.
+- **Madderakka moved from `"Finnish"` to `"Sami"`.** `by_tradition("Finnish")` is 14 -> 13.
+- **`lookup("Morana")` now returns `Err`.** Morana was merged into Marzanna.
+- The module names, `polynesian_*`/`finnish_*` functions and file layout are **unchanged** — module
+  identity is not a tradition claim, the same decoupling v2.12.0 established for `incarnate`.
+
+### Changed
+
+- **The Pacific is a place these peoples share, not a tradition either belongs to.** One ocean-wide
+  string stood over the akua of Hawaiʻi and the atua of Aotearoa — the error ADR-010 forbids and
+  v2.14.0 fixed for Aboriginal Australia. The ground here is subtly different and worth stating,
+  because the pantheon genuinely *is* cognate: Pukui and Elbert gloss Kāne as PCP *Taane*, Kū as PEP
+  *Tuu*, Lono as PPN *rongo*, Kanaloa as PPN *Tangaloa*. A profile does not instantiate a
+  proto-language, though — it instantiates **one people's telling**. Kāne/Tāne, Kū/Tū, Lono/Rongo and
+  Kanaloa/Tangaroa are one inherited figure as two peoples tell him, and **only the split lets
+  `cross_tradition_match()` say so**: under one string the library could not answer "who is the Māori
+  Kāne?" because both sat inside the same tradition. A test now pins exactly that — a cognate pair may
+  not share a tradition string — which is the invariant that fails if anyone re-merges the bucket.
+  Attribution follows Pukui & Elbert and Kahoʻiwai, a University of Hawaiʻi Libraries project published
+  under an explicit Hawaiian knowledge-sovereignty mandate. Each people is dated to its own settlement:
+  Hawaiʻi 1200, Aotearoa 1250, both inside the 1190–1290 East Polynesian pulse (Wilmshurst et al.,
+  PNAS 2011; PNAS 2008 for the Pacific-rat dating). `"Hawaiian Islands"` is the primary civilization,
+  not `"Hawaiian Kingdom"` — the Kingdom (1795-1893) postdates the tradition by six centuries, which is
+  precisely the error 2.14.3 fixed for Celtic-under-Kingdom-of-France.
+- **`"Finnish"` is a nation-state; Madderakka is Sámi.** The Sámi are a distinct Indigenous people of
+  Sápmi across four states, with their own parliaments in three of them, and Finland has run a Truth
+  and Reconciliation Commission concerning the Sámi People since 2021. Filing her under the state label
+  asserted something false, and `by_tradition("Finnish")` returned her. She keeps her name and her
+  module — a new `"Sami"` history mapping carries Sápmi and Fennoscandia. **The Finnish mapping itself
+  was filed under the civilization `"Viking/Norse"`**, placing a Uralic tradition under its Germanic
+  neighbours; corrected to Finland/Karelia, same class as the Celtic fix at 2.14.3.
+- **Joukahainen's persona no longer calls itself "the young Lapp".** Lönnrot's Rune 3 has *laiha poika
+  lappalainen* and the older English translations render it "Lapp", but this is a `soul` field spoken in
+  the first person, and "Lapp" is an exonym the Sámi reject. It is also not a reliable ethnic
+  designation in Finnish folklore — used broadly of nomads and remote-dwellers, with one etymology
+  tracing it to *lappea*, "periphery". Now "the young northerner", with the reasoning in the header so
+  it is not reverted against an older translation.
+- **Marzanna and Morana were one goddess carried twice.** Marzanna (Pol.) is Morana (Cz., Sln., Serb.,
+  Cro.), Morena (Slk., Mac.), Marena (Rus.), Mara (Ukr.), Mora (Bulg.) — all from PIE \*mar-/\*mor-
+  "death", and all one figure in one rite: *topienie Marzanny* / *vynášení smrti* / *vynášanie Moreny*.
+  The duplicate read her as goddess of "night and dreams", which is the separate \*mara
+  nightmare-demon, an etymological cousin rather than an attribute of her cult; **none of that text was
+  folded in**. Marzanna's `desc` now names the other forms so the merged figure stays findable in prose.
+
+### Fixed — cultural protocol
+
+- **A v2.14.0 "correction" was itself the error, and it is the finding worth recording.** v2.14.0
+  reported that the GLaWAC Elder-approval statement had been over-read — that the page approved only
+  **orthography**. The page carries **two** approval sentences in two sections: *"The stories which
+  appear on this website have been approved for use by the Elders and Knowledge Holders…"* above the
+  stories, and *"The spelling of those which appear on this website has been approved for use…"* under
+  Cultural Protocols. v2.14.0 quoted the second as if it were the first. **The wording it replaced had
+  been accurate**; the correction degraded it, and did so about a living community's published words on
+  its own Elders' consent. Both sentences appear on every Wayback snapshot back to 2024-06-22 — the
+  source did not move. The half that was right is kept, restated as the clarification it actually was:
+  neither sentence licenses third-party reuse. *A correction needs its own source check; a
+  plausible-looking correction is not self-verifying.*
+- **Tidilick's persona credited an eel.** GLaWAC's published telling names **Snake**, who "twisted and
+  nearly tied himself in a knot"; "eel" appears nowhere on the page, in any snapshot. The eel is Nabunum
+  of the widely reprinted settler-derived retellings — the exact line of transmission the entry's own
+  comment disclaims, thirty lines above the string. The cited URL was also dead; the page is at
+  `gunaikurnai.org/our-culture/stories/`.
+- **The Waa sourcing note described a page that has never existed.** It said the Taungurung Land and
+  Waters Council's Creation Stories page says Waang obtained fire "through cunning means" and "does not
+  name the Karatgurk", and on that basis deleted the Karatgurk sequence as an Aldo Massola accretion.
+  The page **names the Karatgurk three times** and carries the whole sequence; "cunning" and
+  "distributed" appear zero times. Across ten Wayback snapshots from 2018-07-14 to 2026-05-15 the Waang
+  section is byte-identical, so it was wrong when written. A quotation was attributed to a Registered
+  Aboriginal Party that never wrote it, and then used to overrule that RAP — **ADR-010 rule 6 exactly
+  inverted.**
+  **The deletion was nonetheless right, on rule 4** — text provenance, not channel ownership. TLaWC's
+  Waang section shares 348 of its 439 five-word sequences (79%) with Wikipedia's "Crow (Australian
+  Aboriginal mythology)", longest common run **100 consecutive words**, against the 39 that disqualified
+  Marrawuddi. Direction is settled: the Wikipedia text dates from 2011, seven years before the earliest
+  snapshot, and TLaWC preserves Wikipedia's since-revised 2011 phrasing. Its cited source is Mudrooroo
+  (1994), not Massola — and Mudrooroo claimed Nyoongar identity, publicly rejected by Nyoongah elders in
+  1996. It is also a **Wurundjeri** story, and the Wurundjeri have their own RAP.
+  **So the fire claim is withdrawn from `desc` and `spirit_text` too.** The previous edit deleted the
+  specific detail while keeping the general claim that rested on the same text — leaving the entry less
+  faithful, not more. What TLaWC says in its own voice is about seventy words, half of it about Bunjil,
+  with no fire story and no trickster characterisation.
+- **TLaWC publishes an express ICIP notice, and it is now on the record as blocked.** *"You may only
+  deal with the content of this website with the prior written consent of TLaWC…"*, live since at least
+  February 2024 — before the v2.14.0 survey that refused six figures on weaker grounds. TLaWC is this
+  library's cited channel for **both Bunjil and Waa**, which are already shipped. This is materially the
+  SWALSC/Waugal situation. Under ADR-010 rule 8 this is a letter someone writes, not a code change, so
+  it is recorded in the module header and added to the roadmap's blocked table rather than acted on.
+
+### Testing
+
+- **311 -> 338 assertions.** The Polynesian split gets the full named-nation battery mirroring the
+  Aboriginal one, plus the cognate-pair invariant; Sámi and the Marzanna merge get their own.
+- **Mutation-tested per the 2.14.3 standard.** Re-merging Tāne into `"Hawaiian"` fails 3 assertions
+  including the cognate-pair rule; dropping the Sámi mapping fails 3 including the both-directions walk;
+  giving both peoples the same settlement date fails "peoples carry distinct dates".
+
+### Known and deferred
+
+- **`"Mystic"` over 17 figures of three religions** (Christian 9, Sufi 6, Jewish 2) — verified as a real
+  problem but downgraded to **P2**, and it would be a fourth `tradition`-string break. Left for a
+  considered decision: the honest answer may be that it belongs as an **overlay**, not a tradition.
+- **Four living named individuals** — the Dalai Lama, the Karmapa (an office; both claimants living),
+  Amma and Mother Meera — are voiced in the first person, and `shadow()` manufactures an inverted
+  persona for each. **P2**, prose-only remedy available. v2.13.1 ruled that `shadow()` applies uniformly
+  with no per-figure opt-out, but that was decided about apical ancestors, not living people, so the
+  ruling does not obviously reach this case.
+- Rod and Jarilo still need the entry comments the 2.14.4 Slavic header promises.
+
+
 ## [2.14.4] — 2026-08-31
 
 Second of the sweep-and-repair releases: **content accuracy**, and strictly non-breaking. No name,
@@ -348,6 +467,9 @@ found while making the first change.
   i.e. this file's own false positive #1 cited as support. Replaced with the South West Aboriginal Land and
   Sea Council's own channel, whose lead form is **Waugal**.
 - **The GLaWAC Elder-approval statement was over-read**, and it was the strongest consent claim in the file.
+  **[Superseded at 2.14.5: this bullet is itself wrong.** The page carries two approval sentences in two
+  sections, and this correction quoted the spelling one from Cultural Protocols as if it were the
+  approval sentence above the stories. The wording it replaced had been accurate.**]**
   It was described as approving the stories "for use". It reads that *the spelling* has been approved, to
   ensure consistent public material — approval of **orthography**, silent on content and on third-party
   reuse. Corrected wherever it was relied on.

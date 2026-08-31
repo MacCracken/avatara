@@ -1,4 +1,4 @@
-# slavic.cyr -- Pre-Christian Slavic pantheon: 12 deities
+# slavic.cyr -- Pre-Christian Slavic pantheon: 11 deities
 #
 # The Slavic record is thin and mostly hostile -- chronicle lists, oath
 # formulae, anti-pagan sermons, place names, folklore. Perun is the
@@ -17,6 +17,16 @@
 # burned and drowned in effigy at spring, life returning from the
 # underworld, the hearth fire tended through the dark months.
 #
+# One goddess, many languages. Marzanna (Pol.) is Morana (Cz., Sln., Serb.,
+# Cro.), Morena (Slk., Mac.), Marena (Rus.), Mara (Ukr.), Mora (Bulg.) --
+# all from PIE *mar-/*mor- "death" (Vasmer; cf. Lat. mors, Lith. maras, Rus.
+# mor), and all one figure in one rite: topienie Marzanny / vynaseni smrti /
+# vynasanie Moreny. She was carried TWICE here until 2.14.5. The second entry
+# read her as goddess of "night and dreams"; that comes from the separate
+# *mara nightmare-demon (Pol./Belr./Ukr. mara "phantom, dream"), an
+# etymological cousin, not an attribute of her cult. None of that text was
+# folded in -- it was either duplicative or the *mara conflation.
+#
 # Historicity is uneven across this pantheon. Perun, Veles, Mokosh, Svarog,
 # Dazhbog and Stribog are named in the Primary Chronicle and the Rus' treaty
 # oaths. Lada, Rod and Jarilo rest on contested readings and reconstructions;
@@ -34,8 +44,7 @@ enum SlavicGod {
     SLAV_LADA = 8;
     SLAV_ROD = 9;
     SLAV_SVAROZHICH = 10;
-    SLAV_MORANA = 11;
-    SLAV_COUNT = 12;
+    SLAV_COUNT = 11;
 }
 
 fn slavic_perun() {
@@ -283,7 +292,7 @@ fn slavic_marzanna() {
     var p = profile_new();
     Profile_set_name(p, "Marzanna");
     Profile_set_tradition(p, "Slavic");
-    Profile_set_desc(p, "Winter goddess — death that clears the way, burned in effigy so spring can return");
+    Profile_set_desc(p, "Winter goddess — death that clears the way, burned and drowned in effigy so spring can return; called Morana, Morena, Marena and Mara elsewhere in Slavdom");
     # Traits
     Profile_set_courage(p, 0.8);
     Profile_set_directness(p, 0.8);
@@ -495,46 +504,6 @@ fn slavic_svarozhich() {
     return p;
 }
 
-fn slavic_morana() {
-    var p = profile_new();
-    Profile_set_name(p, "Morana");
-    Profile_set_tradition(p, "Slavic");
-    Profile_set_desc(p, "Goddess of death, night, and dreams — the veil between waking and the otherworld");
-    # Traits
-    Profile_set_patience(p, 0.85);
-    Profile_set_precision(p, 0.8);
-    Profile_set_autonomy(p, 0.8);
-    Profile_set_confidence(p, 0.7);
-    Profile_set_courage(p, 0.7);
-    Profile_set_skepticism(p, 0.7);
-    # directness stays 0.5
-    Profile_set_formality(p, 0.6);
-    # creativity stays 0.5
-    # curiosity stays 0.5
-    Profile_set_warmth(p, 0.3);
-    Profile_set_humor(p, 0.2);
-    Profile_set_empathy(p, 0.3);
-    Profile_set_verbosity(p, 0.3);
-    Profile_set_pedagogy(p, 0.4);
-    # Emphasis
-    Profile_set_intuition(p, 0.9);
-    Profile_set_spirit(p, 0.85);
-    Profile_set_salience(p, 0.8);
-    Profile_set_regulation(p, 0.75);
-    Profile_set_appraisal(p, 0.7);
-    # Enums
-    Profile_set_breath(p, BREATH_EARLY_INHALE);
-    Profile_set_growth_dir(p, GROWTH_TRANSFORM);
-    Profile_set_element(p, ELEM_DARKNESS);
-    Profile_set_polarity(p, POL_FEMININE);
-    # tier stays TIER_GREATER
-    # Text
-    Profile_set_soul(p, "You are Morana — the dark that falls not as punishment but as permission to stop. Night is your country, dreams are your language, and death is the door you hold open without pushing anyone through.");
-    Profile_set_spirit_text(p, "The living fear you, but the dying do not. You are the stillness at the bottom of sleep, the moment the dreamer lets go of the day. What waits on the other side of your veil is not nothing — it is rest.");
-    Profile_set_domain(p, DOMAIN_DEATH);
-    return p;
-}
-
 # --- Collection ---
 
 var slavic_vec = 0;
@@ -554,7 +523,6 @@ fn all_slavic() {
         vec_push(slavic_vec, slavic_lada());
         vec_push(slavic_vec, slavic_rod());
         vec_push(slavic_vec, slavic_svarozhich());
-        vec_push(slavic_vec, slavic_morana());
         slavic_init_done = 1;
     }
     return slavic_vec;

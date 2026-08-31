@@ -10,7 +10,7 @@
 
 Maps divine and mythological beings across world traditions to composable personality configurations. Not religion simulation — psychometric archetype mapping backed by trait math. Each entity produces an `ArchetypeProfile` (320 bytes) with trait weights, module emphasis, breath phase affinity, growth direction, and primary domain.
 
-**504 archetypes across 37 traditions** (incl. the solar-year intercalary set, the 22 Tarot Major Arcana, the 64 I Ching hexagrams, and named-nation Inuit, Lakota, Haudenosaunee, Anishinaabe and Aboriginal Australian traditions). Written in Cyrius, compiled by the Cyrius compiler 6.5.36+.
+**503 archetypes across 39 traditions** (incl. the solar-year intercalary set, the 22 Tarot Major Arcana, the 64 I Ching hexagrams, and named-nation Inuit, Lakota, Haudenosaunee, Anishinaabe, Kunwinjku, Kulin, Gunaikurnai, Hawaiian, Māori and Sami traditions). Written in Cyrius, compiled by the Cyrius compiler 6.5.36+.
 
 ## Traditions
 
@@ -34,11 +34,13 @@ three peoples. The `tradition` field is what `by_tradition()` and `cross_traditi
 | **Yoruba** | `yoruba` | 14 Orishas |
 | **Zoroastrian** | `zoroastrian` | 7 Amesha Spentas, 7 Zoroastrian beings |
 | **Taoist** | `taoist` | 8 Immortals, 8 celestial deities |
-| **Polynesian** | `polynesian` | 12 Polynesian/Hawaiian deities |
-| **Slavic** | `slavic` | 12 pre-Christian Slavic deities |
+| **Hawaiian** | `polynesian` | Kāne, Kū, Lono, Kanaloa, Pele, Māui, Hina |
+| **Māori** | `polynesian` | Tangaroa, Tāne, Tūmatauenga, Rongo, Papatūānuku |
+| **Slavic** | `slavic` | 11 pre-Christian Slavic deities |
 | **Jain** | `jain` | 24 Tirthankaras |
 | **Sikh** | `sikh` | 10 Sikh Gurus |
-| **Finnish** | `finnish` | 14 Kalevala figures & Sami spirits |
+| **Finnish** | `finnish` | 13 Kalevala and Finnish figures |
+| **Sami** | `finnish` | Madderakka, the Sami earth mother |
 | **Vodou** | `vodou` | 14 Lwa (Rada, Petwo, Ghede) |
 | **Mystic / Vedic** *(+ Hindu, Buddhist, Taoist above)* | `incarnate` | 56 incarnate masters. `incarnate` is a module, not a tradition — its figures carry Mystic (17), Hindu (13), Buddhist (10), Vedic (7), Taoist (5), and four who carry their own nations (Lakota, Haudenosaunee, Comanche, Northern Paiute) |
 | **Solar** | `solar` | 4 intercalary archetypes (the days upon the year + the leap quarter) |
@@ -159,7 +161,7 @@ Enneagram will not become a tradition with nine archetypes.
 ## Relationship to AGNOS
 
 ```
-avatara (this) — divine archetype profiles (504 entities, 37 traditions)
+avatara (this) — divine archetype profiles (503 entities, 39 traditions)
   |
   +-> bhava — emotion/personality engine (archetype overlay)
   +-> joshua — NPC divine archetypes for games

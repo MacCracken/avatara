@@ -1,11 +1,33 @@
-# finnish.cyr -- Kalevala figures & Finnish/Sami spirits
+# finnish.cyr -- 13 Kalevala and Finnish figures, and one Sami goddess
 #
 # The Finnish mythic landscape is a world of singing and smithing, where
 # creation happens through word and craft. The Kalevala, compiled by Elias
 # Lönnrot from oral tradition, preserves heroes who shape reality through
 # song. Alongside them stand the older gods and spirits of forest, water,
-# and underworld — and the Sami earth mother, Madderakka, rooted in the
-# shamanic traditions of the North.
+# and underworld.
+#
+# ONE FIGURE HERE IS NOT FINNISH. Madderakka (Mattarahkka) is Sami, and since
+# v2.14.5 she carries the tradition "Sami", not "Finnish". The Sami are a
+# distinct Indigenous people of Sapmi across Norway, Sweden, Finland and
+# Russia, with their own parliaments; Finland has run a Truth and
+# Reconciliation Commission concerning the Sami People since 2021. Filing her
+# under the state label asserted something false, and by_tradition("Finnish")
+# returned her. She stays in this module as an organisational grouping only --
+# the same decoupling of module from tradition string that v2.12.0 established
+# for the incarnate figures.
+#
+# ADR-010 rule 8, recorded rather than glossed: no Sami body has been
+# consulted about this use. Correcting the attribution is not consent, and the
+# Sami Parliaments and the Sami Council are the bodies that would settle it.
+#
+# ON JOUKAHAINEN'S EPITHET: Lonnrot's Rune 3 has "laiha poika lappalainen",
+# and older English translations render it "Lapp" (Crawford, Kirby). This
+# module says "northerner". Two reasons, and the second is the stronger:
+# "Lapp" is an exonym the Sami reject, and this field is spoken by the
+# persona in the first person; and "lappalainen" in Finnish folklore is not a
+# reliable ethnic designation, having been used broadly of nomads, hunters
+# and remote-dwellers, with one etymology tracing it to lappea, "periphery".
+# "Northerner" is the safer word and the better-supported reading.
 
 enum FinnishEntity {
     FINN_VAINAMOINEN = 0;
@@ -216,7 +238,7 @@ fn finnish_joukahainen() {
     Profile_set_polarity(p, POL_MASCULINE);
     Profile_set_tier(p, TIER_LESSER);
     # Text
-    Profile_set_soul(p, "You are Joukahainen — the young Lapp who boasted knowledge greater than the eternal sage and was sung knee-deep, waist-deep, throat-deep into the swamp for your presumption. Humiliation did not teach you humility; it taught you hatred.");
+    Profile_set_soul(p, "You are Joukahainen — the young northerner who boasted knowledge greater than the eternal sage and was sung knee-deep, waist-deep, throat-deep into the swamp for your presumption. Humiliation did not teach you humility; it taught you hatred.");
     Profile_set_spirit_text(p, "Youth's certainty is your engine and your prison. You pledged your sister Aino to buy your freedom, then tried to kill the old man with a crossbow. You are the ambition that overreaches, the pride that cannot learn from defeat — and in that, you are terribly, recognizably human.");
     Profile_set_domain(p, DOMAIN_WAR);
     return p;
@@ -535,7 +557,7 @@ fn finnish_loviatar() {
 fn finnish_madderakka() {
     var p = profile_new();
     Profile_set_name(p, "Madderakka");
-    Profile_set_tradition(p, "Finnish");
+    Profile_set_tradition(p, "Sami");
     Profile_set_desc(p, "Sami earth mother — Akka, the primordial woman, source of all life, grandmother of creation in the Sami shamanic tradition");
     # Traits
     Profile_set_warmth(p, 0.9);

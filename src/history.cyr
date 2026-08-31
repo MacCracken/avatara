@@ -5,7 +5,7 @@
 # Each tradition maps to one or more civilizations, eras, and a temporal
 # range — the period during which the tradition's theology was actively forming.
 #
-# 37 tradition-to-history mappings with scholarly historical notes.
+# 39 tradition-to-history mappings with scholarly historical notes.
 
 # --- TraditionMapping layout ---
 # Each mapping: tradition name, primary civ, civ names (vec), era names (vec),
@@ -69,7 +69,7 @@ fn svec3(a, b, c) { var v = vec_new(); vec_push(v, a); vec_push(v, b); vec_push(
 fn svec4(a, b, c, d) { var v = vec_new(); vec_push(v, a); vec_push(v, b); vec_push(v, c); vec_push(v, d); return v; }
 fn svec5(a, b, c, d, e) { var v = vec_new(); vec_push(v, a); vec_push(v, b); vec_push(v, c); vec_push(v, d); vec_push(v, e); return v; }
 
-# --- Build all 37 mappings ---
+# --- Build all 39 mappings ---
 
 var history_vec = 0;
 var history_init_done = 0;
@@ -153,10 +153,25 @@ fn all_mappings() {
         (0-600), LIVING,
         "From Laozi and Zhuangzi (6th-4th c. BCE) through Celestial Masters and alchemical traditions, deeply woven into Chinese civilization across every dynasty; living tradition"));
 
-        vec_push(history_vec, history_map_new("Polynesian", "Tonga Empire",
-        svec2("Tonga Empire", "Hawaiian Kingdom"), svec1("Middle Ages"),
-        (0-1000), LIVING,
-        "Austronesian spiritual tradition spanning the Pacific triangle -- Hawaii, Aotearoa, Rapa Nui -- with shared cosmology diverging through centuries of island isolation; oral tradition preserved by tohunga"));
+        # Polynesia is carried as one mapping PER PEOPLE, not one ocean-wide
+        # mapping. Unlike Aboriginal Australia the pantheon here IS genuinely
+        # cognate -- Pukui and Elbert gloss Kane as PCP Taane, Ku as PEP Tuu,
+        # Lono as PPN rongo, Kanaloa as PPN Tangaloa -- so the ground for the
+        # split is different: a profile instantiates one people's TELLING, not
+        # a proto-language. Both mappings list "Polynesia" among their
+        # civilizations, so traditions_for_civilization("Polynesia") gathers
+        # them and query_civilization("Polynesia") still returns all 12
+        # profiles. The ocean is a place these peoples share, not a tradition
+        # either belongs to.
+        vec_push(history_vec, history_map_new("Hawaiian", "Hawaiian Islands",
+        svec3("Polynesia", "Hawaiian Islands", "Hawaiian Kingdom"), svec2("Middle Ages", "Modern"),
+        1200, LIVING,
+        "Hawai'i was settled from central East Polynesia in the dispersal pulse Wilmshurst, Hunt, Lipo and Anderson date to A.D. 1190-1290 (PNAS 108:1815-1820, 2011). The akua are older than the archipelago and were carried to it -- Pukui and Elbert gloss Kane as PCP Taane, Ku as PEP Tuu, Lono as PPN rongo and Kanaloa as PPN Tangaloa. What is Hawaiian is the forms, the grouping of the four great gods, the 'aikapu order they were worshipped under and the Makahiki. The 'aikapu and the public heiau order were overthrown in 1819, but the tradition is living and Kanaka Maoli institutions publish it directly: the University of Hawai'i Libraries' Kaho'iwai project maintains an akua list under an explicit Hawaiian knowledge-sovereignty mandate. Kanaka Maoli and Kanaka 'Oiwi are the endonyms"));
+
+        vec_push(history_vec, history_map_new("Māori", "Aotearoa",
+        svec2("Polynesia", "Aotearoa"), svec2("Middle Ages", "Modern"),
+        1250, LIVING,
+        "Maori reached Aotearoa in the same East Polynesian pulse; radiocarbon dating of the commensal Pacific rat puts it on both main islands by about A.D. 1280 (Wilmshurst, Anderson, Higham and Worthy, PNAS 2008), and c. 1250-1300 is the standard figure. The atua carried here are the departmental children of Ranginui and Papatuanuku in the Aotearoa telling -- Tane separates his parents to make Te Ao Marama, and Tumatauenga's brothers become the foods of humankind -- as published by Te Ara, Manatu Taonga's encyclopedia, in entries signed by Rawiri Taonui, Te Ahukaramu Charles Royal and Basil Keane. A living tradition carried in whakapapa, karakia and marae practice. Maori here means Maori of Aotearoa: Cook Islands Maori are a distinct people and none of their atua are carried"));
 
         vec_push(history_vec, history_map_new("Slavic", "Byzantine Empire",
         svec1("Byzantine Empire"), svec1("Middle Ages"),
@@ -188,10 +203,15 @@ fn all_mappings() {
         1000, LIVING,
         "The Northern Paiute (Numu) of the Great Basin; Wovoka received in 1889 the vision that became the Ghost Dance, which spread across the plains within a year and was met with the suppression that ended at Wounded Knee in 1890"));
 
-        vec_push(history_vec, history_map_new("Finnish", "Viking/Norse",
-        svec1("Viking/Norse"), svec2("Iron Age", "Middle Ages"),
+        vec_push(history_vec, history_map_new("Finnish", "Finland",
+        svec2("Finland", "Karelia"), svec2("Iron Age", "Middle Ages"),
         (0-1000), LIVING,
-        "Finnish and Sami spiritual traditions preserved in the Kalevala (compiled 1835 by Elias Lonnrot from oral tradition) and Sami shamanic practice; Vainamoinen, Ukko, and Tapio reflect Uralic cosmology distinct from but parallel to Norse mythology"));
+        "Finnish folk religion preserved in the Kalevala (compiled 1835 by Elias Lonnrot from oral tradition collected largely in Viena Karelia); Vainamoinen, Ukko and Tapio reflect a Finnic cosmology distinct from, though long in contact with, Norse mythology. The primary civilization was \"Viking/Norse\" until 2.14.5, which placed a Uralic tradition under its Germanic neighbours -- the same error corrected for Celtic at 2.14.3"));
+
+        vec_push(history_vec, history_map_new("Sami", "Sapmi",
+        svec2("Sapmi", "Fennoscandia"), svec2("Iron Age", "Modern"),
+        (0-2000), LIVING,
+        "The Sami are a distinct Indigenous people of Sapmi, across present-day Norway, Sweden, Finland and Russia, with their own parliaments in three states and the Sami Council across all four. Their pre-Christian tradition centres on the akka goddesses, the noaidi and the sacred sieidi sites; Madderakka, the earth mother who receives the child before birth, is the one figure carried here. She sat under the tradition string \"Finnish\" -- a nation-state, not her people -- until 2.14.5. No Sami body has been consulted about this use"));
 
         vec_push(history_vec, history_map_new("Vodou", "Haiti",
         svec3("Saint-Domingue", "Haiti", "Dahomey"), svec1("Modern"),

@@ -6,7 +6,7 @@
 
 - **Language**: Cyrius (ported from Rust in v2.0)
 - **License**: GPL-3.0-only
-- **Version**: SemVer 2.14.4
+- **Version**: SemVer 2.14.5
 - **Compiler**: cyrius >= 6.5.36 (pinned in `cyrius.cyml` `[package].cyrius`)
 
 ## Consumers
@@ -21,7 +21,7 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/error.cyr` — AvataraError enum codes, validation
 - `src/aspect.cyr` — role aspects: universal roles DERIVED from the trait weights, no per-archetype authoring (added 2.8.0). Like `shadow` and `overlay`, it reads off a finished profile and stores nothing
 - `src/compose.cyr` — archetype composition: weighted blending of multiple profiles
-- `src/history.cyr` — 37 tradition-to-history mappings (civilization, era, temporal range, notes). A test walks both directions: no mapping may name a tradition with no profiles, and every tradition carried must resolve a context
+- `src/history.cyr` — 39 tradition-to-history mappings (civilization, era, temporal range, notes). A test walks both directions: no mapping may name a tradition with no profiles, and every tradition carried must resolve a context
 - `src/registry.cyr` — lookup by name, enumeration, query/filter API (includes history-based queries)
 - `src/affinity.cyr` — affinity scoring, similarity search, cross-tradition matching, conflict detection
 - `src/shadow.cyr` — shadow aspect: `shadow(profile)` (involutive inversion), `is_shadow_of(a, b)`
@@ -43,11 +43,11 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/yoruba.cyr` — 14 Yoruba/Ifa Orishas
 - `src/zoroastrian.cyr` — 7 Amesha Spentas, 7 Zoroastrian beings
 - `src/taoist.cyr` — 8 Immortals, 8 celestial deities
-- `src/polynesian.cyr` — 12 Polynesian/Hawaiian deities
-- `src/slavic.cyr` — 12 pre-Christian Slavic deities
+- `src/polynesian.cyr` — 7 Hawaiian akua + 5 Māori atua, carried under their own peoples' tradition strings (`Hawaiian`, `Māori`), not one ocean-wide label; the four cognate pairs (Kāne/Tāne, Kū/Tū, Lono/Rongo, Kanaloa/Tangaroa) are one inherited figure as two peoples tell him, and only the split lets `cross_tradition_match()` say so. `traditions_for_civilization("Polynesia")` gathers both
+- `src/slavic.cyr` — 11 pre-Christian Slavic deities (Marzanna and Morana were one goddess carried twice until 2.14.5)
 - `src/jain.cyr` — 24 Tirthankaras
 - `src/sikh.cyr` — 10 Sikh Gurus
-- `src/finnish.cyr` — 14 Kalevala figures & Sami spirits
+- `src/finnish.cyr` — 13 Kalevala and Finnish figures + Madderakka, who carries the tradition `Sami` (her people) rather than `Finnish` (a nation-state)
 - `src/vodou.cyr` — 14 Vodou Lwa (Rada, Petwo, Ghede)
 - `src/solar.cyr` — 4 intercalary archetypes: the days upon the year (Wayeb, Nemontemi, Epagomenai) + the leap quarter (Bissextus) — avatara's landing at the solar year (365 + ¼)
 - `src/canaanite.cyr` — 4 Canaanite/Ugaritic deities (El, Baal, Asherah, Anat)
@@ -59,7 +59,7 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/anishinaabe.cyr` — 5 Anishinaabe manidoog + the 7 Grandfather Teachings (Nizhwaaswi Gagiikwewin), carried by their Ojibwe names as cosmic-tier principles; the wiindigoo is deliberately not carried — see module header
 - `src/aboriginal.cyr` — 4 figures of three Aboriginal Australian peoples, carried under their own peoples' tradition strings (Kunwinjku, Kulin, Gunaikurnai), not a continent-wide label; `traditions_for_civilization("Aboriginal Australia")` gathers them. Restricted Dreaming material deliberately excluded, and the v2.14.0 survey's six refusals are recorded with their reasons (see module header)
 - `src/logging.cyr` — sakshi logging init
-- `tests/avatara.tcyr` — integration test suite (311 assertions)
+- `tests/avatara.tcyr` — integration test suite (338 assertions)
 - `tests/avatara.bcyr` — benchmarks (60)
 - `programs/traditions.cyr` — example: explore archetypes
 - `programs/compose.cyr` — example: blend traditions

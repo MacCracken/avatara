@@ -30,7 +30,7 @@ enum PolynesianGod {
 fn polynesian_kane() {
     var p = profile_new();
     Profile_set_name(p, "Kane");
-    Profile_set_tradition(p, "Polynesian");
+    Profile_set_tradition(p, "Hawaiian");
     Profile_set_desc(p, "Supreme creator — life-giver, lord of fresh water and sunlight");
     # Traits
     Profile_set_warmth(p, 0.9);
@@ -72,7 +72,7 @@ fn polynesian_kane() {
 fn polynesian_ku() {
     var p = profile_new();
     Profile_set_name(p, "Ku");
-    Profile_set_tradition(p, "Polynesian");
+    Profile_set_tradition(p, "Hawaiian");
     Profile_set_desc(p, "God of war and governance — builder, protector, male generative power");
     # Traits
     Profile_set_warmth(p, 0.3);
@@ -116,7 +116,7 @@ fn polynesian_ku() {
 fn polynesian_lono() {
     var p = profile_new();
     Profile_set_name(p, "Lono");
-    Profile_set_tradition(p, "Polynesian");
+    Profile_set_tradition(p, "Hawaiian");
     Profile_set_desc(p, "God of peace, rain, and agriculture — lord of the Makahiki season");
     # Traits
     Profile_set_warmth(p, 0.9);
@@ -158,7 +158,7 @@ fn polynesian_lono() {
 fn polynesian_kanaloa() {
     var p = profile_new();
     Profile_set_name(p, "Kanaloa");
-    Profile_set_tradition(p, "Polynesian");
+    Profile_set_tradition(p, "Hawaiian");
     Profile_set_desc(p, "God of the deep ocean — keeper of mysteries, teacher of magic, lord of the abyss");
     # Traits
     Profile_set_warmth(p, 0.4);
@@ -201,7 +201,7 @@ fn polynesian_kanaloa() {
 fn polynesian_pele() {
     var p = profile_new();
     Profile_set_name(p, "Pele");
-    Profile_set_tradition(p, "Polynesian");
+    Profile_set_tradition(p, "Hawaiian");
     Profile_set_desc(p, "Goddess of fire and volcanoes — creation through destruction, the molten heart of the islands");
     # Traits
     Profile_set_empathy(p, 0.3);
@@ -241,7 +241,7 @@ fn polynesian_pele() {
 fn polynesian_maui() {
     var p = profile_new();
     Profile_set_name(p, "Maui");
-    Profile_set_tradition(p, "Polynesian");
+    Profile_set_tradition(p, "Hawaiian");
     Profile_set_desc(p, "Trickster demigod — island-fisher, sun-lassoer, fire-thief, irrepressible champion of humanity");
     # Traits
     Profile_set_warmth(p, 0.6);
@@ -283,7 +283,7 @@ fn polynesian_maui() {
 fn polynesian_hina() {
     var p = profile_new();
     Profile_set_name(p, "Hina");
-    Profile_set_tradition(p, "Polynesian");
+    Profile_set_tradition(p, "Hawaiian");
     Profile_set_desc(p, "Moon goddess — feminine principle, keeper of rhythm, craftswoman of tapa cloth");
     # Traits
     Profile_set_warmth(p, 0.85);
@@ -325,7 +325,7 @@ fn polynesian_hina() {
 fn polynesian_tangaroa() {
     var p = profile_new();
     Profile_set_name(p, "Tangaroa");
-    Profile_set_tradition(p, "Polynesian");
+    Profile_set_tradition(p, "Māori");
     Profile_set_desc(p, "Maori sea god and creator — father of fish, lord of the ocean's living multitude");
     # Traits
     Profile_set_creativity(p, 0.9);
@@ -362,7 +362,7 @@ fn polynesian_tangaroa() {
 fn polynesian_tane() {
     var p = profile_new();
     Profile_set_name(p, "Tane");
-    Profile_set_tradition(p, "Polynesian");
+    Profile_set_tradition(p, "Māori");
     Profile_set_desc(p, "Maori god of forests and light — he who separated earth and sky to let the world breathe");
     # Traits
     Profile_set_warmth(p, 0.8);
@@ -405,7 +405,7 @@ fn polynesian_tane() {
 fn polynesian_tu() {
     var p = profile_new();
     Profile_set_name(p, "Tu");
-    Profile_set_tradition(p, "Polynesian");
+    Profile_set_tradition(p, "Māori");
     Profile_set_desc(p, "Maori god of war — the fierce one who stood when others would not");
     # Traits
     Profile_set_warmth(p, 0.3);
@@ -447,7 +447,7 @@ fn polynesian_tu() {
 fn polynesian_rongo() {
     var p = profile_new();
     Profile_set_name(p, "Rongo");
-    Profile_set_tradition(p, "Polynesian");
+    Profile_set_tradition(p, "Māori");
     Profile_set_desc(p, "Maori god of peace and cultivated plants — keeper of the kumara, tender of the garden");
     # Traits
     Profile_set_warmth(p, 0.85);
@@ -487,7 +487,7 @@ fn polynesian_rongo() {
 fn polynesian_papatuanuku() {
     var p = profile_new();
     Profile_set_name(p, "Papatuanuku");
-    Profile_set_tradition(p, "Polynesian");
+    Profile_set_tradition(p, "Māori");
     Profile_set_desc(p, "Earth mother — she who endures, who nourishes all life from beneath, separated from sky yet never ceasing to love");
     # Traits
     Profile_set_warmth(p, 0.95);
