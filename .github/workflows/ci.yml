@@ -96,3 +96,12 @@ jobs:
           [ "$FILE_VERSION" = "$CYML_VERSION" ] || { echo "VERSION ($FILE_VERSION) != cyrius.cyml ($CYML_RAW)"; exit 1; }
           grep -q "$FILE_VERSION" CHANGELOG.md || { echo "version not in CHANGELOG.md"; exit 1; }
           echo "Version consistent: $FILE_VERSION"
+      - name: Verify toolchain pin consistency
+        run: |
+          # The cyrius.cyml `[package].cyrius` pin is the single source of truth;
+          # the human-facing docs quote it by hand and must not drift.
+          PIN=$(grep '^cyrius = ' cyrius.cyml | head -1 | sed 's/cyrius = "\(.*\)"/\1/')
+          grep -q "^- \*\*Compiler\*\*: cyrius >= ${PIN} " CLAUDE.md || { echo "CLAUDE.md compiler pin != cyrius.cyml ($PIN) — run scripts/version-bump.sh"; exit 1; }
+          HITS=$(grep -c "Cyrius compiler ${PIN}+" README.md || true)
+          [ "$HITS" = "2" ] || { echo "README.md: expected 2 'Cyrius compiler ${PIN}+' references, found $HITS — run scripts/version-bump.sh"; exit 1; }
+          echo "Toolchain pin consistent: $PIN"
