@@ -19,8 +19,9 @@
                     |  |  yoruba  zoroastrian  taoist            |  |
                     |  |  polynesian  slavic  jain  sikh         |  |
                     |  |  finnish  vodou                         |  |
-                    |  |  incarnate (56; Christian/Sufi/Jewish/  |  |
-                    |  |    Buddhist/Taoist + 4 named nations)   |  |
+                    |  |  incarnate (56; Hindu/Buddhist/         |  |
+                    |  |    Christian/Vedic/Sufi/Taoist/Jewish   |  |
+                    |  |    + 4 named nations)                   |  |
                     |  |  solar (intercalary: 365 + the quarter) |  |
                     |  |  canaanite  etruscan                    |  |
                     |  |  tarot (Tree-of-Life paths, Kabbalah)   |  |
@@ -49,7 +50,7 @@
                     |                      |                       |
                     |  +--------+------+------+                    |
                     |  | compose | hist | affi |                   |
-                    |  | blend   | 37   | nity |                   |
+                    |  | blend   | 41   | nity |                   |
                     |  | weight  | maps | sim  |                   |
                     |  +---------+------+------+                   |
                     +---------------------+------------------------+
@@ -80,7 +81,7 @@ Avatara produces plain f64/enum outputs. It does not depend on bhava — bhava c
 5. `registry::all_profiles()` aggregates all traditions into a single cached vec
 6. `query_*()` functions filter profiles by trait, breath, growth, element, polarity, tier, domain, civilization, era, year
 7. `affinity()` scores similarity between profiles; `similar_to()` finds nearest neighbors (bounded top-k, O(N*k)); `cross_tradition_match()` maps across traditions; `detect_conflicts()` identifies trait tensions
-8. Derived layers read *off* a finished profile and store nothing: `aspect.cyr` (trait-derived roles), `shadow.cyr` (`shadow()`, the involutive inversion), `overlay.cyr` (Enneagram and Jungian typologies, walked through the `OverlaySystem` registry). None of them adds archetypes, so `profile_count()` is unaffected by any of them
+8. Derived layers read *off* a finished profile and store nothing: `aspect.cyr` (trait-derived roles), `shadow.cyr` (`shadow()`, the involutive inversion), `overlay.cyr` (Enneagram, Jungian and Mystic typologies, walked through the `OverlaySystem` registry). None of them adds archetypes, so `profile_count()` is unaffected by any of them
 9. Consumer (bhava, joshua, etc.) receives plain f64/enum output via profile accessors
 
 ## Type System

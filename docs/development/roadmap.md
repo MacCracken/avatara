@@ -1,61 +1,47 @@
 # Roadmap
 
-> avatara — forward-looking milestones only. Shipped work lives in [CHANGELOG.md](../../CHANGELOG.md).
+> avatara — **forward-looking only.** Shipped work lives in [CHANGELOG.md](../../CHANGELOG.md), which
+> is also where every breaking change and its consumer note is recorded, per release. Nothing on this
+> page describes what was done; everything describes what is not done yet and why.
 
 ## Planned
 
-**Nothing is scheduled before 3.0.0.** v2.14.0 was the last planned minor. Everything remaining is
-either breaking (3.0.0, below), additive but unscheduled (backlog), or blocked on something no code
-change resolves.
+**Nothing is scheduled before 3.0.0.** Everything remaining is one of: breaking and banked for 3.0.0
+(below), additive but unscheduled (backlog), or blocked on something no code change resolves.
 
 ## Blocked — Aboriginal Australian depth
-
-The arc closed at v2.14.0 with **six candidates researched and six refused**; the grounds are recorded
-in the `src/aboriginal.cyr` header and the 2.14.0 CHANGELOG entry, and the standing rules are ADR-010.
-None of that is revisited here. What matters going forward is the single reason the arc cannot move:
 
 **The constraint is engagement, not research, and the two are not substitutes.** Desk research
 establishes that material is *already public*, which is checkable. It cannot establish that a people
 *consents to this particular use*, which is what review is for. No community is engaged with this
-project. The refusal that makes this concrete is the Waugal: its sourcing is excellent — roughly a
-thousand words in named Noongar Elders' own voices — and SWALSC's published terms require written
-permission for "modification, distribution or publication", which is precisely what a GPL-3.0 library
-that ships a profile and inverts it through `shadow()` does. More research cannot answer that. Asking
-can.
+project, so no figure can move from blocked to cleared by any amount of further reading. ADR-010
+rule 8 states this; the point here is only that it is still true.
 
-Six bodies publish contact details, and nobody has written to any of them. Per-figure provenance,
-verbatim published terms and consent status are tabulated in
-[sourcing-register.md](sourcing-register.md), which carries the same six as a request-for-information
-plan — one letter per body rather than per figure:
+Two shapes of block, both live:
 
-| body | question |
-|---|---|
-| SWALSC | Written consent for the Waugal, whose terms expressly cover modification and distribution |
-| GLaWAC | Whether more of the Borun and Tuk account may be published, and on what terms |
-| Injalak Arts | Reuse terms for Namarrkon — their site states none, so shipping would rest on silence |
-| Barkandji Native Title Group | The Barkandji-preferred spelling, Ngatyi vs Ngatji, which their own publications split on |
-| Jali LALC / the Dirawong Trust | Dirawong, the one borderline candidate never assessed to conclusion |
-| **Wurundjeri Woi-wurrung (WWCHAC)** | **Consent for Bunjil and Waa. Their own plan lists an ICIP policy as due in 2026, so the ask is partly about timing** |
+- **Express restriction.** A body publishes terms that a GPL-3.0 library shipping a profile — and
+  inverting it through `shadow()` — does not satisfy. SWALSC over the Waugal is the worked case.
+- **Declared gap.** A body publishes no reuse terms at all, so there is nothing to satisfy and nothing
+  to breach. Silence is not permission. Wurundjeri Woi-wurrung is here, and its own Country Plan lists
+  an ICIP policy as a 2026 action — so this one may resolve itself on their timetable, not ours.
 
-**Re-sourced at v2.14.7, and the ICIP question moved with it.** Bunjil and Waa were cited to TLaWC
-until 2.14.7; both are now cited to the Wurundjeri Woi-wurrung RAP, whose account is own-voice and
-textually independent where TLaWC's reproduces Wikipedia. WWCHAC publishes no reuse terms at all and
-lists an ICIP policy as a 2026 action, so the block did not go away — it changed shape, from an express
-restriction to a declared gap. Silence is not permission. The original finding is kept below because
-the reasoning is what matters.
-
-**The TLaWC notice was found at v2.14.5 and was the most concrete of these.** The Taungurung Land and
-Waters Council — this library's cited channel for *both* Bunjil and Waa — publishes an Indigenous
-Cultural and Intellectual Property notice reading "You may only deal with the content of this website
-with the prior written consent of TLaWC, the copyright owner and/or the Traditional Custodians of that
-ICIP, and with attribution", plus a bar on commercialising ICIP. It has been live since at least
-February 2024, i.e. before the v2.14.0 survey that refused six other figures. This is materially the
-same situation as the Waugal, over which SWALSC's terms caused a refusal — the difference is that
-those two figures are already shipped. Nobody has written to TLaWC. Under ADR-010 rule 8 no amount of
-further desk research settles this; only asking does.
+**Six bodies publish contact details and none has been written to.** The per-figure provenance,
+verbatim published terms, consent status and the request-for-information plan — one letter per body
+rather than per figure — are tabulated in **[sourcing-register.md](sourcing-register.md)**. That file
+is the working document; this section exists only to say the gate is shut and why.
 
 If a community engages, the gate reopens and everything carried is revisable at their direction,
 including removal.
+
+### Also blocked, and cheaper to move
+
+- **38 figures have no written sourcing provenance** — `inuit` (10), `lakota` (10), `haudenosaunee` (6),
+  `anishinaabe` (12). Their sources *were* checked directly against Boas, Rasmussen and Converse and
+  found sound; it was never written down, so each pass re-derives it. Entering them in the sourcing
+  register needs no community engagement and is the one item in this section that desk work can close.
+- **A channel can be excellent and undiscoverable.** The best Wurundjeri account of Bunjil and Waa sits
+  inside a PDF; all 51 pages of that site's sitemap mention Waa zero times. Future sourcing passes must
+  check publications pages and PDFs, not only crawlable HTML.
 
 ## Backlog — additive, unscheduled
 
@@ -68,6 +54,10 @@ including removal.
   would add a parallel layer (e.g. `tarot_marseille_number(i)` and/or a variant attribution accessor)
   so a consumer can select the deck tradition appropriate to its use. No change to existing profiles,
   API, or the Tree-of-Life bridge.
+- **Further overlay systems.** The `OverlaySystem` registry takes a new family without touching any
+  archetype, and the generic API enumerates it for free. Overlays are readings — plural, revisable,
+  and allowed to disagree over the same figure — so this is the sanctioned home for any analytic grid
+  that is not a people's own account of itself.
 
 ## v3.0.0 — Consolidation (breaking)
 
@@ -78,17 +68,29 @@ The major bump banks the API cleanups deferred through 2.x:
 - Drop the `prof_*` compat shims — consumers move to the derived `Profile_*` accessors (shims have
   eased the transition since 2.5.3).
 - Retire the public `ProfLayout` offset enum from the consumer surface (internal-only).
-- Formalize the overlay subsystem (shipped 2.13.0) as first-class API. The "archetype + overlay
-  engine" identity for v3.
-- **Rename `incarnate_indigenous_*`.** The four figures stopped carrying an `"Indigenous"` tradition
-  in 2.12.0, but their constructor names and the `all_incarnate_indigenous()` collection still say so.
-  Renaming is breaking, which is why it waited for this bump.
+- Formalize the overlay subsystem as first-class API. The "archetype + overlay engine" identity for v3.
+- **Restore macrons on the Hawaiian and Māori names.** `Kane`, `Ku`, `Maui`, `Tane`, `Tu` and
+  `Papatuanuku` should be `Kāne`, `Kū`, `Māui`, `Tāne`, `Tū` and `Papatūānuku` per ADR-004 point 2,
+  which the tradition strings already honour (`Māori`). Renaming an archetype breaks `lookup()`.
+- **Rename `incarnate_indigenous_*` and `incarnate_mystic_*`.** Neither `"Indigenous"` nor `"Mystic"`
+  is a tradition string any more, but both survive as constructor-name prefixes and in
+  `all_incarnate_indigenous()` / `all_incarnate_mystic()`. Renaming is breaking, which is why it waits.
 
 ## Declined
 
 - **Affinity-graph caching** — a pointer-keyed cross-tradition cache regressed the bench
   (`cross_tradition_match` 49µs → 945µs); the construct-then-query access pattern misses a
   pointer-keyed cache. Revisit only with a non-pointer-keyed (index/name-based), bench-proven design.
+- **Per-figure opt-outs inside `shadow()` / `compose()`.** Proposed for living people and for apical
+  ancestors, and refused both times: a quiet exception is exactly what ADR-010 rule 9 exists to forbid.
+  The machinery applies uniformly and the consequence is documented instead.
+
+## Watch items
+
+- **`history/context_all_traditions` grows quadratically with tradition count** — it walks every
+  tradition calling `context_for_tradition()`, which linearly scans every mapping, so it is
+  O(traditions × mappings). It is the one benchmark that moves on a tradition split rather than on a
+  code change. A name- or index-keyed mapping lookup would flatten it if it ever matters.
 
 ## Dependencies for Consumer Integration
 
@@ -102,13 +104,6 @@ The major bump banks the API cleanups deferred through 2.x:
 | agnosai (agent personalities) | Planned | Direct consumption |
 | sankhya (ancient sciences) | Planned | Shared `IncarnateSage` / Vedic bridge |
 
-> **Note for consumers at v2.14.5 (breaking):** three changes to what `prof_tradition()` returns and
-> one to `profile_count()`. (1) `"Polynesian"` is gone — the 12 atua now carry `"Hawaiian"` (7) and
-> `"Māori"` (5), and `traditions_for_civilization("Polynesia")` gathers both. (2) Madderakka moved from
-> `"Finnish"` to `"Sami"`. (3) Morana was merged into Marzanna — `lookup("Morana")` now returns
-> `Err`, and `profile_count()` is **503**, with `all_traditions()` at **39**.
->
-> **Note for consumers at v2.14.0:** the Aboriginal figures' `tradition` strings changed from the
-> single `"Aboriginal Australian"` to `Kunwinjku`, `Kulin` and `Gunaikurnai`. Anything reading
-> `prof_tradition()` or `all_traditions()` for those figures needs updating;
-> `traditions_for_civilization("Aboriginal Australia")` gathers all three.
+> Consumers upgrading across a breaking release should read that release's entry in
+> [CHANGELOG.md](../../CHANGELOG.md), which carries the consumer note. They are not duplicated here —
+> a version-pinned note on a forward-looking page is stale the moment the next release lands.

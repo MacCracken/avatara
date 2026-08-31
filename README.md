@@ -14,7 +14,12 @@ Maps divine and mythological beings across world traditions to composable person
 
 ## Traditions
 
-Tradition and module are not one-to-one: `incarnate` spans eleven traditions, and `aboriginal` carries
+Names in the table are the strings `lookup()` takes. Several Hawaiian and Māori names are carried
+without their macrons (`Kane`, `Ku`, `Maui`, `Tane`, `Tu`, `Papatuanuku`); ADR-004 point 2 asks for
+proper diacritics and renaming is breaking, so it is banked for 3.0.0.
+
+Tradition and module are not one-to-one: `incarnate` spans eleven traditions, `polynesian` carries
+Hawaiian and Māori, `finnish` carries Finnish and Sami, and `aboriginal` carries
 three peoples. The `tradition` field is what `by_tradition()` and `cross_tradition_match()` key on.
 
 | Tradition | Module | Entities |
@@ -34,8 +39,8 @@ three peoples. The `tradition` field is what `by_tradition()` and `cross_traditi
 | **Yoruba** | `yoruba` | 14 Orishas |
 | **Zoroastrian** | `zoroastrian` | 7 Amesha Spentas, 7 Zoroastrian beings |
 | **Taoist** | `taoist` | 8 Immortals, 8 celestial deities |
-| **Hawaiian** | `polynesian` | Kāne, Kū, Lono, Kanaloa, Pele, Māui, Hina |
-| **Māori** | `polynesian` | Tangaroa, Tāne, Tūmatauenga, Rongo, Papatūānuku |
+| **Hawaiian** | `polynesian` | Kane, Ku, Lono, Kanaloa, Pele, Maui, Hina |
+| **Māori** | `polynesian` | Tangaroa, Tane, Tu, Rongo, Papatuanuku |
 | **Slavic** | `slavic` | 11 pre-Christian Slavic deities |
 | **Jain** | `jain` | 24 Tirthankaras |
 | **Sikh** | `sikh` | 10 Sikh Gurus |
@@ -94,13 +99,15 @@ var ctx = context_for_tradition("Hindu");
 
 All traditions map to the same `ArchetypeProfile` output:
 
-- **TraitWeights** — 15 personality dimensions (0.0-1.0), maps 1:1 to bhava's `PersonalityProfile`
+- **TraitWeights** — 15 personality dimensions (0.0-1.0), aligned with bhava's `PersonalityProfile` (14 of the 15 share a name; avatara's `courage` is bhava's `RiskTolerance`)
 - **ModuleEmphasis** — which bhava modules this archetype amplifies (mood, energy, spirit, reasoning, etc.)
 - **BreathAffinity** — position on the cosmic breath cycle (Unity through LateExhale through Unity)
 - **GrowthDirection** — Differentiate, Integrate, Preserve, Transform, or Still
 - **Element** — Fire, Water, Earth, Air, Aether, Light, Darkness, Storm, Mixed
 - **Polarity** — Masculine, Feminine, Androgynous, Transcendent
 - **CosmicTier** — Supreme, Primordial, Cosmic, Greater, Lesser, Demigod, Master
+- **Domain** — the archetype's primary sphere: Creation, War, Love, Death, Wisdom, Order, Chaos,
+  Nature, Sky, Sea, Fire, Sun, Moon, Fate, Trickery, Healing, Prosperity, Hearth, Transcendence
 
 Archetypes are composable across traditions. A character can carry Kabbalistic Tiphareth + Hindu Vishnu + Greek Athena — reinforcing archetypes amplify, conflicting archetypes create productive internal tension.
 
@@ -115,7 +122,9 @@ var closest = cross_tradition_match(norse_thor());
 # Returns the most similar archetype from a different tradition
 # (note: `match` is a reserved keyword in Cyrius and cannot name a variable)
 
-# Top 5 most similar archetypes to any entity
+# Top 5 most similar archetypes to any entity — a vec of *sim entries*, not
+# profiles: read each with sim_profile(e) and sim_score(e). Passing k <= 0
+# returns every profile, sorted.
 var top5 = similar_to(norse_thor(), 5);
 
 # Detect conflicting traits (delta strictly > 0.4)
@@ -140,6 +149,7 @@ var yes = is_shadow_of(dark_thor, norse_thor());
 # Overlays — cross-cutting typologies derived from the profile's own weights.
 var etype = profile_enneagram_type(norse_thor());   # index; also _wing/_centre/_score
 var role  = profile_jungian_role(norse_thor());     # Hero/Shadow/Anima/Self/Trickster
+var mode  = profile_mystic_mode(norse_thor());      # apophatic/kataphatic/unitive/devotional/ascetic
 
 # Or walk every registered system without naming one — so a system added later
 # is enumerable by code written today.
@@ -149,10 +159,16 @@ for (var s = 0; s < overlay_system_count(); s += 1) {
 }
 ```
 
-An overlay is **one reading, not the reading**. The Enneagram and Jung's set are 20th-century
-frameworks; neither was in the room when the Dagda or Sedna were described. Several overlays may sit
-over the same figure and disagree, and none of them displaces what the tradition modules say the
-archetype *is*.
+An overlay is **one reading, not the reading**. Three systems are registered — the Enneagram, Jung's
+set, and the mystical modes (apophatic, kataphatic, unitive, devotional, ascetic) — and all three are
+modern comparative grids laid over other people's figures; none was in the room when the Dagda or
+Sedna were described. Several overlays may sit over the same figure and disagree, and none of them
+displaces what the tradition modules say the archetype *is*.
+
+Mystic is the worked example of the rule. It was a `tradition` string over 17 figures until 2.14.6 —
+the library breaking its own traditions-vs-typologies principle. Rekeyed to Christian, Sufi and
+Jewish, it came back here: derived over all 503 profiles instead of labelling 17, which is the
+cross-tradition statement the string only gestured at.
 
 Traditions and typologies are therefore mutually exclusive, and a test enforces it: a typology may
 only ever be an overlay — never a `tradition` string, never an archetype, never counted. The

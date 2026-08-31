@@ -7,6 +7,109 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.14.8] — 2026-08-31
+
+A documentation staleness sweep — the first full one since v2.14.0, seven releases back. Five
+independent passes, every claim verified by **executing** it rather than reading it. No archetype,
+tradition string, count or API change: `profile_count()` **503**, `all_traditions()` **41**, suite
+**368/368**.
+
+90 findings, 17 of them P1. The single most stale document in the repository was `docs/doc-health.md`
+— the ledger that was asserting everything else was fresh.
+
+### Fixed — documentation
+
+- **`docs/doc-health.md` restamped, not patched.** Six of the eight values in its ground-truth block
+  were false (504→503, 37→41 traditions, 37→41 mappings, 2.14.0→2.14.8, 6.4.71→6.5.36, 295→368), and
+  it certified README, CLAUDE.md, `overview.md` and the ADRs as Fresh at values none of them still
+  carried. Its "last swept 2026-07-22" stamp had previously been defended as a correctly-scoped
+  point-in-time record; that defence failed here, because the file's own body had since gained rows
+  dated 2026-08-30 and 2026-08-31. **A ledger that is partially updated is not dated — it is wrong.**
+- **`src/main.cyr`'s header read "34 traditions, 497 archetypes"** while the binary it builds prints
+  503/41 three lines later. Stale since at least 2.11.0, and missed by 2.14.3's pass, which corrected
+  the identical defect in `src/lib.cyr` and stopped there. Both headers are now tracked in the ledger,
+  because `lib.cyr`'s ships inside `dist/avatara.cyr` and is API documentation consumers read.
+- **`docs/architecture/overview.md` was the worst-drifted doc again** — as it was at the v2.14.0
+  sweep. The pattern is that diagrams get edited less often than prose. Its history box read 37 maps
+  (actual 41), its `incarnate` breakdown silently omitted Hindu (13) and Vedic (7) — 20 of 56 figures
+  including the largest group — and its derived-layers line named two overlay systems where there are
+  three.
+- **README's Derived Layers section never learned about the Mystic overlay.** It documented two
+  systems while `overlay_system_count()` returns 3, contradicting the README's own tradition table,
+  which tells the reader that Mystic "returns as an overlay". Four smaller corrections alongside:
+  `similar_to` was shown as though it returned profiles rather than sim entries (a consumer indexing
+  the result like `query_min_trait`'s would crash), the Māori table row named "Tūmatauenga" which the
+  registry does not carry, `Domain` was missing from the Design list, and "maps 1:1 to bhava's
+  `PersonalityProfile`" is 14 of 15 by name — `courage` is bhava's `RiskTolerance`.
+  **Every code example was compiled and run from a directory that is not the repo root**, which is the
+  only way to test the Quick Start's `include "avatara/dist/avatara.cyr"`; all of them pass, and every
+  commented expected output matches.
+- **`CLAUDE.md` never mentioned `safe_strlen` / `safe_streq`.** They are a mandatory convention exactly
+  like `xalloc`, and the reason seven public functions stopped segfaulting at 2.14.3 — but the file
+  loaded into context at the start of every session on this repo did not say so. Added, along with
+  `validate_profile`'s actual contract (field ranges, not string presence) and the `profile_mystic_*`
+  entry points.
+- **`CONTRIBUTING.md`, verified by running every command it gives a contributor.** Its gate table
+  claimed to be "exactly what `.github/workflows/ci.yml` enforces" while omitting the toolchain-pin
+  step; its `cyrius vet` output did not reproduce; and "every enum carries a trailing `_COUNT`
+  sentinel" was false — 15 of 67 have none, including all six public classification enums. The
+  sentinel is a *collection* convention; a classification read off a profile is a closed vocabulary,
+  not a range to walk.
+- **`SECURITY.md` overclaimed the allocation guarantee** in the terms a security reader relies on:
+  `xalloc` covers avatara's own allocations, not the vendored stdlib's. The NULL-string class fixed at
+  2.14.3 was also undocumented there.
+- **Supersession markers are now applied consistently.** The 2.14.5 TLaWC bullet was overturned at
+  2.14.7 with no marker, while the 2.14.0 GLaWAC bullet carried one — the file set a precedent and
+  then broke it. Also corrected 2.14.5's "four living religions" to three.
+
+### Fixed — ADRs
+
+Point-in-time records, so each got a **note rather than a rewrite**:
+
+- **ADR-002** — "every enum carries a trailing `_COUNT` sentinel" was never true of the six public
+  classification enums this ADR is actually about. Corrected as a note; the additive-only intent is
+  unaffected.
+- **ADR-004 point 7** — not contradicted, but 2.14.6 added a second constraint to the same two fields
+  (living people get third-person text, never a second-person script). Recorded as an extension.
+- **ADR-010 rules 8 and 9** — two scope notes. Rule 8 is a **research standard, not a ship gate**: all
+  42 high-protocol figures ship with consent `never-asked`, and what the rule governs is what may be
+  claimed and what may be added. Rule 9's "modules say so in their headers" is currently true of two
+  modules, not six.
+- **ADR-004 point 3** needed nothing — 2.14.4 made it simply true by adding the Vaishnava marking it
+  had asserted for releases. Recorded so the next pass does not re-flag it.
+
+### Fixed — code
+
+- **`slavic/all_12` benchmarked a module of 11**, stale since 2.14.5 merged Morana into Marzanna. Now
+  `slavic/all_11`. Same class as the two labels corrected at 2.14.7, and the third such rename — the
+  ledger now tracks all four so the `bench-history.csv` series breaks are explained rather than
+  discovered.
+- **Tier 6 of the benchmark suite printed an empty section.** The four `affinity/*` benchmarks sat
+  after the tier 7 header, so they reported under "overlays" while "tier 6: affinity" printed nothing.
+  This is the report CI runs on every push and that `scripts/bench-history.sh` parses. Moved.
+- **`Dogen` now carries its macron** — `Dōgen`, in both the name and the soul text. ADR-004 point 2
+  cites it by name as one of three worked examples of proper diacritics; the other two, Shangó and
+  Ōkuninushi, were already honoured.
+- Two references to `cyrius.toml`, renamed to `cyrius.cyml` at 2.4.0, still sat in the test and
+  benchmark headers.
+
+### Changed
+
+- **`docs/development/roadmap.md` rewritten forward-facing only**, as it always claimed to be. Removed
+  the Aboriginal historical narrative, the six-body table duplicating the sourcing register, "v2.14.0
+  was the last planned minor" — and **both version-pinned consumer notes**, one of which had already
+  rotted, stating `all_traditions()` = 39 when 2.14.6 made it 41. A version-pinned note on a
+  forward-looking page is stale the moment the next release lands; they live in the CHANGELOG now.
+  Added in their place: the block restated as its two live shapes (express restriction vs declared
+  gap), a **Watch items** section for `history/context_all_traditions` growing quadratically with
+  tradition count, and the observation that entering the remaining 38 figures in the sourcing register
+  is the one blocked item desk work can close.
+- **Banked for 3.0.0: restore the macrons on the Hawaiian and Māori names.** `Kane`, `Ku`, `Maui`,
+  `Tane`, `Tu` and `Papatuanuku` should carry them per ADR-004 point 2 — the tradition string `Māori`
+  already does. Renaming an archetype breaks `lookup()`, so it waits. The README table now names the
+  strings `lookup()` actually takes, and says why.
+
+
 ## [2.14.7] — 2026-08-31
 
 Two stale benchmark labels, a sourcing register, and the re-sourcing that register was built to make
@@ -304,7 +407,10 @@ and three sets of `tradition` strings change. Suite 311 -> 338.
   specific detail while keeping the general claim that rested on the same text — leaving the entry less
   faithful, not more. What TLaWC says in its own voice is about seventy words, half of it about Bunjil,
   with no fire story and no trickster characterisation.
-- **TLaWC publishes an express ICIP notice, and it is now on the record as blocked.** *"You may only
+- **TLaWC publishes an express ICIP notice, and it is now on the record as blocked.** **[Superseded at
+  2.14.7: TLaWC is no longer the cited channel — both figures were re-cited to Wurundjeri Woi-wurrung
+  after TLaWC's sections for both were found to reproduce Wikipedia. The notice is real and is
+  recorded in the sourcing register; the block moved rather than lifted.]** *"You may only
   deal with the content of this website with the prior written consent of TLaWC…"*, live since at least
   February 2024 — before the v2.14.0 survey that refused six figures on weaker grounds. TLaWC is this
   library's cited channel for **both Bunjil and Waa**, which are already shipped. This is materially the
@@ -427,7 +533,7 @@ Held for **2.14.5**, which is breaking and needs its own consumer note and sensi
 Marzanna and Morana are one goddess carried as two archetypes (merging them moves `profile_count()`
 504 -> 503 and `lookup("Morana")` stops resolving); `"Polynesian"` as a pan-ethnic tradition string over
 Hawaiian and Māori atua; Máttaráhkká, a Sámi goddess, under tradition `"Finnish"`; Joukahainen's persona
-calling itself "the young Lapp"; `"Mystic"` as a tradition string over 17 figures of four living
+calling itself "the young Lapp"; `"Mystic"` as a tradition string over 17 figures of three living
 religions; and three `src/aboriginal.cyr` sourcing notes that misstate what the Taungurung and
 Gunaikurnai land councils published — verified against Wayback snapshots predating v2.14.0, so not a
 case of the sources moving. Rod and Jarilo still need the entry comments this release's Slavic header

@@ -77,10 +77,21 @@ replaced it with the rules below. This ADR records them so a reader of ADR-004 i
    this particular use*, which is what review is for. Where no community is engaged, the honest
    status is blocked — not "sourced well enough to proceed".
 
+   *Recorded at 2.14.8:* rule 8 is a **research standard, not a ship gate**, and the library does not
+   read it as one. All four Aboriginal figures ship with consent status `never-asked`, as do the 38
+   figures in the other high-protocol modules. What the rule governs is what may be *claimed* and what
+   may be *added*: it is why six candidates were refused at v2.14.0, and why nothing carried here is
+   described as consented-to. Every status is tabulated in `docs/development/sourcing-register.md`.
+
 9. **Library machinery applies uniformly, and the consequence is documented.** `shadow()` inverts
    every profile and `compose()` blends across traditions; no figure is silently exempted. A library
    with quiet exceptions is harder to reason about than one that is uniform and says plainly what it
    does. Modules carrying figures whose sources did not contemplate that say so in their headers.
+
+   *Scope note, 2.14.8:* "modules … say so in their headers" is currently true of `src/aboriginal.cyr`
+   and `src/incarnate.cyr` only. The other four high-protocol modules — `inuit`, `lakota`,
+   `haudenosaunee`, `anishinaabe` — carry no such disclosure. That is a gap in the practice, not a
+   change of decision; the rule stands as written.
 
 ## Consequences
 

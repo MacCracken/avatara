@@ -6,74 +6,83 @@ timer. Modeled on cyrius/vidya `doc-health.md`.
 
 Buckets: ✅ Fresh · 🟡 Stale (needs a pass) · 🔵 Dated artifact (frozen on purpose) · ❓ Open question
 
-_Last swept: 2026-07-22 (v2.14.0 — full claim-by-claim verification against source, not a read-through)._
+_Last swept: 2026-08-31 (v2.14.8 — full claim-by-claim verification by execution, five independent
+passes; supersedes the 2026-07-22 / v2.14.0 sweep)._
 
-Ground truth at this sweep: **504 archetypes, 37 traditions, 32 tradition modules**;
-**37 history mappings**; version **2.14.0**; cyrius pin **6.4.71**; 295 integration
-tests; 60 benchmarks; `ArchetypeProfile` = 320-byte `#derive` struct.
+Ground truth at this sweep, every value executed rather than read: **503 archetypes, 41 traditions,
+32 tradition modules**; **41 history mappings**; version **2.14.8**; cyrius pin **6.5.36**; **368**
+integration assertions; **60** benchmarks; **3** overlay systems; `ArchetypeProfile` = 320-byte
+`#derive` struct.
 
-## How this sweep was run, and why the method changed
+## Method
 
-Previous sweeps marked docs fresh by reading them. This one checked every factual
-claim against the source and **found 25 stale statements across five documents that
-had all been marked ✅ Fresh**, including in this ledger. Reading a doc tells you
-whether it is coherent, not whether it is true.
+**Verify, do not read.** Reading a doc tells you whether it is coherent, not whether it is true. Every
+count is executed against source, every code example compiled and run, every gate re-run.
 
-Two findings are worth carrying forward as method:
+Three findings worth carrying forward as method:
 
-- **A doc that certifies other docs goes stale twice** — once on its own content and
-  once on its certifications. This file claimed `overview.md` was fresh while that
-  file said the library had 27 history mappings (it had 35 at the time, 37 now), and
-  claimed the ADRs carried "no present-tense claims gone stale" while ADR-004 point 6
-  stated the library does not codify Aboriginal Australian or Native American
-  traditions — three releases after it began doing exactly that.
-- **Executable claims should be executed.** The README's affinity example did not
-  compile (`match` is a reserved Cyrius keyword and the example used it as a variable
-  name), and its `detect_conflicts` output comment listed three conflicts where the
-  code returns two — the third, humor, has a delta of exactly 0.4 and the predicate is
-  strictly greater. Neither is findable by reading; both fell out of compiling and
-  running the snippets. Every README example is now verified by compilation.
+- **A doc that certifies other docs goes stale twice** — once on its own content and once on its
+  certifications. Established at the v2.14.0 sweep and confirmed again here: this ledger was the single
+  most stale document in the repository, and it was the one asserting everything else was fresh.
+- **Executable claims must be executed.** The README's Quick Start tells consumers to
+  `include "avatara/dist/avatara.cyr"`. That claim is *only* testable from outside the repository —
+  compiling from the repo root passes either way. This sweep built a consumer harness in a separate
+  directory and confirmed it, along with every commented expected output in every example.
+- **A dated stamp is not a licence to be wrong.** The previous sweep's ground-truth block was defended
+  once as a correctly-scoped point-in-time record. That defence failed here: the file's own body had
+  since gained rows dated 2026-08-30 and 2026-08-31, so the "last swept 2026-07-22" stamp was
+  contradicted by its own contents. A ledger that is partially updated is not dated — it is wrong.
 
 ## Structural docs
 
 | Doc | Last touched | Status | Notes |
 |-----|--------------|--------|-------|
-| `README.md` | 2026-07-22 | ✅ Fresh | 504/37, compiler 6.4.71. Tradition table now states that tradition and module are not one-to-one (`incarnate` spans nine traditions; `aboriginal` carries three peoples) — the Incarnate row previously named a tradition string that does not exist. New "Derived Layers" section covers `shadow()` and overlays incl. the generic `overlay_*` registry API, both of which were entirely undocumented here. **All code examples verified by compiling and running them**; two were broken (see above). Version-stamped heading removed — it drifts by construction. |
-| `CHANGELOG.md` | 2026-07-22 | ✅ Fresh | Entries through 2.14.0 (per-people Aboriginal split; `history.cyr` bidirectional integrity fix; six recorded refusals). `[Unreleased]` points at the roadmap. |
-| `CLAUDE.md` | 2026-07-22 | ✅ Fresh | Version 2.14.0, compiler 6.4.71; main.cyr = 6 smoke checks (was claimed as "~10") / tcyr=295 / bcyr=60. `src/aspect.cyr` added to the module list — it had been absent since 2.8.0 shipped it. Aboriginal line rewritten for the per-people split. |
-| `CONTRIBUTING.md` | 2026-08-30 | ✅ Fresh | **Rewritten — it had never been ported at v2.0.0 and every instruction in it was wrong.** It told contributors to run `cargo test`, `cargo clippy`, `cargo bench` and `make check` (none exist here); required `#[non_exhaustive]`, `#[must_use]`, serde derives and zero clippy warnings, three of which ADR-002 already records as superseded by the Cyrius port; and gave an "adding a tradition" procedure naming `src/<tradition>.rs`, an `Archetype` trait and `lib.rs`. Now documents the real toolchain, the eight CI gates, what is deliberately *not* a gate, the six include roots, and the cultural-protocol rules from ADR-010. **Every command in it was executed against the working tree**, not transcribed from `ci.yml` — that is how the `cyrius audit` note below was found to be stale. |
-| `SECURITY.md` | 2026-08-30 | ✅ Fresh | The Supported Versions table named only the retired 1.0.x Rust line and had no 2.x row at all, so a reader was told that nothing currently shipping is supported — while the project was on 2.14.2. Now tracks the current 2.x minor, records 1.0.x as retired at the Cyrius port, and adds a Scope section (no I/O, `xalloc` abort-on-OOM per ADR-009, convention-enforced memory safety per ADR-006, `dist/` regenerated not patched). **Carries version content by construction — revisit on every minor bump.** |
-| `CODE_OF_CONDUCT.md` | — | ✅ Fresh | Contributor Covenant v2.1 link and a contact address. No project version, count or API content. |
-| `cyrius.cyml` | 2026-07-22 | ✅ Fresh | Pin 6.4.71. `[lib]` list verified in both directions against `src/*.cyr` — no module missing, no ghost entry. |
+| `README.md` | 2026-08-31 | ✅ Fresh | 503/41, compiler 6.5.36. **Every code example compiled and run from a directory that is not the repo root**, against `dist/avatara.cyr`, and every commented output matched — including `detect_conflicts` returning exactly 2 (humor's delta is exactly 0.4 and the predicate is strictly greater). Tradition table diffed row by row against `by_tradition()` output; the Entities column sums to exactly 503, and the module-vs-tradition differences are all accounted for by the `incarnate` row. Fixed this sweep: Derived Layers named two overlay systems where there are three, `similar_to` was shown as if it returned profiles rather than sim entries, the Māori row named "Tūmatauenga" which the registry does not carry, Domain was missing from the Design list, and the "maps 1:1 to bhava" claim is 14 of 15 by name. |
+| `CLAUDE.md` | 2026-08-31 | ✅ Fresh | Version 2.14.8, compiler 6.5.36, tcyr=368, bcyr=60, all per-module counts verified against source. Fixed this sweep: it never mentioned `safe_strlen`/`safe_streq`, which are a mandatory convention exactly like `xalloc` and the reason seven functions stopped segfaulting at 2.14.3; `validate_profile`'s contract (ranges, not string presence) was stated only in `src/error.cyr`; the overlay bullet omitted `profile_mystic_*`. |
+| `CHANGELOG.md` | 2026-08-31 | ✅ Fresh | Entries 2.14.0–2.14.8, each matching a git tag. Supersession markers now applied consistently wherever a later release overturned an earlier claim — the 2.14.0 GLaWAC bullet (superseded 2.14.5) and the 2.14.5 TLaWC bullet (superseded 2.14.7). Corrected "four living religions" to three. |
+| `CONTRIBUTING.md` | 2026-08-31 | ✅ Fresh | Ported from Rust and now verified **by running every command it gives a contributor**. Fixed this sweep: the gate table omitted ci.yml's toolchain-pin step while claiming to be exactly what CI enforces; the `cyrius vet` output did not reproduce (the one "missing" dep is the root file itself); the lint count was 1570, now ~1580; and "every enum carries a trailing `_COUNT` sentinel" was false — 15 of 67 have none, including all six public classification enums. |
+| `SECURITY.md` | 2026-08-31 | ✅ Fresh | Supported-versions table correct at 2.14.x. Fixed this sweep: the `xalloc` guarantee overclaimed — it covers avatara's own allocations, not the vendored stdlib's — and the NULL-string class fixed at 2.14.3 was undocumented. |
+| `CODE_OF_CONDUCT.md` | — | ✅ Fresh | Carries no version, count or API content. Stated as a finding of this sweep, not as an exemption: the previous ledger's "nothing here can go stale" phrasing was applied to `CONTRIBUTING.md` and was false. |
+| `cyrius.cyml` | 2026-08-31 | ✅ Fresh | Pin 6.5.36. `[lib]` verified in both directions and in order against `src/*.cyr` — 43 entries, no ghost, no omission, `main.cyr` correctly excluded as the build entry. |
+| `src/lib.cyr` header | 2026-08-31 | ✅ Fresh | **Tracked here because it ships.** `cyrius.cyml` bundles it as the last module of `dist/avatara.cyr`, so it is API documentation consumers read. It stated 497/34 until 2.14.3 and omitted ten modules. Now 503/41 with a complete module list, checked against the file's own `include` lines. |
+| `src/main.cyr` header | 2026-08-31 | ✅ Fresh | Same class, same fix: it read "34 traditions, 497 archetypes" while the binary it builds printed 503/41 three lines later. Stale since at least 2.11.0 and missed by the 2.14.3 pass, which corrected `lib.cyr` only. |
 
 ## Development
 
 | Doc | Last touched | Status | Notes |
 |-----|--------------|--------|-------|
-| `docs/development/roadmap.md` | 2026-07-22 | ✅ Fresh | **Forward-looking only, as its own header always promised** — the Shipped section and the closed/resolved blocks were removed (158 → 87 lines) once verified duplicated in CHANGELOG.md, `src/aboriginal.cyr` and ADR-010. Nothing scheduled before v3.0.0. The Aboriginal arc is retained only as a *blocked* item, reduced to the one thing that can move it: five named bodies nobody has written to. `incarnate_indigenous_*` renaming moved into the v3.0.0 list where it belongs. |
-| `docs/development/sourcing-register.md` | 2026-08-31 | ✅ Fresh | **New at 2.14.7.** Per-figure sourcing provenance, verbatim reuse terms and consent status for the four shipped Aboriginal figures and the six refused, plus the request-for-information plan. Built from existing findings rather than new research — the knowledge was real but scattered across `src/aboriginal.cyr` and three CHANGELOG entries, so each pass rediscovered it. Makes two things visible that prose did not: not one shipped figure rests on anything resembling a licence, and the module refuses to *add* under terms it continues to *ship* under. 38 figures in the other four high-protocol modules are not yet entered. |
+| `docs/development/roadmap.md` | 2026-08-31 | ✅ Fresh | Rewritten forward-facing only. Removed: "v2.14.0 was the last planned minor" (seven releases stale), the Aboriginal historical narrative, the six-body table duplicating the sourcing register, and **both version-pinned consumer notes** — one of which had already rotted, stating `all_traditions()` = 39 when 2.14.6 made it 41. Consumer notes now live only in the CHANGELOG, where they cannot drift. |
+| `docs/development/sourcing-register.md` | 2026-08-31 | ✅ Fresh | **New at 2.14.7.** Per-figure provenance, verbatim reuse terms and consent status for the four shipped Aboriginal figures and the six refused, plus the request-for-information plan. Makes visible what prose hid: no shipped figure rests on anything resembling a licence, and the module refuses to *add* under terms it continues to *ship* under. 38 figures in the other four high-protocol modules remain unentered. |
 | `docs/development/state.md` | — | ❓ Open | Not split out; volatile state lives in CLAUDE.md + roadmap. Adopt vidya's `state.md` split only if CLAUDE.md churn warrants. |
 
 ## Architecture
 
 | Doc | Last touched | Status | Notes |
 |-----|--------------|--------|-------|
-| `docs/architecture/overview.md` | 2026-07-22 | ✅ Fresh | Was the worst-drifted doc despite being marked fresh: claimed 34 tradition modules (32), 27 history maps (37), 6 incarnate sub-traditions (9), and omitted `domain` from the profile box and `aspect`/`shadow`/`overlay` from the diagram entirely. Diagram now carries a derived-layer box; data flow and `query_*` list corrected. |
-| `docs/architecture/adr/001–009` | 2026-07-22 | ✅ Fresh | Point-in-time records, **not** to be rewritten when superseded — but four were contradicted by shipped code with no note saying so, which leaves a reader no way to know. 001/002/003 now carry supersession notes pointing at the Cyrius port (006) and struct migration (008); 003's note states explicitly that field completeness is no longer compiler-verified, which it had claimed as a benefit. 004 point 6 is superseded by the new 010. 005 had two examples backwards against the shipped data (Tiamat is Unity, not EarlyExhale; Ahura Mazda is EarlyExhale, not Unity) and described the exhale/inhale asymmetry the wrong way round — both fixed as factual errors rather than superseded decisions. |
-| `docs/architecture/adr/010` | 2026-07-22 | ✅ Fresh | **New.** Named-nation representation of Indigenous traditions, superseding ADR-004 point 6. Records the nine rules that replaced the blanket exclusion, including the v2.14.0 finding that channel ownership and text provenance are separate checks. |
+| `docs/architecture/overview.md` | 2026-08-31 | ✅ Fresh | Worst-drifted doc at the previous sweep, and again at this one — the pattern is that diagrams are edited less often than prose. Fixed: the history box read 37 maps (actual 41), the `incarnate` breakdown silently omitted Hindu (13) and Vedic (7), i.e. 20 of 56 figures including the largest group, and the derived-layers line named two overlay systems where there are three. |
+| `docs/architecture/adr/001–009` | 2026-08-31 | ✅ Fresh | Point-in-time records, **not** rewritten when superseded — but checked for decisions the code has since contradicted with no note. ADR-004 point 3 (the Buddha marked as a Vaishnava claim) became simply **true** at 2.14.4 and needs no note; point 7 gained an extension note for the 2.14.6 living-persons rule; ADR-002's "every enum carries a `_COUNT` sentinel" was never true of the classification enums the ADR is about and now carries a correction. |
+| `docs/architecture/adr/010` | 2026-08-31 | ✅ Fresh | Named-nation representation, heavily exercised across 2.14.5–2.14.7. Two scope notes added rather than changes: rule 8 is a research standard, not a ship gate — all 42 high-protocol figures ship with consent `never-asked` — and rule 9's "modules say so in their headers" is currently true of two modules, not six. |
 
 ## Benchmarks
 
 | Doc | Last touched | Status | Notes |
 |-----|--------------|--------|-------|
-| `bench-history.csv` | 2026-08-31 | ✅ Fresh | Rows for 2.4.0–2.14.6 (49/release through 2.8.1; 50 from 2.9.0 with `tarot/all_22`; 52 from 2.10.0; 57 from 2.11.0; 60 from 2.13.0 adding the three `overlay/*` benches, unchanged at 2.14.0; 2.8.0 skipped bench-recording, restored at 2.8.1). One row set per version — the pre-final 2.13.1 rows were replaced rather than appended. Bench is a hard release gate (build + run-to-completion + exit 0). Resolved at 2.10.1: `affinity/similar_to_5` 809 → 73 µs after `similar_to()` moved to bounded top-k. The `aboriginal/all_5` label counted five figures against a module of four from 2.11.0 until 2.14.0. **2.14.1 recorded no rows** — that release bumped the pin 6.4.71 -> 6.5.27 and skipped the mandatory bench step, so 2.14.2's only baseline is 2.14.0; same class as the 2.8.0 skip, and not back-fillable. **Recorded at 2.14.2: the script stores one sample per benchmark per release**, which for the sub-microsecond rows is inside run-to-run spread. The 2.14.0 -> 2.14.2 table appeared to show a +30% `history/traditions_for_civ` regression; it is a layout swap with its near-twin `history/traditions_for_era` (their sum moved 8024 -> 8049 ns) and the whole-suite total moved 247528 -> 247040 ns. Compare the µs-scale rows release-over-release; treat the ns-scale rows as a liveness check, not a measurement. At 2.14.3 that method earned its keep in both directions: it confirmed `registry/by_tradition` and `history/query_civilization` as REAL ~4% regressions from the safe_streq hardening (the prior sample fell outside the whole observed spread) while clearing `registry/query_courage_0.9`, which moved as far by the raw numbers but landed inside it. At 2.14.6 it separated a third case: `history/context_all_traditions` +11.3% is neither noise nor regression but **workload growth** — the benchmark is O(traditions x mappings) and both went 39 -> 41, predicting +10.5%. It is the one row that grows quadratically with tradition count. |
+| `bench-history.csv` | 2026-08-31 | ✅ Fresh | Rows for 2.4.0–2.14.8, one set per version, 60 from 2.13.0 onward. **Label renames break per-benchmark continuity and are recorded rather than hidden:** `aboriginal/all_5`→`all_4` (2.14.0), `celtic/all_15`→`all_17` and `incarnate/all_51`→`all_56` (2.14.7), `slavic/all_12`→`all_11` (2.14.8, after the Morana merge). Old series end, new ones begin; nothing is rewritten. 2.14.1 recorded no rows at all. **Method, established 2.14.2 and refined since:** the script records ONE sample per benchmark per release, so ns-scale rows are noise — compare the µs-scale rows and the suite total. It has now separated three cases: real regression (`by_tradition` +4% from the safe_streq hardening), noise (`query_courage_0.9` moving as far but inside its spread), and **workload growth** (`history/context_all_traditions` +11.3%, where the benchmark is O(traditions × mappings) and both went 39→41, predicting +10.5%). |
 | `benchmarks-rust-v-cyrius.md` | 2026-04-12 | 🔵 Dated artifact | Frozen Rust v1.1.0 vs Cyrius v2.0.1 comparison; references cc3 3.7.0 — intentionally historical. |
 
 ## Forward commitments
 
-- ✅ ADRs for struct migration (008), checked-allocation (009) and named-nation representation (010) filed.
-- Benchmarks are mandatory per release (build+run+exit-0+record) — added to CLAUDE.md § Versioning & Benchmarking after the v2.6.0 bench-include miss.
-- **Verify, do not read.** The next sweep should re-run the same checks rather than trusting these ✅s: compile every code example, count every count against source, and check each ADR for decisions the code has since contradicted. Every finding above was invisible to a careful read of the prose.
-- `cyrius audit` is **not** a usable gate for this project. _Reason updated 2026-08-30 against pin 6.5.36 — the reason previously recorded here had itself gone stale._ The old grounds (test stage compiling `tests/avatara.tcyr` standalone and failing on `SYS_WRITE`; benches looked for in `benches/`) no longer hold: both stages now pass, 295/295 and 60 benches. It still exits 1, on three things that are not project rules — the `fmt` stage over `src/history.cyr` and `src/affinity.cyr`, a raw count of 1570 lint warnings (verified: **all 1570 are the cosmetic `exceeds 120 characters` warning** the real gate filters out, 0 of any other kind), and 454 undocumented public fns against a doc-coverage standard this project has not adopted. The real gates are the eight in `ci.yml`: `cyrius deps`, the filtered lint loop over `src/*.cyr` and `programs/*.cyr`, the DCE build + ELF check, **both** `programs/*.cyr` builds, `cyrius test tests/avatara.tcyr`, the bench build-and-run, the dist-bundle staleness check, and the docs job (required files + `VERSION`/`cyrius.cyml`/CHANGELOG consistency). All are listed with their exact commands in `CONTRIBUTING.md`.
-- **"Nothing here can go stale" is a claim, not an exemption — and it was wrong.** The 2026-07-22 row certifying `CONTRIBUTING.md` and `SECURITY.md` as carrying no version, count or API content was false for both: `CONTRIBUTING.md` was a page of Rust build commands for a project with no Rust in it, and `SECURITY.md`'s support table omitted the entire shipping major. Both had been marked ✅ Fresh without being read against the tree. A doc exempted from checking is a doc that drifts unobserved; no row gets that exemption again.
-- Consider splitting volatile state into `docs/development/state.md` if CLAUDE.md version/pin churn grows.
+- **Verify, do not read.** The next sweep should re-run these checks rather than trusting these ✅s.
+  Every finding above was invisible to a careful read of the prose.
+- **Compile the README from outside the repo.** The Quick Start's consumer include is not testable
+  any other way.
+- Benchmarks are mandatory per release (build + run + exit 0 + record).
+- `cyrius audit` is **not** a usable gate for this project — its `fmt` stage fails on two files, it
+  counts the ~1580 cosmetic line-length warnings the real gate filters out, and it reports undocumented
+  public functions against a standard this project does not adopt. Its test and bench stages do pass.
+  The real gates are `cyrius deps`, the CI lint loop, `cyrius test`, the bench build+run, the
+  dist-staleness check, and the version and toolchain-pin consistency steps.
+- **Enter the remaining 38 figures in the sourcing register** — `inuit`, `lakota`, `haudenosaunee`,
+  `anishinaabe`. Their sources were checked at v2.14.5 and found sound; it was never written down, so
+  each pass re-derives it. This needs no community engagement and is the one blocked item desk work
+  can close.

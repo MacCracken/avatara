@@ -29,9 +29,15 @@ archetype and tradition names passed to its lookup and query functions.
 
 - **Dependencies.** Zero external dependencies except sakshi (logging). The Cyrius stdlib is vendored
   from the toolchain snapshot pinned in `cyrius.cyml` `[package].cyrius`.
-- **Allocation.** All heap allocation routes through the checked `xalloc(n)`, which aborts on OOM
-  rather than returning a null that would be dereferenced
-  ([ADR-009](docs/architecture/adr/009-checked-allocation-policy.md), CWE-690).
+- **Allocation.** Every heap allocation avatara itself makes routes through the checked `xalloc(n)`,
+  which aborts on OOM rather than returning a null that would be dereferenced
+  ([ADR-009](docs/architecture/adr/009-checked-allocation-policy.md), CWE-690). This covers avatara's
+  own structures; allocations made inside the vendored Cyrius stdlib (`vec_new`, string builders) are
+  the stdlib's own and are not routed through `xalloc`.
+- **NULL string fields.** `profile_new()` leaves a profile's five string fields NULL and
+  `validate_profile()` validates field ranges rather than string presence, so every read of a profile
+  string goes through `safe_strlen` / `safe_streq`. Seven public functions dereferenced NULL on a
+  validated profile before 2.14.3 (CWE-476); a regression test covers each.
 - **Memory safety is convention-enforced.** Cyrius has no borrow checker
   ([ADR-006](docs/architecture/adr/006-cyrius-port.md)), so bounds and null handling are the
   contributor's responsibility. Reports of out-of-bounds reads, null dereferences or unchecked

@@ -22,6 +22,12 @@ Avatara maps beings from traditions that are actively practiced by billions of p
 5. **Archangel list sourced** — module doc acknowledges the composite/metaphysical tradition rather than claiming canonical status
 6. **Secret/sacred traditions excluded** — Aboriginal Australian Dreamtime and broad "Native American" traditions are not codified, as many are explicitly not meant for outsider systematization
 7. **Soul/spirit text is evocative, not doctrinal** — written to capture the archetype's essence without making theological claims
+   - *Extended at 2.14.6, not superseded:* a second constraint now applies to the same two fields.
+     Where a figure is a **living person**, both fields are written in the third person about the
+     archetype, never as a second-person script. A `soul` reading "You are X" is a line a consumer
+     hands to an agent to speak, which for someone alive puts words in a real person's mouth and
+     distributes them under GPL-3.0. This is a rule, not a per-figure exemption, and it applies to any
+     living figure added later. See `src/incarnate.cyr`'s header.
 
 ## Consequences
 

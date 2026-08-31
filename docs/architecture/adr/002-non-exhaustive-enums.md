@@ -8,6 +8,12 @@
 > the forward-compatibility problem this ADR solves does not arise in the same form. The intent — that
 > new variants are additive and consumers must tolerate unknown values — is still honoured, by
 > convention and by the `_COUNT` sentinel each enum carries.
+>
+> **Correction, 2.14.8:** "each enum carries" a `_COUNT` sentinel was never true of the enums this ADR
+> is actually about. The six public classification enums — BreathAffinity, GrowthDirection, Element,
+> Polarity, CosmicTier, Domain — carry none, and 15 of 67 enums in `src/` have none. The sentinel is a
+> **collection** convention, for enums a caller iterates; a classification read off a profile is a
+> closed vocabulary, not a range to walk. The additive-only intent is unaffected and still holds.
 
 ## Context
 

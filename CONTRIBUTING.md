@@ -56,6 +56,7 @@ local run is a green CI run.
 | Benchmarks | `CYRIUS_DCE=1 cyrius build tests/avatara.bcyr build/bench && ./build/bench` | the bench suite builds, runs to completion and exits 0 |
 | Dist bundle | `cyrius distlib --check` | `dist/avatara.cyr` matches `src/` |
 | Docs | required files present; `VERSION` == `cyrius.cyml`; `VERSION` appears in `CHANGELOG.md` | version consistency |
+| Toolchain pin | the `[package].cyrius` pin must match CLAUDE.md's `- **Compiler**:` line and both `Cyrius compiler N+` references in README | prose cannot drift from the pin |
 
 The lint gate is a filtered loop, not a bare `cyrius lint`. Line-length warnings are cosmetic and
 excluded; everything else fails:
@@ -79,7 +80,7 @@ consumers include, and a stale bundle fails CI.
 
 - **`cyrius audit`** — do not use it as a pre-PR check. It currently exits non-zero on this repo and
   none of its complaints correspond to a project rule: it fails the `fmt` stage on two files, counts
-  the 1570 cosmetic line-length lint warnings the real gate filters out, and reports undocumented
+  the ~1580 cosmetic line-length lint warnings the real gate filters out, and reports undocumented
   public functions against a doc-coverage standard this project does not adopt. Its test and bench
   stages do pass. See [`docs/doc-health.md`](docs/doc-health.md).
 - **`cyrius fmt --check`** — not enforced. `src/affinity.cyr`, `src/history.cyr` and
@@ -90,8 +91,9 @@ consumers include, and a stale bundle fails CI.
 - **`cyrius check`** — useful while iterating, but note it defaults to standalone and will report
   `undefined function 'sakshi_set_level'` on any root that includes `src/logging.cyr`. Use
   `cyrius check --with-deps <root>` for a meaningful answer.
-- **`cyrius vet <root>`** — not a gate, but a useful audit of the include graph (`42 deps, 0
-  untrusted, 0 missing` today).
+- **`cyrius vet <root>`** — not a gate, but a useful audit of the include graph. Run from the repo
+  root it reports `43 deps, 0 untrusted, 1 missing`; the one "missing" is the root file itself,
+  which vet resolves relative to the parent directory. Not a defect.
 
 ## Code Guidelines
 
@@ -102,8 +104,11 @@ clippy in Cyrius — see [ADR-002](docs/architecture/adr/002-non-exhaustive-enum
 own supersession. The intent behind those rules survives in Cyrius form:
 
 - **Enums are plain integer constants.** Adding a variant cannot break a downstream `match`, so
-  forward-compatibility is achieved by convention: every enum carries a trailing `_COUNT` sentinel
-  (`CAN_COUNT = 4`), and consumers must tolerate unknown values.
+  forward-compatibility is achieved by convention: **collection** enums carry a trailing `_COUNT`
+  sentinel (`CAN_COUNT = 4`) so callers can iterate them, and consumers must tolerate unknown values.
+  The six public *classification* enums — BreathAffinity, GrowthDirection, Element, Polarity,
+  CosmicTier, Domain — deliberately carry no sentinel: they are closed vocabularies read off a
+  profile, not ranges to walk.
 - **No serialization.** Profiles are plain memory; there is no derive to add.
 - **Errors are values, not panics.** Fallible public functions return `Result` from `lib/result.cyr` —
   `Ok(x)` / `Err(code)`, inspected with `is_ok` / `is_err_result` / `result_unwrap` / `err_code_of`,
@@ -238,8 +243,9 @@ template, so the manifest needs no edit.
 scripts/version-bump.sh 2.15.0
 ```
 
-That writes `VERSION`, updates the version line in `CLAUDE.md`, stubs a `CHANGELOG.md` section and
-regenerates `dist/avatara.cyr`. Filling in the CHANGELOG entry is manual, and CI requires the version
+That writes `VERSION`, updates the version line in `CLAUDE.md`, propagates the `[package].cyrius`
+pin into CLAUDE.md's `- **Compiler**:` line and both README `Cyrius compiler N+` references, stubs a
+`CHANGELOG.md` section and regenerates `dist/avatara.cyr`. Filling in the CHANGELOG entry is manual, and CI requires the version
 to appear there.
 
 **Benchmark every release.** `scripts/bench-history.sh` builds and runs `tests/avatara.bcyr` and

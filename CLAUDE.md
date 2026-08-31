@@ -6,7 +6,7 @@
 
 - **Language**: Cyrius (ported from Rust in v2.0)
 - **License**: GPL-3.0-only
-- **Version**: SemVer 2.14.7
+- **Version**: SemVer 2.14.8
 - **Compiler**: cyrius >= 6.5.36 (pinned in `cyrius.cyml` `[package].cyrius`)
 
 ## Consumers
@@ -71,15 +71,16 @@ All values are i64. f64 trait/emphasis weights stored as IEEE 754 bit patterns. 
 - `ArchetypeProfile` — a native `#derive(accessors)` `struct Profile` (`src/types.cyr`), 40 i64 fields = 320 bytes (incl. `domain` at offset 312). The compiler-generated `Profile_<field>(p)` / `Profile_set_<field>(p, v)` are canonical; constructors set fields via `Profile_set_*`. The `prof_*` accessors are thin consumer-facing shims that delegate to `Profile_*`. The `ProfLayout` offset enum is retained for the loop-based code (compose/affinity/error iterate offset ranges) and the layout-assertion test.
 - `profile_new()` — allocates with defaults (traits=0.5, emphasis=0.5, breath=LATE_EXHALE, growth=DIFFERENTIATE)
 - All heap allocation routes through `xalloc(n)` (`src/types.cyr`) — checked alloc that aborts on OOM (CWE-690 guard; abort-on-OOM policy, see ADR-009). Use `xalloc`, not raw `alloc`, for new profile/struct allocations.
+- **All reads of a profile string go through `safe_strlen` / `safe_streq` (`src/types.cyr`), never raw `strlen`/`streq`** — a mandatory convention, like `xalloc`. `profile_new()` leaves all five string fields NULL and `validate_profile()` checks field ranges rather than string presence, so a profile the validator returns `Ok` for can carry NULL strings. Seven public functions segfaulted on exactly that until 2.14.3 (CWE-476). `safe_streq(0, 0)` is deliberately **false**: two profiles with unset names are not the same archetype. Only string literals may call the raw primitives.
 - Each tradition module: entity functions (e.g. `kabbalah_kether()`) + lazy-init `all_*()` collection + `*_count()`
 - Registry: `all_profiles()`, `by_tradition()`, `query_*()` filters; `lookup(name)` / `lookup_in(tradition, name)` return `Result` (`Ok(profile)` / `Err(ERR_UNKNOWN_ARCHETYPE)`); `find_and_validate(name)` chains lookup + validate via `?`
 - Compose: `compose(weighted_vec)` — weighted blending; returns `Result` (`Ok(profile)` / `Err(ERR_INVALID_PARAMETER)`)
-- Errors: `Result<T, E>` from `lib/result.cyr` (`is_ok` / `is_err_result` / `result_unwrap` / `err_code_of`); `validate_profile(p)` returns `Result`. `AvataraError` codes are the `Err` payload. Internal range predicates (`require_unit_range`/`require_all_unit_range`) stay bare-int (loop-hot)
+- Errors: `Result<T, E>` from `lib/result.cyr` (`is_ok` / `is_err_result` / `result_unwrap` / `err_code_of`); `validate_profile(p)` returns `Result`. **Its contract is field RANGES, not string presence** — `validate_profile(profile_new())` is `Ok` by design, because `profile_new()` is a build-then-populate constructor; NaN is rejected explicitly since ordered comparison against NaN is always false. `AvataraError` codes are the `Err` payload. Internal range predicates (`require_unit_range`/`require_all_unit_range`) stay bare-int (loop-hot)
 - History: `context_for_tradition()`, `traditions_for_civilization()`, `traditions_active_at()`, `traditions_for_era()`
 - Affinity: `affinity()`, `similar_to()`, `cross_tradition_match()`, `cross_tradition_matches()`, `detect_conflicts()`, `is_incompatible()`. `similar_to(src, k)` uses bounded top-k selection (O(N·k)) — do not reintroduce a full sort before trimming; `k <= 0` still means "all, sorted"
 - Shadow: `shadow(profile)` — inverted form (traits→1−v, breath/growth/polarity mirrored, element/tier kept); involutive; `is_shadow_of(a, b)`
 - Domain: every archetype has a `Domain` (primary sphere, offset 312); `prof_domain(p)`, `query_domain(domain)`, `query_count_domain(domain)`
-- Overlays: `profile_enneagram_type/wing/centre/score(p)`, `profile_jungian_role/score(p)`, `jungian_shadow_form(p)`. Derived, never stored; adding an overlay must not change `profile_count()`. Generic registry API — `overlay_system_count/name/by_name`, `overlay_label_count/label`, `overlay_score(s,p,i)`, `overlay_best(s,p)` — enumerates every registered system without naming one; out-of-range systems degrade (`"unknown"`/0/0.0), they do not trap
+- Overlays: `profile_enneagram_type/wing/centre/score(p)`, `profile_jungian_role/score(p)`, `profile_mystic_mode/score(p)`, `jungian_shadow_form(p)`. Derived, never stored; adding an overlay must not change `profile_count()`. Generic registry API — `overlay_system_count/name/by_name`, `overlay_label_count/label`, `overlay_score(s,p,i)`, `overlay_best(s,p)` — enumerates every registered system without naming one; out-of-range systems degrade (`"unknown"`/0/0.0), they do not trap
 
 ## Key Principles
 
