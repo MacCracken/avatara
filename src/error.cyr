@@ -9,7 +9,12 @@ enum AvataraError {
 }
 
 # Validate f64 is in 0.0-1.0 range. Returns 0 on success, ERR_OUT_OF_RANGE on failure.
+# NaN is rejected explicitly: every ordered comparison against NaN is false, so
+# f64_lt/f64_gt alone certified NaN as in-range and validate_profile() returned
+# Ok() for a profile whose traits were all NaN (fixed 2.14.3). `f64_eq(v, v) == 0`
+# is the same NaN test compose() already uses on its weights.
 fn require_unit_range(val) {
+    if (f64_eq(val, val) == 0) { return ERR_OUT_OF_RANGE; }
     if (f64_lt(val, 0.0) == 1) { return ERR_OUT_OF_RANGE; }
     if (f64_gt(val, 1.0) == 1) { return ERR_OUT_OF_RANGE; }
     return ERR_NONE;
@@ -31,6 +36,11 @@ fn require_all_unit_range(p, first, last) {
 # Returns Result: Ok(p) on success, or Err(AvataraError) — Err(ERR_INVALID_PARAMETER)
 # for a NULL profile, Err(ERR_OUT_OF_RANGE) for an out-of-range field.
 # Public entry point for consumers that build profiles from external data.
+# CONTRACT: this validates field RANGES, not string presence. A profile straight
+# from profile_new() carries NULL name/tradition/desc/soul/spirit_text and still
+# validates Ok, which is deliberate — profile_new() is a build-then-populate
+# constructor. Every API that reads a profile string therefore goes through
+# safe_strlen/safe_streq (src/types.cyr) rather than assuming a non-NULL pointer.
 # (require_unit_range / require_all_unit_range stay bare-int — they run in
 # per-field loops, where a Result heap alloc per element would be wasteful.)
 fn validate_profile(p) {

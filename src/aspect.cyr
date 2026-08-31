@@ -65,7 +65,7 @@ fn aspect_index_by_name(name) {
     if (name == 0) { return 0 - 1; }
     var i = 0;
     while (i < ASPECT_COUNT) {
-        if (streq(aspect_name(i), name) == 1) { return i; }
+        if (safe_streq(aspect_name(i), name) == 1) { return i; }
         i = i + 1;
     }
     return 0 - 1;
@@ -73,6 +73,7 @@ fn aspect_index_by_name(name) {
 
 # profile_aspect_weight(p, i): archetype p's f64 trait weight for aspect i (0.0..1.0); 0.0 for a bad index.
 fn profile_aspect_weight(p, i) {
+    if (p == 0) { return 0.0; }
     var off = aspect_trait_offset(i);
     if (off < 0) { return 0.0; }
     return load64(p + off);

@@ -42,10 +42,10 @@ fn shadow_polarity(p) {
 fn shadow_name(name) {
     var prefix = "Shadow of ";
     var plen = strlen(prefix);
-    var nlen = strlen(name);
+    var nlen = safe_strlen(name);
     var buf = xalloc(plen + nlen + 1);
     memcpy(buf, prefix, plen);
-    memcpy(buf + plen, name, nlen);
+    if (nlen > 0) { memcpy(buf + plen, name, nlen); }
     store8(buf + plen + nlen, 0);
     return buf;
 }

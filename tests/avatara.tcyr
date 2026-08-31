@@ -56,6 +56,12 @@ fn main() {
     # offsets, and sizeof == 320. Guards the manual-offset/struct match.
     # ================================================================
     assert_eq(PROF_SIZE, 320, "profile size 320");
+    # PROF_SIZE is the ProfLayout constant; sizeof(Profile) is the struct itself.
+    # Pinning only the former let a 41st field on struct Profile pass the suite
+    # while every Profile_set_<41st> wrote 8 bytes past profile_new()'s
+    # xalloc(PROF_SIZE) -- the one and only allocation site (fixed 2.14.3).
+    assert_eq(sizeof(Profile), PROF_SIZE, "sizeof(Profile) == PROF_SIZE (no field added without updating ProfLayout)");
+    assert_eq(sizeof(Profile), 320, "Profile is 320 bytes");
     var lp = alloc(PROF_SIZE);
     Profile_set_warmth(lp, 42);
     assert_eq(load64(lp + PROF_WARMTH), 42, "Profile_set_warmth -> offset 24");
@@ -786,22 +792,40 @@ fn main() {
     var excl_ok = 1;
     var xtrads = all_traditions();
     var xprofs = all_profiles();
+    # Lowercase once. The byte-exact comparison this replaced was evaded by both
+    # realistic shapes: overlay_label() returns the lowercase key form ("hero"),
+    # so an archetype named "Hero" slipped through, and a tradition string of
+    # "Jungian Archetypes" never equals "Jungian" (fixed 2.14.3).
+    var xtl = vec_new();
+    for (var xli = 0; xli < vec_len(xtrads); xli += 1) { vec_push(xtl, str_lower_cstr(vec_get(xtrads, xli))); }
+    var xnl = vec_new();
+    for (var xni = 0; xni < vec_len(xprofs); xni += 1) { vec_push(xnl, str_lower_cstr(prof_name(vec_get(xprofs, xni)))); }
     var xs = 0;
     while (xs < overlay_system_count()) {
+        # A tradition string may not even CONTAIN a registered system's name --
+        # substring, because "Jungian Archetypes" is the shape this enters in.
+        # Applied to traditions ONLY, never to archetype names: enneagram_title
+        # returns "The Peacemaker", which is also Deganawidah in incarnate.cyr,
+        # a real Haudenosaunee figure carried under ADR-010.
+        var sysl = str_lower_cstr(overlay_system_name(xs));
+        for (var xsi = 0; xsi < vec_len(xtl); xsi += 1) {
+            if (strstr(vec_get(xtl, xsi), sysl) >= 0) { excl_ok = 0; }
+        }
         var nlab = overlay_label_count(xs);
         var xi = 0 - 1;
         while (xi < nlab) {
             # xi == -1 checks the system's own name; 0..n-1 check its labels.
             var label = overlay_system_name(xs);
             if (xi >= 0) { label = overlay_label(xs, xi); }
+            var labl = str_lower_cstr(label);
             var xt = 0;
-            while (xt < vec_len(xtrads)) {
-                if (streq(vec_get(xtrads, xt), label) == 1) { excl_ok = 0; }
+            while (xt < vec_len(xtl)) {
+                if (streq(vec_get(xtl, xt), labl) == 1) { excl_ok = 0; }
                 xt = xt + 1;
             }
             var xp = 0;
-            while (xp < vec_len(xprofs)) {
-                if (streq(prof_name(vec_get(xprofs, xp)), label) == 1) { excl_ok = 0; }
+            while (xp < vec_len(xnl)) {
+                if (streq(vec_get(xnl, xp), labl) == 1) { excl_ok = 0; }
                 xp = xp + 1;
             }
             assert_eq(vec_len(by_tradition(label)), 0, "overlay label is not a tradition");
@@ -829,6 +853,40 @@ fn main() {
     assert_eq(overlay_best(99, gp), 0, "unknown system best -> 0");
     assert_eq(f64_eq(overlay_score(99, gp, 0), 0.0), 1, "unknown system scores 0.0");
     assert_eq(streq(overlay_system_name(99), "unknown"), 1, "unknown system name");
+
+    # ================================================================
+    # Null-safety: a profile validate_profile() certifies as Ok may still
+    # carry NULL strings, because profile_new() leaves all five unset and
+    # the validator checks field RANGES, not string presence. Before 2.14.3
+    # shadow(), compose(), similar_to(), cross_tradition_match(),
+    # cross_tradition_matches(), context_for_profile() and
+    # profile_aspect_weight() all dereferenced NULL and died on such a
+    # profile. Each assert below segfaults the suite if its guard regresses.
+    # ================================================================
+    var np = profile_new();
+    var nq = profile_new();
+    assert_eq(is_ok(validate_profile(np)), 1, "profile_new() validates Ok (build-then-populate)");
+    assert_eq(shadow(np) != 0, 1, "shadow() survives a validated unnamed profile");
+    assert_eq(streq(prof_name(shadow(np)), "Shadow of "), 1, "shadow_name() of an unset name");
+    var nw = vec_new();
+    vec_push(nw, weighted_new(np, 1.0));
+    vec_push(nw, weighted_new(nq, 1.0));
+    assert_eq(is_ok(compose(nw)), 1, "compose() survives unnamed profiles");
+    assert_eq(f64_eq(profile_aspect_weight(0, 0), 0.0), 1, "profile_aspect_weight(NULL) -> 0.0");
+    assert_eq(vec_len(similar_to(np, 3)) >= 0, 1, "similar_to() survives an unset-name profile");
+    assert_eq(cross_tradition_match(np) != 0, 1, "cross_tradition_match() survives an unset tradition");
+    assert_eq(vec_len(cross_tradition_matches(np, 3)) >= 0, 1, "cross_tradition_matches() survives it too");
+    assert_eq(context_for_profile(np), 0, "context_for_profile() -> 0 on an unset tradition");
+    assert_eq(context_for_profile(0), 0, "context_for_profile(NULL) -> 0");
+    # NULL never equals NULL: two unnamed profiles are not the same archetype.
+    assert_eq(safe_streq(0, 0), 0, "safe_streq(NULL, NULL) is not equality");
+    assert_eq(safe_strlen(0), 0, "safe_strlen(NULL) -> 0");
+    # NaN is not in 0.0-1.0. Every ordered comparison against NaN is false, so
+    # f64_lt/f64_gt alone certified it as in-range (fixed 2.14.3).
+    var nanp = profile_new();
+    store64(nanp + TW_FIRST, f64_div(0.0, 0.0));
+    assert_eq(is_err_result(validate_profile(nanp)), 1, "validate_profile() rejects a NaN trait");
+    assert_eq(err_code_of(validate_profile(nanp)), ERR_OUT_OF_RANGE, "NaN trait -> ERR_OUT_OF_RANGE");
 
     return assert_summary();
 }

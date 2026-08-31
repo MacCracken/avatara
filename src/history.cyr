@@ -78,8 +78,8 @@ fn all_mappings() {
     if (history_init_done == 0) {
         history_vec = vec_new();
 
-        vec_push(history_vec, history_map_new("Kabbalah", "Phoenicia",
-        svec1("Phoenicia"), svec2("Middle Ages", "Renaissance"),
+        vec_push(history_vec, history_map_new("Kabbalah", "Medieval Iberia",
+        svec3("Judea", "Medieval Iberia", "Ottoman Empire"), svec2("Middle Ages", "Renaissance"),
         100, LIVING,
         "Rooted in Jewish mysticism from the 1st century CE, flourishing in medieval Provence and Spain (Zohar, 13th c.), with continued development through Lurianic Kabbalah in 16th c. Safed"));
 
@@ -118,8 +118,8 @@ fn all_mappings() {
         (0-3500), (0-500),
         "Sumerian, Akkadian, and Babylonian religion -- among humanity's earliest recorded theologies, from Uruk-period temples through the Neo-Babylonian Empire; displaced by Persian and Hellenistic religions"));
 
-        vec_push(history_vec, history_map_new("Celtic", "Kingdom of France",
-        svec1("Kingdom of France"), svec3("Iron Age", "Classical Antiquity", "Middle Ages"),
+        vec_push(history_vec, history_map_new("Celtic", "Gaelic Ireland",
+        svec3("Gaelic Ireland", "Medieval Wales", "Gaul"), svec3("Iron Age", "Classical Antiquity", "Middle Ages"),
         (0-800), 1200,
         "Continental and Insular Celtic religion, from Hallstatt culture through La Tene and Irish/Welsh medieval literary traditions; Tuatha De Danann preserved in the Lebor Gabala Erenn"));
 
@@ -131,15 +131,15 @@ fn all_mappings() {
         vec_push(history_vec, history_map_new("Aztec", "Aztec Empire",
         svec2("Aztec Empire", "Olmec"), svec1("Mesoamerican Postclassic"),
         1300, 1521,
-        "Mexica theology synthesizing Toltec heritage with original cosmology, centered on Tenochtitlan; destroyed by Spanish conquest but with roots in earlier Mesoamerican traditions"));
+        "Mexica theology synthesizing Toltec heritage with original cosmology, centered on Tenochtitlan; the Mexica state fell to the Spanish conquest in 1521, though Nahua peoples and their descendants continue, and elements of the tradition persist in contemporary Nahua practice"));
 
         vec_push(history_vec, history_map_new("Maya", "Maya",
         svec1("Maya"), svec3("Mesoamerican Preclassic", "Mesoamerican Classic", "Mesoamerican Postclassic"),
-        (0-2000), 1500,
-        "One of the longest-lived Mesoamerican traditions, from Preclassic origins through Classic period city-states (Tikal, Palenque, Copan) to Postclassic Yucatan; Popol Vuh recorded in the colonial period"));
+        (0-2000), LIVING,
+        "One of the longest-lived Mesoamerican traditions, from Preclassic origins through Classic period city-states (Tikal, Palenque, Copan) to Postclassic Yucatan; Popol Vuh recorded in the colonial period. A living tradition: the last independent Maya polity, Itza Nojpeten, fell only in 1697, and the 260-day count (cholq\'ij) has been kept without interruption by highland aj q\'ij daykeepers into the present"));
 
-        vec_push(history_vec, history_map_new("Yoruba", "Ghana Empire",
-        svec2("Ghana Empire", "Songhai Empire"), svec1("Middle Ages"),
+        vec_push(history_vec, history_map_new("Yoruba", "Ife",
+        svec2("Ife", "Oyo Empire"), svec1("Middle Ages"),
         (0-500), LIVING,
         "Ifa theology originating in Ile-Ife (present-day Nigeria), with oral tradition stretching back millennia; diaspora traditions (Candomble, Santeria, Vodun) carry it worldwide"));
 
@@ -193,8 +193,8 @@ fn all_mappings() {
         (0-1000), LIVING,
         "Finnish and Sami spiritual traditions preserved in the Kalevala (compiled 1835 by Elias Lonnrot from oral tradition) and Sami shamanic practice; Vainamoinen, Ukko, and Tapio reflect Uralic cosmology distinct from but parallel to Norse mythology"));
 
-        vec_push(history_vec, history_map_new("Vodou", "Ghana Empire",
-        svec2("Ghana Empire", "Songhai Empire"), svec1("Middle Ages"),
+        vec_push(history_vec, history_map_new("Vodou", "Haiti",
+        svec3("Saint-Domingue", "Haiti", "Dahomey"), svec1("Modern"),
         1600, LIVING,
         "Haitian Vodou synthesized West African (primarily Fon and Yoruba) spiritual traditions with Taino and Catholic elements during the colonial period; a living religion of the African diaspora, central to the Haitian Revolution (1791-1804) and Haitian national identity"));
 
@@ -289,7 +289,7 @@ fn find_mapping(tradition) {
     var n = vec_len(v);
     for (var i = 0; i < n; i += 1) {
         var m = vec_get(v, i);
-        if (streq(map_tradition(m), tradition) == 1) { return m; }
+        if (safe_streq(map_tradition(m), tradition) == 1) { return m; }
     }
     return 0;
 }
@@ -309,8 +309,13 @@ fn context_for_tradition(tradition) {
 }
 
 # Get historical context for a profile (by its tradition field).
+# Returns 0 for a NULL profile or one whose tradition is unset — every peer
+# accessor guards its pointer, and this one did not until 2.14.3.
 fn context_for_profile(profile) {
-    return context_for_tradition(prof_tradition(profile));
+    if (profile == 0) { return 0; }
+    var trad = prof_tradition(profile);
+    if (trad == 0) { return 0; }
+    return context_for_tradition(trad);
 }
 
 # List all tradition names that have historical mappings.
@@ -334,7 +339,7 @@ fn traditions_for_civilization(civ_name) {
         var civs = map_civs(m);
         var cn = vec_len(civs);
         for (var j = 0; j < cn; j += 1) {
-            if (streq(vec_get(civs, j), civ_name) == 1) {
+            if (safe_streq(vec_get(civs, j), civ_name) == 1) {
                 vec_push(result, map_tradition(m));
             }
         }
@@ -368,7 +373,7 @@ fn traditions_for_era(era_name) {
         var eras = map_eras(m);
         var en = vec_len(eras);
         for (var j = 0; j < en; j += 1) {
-            if (streq(vec_get(eras, j), era_name) == 1) {
+            if (safe_streq(vec_get(eras, j), era_name) == 1) {
                 vec_push(result, map_tradition(m));
             }
         }

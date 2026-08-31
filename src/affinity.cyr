@@ -96,8 +96,8 @@ fn similar_to(source, max_results) {
     for (var i = 0; i < n; i += 1) {
         var p = vec_get(profiles, i);
         # Skip self
-        if (streq(prof_name(p), src_name) == 1) {
-            if (streq(prof_tradition(p), src_trad) == 1) {
+        if (safe_streq(prof_name(p), src_name) == 1) {
+            if (safe_streq(prof_tradition(p), src_trad) == 1) {
                 continue;
             }
         }
@@ -151,7 +151,7 @@ fn cross_tradition_match(source) {
     for (var i = 0; i < n; i += 1) {
         var p = vec_get(profiles, i);
         # Must be different tradition
-        if (streq(prof_tradition(p), src_trad) == 1) { continue; }
+        if (safe_streq(prof_tradition(p), src_trad) == 1) { continue; }
         var score = affinity(source, p);
         if (f64_gt(score, best_score) == 1) {
             best = p;
@@ -171,7 +171,7 @@ fn cross_tradition_matches(source, max_results) {
 
     for (var i = 0; i < vec_len(trads); i += 1) {
         var t = vec_get(trads, i);
-        if (streq(t, src_trad) == 1) { continue; }
+        if (safe_streq(t, src_trad) == 1) { continue; }
 
         # Find best match in this tradition
         var tprofs = by_tradition(t);

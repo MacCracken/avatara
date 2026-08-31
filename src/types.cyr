@@ -27,6 +27,28 @@ fn xalloc(n) {
     return p;
 }
 
+# safe_strlen(s) / safe_streq(a, b): string primitives that tolerate a NULL
+# pointer. A Profile's five string fields (name, tradition, desc, soul,
+# spirit_text) default to 0 from profile_new(), and validate_profile() checks
+# field RANGES rather than string presence — so a profile the validator returns
+# Ok() for can still carry NULL strings, and every consumer of a profile string
+# has to survive that. Before 2.14.3 they did not: shadow(), compose(),
+# similar_to(), cross_tradition_match() and context_for_profile() all
+# dereferenced NULL and died on a validated profile (CWE-476).
+fn safe_strlen(s) {
+    if (s == 0) { return 0; }
+    return strlen(s);
+}
+
+# NULL never equals anything, including another NULL: two profiles with unset
+# names are not thereby "the same archetype", which is what streq(0, 0) would
+# have claimed in similar_to()'s self-skip.
+fn safe_streq(a, b) {
+    if (a == 0) { return 0; }
+    if (b == 0) { return 0; }
+    return streq(a, b);
+}
+
 # --- BreathAffinity ---
 # Manifestation phase: where on the cosmic breath this archetype sits.
 # intensity() values in parentheses.

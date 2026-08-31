@@ -163,7 +163,7 @@ fn compose(weighted) {
     for (var i = 0; i < n; i += 1) {
         var entry = vec_get(weighted, i);
         if (f64_gt(weighted_weight(entry), 0.0) == 1) {
-            name_size += strlen(prof_name(weighted_profile(entry))) + 3;
+            name_size += safe_strlen(prof_name(weighted_profile(entry))) + 3;
         }
     }
     var name_buf = xalloc(name_size);
@@ -179,7 +179,7 @@ fn compose(weighted) {
                 store8(name_buf + name_pos, 32); name_pos += 1;
             }
             var nm = prof_name(weighted_profile(entry));
-            var nmlen = strlen(nm);
+            var nmlen = safe_strlen(nm);
             memcpy(name_buf + name_pos, nm, nmlen);
             name_pos += nmlen;
             first = 0;
@@ -194,7 +194,7 @@ fn compose(weighted) {
     for (var i = 0; i < n; i += 1) {
         var entry = vec_get(weighted, i);
         if (f64_gt(weighted_weight(entry), 0.0) == 1) {
-            trad_size += strlen(prof_tradition(weighted_profile(entry))) + 3;
+            trad_size += safe_strlen(prof_tradition(weighted_profile(entry))) + 3;
         }
     }
     var trad_buf = xalloc(trad_size);
@@ -209,7 +209,7 @@ fn compose(weighted) {
             # Check if already seen
             var dup = 0;
             for (var j = 0; j < vec_len(seen_trads); j += 1) {
-                if (streq(vec_get(seen_trads, j), t) == 1) { dup = 1; }
+                if (safe_streq(vec_get(seen_trads, j), t) == 1) { dup = 1; }
             }
             if (dup == 0) {
                 vec_push(seen_trads, t);
@@ -218,7 +218,7 @@ fn compose(weighted) {
                     store8(trad_buf + trad_pos, 43); trad_pos += 1;
                     store8(trad_buf + trad_pos, 32); trad_pos += 1;
                 }
-                var tlen = strlen(t);
+                var tlen = safe_strlen(t);
                 memcpy(trad_buf + trad_pos, t, tlen);
                 trad_pos += tlen;
                 first = 0;

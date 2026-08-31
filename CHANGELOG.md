@@ -7,6 +7,122 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.14.3] — 2026-08-31
+
+First of several sweep-and-repair releases. This one is **correctness and integrity only** — no content
+corrections, no `tradition` string changes, nothing a consumer can observe except that calls which used
+to segfault now return. The audit behind it graded 218 findings across the whole project; the content
+and cultural-protocol repairs are deliberately held for 2.14.4 and 2.14.5 so that a crash fix and a
+theological correction are never reviewed in the same diff.
+
+### Fixed
+
+- **Seven public functions segfaulted on a profile `validate_profile()` had just certified as `Ok`.**
+  `profile_new()` leaves all five string fields NULL, and `validate_profile()` checks the profile
+  pointer and the 29 trait/emphasis ranges — never string presence. So the documented
+  build-then-populate flow produced a validated profile that killed the process on first use.
+  `shadow()`, `compose()`, `similar_to()`, `cross_tradition_match()`, `cross_tradition_matches()`,
+  `context_for_profile()` and `profile_aspect_weight()` all died this way (CWE-476), each reproduced at
+  exit 139 before the fix and asserted against afterwards.
+  The repair is a class fix, not seven patches: new `safe_strlen()` / `safe_streq()` primitives in
+  `src/types.cyr`, applied at **every** site in `src/` that reads a profile string — 18 of them across
+  `shadow`, `compose`, `affinity`, `registry`, `history`, `overlay`, `aspect`, `tarot` and `iching`.
+  Only true literals still call the raw primitives. `safe_streq(0, 0)` is deliberately **false**: two
+  profiles with unset names are not thereby the same archetype, which is what `streq(0, 0)` had been
+  claiming inside `similar_to()`'s self-skip.
+  Finding the class mattered — patching only what the first three reproductions touched would have left
+  `similar_to`, both `cross_tradition_*` functions and `context_for_profile` live, and a grep for
+  `prof_name`/`prof_tradition` still missed `affinity.cyr:174`, where the NULL arrives through a local.
+- **`validate_profile()` certified NaN as in-range.** Every ordered comparison against NaN is false, so
+  `f64_lt(v, 0.0)` and `f64_gt(v, 1.0)` both returned 0 and a profile whose traits were **all NaN**
+  validated `Ok`. `require_unit_range` now rejects NaN explicitly with `f64_eq(v, v) == 0` — the same
+  test `compose()` has always applied to its weights, which is why compose caught what the validator did
+  not. `validate_profile`'s doc comment now records the contract it actually enforces: field ranges, not
+  string presence.
+- **The layout test pinned the constant, not the struct.** It asserted `PROF_SIZE == 320` — a ProfLayout
+  enum value compared to a literal — and never `sizeof(Profile)`. Appending a 41st field to
+  `struct Profile` left the suite green at 295/295 while every generated `Profile_set_<41st>` wrote 8
+  bytes past `profile_new()`'s `xalloc(PROF_SIZE)`, the library's one and only profile allocation site.
+  Three documents claimed this test pinned `sizeof`; it did not exist. Now it does, and the mutation
+  fails loudly.
+- **The traditions-vs-typologies test did not enforce its own invariant.** CLAUDE.md's strongest
+  structural rule is guarded by a registry walk that compared byte-exact and case-sensitive, and both
+  realistic evasions passed it: `overlay_label()` returns the lowercase key form, so an archetype named
+  `"Hero"` never matched `"hero"`, and a tradition string of `"Jungian Archetypes"` never equalled
+  `"Jungian"`. Verified by injecting five Jungian archetypes with a tradition string — suite stayed
+  green. The comparison is now case-insensitive, and a tradition may not even *contain* a registered
+  system's name. Substring matching is applied to **traditions only, never to archetype names**:
+  `enneagram_title(ENN_PEACEMAKER)` is `"The Peacemaker"`, which is also Deganawidah in
+  `src/incarnate.cyr`, a real Haudenosaunee figure carried under ADR-010. Normalising both sides — the
+  obvious fix — would have flagged him as a typology collision.
+- **Six `history.cyr` mappings filed traditions under the wrong civilization, or as extinct.**
+  Kabbalah was filed under **Phoenicia**, putting Jewish mysticism under the Canaanite civilization;
+  it now carries Judea / Medieval Iberia / Ottoman Empire, tracking its own note's arc. Celtic religion
+  was filed under the **Kingdom of France** — a polity founded centuries after the tradition it was
+  meant to place — now Gaelic Ireland / Medieval Wales / Gaul. **Yoruba** and **Haitian Vodou** were
+  both filed under the **Ghana and Songhai Empires**, states of a different region and people; Yoruba
+  now carries Ife / Oyo Empire, and Vodou carries Saint-Domingue / Haiti / Dahomey in the Modern era
+  rather than the Middle Ages, which its own 1600 start date already contradicted.
+  **Maya was recorded as ending in 1500** — coded extinct, though the last independent Maya polity fell
+  in 1697 and the 260-day *cholq'ij* count has been kept by highland *aj q'ij* daykeepers without
+  interruption since; it is now `LIVING`. The **Aztec** note's "destroyed by Spanish conquest" is
+  corrected the same way: the Mexica state fell in 1521, Nahua peoples did not.
+- **The README Quick Start did not compile for its intended reader.** It told consumers to
+  `include "avatara/src/lib.cyr"`, but `src/lib.cyr` resolves its own includes relative to the working
+  directory, so it only builds from inside the avatara repo. From a consumer's own project root it
+  fails on the first line. It now includes `dist/avatara.cyr`, the committed consumer bundle that
+  `cyrius.cyml` has always described as exactly that. Compiling the snippet from the repo root cannot
+  detect this — it has to be built from somewhere else.
+- **`src/lib.cyr`'s header is shipped API documentation** — `cyrius.cyml` bundles it as the last module
+  of `dist/avatara.cyr`, so it is what consumers read — and it stated **497 archetypes across 34
+  traditions** (actual: 504/37), `celtic - 15` (17), `incarnate - 44+` (56), and omitted **ten shipped
+  modules** from its list, five of them tradition modules carrying 40 archetypes. All corrected, and the
+  list is now checked against the file's own `include` lines.
+- **README said `incarnate` spans six traditions; it spans nine** — Mystic, Hindu, Buddhist, Vedic,
+  Taoist, plus Lakota, Haudenosaunee, Comanche and Northern Paiute. The README's own table three lines
+  below already enumerated all nine. `docs/doc-health.md` repeated the wrong count while certifying the
+  README fresh; both fixed.
+- **The 2.14.2 entry said a preventive measure was absent that the same release shipped.**
+  `release.yml` publishes that text verbatim as the GitHub release body, so it was wrong in public.
+
+### Testing
+
+- **295 -> 311 assertions.** The new ones cover each crash above, `safe_streq(0,0)`/`safe_strlen(0)`,
+  NaN rejection and its error code, and the two repaired pins.
+- **Every new assertion was mutation-tested**, on the principle that a test which cannot fail is itself
+  a defect: reverting the NaN guard fails 2; adding a 41st field fails 2; reverting `shadow_name`'s null
+  tolerance crashes the suite outright; injecting an archetype named `"Hero"` under tradition
+  `"Jungian Archetypes"` now trips the exclusivity assertion that previously let it through.
+
+### Benchmarks
+
+- **The null-safety hardening costs ~3.5-4% on tradition and civilization scans, and that is a real
+  cost, not noise.** `registry/by_tradition` 21882 -> 22644 ns and `history/query_civilization`
+  30326 -> 31475 ns (medians of 5 runs; the 2.14.2 sample sits below the whole observed range in both
+  cases, which is the test the 2.14.2 entry established for telling a regression from a single-sample
+  artifact). Both scan every profile calling `safe_streq` where they previously called `streq`, so one
+  extra null check per comparison in the hot loop is exactly the expected shape.
+  `registry/query_courage_0.9` moved +4.2% by the raw numbers but its 2.14.2 sample falls *inside* the
+  observed spread, so it is noise — and it is a pure trait filter with no string comparison at all,
+  which corroborates the attribution: only the string-comparing benchmarks moved.
+  Judged worth it: seven reachable segfaults removed for ~4% on two query paths. Suite total across all
+  60 benchmarks is flat at 247040 -> 247899 ns (+0.3%).
+
+### Known and deferred
+
+Held for **2.14.4** (content accuracy) and **2.14.5** (protocol and naming, potentially breaking):
+Zadkiel attributed to Saturn rather than Jupiter; Guru Har Krishan's age at death; Epona's Roman temple;
+Fūjin's Kojiki attribution; Babalú-Ayé carrying San Lázaro iconography; Ezili Dantò's invented
+speechlessness; Marzanna and Morana carried as two archetypes of one goddess; Lada; the Slavic module's
+Ivanov–Toporov framing; `"Polynesian"` as a pan-ethnic tradition string over Hawaiian and Māori atua;
+Máttaráhkká, a Sámi goddess, under tradition `"Finnish"`; Joukahainen's persona calling itself "the
+young Lapp"; the Sikh module's lack of a protocol note against express Akal Takht guidance on portraying
+the Gurus; ADR-004 point 3's Vaishnava-marking claim that `src/hindu.cyr` does not carry; and three
+`src/aboriginal.cyr` sourcing notes that misstate what the Taungurung and Gunaikurnai land councils
+actually published — verified against Wayback snapshots predating v2.14.0, so not a case of the source
+moving.
+
+
 ## [2.14.2] — 2026-08-31
 
 A toolchain bump, and a benchmark practice that turned out to be measuring itself. Nothing in `src/`
@@ -45,9 +161,11 @@ changed; the suite is 295/295, identical to the pre-bump baseline.
   the current source still *compiles* and passes 295/295 under 6.4.71, so the old number was not wrong
   about buildability — but 6.4.71 predates the `fmt_float` carry fix, so a contributor honouring the
   documented floor gets a compiler that mis-prints near-integer floats from both example programs.
-  Root cause of the drift: `scripts/version-bump.sh` rewrites CLAUDE.md's `- **Version**:` line and never
-  the `- **Compiler**:` line, and CI gates VERSION against `cyrius.cyml` but never the pin against prose.
-  Nothing yet prevents this recurring on the next pin bump.
+  Root cause of the drift: `scripts/version-bump.sh` rewrote CLAUDE.md's `- **Version**:` line and never
+  the `- **Compiler**:` line, and CI gated VERSION against `cyrius.cyml` but never the pin against prose.
+  **Both are now closed**: `version-bump.sh` reads `[package].cyrius` and propagates it into CLAUDE.md's
+  Compiler line and both README references, and the `docs` job gained a **Verify toolchain pin
+  consistency** step that fails when any of the three disagrees with the pin.
 
 ### Benchmarks
 

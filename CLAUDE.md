@@ -6,7 +6,7 @@
 
 - **Language**: Cyrius (ported from Rust in v2.0)
 - **License**: GPL-3.0-only
-- **Version**: SemVer 2.14.2
+- **Version**: SemVer 2.14.3
 - **Compiler**: cyrius >= 6.5.36 (pinned in `cyrius.cyml` `[package].cyrius`)
 
 ## Consumers
@@ -59,7 +59,7 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/anishinaabe.cyr` — 5 Anishinaabe manidoog + the 7 Grandfather Teachings (Nizhwaaswi Gagiikwewin), carried by their Ojibwe names as cosmic-tier principles; the wiindigoo is deliberately not carried — see module header
 - `src/aboriginal.cyr` — 4 figures of three Aboriginal Australian peoples, carried under their own peoples' tradition strings (Kunwinjku, Kulin, Gunaikurnai), not a continent-wide label; `traditions_for_civilization("Aboriginal Australia")` gathers them. Restricted Dreaming material deliberately excluded, and the v2.14.0 survey's six refusals are recorded with their reasons (see module header)
 - `src/logging.cyr` — sakshi logging init
-- `tests/avatara.tcyr` — integration test suite (295 assertions)
+- `tests/avatara.tcyr` — integration test suite (311 assertions)
 - `tests/avatara.bcyr` — benchmarks (60)
 - `programs/traditions.cyr` — example: explore archetypes
 - `programs/compose.cyr` — example: blend traditions

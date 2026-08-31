@@ -14,7 +14,7 @@ Maps divine and mythological beings across world traditions to composable person
 
 ## Traditions
 
-Tradition and module are not one-to-one: `incarnate` spans six traditions, and `aboriginal` carries
+Tradition and module are not one-to-one: `incarnate` spans nine traditions, and `aboriginal` carries
 three peoples. The `tradition` field is what `by_tradition()` and `cross_tradition_match()` key on.
 
 | Tradition | Module | Entities |
@@ -57,7 +57,10 @@ three peoples. The `tradition` field is what `by_tradition()` and `cross_traditi
 ## Quick Start
 
 ```cyrius
-include "avatara/src/lib.cyr"
+# dist/avatara.cyr is the committed consumer bundle — include that, not src/.
+# (src/lib.cyr resolves its own includes relative to the repo root, so it only
+# builds from inside avatara itself.)
+include "avatara/dist/avatara.cyr"
 
 alloc_init();
 

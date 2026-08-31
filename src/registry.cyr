@@ -150,7 +150,7 @@ fn lookup(name) {
     var n = vec_len(v);
     for (var i = 0; i < n; i += 1) {
         var p = vec_get(v, i);
-        if (streq(prof_name(p), name) == 1) { return Ok(p); }
+        if (safe_streq(prof_name(p), name) == 1) { return Ok(p); }
     }
     return Err(ERR_UNKNOWN_ARCHETYPE);
 }
@@ -162,8 +162,8 @@ fn lookup_in(tradition, name) {
     var n = vec_len(v);
     for (var i = 0; i < n; i += 1) {
         var p = vec_get(v, i);
-        if (streq(prof_tradition(p), tradition) == 1) {
-            if (streq(prof_name(p), name) == 1) { return Ok(p); }
+        if (safe_streq(prof_tradition(p), tradition) == 1) {
+            if (safe_streq(prof_name(p), name) == 1) { return Ok(p); }
         }
     }
     return Err(ERR_UNKNOWN_ARCHETYPE);
@@ -184,7 +184,7 @@ fn by_tradition(tradition) {
     var n = vec_len(v);
     for (var i = 0; i < n; i += 1) {
         var p = vec_get(v, i);
-        if (streq(prof_tradition(p), tradition) == 1) {
+        if (safe_streq(prof_tradition(p), tradition) == 1) {
             vec_push(result, p);
         }
     }
@@ -200,7 +200,7 @@ fn all_traditions() {
         var t = prof_tradition(vec_get(v, i));
         var dup = 0;
         for (var j = 0; j < vec_len(result); j += 1) {
-            if (streq(vec_get(result, j), t) == 1) { dup = 1; }
+            if (safe_streq(vec_get(result, j), t) == 1) { dup = 1; }
         }
         if (dup == 0) { vec_push(result, t); }
     }
@@ -348,7 +348,7 @@ fn filter_tradition(src, tradition) {
     var n = vec_len(src);
     for (var i = 0; i < n; i += 1) {
         var p = vec_get(src, i);
-        if (streq(prof_tradition(p), tradition) == 1) {
+        if (safe_streq(prof_tradition(p), tradition) == 1) {
             vec_push(result, p);
         }
     }
@@ -367,7 +367,7 @@ fn query_by_traditions(trads) {
         var p = vec_get(v, i);
         var t = prof_tradition(p);
         for (var j = 0; j < vec_len(trads); j += 1) {
-            if (streq(vec_get(trads, j), t) == 1) {
+            if (safe_streq(vec_get(trads, j), t) == 1) {
                 vec_push(result, p);
             }
         }

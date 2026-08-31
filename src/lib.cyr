@@ -6,10 +6,11 @@
 # mapping across traditions. All traditions map to the same
 # ArchetypeProfile output — composable across cultures.
 #
-# 497 archetypes across 34 traditions.
+# 504 archetypes across 37 traditions.
 #
 # Modules:
 #   types      - TraitWeights, ModuleEmphasis, ArchetypeProfile, enums
+#   aspect     - universal roles derived from the trait weights (stores nothing)
 #   error      - AvataraError codes, validation
 #   kabbalah   - 10 Sephiroth (Tree of Life)
 #   angelic    - 7 Archangels, 9 Angelic Orders
@@ -19,7 +20,7 @@
 #   egyptian   - 16 principal deities
 #   buddhist   - 7 Bodhisattvas, 5 Dhyani Buddhas
 #   mesopotamian - 14 Sumerian/Babylonian deities
-#   celtic     - 15 Tuatha De Danann
+#   celtic     - 17 Tuatha De Danann & Insular Celtic deities
 #   shinto     - 15 Japanese Kami
 #   aztec      - 14 Aztec (Mexica) deities
 #   maya       - 12 Maya deities
@@ -30,7 +31,12 @@
 #   slavic     - 12 pre-Christian Slavic deities
 #   jain       - 24 Tirthankaras
 #   sikh       - 10 Sikh Gurus
-#   incarnate  - 44+ incarnate divine figures
+#   finnish    - 14 Kalevala figures & Sami spirits
+#   vodou      - 14 Vodou Lwa (Rada, Petwo, Ghede)
+#   solar      - 4 intercalary archetypes (the days upon the year)
+#   canaanite  - 4 Canaanite/Ugaritic deities
+#   etruscan   - 4 Etruscan deities
+#   incarnate  - 56 incarnate divine figures (nine tradition strings)
 #   tarot      - 22 Major Arcana (Tree-of-Life paths, bridging Kabbalah)
 #   iching     - 64 hexagrams (King Wen sequence, bridging the eight trigrams)
 #   inuit      - 10 Arctic spirits and powers
@@ -39,7 +45,11 @@
 #   anishinaabe - 5 manidoog of the Great Lakes
 #   aboriginal - 4 figures of three Aboriginal Australian peoples
 #   compose    - weighted blending of profiles
+#   history    - 37 tradition-to-history mappings (civilization, era, range)
 #   registry   - lookup, enumeration, query filters
+#   affinity   - affinity scoring, similarity, cross-tradition matching
+#   shadow     - shadow aspect: involutive inversion of a profile
+#   overlay    - derived typology overlays (Enneagram, Jungian); not traditions
 #   logging    - sakshi logging init
 
 # Stdlib auto-included via cyrius.cyml

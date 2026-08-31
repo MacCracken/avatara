@@ -236,7 +236,7 @@ fn enneagram_index_by_name(name) {
     if (name == 0) { return 0 - 1; }
     var i = 0;
     while (i < ENN_COUNT) {
-        if (streq(enneagram_name(i), name) == 1) { return i; }
+        if (safe_streq(enneagram_name(i), name) == 1) { return i; }
         i = i + 1;
     }
     return 0 - 1;
@@ -359,7 +359,7 @@ fn jungian_index_by_name(name) {
     if (name == 0) { return 0 - 1; }
     var i = 0;
     while (i < JUNG_COUNT) {
-        if (streq(jungian_name(i), name) == 1) { return i; }
+        if (safe_streq(jungian_name(i), name) == 1) { return i; }
         i = i + 1;
     }
     return 0 - 1;
@@ -468,7 +468,7 @@ fn overlay_system_by_name(name) {
     if (name == 0) { return 0 - 1; }
     var i = 0;
     while (i < OVL_SYSTEM_COUNT) {
-        if (streq(overlay_system_name(i), name) == 1) { return i; }
+        if (safe_streq(overlay_system_name(i), name) == 1) { return i; }
         i = i + 1;
     }
     return 0 - 1;
