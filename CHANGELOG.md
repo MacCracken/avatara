@@ -7,6 +7,76 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.14.2] — 2026-08-31
+
+A toolchain bump, and a benchmark practice that turned out to be measuring itself. Nothing in `src/`
+changed; the suite is 295/295, identical to the pre-bump baseline.
+
+### Changed
+
+- **Cyrius pin `6.5.27` -> `6.5.36`.** `cyrius lib sync --full` re-vendored the whole version-matched
+  stdlib snapshot (108 files), clearing a `./lib/ shadows version-pinned` warning that was live even
+  against the old pin — the local tree was carrying patra 1.13.0 against a pinned 1.13.8. `cyrius deps`
+  resolves clean, and `lib/` now matches the 6.5.36 snapshot byte-for-byte. The two failure modes the
+  pin-bump checklist exists for — a stale leftover that `lib sync` never deletes, and a `[deps]` name the
+  new snapshot dropped — are both absent: all 16 declared stdlib names resolve, and the file set matches
+  exactly. Note that `lib/` is gitignored, so the re-sync contributes **zero committed bytes**; the delta
+  lands at build time for whoever compiles against the new pin, and consumers do not inherit it by taking
+  avatara 2.14.2 — they inherit it when their own pin moves.
+- **Of the 22 stdlib files that changed between the two pins, 8 are in avatara's closure and exactly one
+  changed symbol is one avatara calls.** The closure is 29 of the snapshot's 102 files, computed by
+  following includes from the 16 declared roots rather than assumed; `bayan`, `mabda`, `sigil`, `sandhi`,
+  `sankoch`, `vani`, `yukti`, `patra`, `niyama`, `ganita`, `yantra`, `freelist` and the `tls_native` pair
+  all changed and are all outside it. Inside it: `fmt`, `io`, `sakshi` and five `syscalls_*` files. The
+  `io` `getenv` rewrite is unreachable (no call site anywhere in the closure), the `sakshi` 2.4.10 ->
+  2.4.11 change touches only the span path while `src/logging.cyr` calls `sakshi_set_level` and nothing
+  else, and every `syscalls_*` change is additive or off-platform — `syscalls_x86_64_linux.cyr`, the file
+  avatara actually builds through, is unchanged.
+- **The one that matters: `fmt_float` gained a carry fix at 6.5.30.** `fmt_float_buf` now computes the
+  rounded fraction *before* emitting the integer part, so a fraction that rounds up to a full unit carries
+  into the integer instead of being emitted verbatim — `0.99` at one decimal printed `0.10`, and `3 - 1e-7`
+  at seven printed `2.1000000`. avatara has 13 `fmt_float` call sites, all in `programs/`. Their current
+  output is unchanged, because no value either example prints falls in the affected band — but the
+  defect is latent rather than absent, and near-integers are exactly where a library of 0.0–1.0 trait
+  weights lands them under composition.
+- **Compiler references corrected across the docs — this is a real floor raise, not bookkeeping.**
+  `README.md` (twice) and `CLAUDE.md` still said `6.4.71`; the 2.14.1 pin bump moved the manifest and left
+  the prose behind, so they were two bumps stale. All three now say `6.5.36`. The floor genuinely moved:
+  the current source still *compiles* and passes 295/295 under 6.4.71, so the old number was not wrong
+  about buildability — but 6.4.71 predates the `fmt_float` carry fix, so a contributor honouring the
+  documented floor gets a compiler that mis-prints near-integer floats from both example programs.
+  Root cause of the drift: `scripts/version-bump.sh` rewrites CLAUDE.md's `- **Version**:` line and never
+  the `- **Compiler**:` line, and CI gates VERSION against `cyrius.cyml` but never the pin against prose.
+  Nothing yet prevents this recurring on the next pin bump.
+
+### Benchmarks
+
+- **2.14.1 recorded no rows at all** — the release bumped the pin `6.4.71` -> `6.5.27` and skipped the
+  mandatory `scripts/bench-history.sh` step, so the only available baseline for this release is 2.14.0,
+  measured on 2026-07-22 under the older toolchain. Not back-fillable. Same class as the 2.8.0 skip
+  already noted in `docs/doc-health.md`.
+- **The apparent 2.14.0 -> 2.14.2 deltas are single-sample noise, and the investigation that established
+  that is worth more than the numbers.** Read naively the table shows `history/traditions_for_civ` +30%
+  and `registry/lookup_by_name` +16% against 40–60% improvements almost everywhere else. Neither
+  regression is real:
+  - `traditions_for_civ` and `traditions_for_era` are **structurally identical** functions
+    (`src/history.cyr:328` and `src/history.cyr:362` — same nested loop, same `streq` scan, differing only
+    in which field they read). Their *sum* is flat across the bump: 8024 ns -> 8049 ns. One went up by
+    almost exactly what the other went down. Which of the pair is the slow one has flipped repeatedly
+    across releases; it is a code-layout artifact between two near-twin functions, not a regression.
+  - Holding the stdlib fixed at the 6.5.36 snapshot and varying only the compiler, cycc **6.5.28, 6.5.34,
+    6.5.35 and 6.5.36 all emit a byte-identical benchmark binary** (same md5, 1198584 bytes). There is no
+    codegen change anywhere in that span to attribute anything to. Against 6.4.71 — the one build that
+    does differ — nine interleaved runs put every benchmark within ~1%: `lookup_by_name` 2593 vs 2604 ns,
+    `traditions_for_civ` 3914 vs 3889, `similar_to_5` 71108 vs 70822.
+  - Whole-suite total across all 60 benchmarks: **247528 ns -> 247040 ns**. Flat.
+- **The practice needs a caveat recorded: `scripts/bench-history.sh` stores one sample per benchmark per
+  release.** For the sub-microsecond rows that is well inside run-to-run spread, so release-over-release
+  comparison of those rows detects noise and will keep producing phantom regressions. The µs-scale rows
+  (`affinity/*`, `history/context_all_traditions`, `registry/by_tradition`) are the ones worth reading.
+  The gate itself — build, run to completion, exit 0 — is unaffected and still valuable.
+
+
 ## [2.14.1] — 2026-08-17
 
 ### Changed
