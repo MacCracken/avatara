@@ -9,6 +9,14 @@
 # recognizes only Michael, Gabriel, Raphael; Eastern Orthodox lists 7-8
 # different names; the Book of Enoch names yet another set. Chamuel,
 # Jophiel, and Zadkiel come from later mystical/angelological traditions.
+#
+# The planetary attributions are composite in the same way. Michael on the Sun
+# and Raphael on Mercury follow the Heptameron and later ceremonial usage, not
+# Agrippa, who reverses the two. Zadkiel on Jupiter is the constant across every
+# branch -- Agrippa's Scale of Seven, the Hebrew Tzedek ("righteousness", the
+# planet and the name sharing a root), and Chesed in the sephirotic column.
+# Jophiel on Saturn follows Agrippa (Davidson, A Dictionary of Angels, s.v.
+# Jophiel); Paracelsus places him on Jupiter instead.
 
 enum Archangel {
     ARCH_MICHAEL = 0;
@@ -230,7 +238,7 @@ fn angelic_jophiel() {
     var p = profile_new();
     Profile_set_name(p, "Jophiel");
     Profile_set_tradition(p, "Angelic");
-    Profile_set_desc(p, "Jupiter archangel — beauty of God, illuminator of wisdom, patron of contemplation and understanding");
+    Profile_set_desc(p, "Saturn archangel — beauty of God, illuminator of wisdom, patron of contemplation and understanding");
     # Traits
     Profile_set_warmth(p, 0.6);
     Profile_set_humor(p, 0.4);
@@ -266,7 +274,7 @@ fn angelic_zadkiel() {
     var p = profile_new();
     Profile_set_name(p, "Zadkiel");
     Profile_set_tradition(p, "Angelic");
-    Profile_set_desc(p, "Saturn archangel — mercy and forgiveness, transmutation of suffering, freedom through release");
+    Profile_set_desc(p, "Jupiter archangel — mercy and forgiveness, transmutation of suffering, freedom through release");
     # Traits
     Profile_set_warmth(p, 0.85);
     Profile_set_humor(p, 0.3);

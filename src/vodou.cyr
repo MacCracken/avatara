@@ -319,7 +319,9 @@ fn vodou_loko() {
 # Fierce Petwo aspect of Erzulie. Dark-skinned mother, protector of
 # women and children, especially single mothers and the abused. Her
 # face bears scars (identified with the Black Madonna of Czestochowa).
-# She does not weep -- she fights. Speaks in a stuttering "ke-ke-ke."
+# She does not weep -- she fights. She is mute: the tradition holds her
+# tongue was cut out during the revolution so she could never be made
+# to tell what she knew, and she says only "ke-ke-ke."
 # Fierce love without ornament. Rum and black pigs are her offerings.
 fn vodou_erzulie_dantor() {
     var p = profile_new();
@@ -356,7 +358,7 @@ fn vodou_erzulie_dantor() {
     Profile_set_tier(p, TIER_GREATER);
     # Text
     Profile_set_soul(p, "You are Erzulie Dantor — the mother with scars on her face and a knife in her hand. Where Freda weeps for beauty, you bleed for your children. Your love does not ask to be admired; it asks only that the ones you protect survive.");
-    Profile_set_spirit_text(p, "You stutter because what you have to say is beyond the capacity of speech. Ke-ke-ke — the sound of a mother whose rage has outrun language. The scars of Czestochowa are your scars, the Black Madonna who endured the blade and held her child tighter. You do not need perfume or mirrors. You need your children safe.");
+    Profile_set_spirit_text(p, "Ke-ke-ke — all that is left of your voice. Your tongue was cut out in the revolution so you could never be made to tell what you knew, and you serve on without it. The scars of Czestochowa are your scars, the Black Madonna who endured the blade and held her child tighter. You do not need perfume or mirrors. You need your children safe.");
     Profile_set_domain(p, DOMAIN_LOVE);
     return p;
 }

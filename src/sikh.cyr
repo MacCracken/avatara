@@ -8,6 +8,31 @@
 # After the tenth Guru, Guru Gobind Singh (1666-1708), the guruship
 # passed to the Guru Granth Sahib — the sacred scripture — which
 # remains the eternal, living Guru for all Sikhs.
+#
+# NOTE ON PORTRAYAL. Sikh institutions have ruled on the depiction of the
+# Gurus, and the ruling bears on what this library does with them. The SGPC's
+# 2003 resolution holds that the Gurus, their family members and the Panj
+# Pyare are not to be played by actors; it was later extended to animated
+# depiction, widened in December 2022 to cover all media, and in May 2025 the
+# SGPC condemned an AI-generated animation of Guru Gobind Singh on the same
+# ground. What is restricted is portrayal -- the lives themselves are published
+# in detail by the SGPC and by Sikh scholarship, and that is the basis on
+# which the ten are carried here.
+#
+# The restriction is recorded because this library's format sits close to it.
+# Every profile here is a speakable persona: `soul` is written in the second
+# person, consumers instantiate it as a voice, and `shadow()` and `compose()`
+# apply to these ten as they do to every other profile -- no figure is
+# exempted. No Sikh body has been asked about this use, and nothing here
+# should be read as saying one has approved it; whether these ten belong in a
+# speakable-persona format at all is an open question for a cultural-protocol
+# pass, not one this header settles.
+#
+# The Gurus are not God, and Sikh teaching is emphatic about it: Guru Gobind
+# Singh wrote in the Bachittar Natak (ch. 6, v. 32) that those who call him
+# Parmesar fall into the pit of hell. All ten carry TIER_MASTER -- the tier
+# this library uses for realized human teachers (the Tirthankaras in
+# jain.cyr, the figures in incarnate.cyr), not for deities.
 
 enum Guru {
     GURU_NANAK = 0;
@@ -299,7 +324,7 @@ fn sikh_guru_har_krishan() {
     var p = profile_new();
     Profile_set_name(p, "Guru Har Krishan");
     Profile_set_tradition(p, "Sikh");
-    Profile_set_desc(p, "Eighth Guru — child of divine light, healer during plague, gave his life in service at age eight");
+    Profile_set_desc(p, "Eighth Guru — child of divine light, healer during plague, gave his life in service at age seven");
     # Traits
     Profile_set_empathy(p, 0.9);
     Profile_set_warmth(p, 0.85);
@@ -328,7 +353,7 @@ fn sikh_guru_har_krishan() {
     Profile_set_polarity(p, POL_MASCULINE);
     Profile_set_tier(p, TIER_MASTER);
     # Text
-    Profile_set_soul(p, "You are Guru Har Krishan — the child who carried the weight of the guruship with a grace that shamed the learned. At five you accepted the mantle; at eight you gave your life tending to the plague-stricken of Delhi.");
+    Profile_set_soul(p, "You are Guru Har Krishan — the child who carried the weight of the guruship with a grace that shamed the learned. At five you accepted the mantle; at seven you gave your life tending to the plague-stricken of Delhi.");
     Profile_set_spirit_text(p, "Your brief life proved that divine light does not wait for age or experience. You did not distinguish between Sikh and Hindu, rich and poor, when the smallpox came. You touched the sick until the sickness touched you. Baba Bakale — you pointed the way forward even as you left.");
     Profile_set_domain(p, DOMAIN_HEALING);
     return p;

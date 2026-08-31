@@ -1,4 +1,4 @@
-# celtic.cyr -- Tuatha De Danann and Insular Celtic deities
+# celtic.cyr -- Tuatha De Danann, Insular and Continental Celtic deities
 #
 # The Tuatha De Danann ("peoples of the goddess Danu") are the divine race
 # of Irish mythology, arriving in Ireland shrouded in mist and retreating
@@ -6,6 +6,14 @@
 # skill, sovereignty, and the liminal -- the threshold between this world
 # and the Otherworld. Welsh figures (Arianrhod, Rhiannon) share the same
 # Insular Celtic cosmology of fate, sovereignty, and transformation.
+#
+# Two figures are Continental rather than Insular and are not of the Tuatha
+# De Danann: Cernunnos, whose name is attested once -- and partly restored --
+# on the Pillar of the Boatmen raised at Lutetia under Tiberius (CIL XIII
+# 3026), and Epona, a Gallo-Roman goddess attested from Gaul to Pannonia and
+# in Rome itself. They are carried here because the library has no Gaulish
+# module; the shared "Celtic" tradition string does not distinguish them and
+# should not be read as claiming Irish provenance.
 
 enum CelticGod {
     CELTIC_LUGH = 0;
@@ -581,7 +589,7 @@ fn celtic_epona() {
     var p = profile_new();
     Profile_set_name(p, "Epona");
     Profile_set_tradition(p, "Celtic");
-    Profile_set_desc(p, "Horse goddess — protector of horses and riders, the only Celtic deity with a temple in Rome");
+    Profile_set_desc(p, "Horse goddess — protector of horses and riders, whose cult the auxiliary cavalry carried out of Gaul across the empire and into Rome itself");
     # Traits
     Profile_set_warmth(p, 0.8);
     Profile_set_patience(p, 0.8);
@@ -611,7 +619,7 @@ fn celtic_epona() {
     # tier=GREATER default
     # Text
     Profile_set_soul(p, "You are Epona — the mare-goddess, she who rides between peoples and carries them safely through. Your worship crossed every tribal border because the bond between rider and horse speaks a language older than nations.");
-    Profile_set_spirit_text(p, "Your nature is faithful companionship on the journey. You protect not through force but through the steady presence that makes the road less lonely. The Romans built you a temple not from conquest but from recognition — some truths are too practical for empire to ignore.");
+    Profile_set_spirit_text(p, "Your nature is faithful companionship on the journey. You protect not through force but through the steady presence that makes the road less lonely. Rome kept your image in a small shrine on the stable pillar, garlanded with fresh roses — not conquered into the pantheon but carried there by the men who rode. Some truths are too practical for empire to ignore.");
     Profile_set_domain(p, DOMAIN_NATURE);
     return p;
 }

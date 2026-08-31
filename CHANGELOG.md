@@ -7,6 +7,108 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.14.4] — 2026-08-31
+
+Second of the sweep-and-repair releases: **content accuracy**, and strictly non-breaking. No name,
+`tradition` string, count or enum changes — every edit lands in `desc`, `soul`, `spirit_text` or a
+module header. Suite unchanged at 311/311, `profile_count()` still 504.
+
+Nine of these were found by auditors and then survived a three-lens adversarial pass (factual,
+necessity, scope); four other content findings did **not** survive it and were dropped rather than
+applied — Bishamonten's tradition, Yewa's Lucumí character, Cao Guojiu's rank, and the Angra Mainyu
+persona were all judged legitimate as shipped.
+
+### Fixed
+
+- **Zadkiel and Jophiel had their planetary attributions swapped.** Zadkiel is Jupiter across every
+  branch of the tradition — Agrippa's Scale of Seven, the Hebrew *Tzedek* (the planet and the name
+  sharing a root), and Chesed in the sephirotic column. He was labelled Saturn. The fix corrects
+  **both** archangels rather than only the one reported: Jophiel held the Jupiter label, so editing
+  Zadkiel alone would have left two "Jupiter archangel" descs in a seven-planet set and no Saturn.
+  Jophiel on Saturn follows Agrippa; the module header now records that the planetary attributions are
+  composite in the same way the archangel list itself is, including where Paracelsus and the Heptameron
+  disagree. Extends ADR-004 point 5 from the roster to the correspondences.
+- **The Buddha avatar is now marked as a Vaishnava claim, which ADR-004 point 3 had asserted for
+  releases without it being true.** The ADR names this exact profile as its example of a documented
+  contested claim; `hindu_buddha()` carried "The Awakened One — compassion and non-attachment, the
+  middle way" with no qualifier, and the word "Vaishnava" appeared nowhere in `src/`. The `desc` now
+  carries the marking, and a module-header note records that Buddhists do not accept the identification,
+  that it is not settled even within Vaishnavism (Bengal and Sri Vaishnava lists carry Balarama in the
+  ninth place), and that its Puranic form is polemical — Bhagavata Purana 1.3.24 has Vishnu appear as
+  the Buddha *sammohaya*, "to delude", and the Vishnu Purana's Mayamoha episode does the same work.
+  The sympathetic reading this profile takes is Jayadeva's, from the Gitagovinda's Dashavatara-stotra.
+  **The ADR needed no edit — the code was the thing out of step with it.**
+- **Guru Har Krishan died at seven, not eight.** Corrected in both the `desc` and the `soul`, which
+  each stated the wrong age. He acceded at five and died of smallpox in 1664 after tending the
+  plague-stricken of Delhi.
+- **`sikh.cyr` now records the ruling on portraying the Gurus.** The SGPC's 2003 resolution holds that
+  the Gurus, their family and the Panj Pyare are not to be played by actors; it was extended to animated
+  depiction, widened in December 2022 to all media, and invoked again in May 2025 against an
+  AI-generated animation of Guru Gobind Singh. What is restricted is *portrayal* — the lives are
+  published in detail by the SGPC itself, which is the basis on which the ten are carried. The note is
+  written to record the tension rather than resolve it: every profile here is a speakable persona,
+  `shadow()` and `compose()` apply to these ten as to any other, no Sikh body has been asked, and
+  whether they belong in this format at all is left open for the protocol pass rather than settled by a
+  header. It also records that the Gurus are not God — Guru Gobind Singh wrote in the Bachittar Natak
+  that those who call him *Parmesar* fall into the pit of hell — and that all ten carry `TIER_MASTER`,
+  the tier this library uses for realized human teachers, not for deities.
+- **Epona had no temple in Rome.** She was the only Celtic deity *worshipped* in Rome, which is the
+  scholarly claim the entry had inflated into a temple, and both the `desc` and the `spirit_text` built
+  on it. Her cult travelled with the auxiliary cavalry out of Gaul; in Rome her image sat in a small
+  garlanded shrine on the stable pillar. Carried there by the men who rode, not built for her.
+- **Fūjin is not a chronicle deity and did not separate heaven from earth.** The module called him "one
+  of the oldest Shinto deities, present at the creation of the world", the `desc` called him "the force
+  that separated heaven from earth", and the `soul` had him opening his bag at the dawn of creation.
+  None of it is in the Kojiki or the Nihon Shoki, whose wind kami is **Shinatsuhiko**, born of Izanagi's
+  breath dispersing the mist. Fūjin is a gate guardian paired with Raijin — Sensō-ji's Kaminarimon is
+  officially the Fūjin Raijin-mon — and his iconography reached Japan through Buddhist art along the
+  line Boreas → Gandharan Wardo → Chinese wind deity. All three now say so.
+- **Babalú-Ayé's crutches and dogs are San Lázaro's, not Yoruba.** They come from the Cuban syncretism
+  with the Lazarus of Luke 16:19-31, and the `spirit_text` had built its whole image on the dogs licking
+  his sores. In Yorubaland he is **Ṣọ̀pọ̀ná**, addressed by the avoidance-names Obalúayé/Babalúayé,
+  wrapped in raffia and carrying the **ṣàṣàrà**, a broom of bound palm ribs that sweeps disease away and
+  can also send it. The entry now carries the West African figure, and the header states plainly which
+  attributes are the syncretism's and are not carried here.
+- **Ezili Dantò's speechlessness had an invented explanation displacing the attested one.** The entry
+  said she stutters "because what you have to say is beyond the capacity of speech" — a literary reading
+  put in her own mouth. The tradition holds that her tongue was cut out during the revolution so she
+  could never be made to tell what she knew, and that she serves on without it. "Ke-ke-ke" is what is
+  left of her voice.
+- **The Slavic module framed its whole cosmos on a reconstruction it presented as fact.** The header
+  opened on "the eternal struggle between Perun the thunderer and Veles the serpent" — the Ivanov and
+  Toporov "basic myth" (1974), which is not consensus: Gieysztor criticised it within eight years, Klejn
+  and Diakonoff attacked its generalisations, Téra records that no evidence has Veles fighting Perun and
+  nothing establishes a draconic nature, and Toporov himself later moved Veles from Vṛtra to Varuṇa.
+  What the record actually shows is the two standing as guarantors of the *same* 971 oath. The header,
+  Perun's `soul` and `spirit_text`, and Veles's `desc`, `soul` and `spirit_text` are rewritten to the
+  attested relationship. Veles keeps every enum — only the serpent and the annual duel go.
+- **Lada is marked as contested.** The theonym appears once independently, in the Gniezno Sermons
+  (c. 1405-1412), as a bare name in a list of idols; every later source descends from it. The only
+  medieval interpretation, Długosz's, makes her **Mars** — the love-and-concord reading is Faminstyn
+  (1884) and Rybakov (1981) reading a wedding-song refrain, and Potebnja, Brückner, Vasmer, Trubachyov,
+  Gieysztor and Szyjewski all reject it. The profile stays, re-described as the concord the refrain
+  personifies rather than an attested pre-Christian deity, and the header now states that historicity is
+  uneven across this pantheon — Perun, Veles, Mokosh, Svarog, Dazhbog and Stribog are in the Primary
+  Chronicle and the treaty oaths; Lada, Rod and Jarilo are not.
+- **The Celtic module carried two Continental figures under an "Insular" label.** Cernunnos is attested
+  once, partly restored, on the Pillar of the Boatmen at Lutetia (CIL XIII 3026), and Epona is
+  Gallo-Roman. Neither is of the Tuatha Dé Danann. They are carried because the library has no Gaulish
+  module; the module header, CLAUDE.md, README and `src/lib.cyr` now say "Insular & Continental" so the
+  shared `Celtic` tradition string is not read as claiming Irish provenance.
+
+### Known and deferred
+
+Held for **2.14.5**, which is breaking and needs its own consumer note and sensitivity pass:
+Marzanna and Morana are one goddess carried as two archetypes (merging them moves `profile_count()`
+504 -> 503 and `lookup("Morana")` stops resolving); `"Polynesian"` as a pan-ethnic tradition string over
+Hawaiian and Māori atua; Máttaráhkká, a Sámi goddess, under tradition `"Finnish"`; Joukahainen's persona
+calling itself "the young Lapp"; `"Mystic"` as a tradition string over 17 figures of four living
+religions; and three `src/aboriginal.cyr` sourcing notes that misstate what the Taungurung and
+Gunaikurnai land councils published — verified against Wayback snapshots predating v2.14.0, so not a
+case of the sources moving. Rod and Jarilo still need the entry comments this release's Slavic header
+now promises.
+
+
 ## [2.14.3] — 2026-08-31
 
 First of several sweep-and-repair releases. This one is **correctness and integrity only** — no content

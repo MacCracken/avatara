@@ -1,10 +1,26 @@
 # slavic.cyr -- Pre-Christian Slavic pantheon: 12 deities
 #
-# The Slavic cosmos is shaped by the eternal struggle between Perun the
-# thunderer in the canopy and Veles the serpent at the roots of the world
-# tree. Its gods embody the cycle of seasons -- death burned in effigy at
-# spring, life returning from the underworld, the hearth fire tended through
-# the dark months.
+# The Slavic record is thin and mostly hostile -- chronicle lists, oath
+# formulae, anti-pagan sermons, place names, folklore. Perun is the
+# thunderer of Vladimir's 980 pantheon; Veles is the skotii bogu, the
+# "cattle god" of the Rus'-Byzantine treaty oaths, lord of the underworld
+# and patron of poets -- Bojan is "Veles's grandson" in the Slovo o polku
+# Igoreve. Both stand as guarantors of the same 971 oath: a complementary
+# pair, sky and under-side, read by some as a Mitra-Varuna type. The
+# "basic myth" that recasts them as thunderer against serpent (Ivanov and
+# Toporov, 1974) is a reconstruction, not consensus -- Gieysztor criticised
+# it within eight years, Klejn and Diakonoff attacked its generalisations,
+# Tera records that there is not a single piece of evidence that Veles
+# fought Perun and nothing establishing a draconic or serpentine nature,
+# and Toporov himself later moved Veles from Vrtra to Varuna. It is not
+# asserted here. What these gods do carry is the cycle of seasons -- death
+# burned and drowned in effigy at spring, life returning from the
+# underworld, the hearth fire tended through the dark months.
+#
+# Historicity is uneven across this pantheon. Perun, Veles, Mokosh, Svarog,
+# Dazhbog and Stribog are named in the Primary Chronicle and the Rus' treaty
+# oaths. Lada, Rod and Jarilo rest on contested readings and reconstructions;
+# each entry says so at its own comment.
 
 enum SlavicGod {
     SLAV_PERUN = 0;
@@ -56,8 +72,8 @@ fn slavic_perun() {
     Profile_set_polarity(p, POL_MASCULINE);
     Profile_set_tier(p, TIER_COSMIC);
     # Text
-    Profile_set_soul(p, "You are Perun — the Thunderer who strikes from the crown of the world tree. Your oak stands on the hilltop, your eagle circles above, and when the serpent stirs below, your axe answers.");
-    Profile_set_spirit_text(p, "Order is not negotiated. It is held — by lightning, by will, by the storm that clears the sky. You do not hate the serpent; you simply will not let the roots swallow the branches.");
+    Profile_set_soul(p, "You are Perun — the Thunderer who strikes from the crown of the world tree. Your oak stands on the hilltop, your eagle circles above, and the axe you strike with is the axe men swear their oaths upon.");
+    Profile_set_spirit_text(p, "Order is not negotiated. It is held — by lightning, by will, by the storm that clears the sky. You are the god men swear by, and a broken oath is a struck tree.");
     Profile_set_domain(p, DOMAIN_SKY);
     return p;
 }
@@ -66,7 +82,7 @@ fn slavic_veles() {
     var p = profile_new();
     Profile_set_name(p, "Veles");
     Profile_set_tradition(p, "Slavic");
-    Profile_set_desc(p, "Lord of the underworld — sorcerer, cattle-keeper, serpent at the roots of the world tree");
+    Profile_set_desc(p, "Lord of the underworld — sorcerer, cattle-keeper, patron of poets, sworn by beside the Thunderer in the Rus' treaties");
     # Traits
     Profile_set_curiosity(p, 0.9);
     Profile_set_creativity(p, 0.8);
@@ -96,8 +112,8 @@ fn slavic_veles() {
     Profile_set_polarity(p, POL_MASCULINE);
     Profile_set_tier(p, TIER_COSMIC);
     # Text
-    Profile_set_soul(p, "You are Veles — the serpent who coils at the roots, the sorcerer who plays music the dead can hear. You guard the cattle of the otherworld and trade in secrets the sky god cannot reach.");
-    Profile_set_spirit_text(p, "Without you, the world tree has no roots. Perun strikes you down each year, and each year you return — because the underworld is not a punishment but a foundation. Magic lives where the light cannot follow.");
+    Profile_set_soul(p, "You are Veles — the keeper of the herds below, the sorcerer who plays music the dead can hear. You guard the cattle of the otherworld and trade in secrets the sky god cannot reach.");
+    Profile_set_spirit_text(p, "Without you the world has no under-side. The Rus' swore their treaties by you and by the Thunderer together, the two ends of one oath — because the underworld is not a punishment but a foundation. Magic lives where the light cannot follow.");
     Profile_set_domain(p, DOMAIN_DEATH);
     return p;
 }
@@ -344,11 +360,26 @@ fn slavic_jarilo() {
     return p;
 }
 
+# -- Lada ---------------------------------------------------------------
+# CONTESTED, and marked here the way ADR-004 point 3 marks the Vaishnava
+# Buddha claim. The theonym appears once independently: Lucas of Wielki
+# Kozmin, Gniezno Sermons (c. 1405-1412), listing "Lado, Jassa, Quia, Nyia"
+# as idol names with no description. Every later source descends from it.
+# Dlugosz (Annales, 1455) gave the only medieval interpretatio and it is
+# MARS, god of war -- "Mars they called Lyada" -- not love; the goddess of
+# love and concord is Faminstyn (1884, tying Lado to Concordia) and Rybakov
+# (1981), reading the wedding- and spring-song refrain "lado, lada".
+# Potebnja, Krek, Bruckner, Vasmer and Trubachyov all reject the goddess
+# reading: *lada is a two-gender common noun, "spouse, beloved", beside
+# *ladu "harmony, order". Gieysztor, Szyjewski, Ivanov and Toporov -- who do
+# accept parts of Dlugosz -- reject Lada with them. Carried here as the
+# concord archetype the refrain personifies, not as an attested
+# pre-Christian deity.
 fn slavic_lada() {
     var p = profile_new();
     Profile_set_name(p, "Lada");
     Profile_set_tradition(p, "Slavic");
-    Profile_set_desc(p, "Goddess of love, beauty, and harmony — the joy that binds, the spring that softens");
+    Profile_set_desc(p, "Concord personified — the wedding-song refrain lada, spouse and beloved, taken by later readers for a goddess of love, beauty and harmony");
     # Traits
     Profile_set_warmth(p, 0.9);
     Profile_set_empathy(p, 0.85);

@@ -27,7 +27,7 @@ three peoples. The `tradition` field is what `by_tradition()` and `cross_traditi
 | **Egyptian** | `egyptian` | 16 principal deities |
 | **Buddhist** | `buddhist` | 7 Bodhisattvas, 5 Dhyani Buddhas |
 | **Mesopotamian** | `mesopotamian` | 14 Sumerian/Babylonian deities |
-| **Celtic** | `celtic` | 17 Tuatha De Danann & Insular Celtic deities |
+| **Celtic** | `celtic` | 17 Tuatha De Danann, Insular & Continental Celtic deities |
 | **Shinto** | `shinto` | 15 Japanese Kami |
 | **Aztec** | `aztec` | 14 Aztec (Mexica) deities |
 | **Maya** | `maya` | 12 Maya deities |

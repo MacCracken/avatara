@@ -6,7 +6,7 @@
 
 - **Language**: Cyrius (ported from Rust in v2.0)
 - **License**: GPL-3.0-only
-- **Version**: SemVer 2.14.3
+- **Version**: SemVer 2.14.4
 - **Compiler**: cyrius >= 6.5.36 (pinned in `cyrius.cyml` `[package].cyrius`)
 
 ## Consumers
@@ -36,7 +36,7 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/egyptian.cyr` — 16 principal deities
 - `src/buddhist.cyr` — 7 Bodhisattvas, 5 Dhyani Buddhas
 - `src/mesopotamian.cyr` — 14 Sumerian/Babylonian deities
-- `src/celtic.cyr` — 17 Tuatha De Danann & Insular Celtic deities (incl. the healers Miach & Airmed)
+- `src/celtic.cyr` — 17 Tuatha De Danann, Insular & Continental Celtic deities (incl. the Gaulish Cernunnos & Epona and the healers Miach & Airmed)
 - `src/shinto.cyr` — 15 Japanese Kami
 - `src/aztec.cyr` — 14 Aztec (Mexica) deities
 - `src/maya.cyr` — 12 Maya deities

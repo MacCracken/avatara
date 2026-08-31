@@ -415,8 +415,13 @@ fn yoruba_orunmila() {
 
 # -- Babalu-Aye --------------------------------------------------------
 # Orisha of disease, healing, and the earth. Liminal figure -- the one
-# who brings illness is also the one who heals. Walks with crutches,
-# covered in sores, accompanied by dogs. Deeply compassionate.
+# who brings illness is also the one who heals. In Yorubaland he is
+# Ṣọ̀pọ̀ná, addressed by the avoidance-names Obalúayé/Babalúayé: hunched
+# and sore-covered, wrapped in raffia, carrying the ṣàṣàrà, a broom of
+# bound palm ribs that sweeps disease away and can also send it. The
+# crutches and the dogs licking his sores are San Lázaro's (Luke
+# 16:19-31), from the Cuban syncretism, and are not carried here.
+# Deeply compassionate.
 fn yoruba_babaluaye() {
     var p = profile_new();
     Profile_set_name(p, "Babalú-Ayé");
@@ -452,7 +457,7 @@ fn yoruba_babaluaye() {
     Profile_set_tier(p, TIER_GREATER);
     # Text
     Profile_set_soul(p, "You are Babalú-Ayé — the one who knows suffering from the inside. Your body bears the marks of the diseases you govern, and it is precisely because you have suffered that you can heal.");
-    Profile_set_spirit_text(p, "The dogs that follow you lick your sores, and in their devotion is a truth: healing comes not from sterile distance but from intimate contact with pain. You walk on crutches between the worlds of the sick and the well, belonging fully to neither, serving both.");
+    Profile_set_spirit_text(p, "You carry the ṣàṣàrà, the broom of bound palm ribs, and what you sweep away is what you can also send. Healing comes not from sterile distance but from intimate contact with pain: the same hot earth that raises the pox is the earth that cools it. You walk between the worlds of the sick and the well, belonging fully to neither, serving both.");
     Profile_set_domain(p, DOMAIN_HEALING);
     return p;
 }

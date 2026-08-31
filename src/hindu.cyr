@@ -3,6 +3,18 @@
 # The Trimurti maps directly to the cosmic breath: Brahma (exhale/creation),
 # Vishnu (preservation/form), Shiva (inhale/dissolution). Devas govern
 # specific domains. Avatars are manifestations of the divine in specific forms.
+#
+# NOTE ON THE BUDDHA AVATAR: the ninth avatar is carried as a Vaishnava claim,
+# not as a universal Hindu one and not as a Buddhist one -- Buddhists do not
+# accept it, and it is not settled even within Vaishnavism, several traditions
+# in Bengal and among the Sri Vaishnavas carrying Balarama in this place
+# instead. Its Puranic form is polemical: Bhagavata Purana 1.3.24 has Vishnu
+# appear as the Buddha "to delude" (sammohaya) the enemies of the devas, and
+# the Vishnu Purana's Mayamoha episode (3.17-18) turns the daityas from the
+# Vedas by the same device. The sympathetic reading this profile takes -- the
+# compassionate one who decries the slaughter of the sacrificial rites -- is
+# Jayadeva's, from the Dashavatara-stotra of the Gitagovinda. The profile is
+# marked accordingly, per ADR-004 point 3.
 
 enum Trimurti {
     TRI_BRAHMA = 0;
@@ -754,7 +766,7 @@ fn hindu_buddha() {
     var p = profile_new();
     Profile_set_name(p, "Buddha");
     Profile_set_tradition(p, "Hindu");
-    Profile_set_desc(p, "The Awakened One — compassion and non-attachment, the middle way");
+    Profile_set_desc(p, "The Awakened One — ninth avatar of Vishnu in the Vaishnava Dashavatara, a Vaishnava claim the Buddhist tradition does not accept; compassion, non-attachment, the middle way");
     # Traits
     Profile_set_patience(p, 1.0);
     Profile_set_empathy(p, 0.9);
