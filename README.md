@@ -10,7 +10,7 @@
 
 Maps divine and mythological beings across world traditions to composable personality configurations. Not religion simulation — psychometric archetype mapping backed by trait math. Each entity produces an `ArchetypeProfile` (320 bytes) with trait weights, module emphasis, breath phase affinity, growth direction, and primary domain.
 
-**503 archetypes across 41 traditions** (incl. the solar-year intercalary set, the 22 Tarot Major Arcana, the 64 I Ching hexagrams, and named-nation Inuit, Lakota, Haudenosaunee, Anishinaabe, Kunwinjku, Kulin, Gunaikurnai, Hawaiian, Māori and Sami traditions). Written in Cyrius, compiled by the Cyrius compiler 6.5.36+.
+**503 archetypes across 41 traditions** (incl. the solar-year intercalary set, the 22 Tarot Major Arcana, the 64 I Ching hexagrams, and named-nation Inuit, Lakota, Haudenosaunee, Anishinaabe, Kunwinjku, Kulin, Gunaikurnai, Hawaiian, Māori and Sami traditions). Written in Cyrius, compiled by the Cyrius compiler 6.6.2+.
 
 ## Traditions
 
@@ -190,7 +190,7 @@ avatara produces plain f64/enum outputs. It does not depend on bhava — bhava c
 
 ## Build
 
-Requires the Cyrius compiler 6.5.36+ (pinned in `cyrius.cyml`).
+Requires the Cyrius compiler 6.6.2+ (pinned in `cyrius.cyml`).
 
 ```sh
 # Resolve dependencies

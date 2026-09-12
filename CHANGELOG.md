@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.14.9] - 2026-09-11
+
+### Changed
+
+- **Toolchain `6.5.36` → `6.6.2`.** Migrated to the `Result` value form:
+  3 first-party file(s) changed. Every surface re-verified — build, tests, and any
+  bench/fuzz/distlib target the repo ships.
+
+
 ## [2.14.8] — 2026-08-31
 
 A documentation staleness sweep — the first full one since v2.14.0, seven releases back. Five

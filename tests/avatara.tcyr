@@ -48,6 +48,21 @@ include "src/shadow.cyr"
 include "src/overlay.cyr"
 include "src/logging.cyr"
 
+# --- cyrius 6.6.2 value form ------------------------------------------------
+# Result is a (tag, payload) REGISTER PAIR, not a heap box. A pair cannot cross a
+# one-argument boundary, so `result_unwrap(lookup(name))` is no longer expressible:
+# the inner call's payload would never reach the unwrap. These two helpers bind
+# both halves and then unwrap both, preserving the old abort-on-Err semantics.
+fn must_lookup(name) {
+    var t, v = lookup(name);
+    return result_unwrap(t, v);
+}
+
+fn must_compose(weighted) {
+    var t, v = compose(weighted);
+    return result_unwrap(t, v);
+}
+
 fn main() {
     alloc_init();
 
@@ -196,9 +211,9 @@ fn main() {
     var tip = kabbalah_tiphareth();
     var single = vec_new();
     vec_push(single, weighted_new(tip, 1.0));
-    var compR = compose(single);
-    assert_eq(is_ok(compR), 1, "compose single ok");
-    var comp = result_unwrap(compR);
+    var comp_t, comp_v = compose(single);
+    assert_eq(is_ok(comp_t), 1, "compose single ok");
+    var comp = result_unwrap(comp_t, comp_v);
     assert_eq(streq(prof_name(comp), "Tiphareth"), 1, "compose single name");
     assert_eq(prof_breath(comp), prof_breath(tip), "compose single breath");
     assert_eq(prof_growth_dir(comp), prof_growth_dir(tip), "compose single growth");
@@ -215,7 +230,7 @@ fn main() {
     var blend = vec_new();
     vec_push(blend, weighted_new(kabbalah_gevurah(), 1.0));
     vec_push(blend, weighted_new(kabbalah_chesed(), 1.0));
-    var blended = result_unwrap(compose(blend));
+    var blended = must_compose(blend);
     var blend_ok = 1;
     var off = TW_FIRST;
     while (off <= TW_LAST) {
@@ -370,9 +385,9 @@ fn main() {
     # ================================================================
     assert_eq(query_count_domain(DOMAIN_UNSPECIFIED), 0, "no archetype is domain-unspecified");
     assert_gt(vec_len(query_domain(DOMAIN_WAR)), 0, "war-domain archetypes exist");
-    assert_eq(prof_domain(result_unwrap(lookup("Ares"))), DOMAIN_WAR, "Ares -> WAR");
-    assert_eq(prof_domain(result_unwrap(lookup("Aphrodite"))), DOMAIN_LOVE, "Aphrodite -> LOVE");
-    assert_eq(prof_domain(result_unwrap(lookup("Ra"))), DOMAIN_SUN, "Ra -> SUN");
+    assert_eq(prof_domain(must_lookup("Ares")), DOMAIN_WAR, "Ares -> WAR");
+    assert_eq(prof_domain(must_lookup("Aphrodite")), DOMAIN_LOVE, "Aphrodite -> LOVE");
+    assert_eq(prof_domain(must_lookup("Ra")), DOMAIN_SUN, "Ra -> SUN");
     # query_count_domain agrees with query_domain length
     assert_eq(query_count_domain(DOMAIN_WAR), vec_len(query_domain(DOMAIN_WAR)), "domain count == filter len");
 
@@ -381,9 +396,9 @@ fn main() {
     # ================================================================
     assert_eq(solar_count(), 4, "4 solar archetypes");
     assert_eq(vec_len(by_tradition("Solar")), 4, "Solar tradition has 4");
-    var leap = lookup_in("Solar", "Bissextus");
-    assert_eq(is_ok(leap), 1, "Bissextus (the leap quarter) exists");
-    assert_eq(prof_domain(result_unwrap(leap)), DOMAIN_ORDER, "Bissextus -> ORDER");
+    var leap_t, leap_v = lookup_in("Solar", "Bissextus");
+    assert_eq(is_ok(leap_t), 1, "Bissextus (the leap quarter) exists");
+    assert_eq(prof_domain(result_unwrap(leap_t, leap_v)), DOMAIN_ORDER, "Bissextus -> ORDER");
     # 366 (solar) + 8 (Canaanite/Etruscan) + 22 (Tarot) + 64 (I Ching) + 2 (Celtic) + 42 (world traditions incl. the seven teachings) = 503 (Morana merged into Marzanna at 2.14.5)
     assert_eq(profile_count(), 503, "503 archetypes");
 
@@ -392,8 +407,8 @@ fn main() {
     # ================================================================
     assert_eq(canaanite_count(), 4, "4 Canaanite");
     assert_eq(etruscan_count(), 4, "4 Etruscan");
-    assert_eq(prof_domain(result_unwrap(lookup("Baal"))), DOMAIN_SKY, "Baal -> SKY");
-    assert_eq(prof_domain(result_unwrap(lookup("Menrva"))), DOMAIN_WISDOM, "Menrva -> WISDOM");
+    assert_eq(prof_domain(must_lookup("Baal")), DOMAIN_SKY, "Baal -> SKY");
+    assert_eq(prof_domain(must_lookup("Menrva")), DOMAIN_WISDOM, "Menrva -> WISDOM");
     assert_eq(vec_len(by_tradition("Canaanite")), 4, "Canaanite tradition has 4");
     assert_eq(vec_len(by_tradition("Etruscan")), 4, "Etruscan tradition has 4");
 
@@ -404,13 +419,13 @@ fn main() {
     assert_eq(vec_len(by_tradition("Tarot")), 22, "Tarot tradition has 22");
     # registry lookup reaches the trumps
     assert_eq(is_ok(lookup("The Fool")), 1, "The Fool exists");
-    assert_eq(streq(prof_tradition(result_unwrap(lookup("The Fool"))), "Tarot"), 1, "The Fool is Tarot");
+    assert_eq(streq(prof_tradition(must_lookup("The Fool")), "Tarot"), 1, "The Fool is Tarot");
     # domain spot-checks
-    assert_eq(prof_domain(result_unwrap(lookup("Death"))), DOMAIN_DEATH, "Death -> DEATH");
-    assert_eq(prof_domain(result_unwrap(lookup("The Sun"))), DOMAIN_SUN, "The Sun -> SUN");
-    assert_eq(prof_domain(result_unwrap(lookup("Wheel of Fortune"))), DOMAIN_FATE, "Wheel of Fortune -> FATE");
-    assert_eq(prof_domain(result_unwrap(lookup("Justice"))), DOMAIN_ORDER, "Justice -> ORDER");
-    assert_eq(prof_domain(result_unwrap(lookup("The Empress"))), DOMAIN_NATURE, "The Empress -> NATURE");
+    assert_eq(prof_domain(must_lookup("Death")), DOMAIN_DEATH, "Death -> DEATH");
+    assert_eq(prof_domain(must_lookup("The Sun")), DOMAIN_SUN, "The Sun -> SUN");
+    assert_eq(prof_domain(must_lookup("Wheel of Fortune")), DOMAIN_FATE, "Wheel of Fortune -> FATE");
+    assert_eq(prof_domain(must_lookup("Justice")), DOMAIN_ORDER, "Justice -> ORDER");
+    assert_eq(prof_domain(must_lookup("The Empress")), DOMAIN_NATURE, "The Empress -> NATURE");
     # all 22 trumps are cosmic-tier (mirroring the Sephiroth they bridge)
     var tarot_tier_ok = 1;
     var tv = all_tarot();
@@ -549,10 +564,10 @@ fn main() {
     assert_eq(streq(prof_name(iching_by_number(64)), "Before Completion"), 1, "hexagram 64 = Before Completion");
     assert_eq(iching_index_by_name("Modesty"), 14, "Modesty is index 14 (hexagram 15)");
     assert_eq(iching_index_by_name("nope"), 0 - 1, "index_by_name unknown = -1");
-    assert_eq(prof_domain(result_unwrap(lookup("The Creative"))), DOMAIN_CREATION, "The Creative -> CREATION");
-    assert_eq(prof_domain(result_unwrap(lookup("The Receptive"))), DOMAIN_NATURE, "The Receptive -> NATURE");
-    assert_eq(prof_domain(result_unwrap(lookup("Keeping Still"))), DOMAIN_TRANSCENDENCE, "Keeping Still -> TRANSCENDENCE");
-    assert_eq(prof_domain(result_unwrap(lookup("The Well"))), DOMAIN_HEARTH, "The Well -> HEARTH");
+    assert_eq(prof_domain(must_lookup("The Creative")), DOMAIN_CREATION, "The Creative -> CREATION");
+    assert_eq(prof_domain(must_lookup("The Receptive")), DOMAIN_NATURE, "The Receptive -> NATURE");
+    assert_eq(prof_domain(must_lookup("Keeping Still")), DOMAIN_TRANSCENDENCE, "Keeping Still -> TRANSCENDENCE");
+    assert_eq(prof_domain(must_lookup("The Well")), DOMAIN_HEARTH, "The Well -> HEARTH");
     # out-of-range behavior
     assert_eq(iching_by_index(0 - 1), 0, "iching_by_index(-1) = 0 (null)");
     assert_eq(iching_by_index(64), 0, "iching_by_index(64) = 0 (null)");
@@ -621,23 +636,23 @@ fn main() {
     assert_eq(ctx_end(hawctx), LIVING, "Hawaiian is a living tradition");
     assert_eq(ctx_end(maoctx), LIVING, "Māori is a living tradition");
     assert_eq(ctx_start(hawctx) != ctx_start(maoctx), 1, "peoples carry distinct dates");
-    assert_eq(streq(prof_tradition(result_unwrap(lookup("Kane"))), "Hawaiian"), 1, "Kane is Hawaiian");
-    assert_eq(streq(prof_tradition(result_unwrap(lookup("Pele"))), "Hawaiian"), 1, "Pele is Hawaiian");
-    assert_eq(streq(prof_tradition(result_unwrap(lookup("Tangaroa"))), "Māori"), 1, "Tangaroa is Māori");
-    assert_eq(streq(prof_tradition(result_unwrap(lookup("Papatuanuku"))), "Māori"), 1, "Papatuanuku is Māori");
+    assert_eq(streq(prof_tradition(must_lookup("Kane")), "Hawaiian"), 1, "Kane is Hawaiian");
+    assert_eq(streq(prof_tradition(must_lookup("Pele")), "Hawaiian"), 1, "Pele is Hawaiian");
+    assert_eq(streq(prof_tradition(must_lookup("Tangaroa")), "Māori"), 1, "Tangaroa is Māori");
+    assert_eq(streq(prof_tradition(must_lookup("Papatuanuku")), "Māori"), 1, "Papatuanuku is Māori");
     # THE ONE THAT MATTERS: a cognate pair may not sit inside one tradition
     # string. Kane/Tane, Ku/Tu, Lono/Rongo and Kanaloa/Tangaroa are one
     # inherited figure as two peoples tell him -- and only the split lets
     # cross_tradition_match() say so. This fails if anyone re-merges the bucket.
-    assert_eq(streq(prof_tradition(result_unwrap(lookup("Kane"))), prof_tradition(result_unwrap(lookup("Tane")))), 0, "Kane/Tane are a cognate pair, not one tradition");
-    assert_eq(streq(prof_tradition(result_unwrap(lookup("Ku"))), prof_tradition(result_unwrap(lookup("Tu")))), 0, "Ku/Tu are a cognate pair, not one tradition");
-    assert_eq(streq(prof_tradition(result_unwrap(lookup("Lono"))), prof_tradition(result_unwrap(lookup("Rongo")))), 0, "Lono/Rongo are a cognate pair, not one tradition");
-    assert_eq(streq(prof_tradition(result_unwrap(lookup("Kanaloa"))), prof_tradition(result_unwrap(lookup("Tangaroa")))), 0, "Kanaloa/Tangaroa are a cognate pair, not one tradition");
+    assert_eq(streq(prof_tradition(must_lookup("Kane")), prof_tradition(must_lookup("Tane"))), 0, "Kane/Tane are a cognate pair, not one tradition");
+    assert_eq(streq(prof_tradition(must_lookup("Ku")), prof_tradition(must_lookup("Tu"))), 0, "Ku/Tu are a cognate pair, not one tradition");
+    assert_eq(streq(prof_tradition(must_lookup("Lono")), prof_tradition(must_lookup("Rongo"))), 0, "Lono/Rongo are a cognate pair, not one tradition");
+    assert_eq(streq(prof_tradition(must_lookup("Kanaloa")), prof_tradition(must_lookup("Tangaroa"))), 0, "Kanaloa/Tangaroa are a cognate pair, not one tradition");
 
     # ---- Sami is a people; "Finnish" is a nation-state ----
     assert_eq(vec_len(by_tradition("Sami")), 1, "Sami tradition has 1 (Madderakka)");
     assert_eq(vec_len(by_tradition("Finnish")), 13, "Finnish keeps its 13 Kalevala figures");
-    assert_eq(streq(prof_tradition(result_unwrap(lookup("Madderakka"))), "Sami"), 1, "Madderakka is Sami, not Finnish");
+    assert_eq(streq(prof_tradition(must_lookup("Madderakka")), "Sami"), 1, "Madderakka is Sami, not Finnish");
     assert_eq(context_for_tradition("Sami") != 0, 1, "Sami resolves a history context");
 
     # ---- Marzanna and Morana were one goddess carried twice ----
@@ -656,16 +671,16 @@ fn main() {
     }
     assert_eq(saw_kun + saw_kul + saw_gun, 3, "all three peoples reachable by civilization");
     # domain spot-checks
-    assert_eq(prof_domain(result_unwrap(lookup("Sedna"))), DOMAIN_SEA, "Sedna -> SEA");
-    assert_eq(prof_domain(result_unwrap(lookup("Sila"))), DOMAIN_TRANSCENDENCE, "Sila -> TRANSCENDENCE");
-    assert_eq(prof_domain(result_unwrap(lookup("Wakan Tanka"))), DOMAIN_TRANSCENDENCE, "Wakan Tanka -> TRANSCENDENCE");
-    assert_eq(prof_domain(result_unwrap(lookup("Iktomi"))), DOMAIN_TRICKERY, "Iktomi -> TRICKERY");
-    assert_eq(prof_domain(result_unwrap(lookup("Sky Woman"))), DOMAIN_CREATION, "Sky Woman -> CREATION");
-    assert_eq(prof_domain(result_unwrap(lookup("Nanabozho"))), DOMAIN_TRICKERY, "Nanabozho -> TRICKERY");
+    assert_eq(prof_domain(must_lookup("Sedna")), DOMAIN_SEA, "Sedna -> SEA");
+    assert_eq(prof_domain(must_lookup("Sila")), DOMAIN_TRANSCENDENCE, "Sila -> TRANSCENDENCE");
+    assert_eq(prof_domain(must_lookup("Wakan Tanka")), DOMAIN_TRANSCENDENCE, "Wakan Tanka -> TRANSCENDENCE");
+    assert_eq(prof_domain(must_lookup("Iktomi")), DOMAIN_TRICKERY, "Iktomi -> TRICKERY");
+    assert_eq(prof_domain(must_lookup("Sky Woman")), DOMAIN_CREATION, "Sky Woman -> CREATION");
+    assert_eq(prof_domain(must_lookup("Nanabozho")), DOMAIN_TRICKERY, "Nanabozho -> TRICKERY");
     # the Seven Grandfather Teachings (2.12.0) — principles, not beings
     assert_eq(streq(prof_name(vec_get(all_anishinaabe(), ANISH_DEBWEWIN)), "Debwewin"), 1, "seventh teaching is Debwewin");
-    assert_eq(prof_domain(result_unwrap(lookup("Zaagiidiwin"))), DOMAIN_LOVE, "Zaagiidiwin -> LOVE");
-    assert_eq(prof_domain(result_unwrap(lookup("Dabaadendiziwin"))), DOMAIN_TRANSCENDENCE, "Dabaadendiziwin -> TRANSCENDENCE");
+    assert_eq(prof_domain(must_lookup("Zaagiidiwin")), DOMAIN_LOVE, "Zaagiidiwin -> LOVE");
+    assert_eq(prof_domain(must_lookup("Dabaadendiziwin")), DOMAIN_TRANSCENDENCE, "Dabaadendiziwin -> TRANSCENDENCE");
     var teach_ok = 1;
     var gv = all_anishinaabe();
     for (var gi = 5; gi <= 11; gi = gi + 1) {
@@ -674,20 +689,20 @@ fn main() {
         if (prof_polarity(gp) != POL_ANDROGYNOUS) { teach_ok = 0; }
     }
     assert_eq(teach_ok, 1, "all 7 teachings are cosmic-tier and androgynous (principles, not beings)");
-    assert_eq(prof_domain(result_unwrap(lookup("Bunjil"))), DOMAIN_CREATION, "Bunjil -> CREATION");
+    assert_eq(prof_domain(must_lookup("Bunjil")), DOMAIN_CREATION, "Bunjil -> CREATION");
     assert_eq(is_err_result(lookup("Baiame")), 1, "Baiame deferred to the 2.11.x arc");
     assert_eq(is_err_result(lookup("Wiindigoo")), 1, "Wiindigoo deliberately not carried");
     # 2.12.0: the pan-ethnic "Indigenous" bucket is gone -- the four incarnate
     # figures now carry their own nations, and none is duplicated in the modules.
     assert_eq(vec_len(by_tradition("Indigenous")), 0, "pan-ethnic Indigenous bucket retired");
-    assert_eq(streq(prof_tradition(result_unwrap(lookup("White Buffalo Calf Woman"))), "Lakota"), 1,
+    assert_eq(streq(prof_tradition(must_lookup("White Buffalo Calf Woman")), "Lakota"), 1,
               "White Buffalo Calf Woman -> Lakota");
-    assert_eq(streq(prof_tradition(result_unwrap(lookup("Quanah Parker"))), "Comanche"), 1,
+    assert_eq(streq(prof_tradition(must_lookup("Quanah Parker")), "Comanche"), 1,
               "Quanah Parker -> Comanche");
-    assert_eq(streq(prof_tradition(result_unwrap(lookup("Wovoka"))), "Northern Paiute"), 1,
+    assert_eq(streq(prof_tradition(must_lookup("Wovoka")), "Northern Paiute"), 1,
               "Wovoka -> Northern Paiute");
     # the Peacemaker is carried by title, not by the personal name reserved for ceremony
-    assert_eq(streq(prof_tradition(result_unwrap(lookup("The Peacemaker"))), "Haudenosaunee"), 1,
+    assert_eq(streq(prof_tradition(must_lookup("The Peacemaker")), "Haudenosaunee"), 1,
               "The Peacemaker -> Haudenosaunee");
     assert_eq(is_err_result(lookup("Deganawidah")), 1, "personal name no longer used as the key");
     # the two new nations resolve history, and it is no longer the Polynesian
@@ -891,7 +906,7 @@ fn main() {
     assert_eq(overlay_system_count(), 3, "three overlay systems registered");
 
     # Generic API agrees with the per-family functions it dispatches to.
-    var gp = result_unwrap(lookup("Thor"));
+    var gp = must_lookup("Thor");
     assert_eq(overlay_label_count(OVL_ENNEAGRAM), enneagram_count(), "enneagram label count via registry");
     assert_eq(overlay_label_count(OVL_JUNGIAN), jungian_count(), "jungian label count via registry");
     assert_eq(streq(overlay_label(OVL_ENNEAGRAM, 0), enneagram_name(0)), 1, "generic label == enneagram_name");
@@ -921,8 +936,8 @@ fn main() {
     assert_eq(vec_len(by_tradition("Mystic")), 0, "Mystic is an overlay, not a tradition");
     # It applies across every tradition, which the string could not do: the 17
     # rekeyed figures and figures never in that group score on the same scale.
-    var mrumi = result_unwrap(lookup("Rumi"));
-    var mmila = result_unwrap(lookup("Milarepa"));
+    var mrumi = must_lookup("Rumi");
+    var mmila = must_lookup("Milarepa");
     assert_eq(f64_ge(profile_mystic_score(mrumi, MYS_UNITIVE), 0.0), 1, "Rumi scores on the mystic overlay");
     assert_eq(f64_ge(profile_mystic_score(mmila, MYS_ASCETIC), 0.0), 1, "Milarepa scores too, though never a \"Mystic\"");
     assert_eq(streq(prof_tradition(mrumi), "Sufi"), 1, "Rumi carries Sufi, his actual tradition");
@@ -935,12 +950,12 @@ fn main() {
     # GPL-3.0 library ships them to anyone. The four living figures carry
     # third-person archetype description instead. This is a rule, not an
     # exemption: it applies to any living figure added later.
-    assert_eq(strstr(prof_soul(result_unwrap(lookup("Amma"))), "You are"), 0 - 1, "Amma has no second-person script");
-    assert_eq(strstr(prof_soul(result_unwrap(lookup("Mother Meera"))), "You are"), 0 - 1, "Mother Meera has no second-person script");
-    assert_eq(strstr(prof_soul(result_unwrap(lookup("Dalai Lama"))), "You are"), 0 - 1, "Dalai Lama has no second-person script");
-    assert_eq(strstr(prof_soul(result_unwrap(lookup("Karmapa"))), "You are"), 0 - 1, "Karmapa has no second-person script");
+    assert_eq(strstr(prof_soul(must_lookup("Amma")), "You are"), 0 - 1, "Amma has no second-person script");
+    assert_eq(strstr(prof_soul(must_lookup("Mother Meera")), "You are"), 0 - 1, "Mother Meera has no second-person script");
+    assert_eq(strstr(prof_soul(must_lookup("Dalai Lama")), "You are"), 0 - 1, "Dalai Lama has no second-person script");
+    assert_eq(strstr(prof_soul(must_lookup("Karmapa")), "You are"), 0 - 1, "Karmapa has no second-person script");
     # ...and the machinery is still uniform over them (ADR-010 rule 9): no opt-out.
-    assert_eq(shadow(result_unwrap(lookup("Amma"))) != 0, 1, "shadow() still applies to living figures -- no exemption");
+    assert_eq(shadow(must_lookup("Amma")) != 0, 1, "shadow() still applies to living figures -- no exemption");
 
     # ================================================================
     # Null-safety: a profile validate_profile() certifies as Ok may still
@@ -973,8 +988,9 @@ fn main() {
     # f64_lt/f64_gt alone certified it as in-range (fixed 2.14.3).
     var nanp = profile_new();
     store64(nanp + TW_FIRST, f64_div(0.0, 0.0));
-    assert_eq(is_err_result(validate_profile(nanp)), 1, "validate_profile() rejects a NaN trait");
-    assert_eq(err_code_of(validate_profile(nanp)), ERR_OUT_OF_RANGE, "NaN trait -> ERR_OUT_OF_RANGE");
+    var nan_t, nan_v = validate_profile(nanp);
+    assert_eq(is_err_result(nan_t), 1, "validate_profile() rejects a NaN trait");
+    assert_eq(err_code_of(nan_t, nan_v), ERR_OUT_OF_RANGE, "NaN trait -> ERR_OUT_OF_RANGE");
 
     return assert_summary();
 }
