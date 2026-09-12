@@ -34,7 +34,7 @@ fn affinity(a, b) {
     if (a == 0) { return 0; }
     if (b == 0) { return 0; }
     var total_diff = f64_add(sum_abs_diff(a, b, TW_FIRST, TW_LAST),
-                             sum_abs_diff(a, b, ME_FIRST, ME_LAST));
+      sum_abs_diff(a, b, ME_FIRST, ME_LAST));
     var mean_diff = f64_div(total_diff, f64_from(TW_COUNT + ME_COUNT));
     return f64_sub(1.0, mean_diff);
 }

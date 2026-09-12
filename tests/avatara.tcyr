@@ -343,7 +343,7 @@ fn main() {
     assert_eq(sim_prefix_ok, 1, "top-5 is a score-identical prefix of the full sort");
     # the weakest kept entry outranks the strongest excluded candidate
     assert_eq(f64_ge(sim_score(vec_get(sim, 4)), sim_score(vec_get(sim_full, 5))), 1,
-              "weakest kept >= strongest excluded (true top-k)");
+      "weakest kept >= strongest excluded (true top-k)");
     assert_eq(vec_len(similar_to(0, 5)), 0, "similar_to(NULL) is empty");
 
     # ================================================================
@@ -696,21 +696,21 @@ fn main() {
     # figures now carry their own nations, and none is duplicated in the modules.
     assert_eq(vec_len(by_tradition("Indigenous")), 0, "pan-ethnic Indigenous bucket retired");
     assert_eq(streq(prof_tradition(must_lookup("White Buffalo Calf Woman")), "Lakota"), 1,
-              "White Buffalo Calf Woman -> Lakota");
+      "White Buffalo Calf Woman -> Lakota");
     assert_eq(streq(prof_tradition(must_lookup("Quanah Parker")), "Comanche"), 1,
-              "Quanah Parker -> Comanche");
+      "Quanah Parker -> Comanche");
     assert_eq(streq(prof_tradition(must_lookup("Wovoka")), "Northern Paiute"), 1,
-              "Wovoka -> Northern Paiute");
+      "Wovoka -> Northern Paiute");
     # the Peacemaker is carried by title, not by the personal name reserved for ceremony
     assert_eq(streq(prof_tradition(must_lookup("The Peacemaker")), "Haudenosaunee"), 1,
-              "The Peacemaker -> Haudenosaunee");
+      "The Peacemaker -> Haudenosaunee");
     assert_eq(is_err_result(lookup("Deganawidah")), 1, "personal name no longer used as the key");
     # the two new nations resolve history, and it is no longer the Polynesian
     # civilisation the orphaned "Incarnate Indigenous" mapping wrongly gave them
     assert_neq(context_for_tradition("Comanche"), 0, "Comanche resolves history context");
     assert_neq(context_for_tradition("Northern Paiute"), 0, "Northern Paiute resolves history context");
     assert_eq(streq(ctx_primary(context_for_tradition("Comanche")), "Great Plains"), 1,
-              "Comanche -> Great Plains, not Tonga Empire");
+      "Comanche -> Great Plains, not Tonga Empire");
     # history: every new tradition resolves a context
     assert_neq(context_for_tradition("Inuit"), 0, "Inuit resolves history context");
     assert_neq(context_for_tradition("Lakota"), 0, "Lakota resolves history context");
