@@ -6,8 +6,8 @@
 
 - **Language**: Cyrius (ported from Rust in v2.0)
 - **License**: GPL-3.0-only
-- **Version**: SemVer 2.14.9
-- **Compiler**: cyrius >= 6.6.2 (pinned in `cyrius.cyml` `[package].cyrius`)
+- **Version**: SemVer 2.15.0
+- **Compiler**: cyrius >= 6.6.6 (pinned in `cyrius.cyml` `[package].cyrius`)
 
 ## Consumers
 

@@ -10,7 +10,7 @@
 
 Maps divine and mythological beings across world traditions to composable personality configurations. Not religion simulation — psychometric archetype mapping backed by trait math. Each entity produces an `ArchetypeProfile` (320 bytes) with trait weights, module emphasis, breath phase affinity, growth direction, and primary domain.
 
-**503 archetypes across 41 traditions** (incl. the solar-year intercalary set, the 22 Tarot Major Arcana, the 64 I Ching hexagrams, and named-nation Inuit, Lakota, Haudenosaunee, Anishinaabe, Kunwinjku, Kulin, Gunaikurnai, Hawaiian, Māori and Sami traditions). Written in Cyrius, compiled by the Cyrius compiler 6.6.2+.
+**503 archetypes across 41 traditions** (incl. the solar-year intercalary set, the 22 Tarot Major Arcana, the 64 I Ching hexagrams, and named-nation Inuit, Lakota, Haudenosaunee, Anishinaabe, Kunwinjku, Kulin, Gunaikurnai, Hawaiian, Māori and Sami traditions). Written in Cyrius, compiled by the Cyrius compiler 6.6.6+.
 
 ## Traditions
 
@@ -75,9 +75,11 @@ alloc_init();
 var tip = kabbalah_tiphareth();
 # prof_warmth(tip) = 0.8, prof_confidence(tip) = 0.8
 
-# Lookup by name — returns Result (Ok(profile) / Err(ERR_UNKNOWN_ARCHETYPE))
-var kr = lookup("Krishna");
-var krishna = result_unwrap(kr);   # or: if (is_err_result(kr) == 1) { ... }
+# Lookup by name — returns Result (Ok(profile) / Err(ERR_UNKNOWN_ARCHETYPE)).
+# A Result is a (tag, payload) value pair: bind both halves, then unwrap both.
+# `var kr = lookup(...)` would keep the tag and drop the profile.
+var kt, kv = lookup("Krishna");
+var krishna = result_unwrap(kt, kv);   # or: if (is_err_result(kt) == 1) { ... }
 # prof_tradition(krishna) = "Hindu"
 
 # Query by trait
@@ -88,7 +90,8 @@ var brave = query_min_trait(PROF_COURAGE, 0.9);
 var w = vec_new();
 vec_push(w, weighted_new(tip, 1.0));
 vec_push(w, weighted_new(krishna, 0.8));
-var blended = result_unwrap(compose(w));
+var ct, cv = compose(w);
+var blended = result_unwrap(ct, cv);
 
 # Historical context
 var ctx = context_for_tradition("Hindu");
@@ -190,7 +193,7 @@ avatara produces plain f64/enum outputs. It does not depend on bhava — bhava c
 
 ## Build
 
-Requires the Cyrius compiler 6.6.2+ (pinned in `cyrius.cyml`).
+Requires the Cyrius compiler 6.6.6+ (pinned in `cyrius.cyml`).
 
 ```sh
 # Resolve dependencies

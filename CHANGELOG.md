@@ -7,6 +7,107 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.15.0] — 2026-09-24
+
+A toolchain-and-dependencies release. Cyrius moves **6.6.2 → 6.6.6**, and each of avatara's
+dependencies moves to its current release with it: the vendored stdlib snapshot, the bundled sakshi
+(**2.5.1 → 2.5.2**), and both GitHub Actions the workflows call. Nothing in `src/` changed.
+`profile_count()` is **503**, `all_traditions()` **41** and the suite **368/368**, the same as the
+pre-bump baseline, and all three programs print byte-identical output under both pins. One
+consumer-facing fix rides along: the README Quick Start had not compiled since 2.14.9.
+
+### Changed
+
+- **Cyrius pin `6.6.2` → `6.6.6`** (the latest release, 2026-09-20). Bumped and verified before any
+  other edit: `cyrius deps`, the CI lint loop (0 warnings), the DCE build and ELF check, both example
+  programs, 368/368, the bench build and run, and `cyrius distlib`, whose bundle came out
+  byte-identical until `version-bump.sh` rewrote its version line. A review of the 6.6.3–6.6.6
+  upstream CHANGELOG found no required source, manifest or CI change beyond the pin and a
+  `cyrius deps` re-vendor.
+- **What the new floor buys avatara, with no source change:** `cyrius distlib` now writes the bundle
+  and its `.deps` sidecar crash-safe. Before 6.6.6, a full disk truncated a committed bundle
+  (4,132 → 1,024 B in the upstream repro), and `dist/avatara.cyr` is a committed bundle. `cyrius build`
+  likewise no longer prints `OK` for a truncated binary. 6.6.3 also fixed `CYRIUS_DCE=1` builds dying
+  before `main` when DCE moves the end of code across a 2 MB boundary. avatara's DCE binaries are
+  ~1.4 MB and have not hit it yet.
+- **`lib/` was re-resolved from empty rather than synced over.** The local `lib/` still held a 110-file
+  tree from an older full sync, and at the old pin the build already warned `./lib/ shadows
+  version-pinned … 11 bundled lib(s) differ`. Deleting it and running `cyrius deps`, which is what CI
+  does, vendored the 32-file closure of the 16 declared leaves, byte-for-byte equal to the 6.6.6
+  snapshot, and the warning is gone. Neither failure mode the pin-bump checklist guards against is
+  present: the snapshot dropped no file (it only added `alloc_cx.cyr`), and all 16 `[deps] stdlib` names
+  resolve. `lib/` is gitignored, so this adds **zero committed bytes**.
+- **41 snapshot files changed or appeared between the pins. 18 of them are in avatara's closure, and
+  none changes behaviour avatara reaches on x86_64 Linux.** `fmt`, `string`, `vec` and `assert` now
+  include their own dependencies. Includes are include-once, so this is a no-op here, where those
+  files are already pulled in. `alloc` gained agnos and cyrius-x arms, plus the new `alloc_cx.cyr`.
+  The `syscalls_*` changes are new wrappers or other targets' peers; in `syscalls_x86_64_linux.cyr`, the file avatara
+  actually builds through, they add syscall numbers and `O_*` constants and re-spell three inotify
+  wrappers with them. `io`'s 277-line diff adds `file_read_whole`, `file_replace_atomic` and their
+  helpers. avatara calls nothing in `io`, and sakshi calls only `file_open`, whose signature is
+  unchanged. `hashseed` changed only its getrandom-failure fallback, and `fnptr` only comments.
+  **sakshi 2.5.1 → 2.5.2 differs in its version header alone.** The bundled code is identical, and
+  `src/logging.cyr` calls `sakshi_set_level` and nothing else.
+- **The one visible change is the benchmark harness.** 6.6.6's `lib/bench.cyr` calibrates the clock and
+  prints a per-op picosecond line under each result (`[per op in ps: mean … min …]`).
+  `scripts/bench-history.sh` matches `: <n><unit> avg` and skips the new line. Checked: the script still
+  records exactly 60 rows. Since 6.6.5 the `_ns` values round half-up instead of truncating, so an
+  ns-scale row can move by 1 ns on the toolchain alone.
+- **One new lint note, not a warning.** cyrlint's deferral scan became case-insensitive at 6.6.5,
+  taking avatara's untracked-deferral notes from 19 to 20. The new one is `src/aboriginal.cyr:47`,
+  "BAIAME IS EXCLUDED, NOT DEFERRED.", and it is a false positive: the sentence records a refusal, not
+  a deferral. Notes never change cyrlint's exit code, and the CI lint gate fails only on `warn` lines.
+- **The binaries grew with the toolchain as a unit.** DCE builds: `build/avatara` +4,704 B (1,418,152 →
+  1,422,856), the bench binary +4,704 B, `traditions` +608 B, `compose` +600 B. Compiler and snapshot
+  cannot be separated here, because `cyrius build` re-syncs the declared leaves from the pin before it
+  compiles.
+- **GitHub Actions moved to their current majors:** `actions/checkout` v4 → **v7** (both jobs in
+  `ci.yml`, and `release.yml`) and `softprops/action-gh-release` v2 → **v3** (`release.yml`). Both
+  majors move the action runtime to Node 24, which GitHub-hosted `ubuntu-latest` provides. checkout v6
+  moved persisted credentials to a separate file, and v7 refuses fork-PR checkouts under
+  `pull_request_target` / `workflow_run`; these workflows use neither. action-gh-release v3 keeps the
+  `name`, `body_path` and `files` inputs `release.yml` passes. ⚠ **Checked against the release notes
+  only.** Neither workflow runs until the next push.
+- `SECURITY.md`: the supported line moves from 2.14.x to **2.15.x**.
+
+### Fixed — documentation
+
+- **The README Quick Start did not compile, and had not since 2.14.9.** 2.14.9 moved `Result` to cyrius
+  6.6.2's value form, a `(tag, payload)` register pair. It migrated `src/main.cyr`,
+  `programs/compose.cyr` and the suite, but not the README.
+  `var kr = lookup("Krishna"); … result_unwrap(kr)` and `result_unwrap(compose(w))` both failed with
+  `'result_unwrap' expects 2 arguments, got 1`. Both now bind the pair (`var kt, kv = lookup(…)`,
+  `var ct, cv = compose(w)`) and unwrap both halves. **All three README examples were then compiled
+  verbatim from a directory outside the repo**, against `dist/avatara.cyr` under 6.6.6, which is the only
+  way to test the Quick Start's include path. Every commented value matched: 0.8 / 0.8, `"Hindu"`,
+  `"Indus Valley"` / −1500, `detect_conflicts` = 2, `"Shadow of Thor"`, three overlay systems.
+- **Consumer note that 2.14.9 did not carry: bind a `Result` as a pair.** `var r = lookup(n)` still
+  compiles. It keeps the tag, drops the profile, and `is_err_result(r)` then reads `0`, so the error
+  looks like a success. Checked under 6.6.6. The shape is
+  `var t, v = lookup(n); if (is_err_result(t) == 1) { … } var p = result_unwrap(t, v);`, and the same
+  holds for `lookup_in` and `compose`. The 2.5.0 *Consumer migration* bullet below predates the value
+  form and no longer applies.
+- `docs/doc-health.md` restamped for the bump (version, pin, and the rows the bump touched). Its
+  ground-truth block had read 2.14.8 / 6.5.36 through 2.14.9.
+
+### Benchmarks
+
+- **2.14.9 recorded no rows.** The 6.5.36 → 6.6.2 bump skipped `scripts/bench-history.sh`, the same gap
+  2.14.1 left. It is not back-filled. The comparison did not need it: the 2.14.9 tree, built under
+  6.6.2, was kept as a control binary and measured interleaved with 2.15.0.
+- **Flat.** Two interleaved A/B runs, 15 and 21 rounds with the order alternating each round, put the
+  suite total at **−2.0%** and **−0.3%**. In the second run every µs-scale row but two is within ±2%.
+  `iching/for_trigrams` read +4.5% there and +1.6% in the first run, which is noise. The first run's
+  registry rows read 14–19% faster and did not repeat, which is also noise. The one mover that repeated
+  is `history/traditions_for_era`, at −22.5% and −22.7%, and it is the layout artifact recorded at
+  2.14.2, not a speedup. Under 6.6.2 it ran 34% slower than its structural twin `traditions_for_civ`;
+  under 6.6.6 the two are about 5% apart. The pair re-balanced; the code did not change.
+- ⚠ **The 2.15.0 rows in `bench-history.csv` were recorded on a loaded host.** Unrelated jobs held the
+  load average near 13 on 16 threads. The µs-scale rows read **1.9–2.7×** their 2.14.8 values, and the
+  suite total **2.3×** (604,630 vs 258,625 ns). The 6.6.2 control binary read the same in that window,
+  so the host caused it, not the release. Do not compare these rows with earlier releases. Re-record
+  on a quiet host before tagging: `sed -i '/,2.15.0,/d' bench-history.csv && scripts/bench-history.sh`.
+
 ## [2.14.9] - 2026-09-11
 
 ### Changed
