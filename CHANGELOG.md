@@ -7,6 +7,66 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.16.0] — 2026-11-04
+
+A toolchain-and-dependencies release. It is a minor because the toolchain crosses a language minor:
+Cyrius moves **6.6.20 → 6.7.9**, and the vendored libs move to the versions that snapshot pins,
+including the bundled sakshi **2.5.7 → 2.5.8**. Nothing in `src/` changed, and avatara's API is the
+same. `profile_count()` is **503**, `all_traditions()` **41** and the suite **368/368**. All three
+programs print byte-identical output under both pins. The README examples compile from outside the
+repo against the regenerated bundle, and every value their comments claim still holds.
+
+### Changed
+
+- **Cyrius pin `6.6.20` → `6.7.9`.** Verified the same way as 2.15.1: `rm -rf lib && cyrius deps`, the
+  CI lint loop, the DCE build and ELF check, both example programs, 368/368, the bench build and run,
+  and `cyrius distlib --check`. Lint has 0 `warn` lines and the same 20 deferral notes and 5 `ERR_*`
+  notes as before.
+- **6.7.x is a language minor, and none of its source-level changes reach avatara.** Checked against
+  the 6.7.0–6.7.9 upstream CHANGELOG, then by scanning `src/`, `programs/` and `tests/` with string
+  literals and comments stripped:
+  - **New reserved words:** `trait` (6.7.0), `const` (6.7.2), `true` / `false` (6.7.3), `do`
+    (6.7.5) and `dyn` (6.7.8). avatara uses none of them as an identifier.
+  - **A lone `!` was silently dropped until 6.7.3**, so `!x` compiled as `x` and `if (!ok)` meant
+    `if (ok)`. 6.7.3 made `!` a real operator. avatara has no lone `!`, so no condition changes
+    meaning.
+  - **6.7.0's checked traits refuse arithmetic on an untyped `self`.** avatara has no `impl` blocks.
+  - **New compile-time checks:** calls to a function defined later are now arity-checked (6.7.7), and a
+    classic-`for` step must end at its `)` (6.7.8). avatara compiles clean under both.
+- **`cyrius.lock` was rewritten for the new pin.** It covers the same 34 files, all byte-equal to the
+  6.7.9 snapshot. 20 hashes changed, and the pin trailer now reads `cyrius 6.7.9`. `cyrius deps
+  --verify` reports `34 verified, 0 failed`. Commit the rewrite along with the pin.
+- **20 of the 34 vendored files changed. avatara calls none of the changed code.** Most of the diffs
+  are comments: CVE-NN references became `CYRIUS-2026-NNNN` ids, and seed-chain headers were added.
+  The code changes are:
+  - `math.cyr`: `f64_parse` was rewritten as a strict parser, and `f64_parse_n` is new.
+  - `fnptr.cyr`: `fncall0`–`fncall8` go through the `callptr` builtin, which also fixes the order of
+    arguments 7 and 8.
+  - The syscall files gain a `sys_ppoll` wrapper. The other changes are in other targets' files.
+  - sakshi 2.5.8 turns its syscall numbers from `var` into `const`, and refuses `sakshi_output_udp` on
+    Windows at compile time.
+
+  avatara calls neither `f64_parse` nor any `fncall*`, and from sakshi it calls only
+  `sakshi_set_level`.
+- **The bundle and sidecar are unchanged apart from the version line.** `dist/avatara.cyr` keeps its
+  six-leaf requires block, and `dist/avatara.deps` names the same six leaves.
+- **Every binary is exactly 48 B smaller.** DCE builds: `build/avatara` 1,172,280 → 1,172,232 B,
+  `traditions` 1,163,944 → 1,163,896, `compose` 434,728 → 434,680, and the bench binary
+  1,210,648 → 1,210,600.
+
+### Performance
+
+- **Flat.** Measured by interleaved A/B against a 6.6.20 control binary built from this tree before
+  the bump: three runs of 31 rounds each, with order alternating each round, comparing medians, on a
+  quiet host (load ~2 on 16 threads). Suite total: −0.4 %, −0.0 %, −0.2 %. Every µs-scale row stayed
+  within ±1.5 % in every run, `affinity/similar_to_5` included (+0.0 %, −0.2 %, −0.3 %).
+- **The 2.15.1 findings were re-measured on the quiet host, and they hold.** 6.6.6 vs 6.6.20, 31
+  rounds: `affinity/similar_to_5` **+8.3 %** and `registry/query_courage_0.9` **−25.4 %**, with the
+  twin `cross_tradition_match` at −1.6 % and the suite at +0.6 %. Both are still unattributed. 6.7.9
+  leaves both rows where 6.6.20 put them.
+- **The 2.16.0 `bench-history.csv` rows** were recorded at load 1.9. Their suite total is 278,380 ns,
+  against 277,087 at 2.15.1.
+
 ## [2.15.1] — 2026-11-04
 
 A toolchain-and-dependencies patch. Cyrius moves **6.6.6 → 6.6.20**, the last 6.6.x release, and the

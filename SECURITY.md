@@ -17,8 +17,8 @@ current release.
 
 | Version | Supported | Notes |
 |---------|-----------|-------|
-| 2.15.x  | Yes       | Current release line (Cyrius) |
-| 2.0–2.14 | No       | Fixes land in the current 2.x minor — upgrade |
+| 2.16.x  | Yes       | Current release line (Cyrius) |
+| 2.0–2.15 | No       | Fixes land in the current 2.x minor — upgrade |
 | 1.0.x   | No        | Rust implementation, retired at the v2.0.0 Cyrius port ([ADR-006](docs/architecture/adr/006-cyrius-port.md)) |
 
 ## Scope
