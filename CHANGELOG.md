@@ -7,6 +7,77 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.16.1] — 2026-11-04
+
+A toolchain-and-dependencies patch. Cyrius moves **6.7.9 → 6.7.18**, and the vendored libs move to the
+versions that snapshot pins, including the bundled sakshi **2.5.8 → 2.5.10**. Every dependency is now
+at its latest release: cyrius 6.7.18 and sakshi 2.5.10 are each project's current GitHub release, and
+both workflow actions already track theirs. Nothing in `src/` changed. `profile_count()` is **503**,
+`all_traditions()` **41** and the suite **368/368**. All three programs print byte-identical output
+under both pins. The README examples compile from outside the repo against the regenerated bundle, and
+every value their comments claim still holds.
+
+### Changed
+
+- **Cyrius pin `6.7.9` → `6.7.18`**, the latest release (2026-10-23). Verified the same way as 2.16.0:
+  `rm -rf lib && cyrius deps`, the CI lint loop, the DCE build and ELF check, both example programs,
+  368/368, the bench build and run, and `cyrius distlib --check`. Lint has 0 `warn` lines and the same
+  20 deferral notes and 5 `ERR_*` notes as before. No build, test or lint run printed a warning or a
+  deprecation.
+- **None of the 6.7.10–6.7.18 language changes reach avatara.** The upstream CHANGELOG for these nine
+  releases runs to ~45,800 lines. Its behaviour-change sections are almost entirely about struct values,
+  vectors, generics, `Str`, `: stack` pairs, coroutines and closures. avatara uses none of them: it
+  reads profiles through pointers and holds f64 weights as i64 bit patterns. The multi-value changes,
+  which do touch avatara's `var t, v = lookup(..)` form, are refusals of shapes avatara doesn't write,
+  and the build would have failed on any of them. CLI removals (`cyrius tests` at 6.7.12) don't touch
+  the CI steps.
+- **`cyrius.lock` was rewritten for the new pin.** It covers the same 34 files, all byte-equal to the
+  6.7.18 snapshot. 24 hashes changed, and the pin trailer now reads `cyrius 6.7.18`. `cyrius deps
+  --verify` reports `34 verified, 0 failed`. Commit the rewrite along with the pin.
+- **24 of the 34 vendored files changed. avatara calls none of the changed code.** The large diffs are
+  in `io`, `math`, `str`, `args`, `chrono` and the per-target syscall files, and avatara calls no
+  function in any of those five libs. In the two libs it does call:
+  - `vec.cyr` routes its abort paths through a new `_vec_abort`, which runs an optional die hook.
+  - `result.cyr` declares `ok_via` / `err_via` as returning `Result`.
+
+  sakshi 2.5.9 adds a cyrius-x arm and 2.5.10 resizes four private buffers. avatara calls only
+  `sakshi_set_level`.
+- **The bundle and sidecar are unchanged apart from the version line.**
+- **The binaries shrank again.** DCE builds: `build/avatara` 1,172,232 → 1,111,600 B (−60,632,
+  −5.2 %), `traditions` 1,163,896 → 1,103,264 (−60,632), `compose` 434,680 → 369,952 (−64,728,
+  −14.9 %), and the bench binary 1,210,600 → 1,145,872 (−64,728).
+- **GitHub Actions: no change needed.** `actions/checkout@v7` and `softprops/action-gh-release@v3`
+  float on their major tags, whose latest releases are v7.0.1 and v3.0.3 (checked against the GitHub
+  API). Upstream cyrius SHA-pins its actions. These workflows don't, and switching would be a policy
+  change rather than an update.
+
+### Performance
+
+- **Suite +1.6 % to +1.9 %, with one row consistently up 24 %.** Measured by interleaved A/B against a
+  6.7.9 control binary built from this tree before the bump: three runs of 31 rounds each, with order
+  alternating each round, comparing medians, at load 3–4 on 16 threads.
+  - ⚠ **`history/traditions_for_era`: +24.8 %, +24.1 %, +24.4 %**, or about 1.2 µs on 5.1 µs. Its
+    twin `traditions_for_civ` is the same code and moved only +2.1 % to +2.7 %. **The stdlib caused
+    it, not the compiler.** This time the compiler-only control was possible: the 6.7.9 compiler
+    builds the 6.7.18 stdlib.
+    - With the compiler held at 6.7.9 and only the stdlib swapped, the row moved **+24.0 %**.
+    - With the stdlib held at 6.7.18 and only the compiler swapped, it moved **+0.5 %**.
+
+    The two functions are line-for-line identical. The benchmarks differ only in the string each one
+    compares ("Tang Dynasty" vs "Indus Valley"), and `string.cyr` (`strlen` / `memeq`) didn't change
+    between the snapshots. The likeliest explanation is data or code placement shifting under the
+    changed lib files, not slower code. That is not proven. It is the layout artifact first recorded
+    at 2.14.2, swinging back. Under 6.6.2 this row ran 34 % slower than its twin, and 6.6.6 brought
+    the pair to about 5 % apart (CHANGELOG 2.15.0). Under 6.7.18 it runs about 41 % slower than its
+    twin (6.3 µs vs 4.5 µs), the 6.6.2 shape again.
+  - The stdlib-only swap also explains `registry/lookup_by_name` +4.4 % and
+    `history/context_all_traditions` +3.0 %. The compiler-only swap accounts for
+    `registry/query_courage_0.9` −4.5 % and `affinity/*` +1.4 % to +2.2 %. Each split's suite total
+    was under +1 % (+0.6 % stdlib, +0.8 % compiler).
+- **The 2.16.1 `bench-history.csv` rows** were recorded as load rose to 6.4 on 16 threads. Their suite
+  total is 290,678 ns, against 278,380 at 2.16.0. That is +4.4 %, larger than the A/B's +1.9 %, which
+  is the figure to use.
+
 ## [2.16.0] — 2026-11-04
 
 A toolchain-and-dependencies release. It is a minor because the toolchain crosses a language minor:
