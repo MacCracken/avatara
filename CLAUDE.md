@@ -6,8 +6,8 @@
 
 - **Language**: Cyrius (ported from Rust in v2.0)
 - **License**: GPL-3.0-only
-- **Version**: SemVer 2.15.0
-- **Compiler**: cyrius >= 6.6.6 (pinned in `cyrius.cyml` `[package].cyrius`)
+- **Version**: SemVer 2.15.1
+- **Compiler**: cyrius >= 6.6.20 (pinned in `cyrius.cyml` `[package].cyrius`)
 
 ## Consumers
 
@@ -103,6 +103,7 @@ All values are i64. f64 trait/emphasis weights stored as IEEE 754 bit patterns. 
 
 - **VERSION is the single source of truth.** `cyrius.cyml` derives its version via the `${file:VERSION}` template; CHANGELOG.md must carry a matching `## [X.Y.Z]` entry. Bump with `scripts/version-bump.sh X.Y.Z` (updates VERSION + CLAUDE.md, stubs the CHANGELOG, regenerates `dist/avatara.cyr`). CI gates version consistency.
 - **Toolchain pin** lives only in `cyrius.cyml` `[package].cyrius` — there is no `.cyrius-toolchain` file. CI reads it dynamically and installs via the upstream `install.sh`. Bumping the cyrius version is a deliberate, separate change from the package version.
+- **`cyrius.lock` is committed** (since the 6.6.20 pin, 2.15.1). `cyrius deps` writes it with one SHA-256 line for each vendored `lib/` file; a pin bump rewrites it, and the rewrite is committed alongside the pin.
 - **Benchmark every release.** Run `scripts/bench-history.sh` as a standard step of each version bump — it builds `tests/avatara.bcyr`, runs the suite, and appends timings to `bench-history.csv` (keyed by date + version). Compare against the prior release's rows to discover deltas and surface potential regressions before tagging; call out any meaningful slowdown in the CHANGELOG. CI also runs the benchmark suite to catch build/perf breakage on every push.
 - **`dist/avatara.cyr`** is the committed consumer bundle (`cyrius distlib`, driven by the `[lib]` section). Regenerate and commit it whenever `src/` changes; CI fails if it is stale.
 

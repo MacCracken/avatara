@@ -7,6 +7,76 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.15.1] — 2026-11-04
+
+A toolchain-and-dependencies patch. Cyrius moves **6.6.6 → 6.6.20**, the last 6.6.x release, and the
+vendored libs move to the versions that snapshot pins: the stdlib closure, and the bundled sakshi
+**2.5.2 → 2.5.7**. Nothing in `src/` changed. `profile_count()` is **503**, `all_traditions()` **41**
+and the suite **368/368**, as before the bump. All three programs print byte-identical output under
+both pins. The README examples compile from outside the repo against the regenerated bundle, and every
+value their comments claim still holds.
+
+### Changed
+
+- **Cyrius pin `6.6.6` → `6.6.20`.** Verified before any doc edit: `rm -rf lib && cyrius deps`, the CI
+  lint loop, the DCE build and ELF check, both example programs, 368/368, the bench build and run, and
+  `cyrius distlib --check`. Lint has 0 `warn` lines and the same notes as under 6.6.6: 20 untracked
+  deferrals, plus 5 on `src/error.cyr`'s bare `ERR_*` members (they belong to sakshi's namespace). A
+  review of the 6.6.7–6.6.20 upstream CHANGELOG found no required source or CI change. Three upstream
+  changes do reach this repo, and the next three bullets cover them.
+- **New file to commit: `cyrius.lock`.** Since 6.6.9, `cyrius deps` writes a lock on a stdlib-only
+  project's first resolve. Before that, a lock was written only with `--relock`. The lock has one
+  SHA-256 line for each of the 34 vendored `lib/` files, and upstream's guidance is to commit it.
+  `cyrius deps --verify` now checks the vendored tree against it and reports `34 verified, 0 failed`.
+- **The `lib/` closure grew from 32 to 34 files.** It was re-resolved from empty, as CI does, and all 34
+  files are byte-equal to the 6.6.20 snapshot. No file in the 6.6.6 closure was dropped. Both new
+  files come in through other stdlib files, not through avatara. `chrono.cyr` arrives because, since
+  6.6.10, `hashseed.cyr` seeds `hashmap` from chrono's clocks. `poison.cyr` arrives because
+  `alloc.cyr` includes it, and its code is compiled only under `CYRIUS_POISON`, which avatara does
+  not set. The 16 `[deps] stdlib` names are unchanged, and `lib/` is gitignored.
+- **sakshi 2.5.2 → 2.5.7.** 2.5.3–2.5.6 fix sakshi's clock calibration and its Windows log-file
+  append. 2.5.7 regenerates sakshi's bundle with `cyrius distlib`, adding a compile-verified
+  requires block. avatara calls `sakshi_set_level(SK_INFO)` and nothing else (`src/logging.cyr`), so
+  none of this changes avatara's behaviour.
+- **`dist/avatara.cyr` now opens with a requires block, and `dist/avatara.deps` names only what the
+  bundle needs.** Both changes are 6.6.18–6.6.19 `cyrius distlib` output, with no source change behind
+  them. The bundle starts with `# Requires (compile-verified; …)` and six `include "lib/…"` lines:
+  `syscalls`, `sakshi`, `alloc`, `string`, `result` and `vec`. The sidecar shrinks from all 16
+  declared `[deps] stdlib` leaves to the same six, the set the compile-verify proved the bundle needs.
+  ⚠ **Consumer note:** a project that takes avatara as a `[deps.avatara]` dep, and relied on
+  avatara's sidecar to vendor `fmt`, `hashmap`, `math`, `str`, `io`, `args`, `assert`, `bench`,
+  `tagged` or `fnptr` for its own code, must now declare those itself. sankhya is the only consumer of
+  `dist/avatara.cyr` today (at tag 2.14.8), and it already declares all ten.
+- **Most binaries shrank.** DCE builds: `build/avatara` 1,422,856 → 1,172,280 B (−250,576, −17.6 %),
+  `traditions` 1,406,328 → 1,163,944 B (−242,384), and the bench binary 1,457,120 → 1,210,648 B
+  (−246,472). `compose` grew 427,248 → 434,728 B (+7,480). These can't be split between compiler and
+  snapshot, because the 6.6.6 compiler refuses the 6.6.20 stdlib (`2 reachable undefined
+  function(s)`).
+- **The bench harness's per-op line changed slightly.** It now also says `E of W windows eligible`.
+  `scripts/bench-history.sh` doesn't parse that line, and it still records exactly 60 rows.
+
+### Performance
+
+- **Flat overall, with one row consistently slower and one consistently faster.** Measured by
+  interleaved A/B against a 6.6.6 control binary built from this tree before the bump: three runs of
+  21, 31 and 31 rounds, with order alternating each round, comparing medians. Host load was 3–7 on 16
+  threads.
+  - **Suite total:** −2.6 %, +1.6 %, +0.4 %. Flat.
+  - ⚠ **`affinity/similar_to_5`: +2.4 %, +8.8 %, +8.1 %**, or about 7 µs on ~90 µs. Its structural
+    twin `affinity/cross_tradition_match` runs the same `affinity()` pass over all 503 profiles, and it
+    measured +0.4 %, −0.5 % and −0.6 %, so the shared scoring loop isn't what moved. **Not
+    attributed.** The obvious suspect, the allocator `similar_to` calls and its twin doesn't, is ruled
+    out: `alloc()`'s fast path is unchanged outside `#ifdef CYRIUS_POISON`. The compiler-only control
+    used at 2.14.2 isn't available, for the reason given under the binary sizes above.
+  - **`registry/query_courage_0.9`: −26.3 %, −24.4 %, −25.3 %.** Faster in every run. Not attributed
+    either.
+  - `registry/lookup_by_name` (+20.9 %) and `registry/by_tradition` (+22.2 %) moved only in the first
+    run, and measured −5 % to −7 % in the next two. That is noise.
+- **The 2.15.1 `bench-history.csv` rows** were recorded at load 4.6 on 16 threads. Their suite total is
+  277,087 ns, against 258,625 at 2.14.8 and 604,630 at the load-inflated 2.15.0. Use the A/B above,
+  not these single-sample rows, to compare releases: within this session the A/B's per-round suite
+  totals ranged from ~280k to ~430k ns as host load shifted.
+
 ## [2.15.0] — 2026-09-24
 
 A toolchain-and-dependencies release. Cyrius moves **6.6.2 → 6.6.6**, and each of avatara's

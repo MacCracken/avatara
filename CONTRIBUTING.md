@@ -48,7 +48,7 @@ local run is a green CI run.
 
 | Gate | Command | Enforces |
 |------|---------|----------|
-| Dependencies | `cyrius deps` | `[deps].stdlib` resolves into `lib/` against the pin |
+| Dependencies | `cyrius deps` | `[deps].stdlib` resolves into `lib/` against the pin, hashed into the committed `cyrius.lock` (`cyrius deps --verify` checks it) |
 | Lint | loop below | zero non-cosmetic `warn` lines in `src/*.cyr` and `programs/*.cyr` |
 | Build | `CYRIUS_DCE=1 cyrius build src/main.cyr build/avatara` | the library compiles; output is an ELF |
 | Examples | `CYRIUS_DCE=1 cyrius build programs/traditions.cyr build/traditions` and the same for `programs/compose.cyr` | **both** examples compile (see [Adding a Tradition](#adding-a-new-tradition)) |
