@@ -6,7 +6,7 @@
 
 - **Language**: Cyrius (ported from Rust in v2.0)
 - **License**: GPL-3.0-only
-- **Version**: SemVer 2.16.1
+- **Version**: SemVer 2.17.0
 - **Compiler**: cyrius >= 6.7.18 (pinned in `cyrius.cyml` `[package].cyrius`)
 
 ## Consumers
@@ -59,8 +59,10 @@ bhava (emotion/personality — post-v2.0 archetype overlay), joshua (NPC divine 
 - `src/anishinaabe.cyr` — 5 Anishinaabe manidoog + the 7 Grandfather Teachings (Nizhwaaswi Gagiikwewin), carried by their Ojibwe names as cosmic-tier principles; the wiindigoo is deliberately not carried — see module header
 - `src/aboriginal.cyr` — 4 figures of three Aboriginal Australian peoples, carried under their own peoples' tradition strings (Kunwinjku, Kulin, Gunaikurnai), not a continent-wide label; `traditions_for_civilization("Aboriginal Australia")` gathers them. Restricted Dreaming material deliberately excluded, and the v2.14.0 survey's six refusals are recorded with their reasons (see module header). Per-figure provenance, verbatim reuse terms and consent status live in `docs/development/sourcing-register.md`
 - `src/logging.cyr` — sakshi logging init
+- `src/json.cyr` — ArchetypeProfile JSON in the Rust 1.0.1 serde shape plus `domain` last (ADR-011): `profile_to_json(p)` / `profile_to_json_into(sb, p)`, `profile_from_json(node)` (a bayan value-tree node) and `profile_from_json_text(buf, len)`, returning `Ok(profile)` / `Err(Str msg)` in serde's wording. **Not in `src/lib.cyr` or `dist/avatara.cyr`** — only in `[lib.json]` → `dist/avatara-json.cyr`, the one bundle that calls bayan. Private names are `_avj_*` / `AVJ_*` (varna's json.cyr owns `_json_*`)
 - `tests/avatara.tcyr` — integration test suite (368 assertions)
-- `tests/avatara.bcyr` — benchmarks (60)
+- `tests/json.tcyr` — JSON suite (146 assertions): all 503 profiles round-trip byte-identical, every variant name, every Err message (checked against serde_json 1.0 on the Rust types)
+- `tests/avatara.bcyr` — benchmarks (65; tier 8 is JSON)
 - `programs/traditions.cyr` — example: explore archetypes
 - `programs/compose.cyr` — example: blend traditions
 
@@ -80,13 +82,15 @@ All values are i64. f64 trait/emphasis weights stored as IEEE 754 bit patterns. 
 - Affinity: `affinity()`, `similar_to()`, `cross_tradition_match()`, `cross_tradition_matches()`, `detect_conflicts()`, `is_incompatible()`. `similar_to(src, k)` uses bounded top-k selection (O(N·k)) — do not reintroduce a full sort before trimming; `k <= 0` still means "all, sorted"
 - Shadow: `shadow(profile)` — inverted form (traits→1−v, breath/growth/polarity mirrored, element/tier kept); involutive; `is_shadow_of(a, b)`
 - Domain: every archetype has a `Domain` (primary sphere, offset 312); `prof_domain(p)`, `query_domain(domain)`, `query_count_domain(domain)`
+- Equality: `profile_eq(a, b)` (`src/types.cyr`, both bundles) — every field; strings by content (NULL equals only NULL, never `""`), enums by value, f64 **by bit pattern**; a NULL profile equals nothing
+- JSON: a new Profile field must be added to `src/json.cyr` (key table, `profile_to_json_into`, `_avj_read_top`) or the round-trip test fails; a new enum variant needs its wire name in that file's exhaustive `match` (compile error otherwise). Variant names, the Rust ones and avatara's Domain names, are a wire contract
 - Overlays: `profile_enneagram_type/wing/centre/score(p)`, `profile_jungian_role/score(p)`, `profile_mystic_mode/score(p)`, `jungian_shadow_form(p)`. Derived, never stored; adding an overlay must not change `profile_count()`. Generic registry API — `overlay_system_count/name/by_name`, `overlay_label_count/label`, `overlay_score(s,p,i)`, `overlay_best(s,p)` — enumerates every registered system without naming one; out-of-range systems degrade (`"unknown"`/0/0.0), they do not trap
 
 ## Key Principles
 
 - All traditions map to the same ArchetypeProfile output — composable across cultures
 - Plain f64/enum outputs only — no bhava types leak into avatara
-- Zero external dependencies except sakshi (logging)
+- Zero external dependencies except sakshi (logging). bayan is the one exception, and only for the opt-in JSON bundle `dist/avatara-json.cyr` (ADR-011): `dist/avatara.cyr` never calls bayan (CI greps for it), and a consumer folding the JSON bundle declares bayan itself — the stdlib monolith or `dist/bayan-json.cyr`, never both
 - f64 values in 0.0-1.0 range for all traits and emphases
 - Historically and theologically accurate — real traditions, real correspondences
 - Respectful representation — these are living traditions for billions of people
@@ -101,11 +105,12 @@ All values are i64. f64 trait/emphasis weights stored as IEEE 754 bit patterns. 
 
 ## Versioning & Benchmarking
 
-- **VERSION is the single source of truth.** `cyrius.cyml` derives its version via the `${file:VERSION}` template; CHANGELOG.md must carry a matching `## [X.Y.Z]` entry. Bump with `scripts/version-bump.sh X.Y.Z` (updates VERSION + CLAUDE.md, stubs the CHANGELOG, regenerates `dist/avatara.cyr`). CI gates version consistency.
+- **VERSION is the single source of truth.** `cyrius.cyml` derives its version via the `${file:VERSION}` template; CHANGELOG.md must carry a matching `## [X.Y.Z]` entry. Bump with `scripts/version-bump.sh X.Y.Z` (updates VERSION + CLAUDE.md, stubs the CHANGELOG, regenerates both dist bundles). CI gates version consistency.
+- **Finish the release — it is part of the work, not an extra.** A change is done only when it is releasable: bump with `scripts/version-bump.sh X.Y.Z` (patch for fixes, minor for new public API), move the `[Unreleased]` entry under the new `## [X.Y.Z]` heading and delete the empty `### Changed` stub the script inserts, run `scripts/bench-history.sh` and write the delta against the prior release into that entry, update every "unreleased" mention (ADRs, roadmap, `SECURITY.md` supported line, `docs/doc-health.md`), regenerate and `--check` both bundles, and run the gates. Do this unasked, even if a brief from another session says not to bump. Only tagging, committing and pushing stay with the user.
 - **Toolchain pin** lives only in `cyrius.cyml` `[package].cyrius` — there is no `.cyrius-toolchain` file. CI reads it dynamically and installs via the upstream `install.sh`. Bumping the cyrius version is a deliberate, separate change from the package version.
 - **`cyrius.lock` is committed** (since the 6.6.20 pin, 2.15.1). `cyrius deps` writes it with one SHA-256 line for each vendored `lib/` file; a pin bump rewrites it, and the rewrite is committed alongside the pin.
 - **Benchmark every release.** Run `scripts/bench-history.sh` as a standard step of each version bump — it builds `tests/avatara.bcyr`, runs the suite, and appends timings to `bench-history.csv` (keyed by date + version). Compare against the prior release's rows to discover deltas and surface potential regressions before tagging; call out any meaningful slowdown in the CHANGELOG. CI also runs the benchmark suite to catch build/perf breakage on every push.
-- **`dist/avatara.cyr`** is the committed consumer bundle (`cyrius distlib`, driven by the `[lib]` section). Regenerate and commit it whenever `src/` changes; CI fails if it is stale.
+- **`dist/avatara.cyr`** and **`dist/avatara-json.cyr`** are the committed consumer bundles (`[lib]` and `[lib.json]`). Regenerate both with **`cyrius distlib --all --no-default-features`** whenever `src/` changes; check with `cyrius distlib --check --no-default-features`. The flag matters: with the optional bayan dep in scope, distlib's compile-verify under-reports the `.deps` sidecars (ADR-011), and a plain `--check` reports STALE. `[lib.json]` repeats `[lib]`'s module list plus `src/json.cyr` — a new module goes in both. CI fails if `dist/` is stale, if `dist/avatara.cyr` names a `bayan_` symbol, or if the JSON bundle leaves a non-bayan name undefined
 
 ## DO NOT
 

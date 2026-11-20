@@ -1,6 +1,7 @@
 # avatara.bcyr -- Benchmarks for avatara
 #
-# 60 benchmarks covering all traditions, sub-groups, registry, compose, history.
+# 65 benchmarks covering all traditions, sub-groups, registry, compose, history,
+# affinity, overlays, and the JSON codec (tier 8, src/json.cyr).
 # Matches and exceeds Rust Criterion suite (29 benchmarks).
 
 # Stdlib auto-included via cyrius.cyml
@@ -46,12 +47,13 @@ include "src/affinity.cyr"
 include "src/shadow.cyr"
 include "src/overlay.cyr"
 include "src/logging.cyr"
+include "src/json.cyr"
 
 var N = 1000;
 var b = 0;
 
 alloc_init();
-println("=== avatara benchmarks (60 benches) ===");
+println("=== avatara benchmarks (65 benches) ===");
 
 # ================================================================
 # Tier 1: Single profile creation
@@ -474,6 +476,52 @@ for (var i = 0; i < N; i = i + 1) { profile_jungian_role(ov_src); }
 bench_batch_stop(b, N);
 bench_report(b);
 
+# ================================================================
+# Tier 8: JSON (src/json.cyr; ADR-011). One Saptarishi profile, the shape
+# sankhya's MultiCalendarDate carries seven of, plus the whole registry.
+# ================================================================
 println("");
-println("=== 60 benchmarks complete ===");
+println("--- tier 8: json ---");
+
+var js_p = incarnate_sage_vashishtha();
+var js_s = profile_to_json(js_p);
+var js_node = bayan_json_v_parse(js_s);
+var js_t, js_q = profile_from_json_text(str_data(js_s), str_len(js_s));
+var js_all = all_profiles();
+
+b = bench_new("json/to_json_sage");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { profile_to_json(js_p); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("json/from_json_node_sage");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { var jt, jv = profile_from_json(js_node); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("json/from_json_text_sage");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { var jt2, jv2 = profile_from_json_text(str_data(js_s), str_len(js_s)); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+b = bench_new("json/profile_eq_sage");
+bench_batch_start(b);
+for (var i = 0; i < N; i = i + 1) { profile_eq(js_p, js_q); }
+bench_batch_stop(b, N);
+bench_report(b);
+
+# 503 profiles per op, so a tenth of N keeps the tier's wall time near the others'.
+b = bench_new("json/to_json_all_503");
+bench_batch_start(b);
+for (var i = 0; i < N / 10; i = i + 1) {
+    for (var k = 0; k < vec_len(js_all); k = k + 1) { profile_to_json(vec_get(js_all, k)); }
+}
+bench_batch_stop(b, N / 10);
+bench_report(b);
+
+println("");
+println("=== 65 benchmarks complete ===");
 syscall(SYS_EXIT, 0);

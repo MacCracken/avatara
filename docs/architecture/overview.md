@@ -83,6 +83,7 @@ Avatara produces plain f64/enum outputs. It does not depend on bhava — bhava c
 7. `affinity()` scores similarity between profiles; `similar_to()` finds nearest neighbors (bounded top-k, O(N*k)); `cross_tradition_match()` maps across traditions; `detect_conflicts()` identifies trait tensions
 8. Derived layers read *off* a finished profile and store nothing: `aspect.cyr` (trait-derived roles), `shadow.cyr` (`shadow()`, the involutive inversion), `overlay.cyr` (Enneagram, Jungian and Mystic typologies, walked through the `OverlaySystem` registry). None of them adds archetypes, so `profile_count()` is unaffected by any of them
 9. Consumer (bhava, joshua, etc.) receives plain f64/enum output via profile accessors
+10. Optionally, a profile crosses a process boundary as JSON: `src/json.cyr` writes and reads the Rust 1.0.1 serde shape (plus `domain`), and `profile_eq()` checks the round trip. It ships only in `dist/avatara-json.cyr`, the one bundle that calls bayan; `dist/avatara.cyr` stays bayan-free ([ADR-011](adr/011-json-profile-codec.md))
 
 ## Type System
 

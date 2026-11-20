@@ -3,6 +3,11 @@
 **Status**: Accepted
 **Date**: 2026-04-12
 
+> **Partly superseded (2.17.0, 2026-11-20).** "No serde serialization" no longer holds for the
+> profile: [ADR-011](011-json-profile-codec.md) restores the Rust 1.0.1 serde shape for
+> `ArchetypeProfile` in `src/json.cyr`, which ships only in `dist/avatara-json.cyr`. The rest of
+> this record stands.
+
 ## Context
 
 Avatara was originally written in Rust (v1.0.0-v1.1.0, 18,804 LOC). The AGNOS ecosystem is standardizing on Cyrius as its systems language. Sibling projects (itihas, vidya, hadara) have already been ported or written natively in Cyrius.

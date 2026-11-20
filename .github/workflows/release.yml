@@ -46,14 +46,16 @@ jobs:
           CYRIUS_DCE=1 cyrius build src/main.cyr build/avatara
           echo "avatara: $(wc -c < build/avatara) bytes"
 
-      - name: Regenerate bundle
-        run: cyrius distlib
+      - name: Regenerate bundles
+        # --no-default-features: see ci.yml "Verify dist bundles are current".
+        run: cyrius distlib --all --no-default-features
 
       - name: Archive
         run: |
           TAG="${GITHUB_REF_NAME}"
           git archive --format=tar.gz --prefix="avatara-${TAG}/" -o "avatara-${TAG}-src.tar.gz" HEAD
           cp dist/avatara.cyr "avatara-${TAG}.cyr"
+          cp dist/avatara-json.cyr "avatara-json-${TAG}.cyr"
           sha256sum avatara-*.tar.gz avatara-*.cyr build/avatara > SHA256SUMS
 
       - name: Extract changelog

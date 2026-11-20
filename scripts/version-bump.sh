@@ -27,8 +27,10 @@ if ! grep -q "## \[${NEW_VERSION}\]" CHANGELOG.md; then
     ' CHANGELOG.md > CHANGELOG.md.tmp && mv CHANGELOG.md.tmp CHANGELOG.md
 fi
 
-# Regenerate the consumer bundle so dist/avatara.cyr carries the new version.
-command -v cyrius >/dev/null && cyrius distlib >/dev/null 2>&1 || true
+# Regenerate both consumer bundles so dist/avatara.cyr and dist/avatara-json.cyr
+# carry the new version. --no-default-features keeps the optional bayan dep out of
+# distlib's compile-verify, which otherwise under-reports the .deps sidecars (ADR-011).
+command -v cyrius >/dev/null && cyrius distlib --all --no-default-features >/dev/null 2>&1 || true
 
 echo "Bumped to ${NEW_VERSION} (cyrius pin ${CYRIUS_PIN})."
 echo "Still manual: fill in CHANGELOG.md ${NEW_VERSION} section, then tag and push."

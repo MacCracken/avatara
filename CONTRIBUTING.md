@@ -52,9 +52,9 @@ local run is a green CI run.
 | Lint | loop below | zero non-cosmetic `warn` lines in `src/*.cyr` and `programs/*.cyr` |
 | Build | `CYRIUS_DCE=1 cyrius build src/main.cyr build/avatara` | the library compiles; output is an ELF |
 | Examples | `CYRIUS_DCE=1 cyrius build programs/traditions.cyr build/traditions` and the same for `programs/compose.cyr` | **both** examples compile (see [Adding a Tradition](#adding-a-new-tradition)) |
-| Tests | `cyrius test tests/avatara.tcyr` | the integration suite ends `0 failed` |
+| Tests | `cyrius test tests/avatara.tcyr tests/json.tcyr` | the integration and JSON suites both end `0 failed` |
 | Benchmarks | `CYRIUS_DCE=1 cyrius build tests/avatara.bcyr build/bench && ./build/bench` | the bench suite builds, runs to completion and exits 0 |
-| Dist bundle | `cyrius distlib --check` | `dist/avatara.cyr` matches `src/` |
+| Dist bundles | `cyrius distlib --check --no-default-features` | `dist/avatara.cyr` and `dist/avatara-json.cyr` (and their `.deps`) match `src/`; `dist/avatara.cyr` names no `bayan_` symbol |
 | Docs | required files present; `VERSION` == `cyrius.cyml`; `VERSION` appears in `CHANGELOG.md` | version consistency |
 | Toolchain pin | the `[package].cyrius` pin must match CLAUDE.md's `- **Compiler**:` line and both `Cyrius compiler N+` references in README | prose cannot drift from the pin |
 
@@ -71,10 +71,14 @@ done
 [ $fail -eq 0 ] || exit 1
 ```
 
-For the dist gate, CI regenerates and diffs (`cyrius distlib` then `git diff --exit-code
-dist/avatara.cyr`); `cyrius distlib --check` is the equivalent local check that does not write. Either
-way, **regenerate and commit `dist/avatara.cyr` whenever `src/` changes** — it is the committed bundle
-consumers include, and a stale bundle fails CI.
+For the dist gate, CI regenerates and diffs (`cyrius distlib --all --no-default-features`, then `git
+diff --exit-code dist/`); `cyrius distlib --check --no-default-features` is the equivalent local check
+that does not write. Either way, **regenerate and commit both bundles whenever `src/` changes**. They
+are what consumers include, and a stale bundle fails CI. Keep `--no-default-features`: avatara's own
+builds take bayan as an optional dep, and with it in scope distlib's compile-verify under-reports the
+`.deps` sidecars ([ADR-011](docs/architecture/adr/011-json-profile-codec.md)). A plain `--check`
+reports both bundles STALE. CI also fails if `dist/avatara.cyr` ever names a `bayan_` symbol, or if
+`dist/avatara-json.cyr` leaves any name undefined besides bayan's (a module missing from `[lib.json]`).
 
 ### What is *not* a gate
 
@@ -109,7 +113,13 @@ own supersession. The intent behind those rules survives in Cyrius form:
   The six public *classification* enums — BreathAffinity, GrowthDirection, Element, Polarity,
   CosmicTier, Domain — deliberately carry no sentinel: they are closed vocabularies read off a
   profile, not ranges to walk.
-- **No serialization.** Profiles are plain memory; there is no derive to add.
+- **One serializer, for the profile only.** `src/json.cyr` writes and reads the Rust 1.0.1 serde
+  shape ([ADR-011](docs/architecture/adr/011-json-profile-codec.md)). It is hand-written, not derived,
+  so **a new `Profile` field must be added there**: the key table, `profile_to_json_into` and
+  `_avj_read_top`. `tests/json.tcyr`'s round trip fails until it is. A new enum variant needs its wire
+  name in that file's exhaustive `match`; the build fails until it has one. The names are a wire
+  contract, so do not rename them. json.cyr stays out of `src/lib.cyr` and `[lib]`, the bayan-free
+  bundle.
 - **Errors are values, not panics.** Fallible public functions return `Result` from `lib/result.cyr` —
   `Ok(x)` / `Err(code)`, inspected with `is_ok` / `is_err_result` / `result_unwrap` / `err_code_of`,
   and propagated with `?`. `AvataraError` codes are the `Err` payload. Loop-hot internal predicates
@@ -136,7 +146,8 @@ own supersession. The intent behind those rules survives in Cyrius form:
 - Do not trivialize or mock any tradition. These are living traditions for billions of people.
 - Do not mix traditions without clear compositional semantics.
 - Plain f64/enum outputs only — no consumer types (bhava's especially) leak into avatara.
-- Zero external dependencies except sakshi (logging).
+- Zero external dependencies except sakshi (logging). bayan is allowed only in `src/json.cyr`, which
+  ships in `dist/avatara-json.cyr` alone.
 
 ## Adding a New Tradition
 
@@ -164,8 +175,10 @@ module must be added to **all six roots** or the build breaks. Full checklist:
    loudly with `undefined function 'all_<tradition>'`; `programs/compose.cyr` can still build when DCE
    elides the unreachable call, silently masking the miss. Build both.
 
-3. **`cyrius.cyml` `[lib].modules`** — add `"src/<tradition>.cyr"` in the same order as `src/lib.cyr`.
-   `cyrius distlib` reads this section; miss it and the bundle ships without your module.
+3. **`cyrius.cyml` `[lib].modules` and `[lib.json].modules`**: add `"src/<tradition>.cyr"` to both, in
+   the same order as `src/lib.cyr`. `cyrius distlib` reads them. If you miss `[lib]`, the bundle ships
+   without your module. If you miss `[lib.json]`, the JSON bundle does, and distlib only warns; CI
+   fails on that warning. (`tests/json.tcyr` includes `src/lib.cyr`, so it is not another root.)
 
 4. **`src/registry.cyr`** — add an `all_<tradition>()` block to `all_profiles()`.
 
@@ -245,7 +258,7 @@ scripts/version-bump.sh 2.15.0
 
 That writes `VERSION`, updates the version line in `CLAUDE.md`, propagates the `[package].cyrius`
 pin into CLAUDE.md's `- **Compiler**:` line and both README `Cyrius compiler N+` references, stubs a
-`CHANGELOG.md` section and regenerates `dist/avatara.cyr`. Filling in the CHANGELOG entry is manual, and CI requires the version
+`CHANGELOG.md` section and regenerates both dist bundles. Filling in the CHANGELOG entry is manual, and CI requires the version
 to appear there.
 
 **Benchmark every release.** `scripts/bench-history.sh` builds and runs `tests/avatara.bcyr` and
@@ -282,7 +295,7 @@ outright factual errors in place; that is different from revising a decision.
   PRs — see the note on `cyrius fmt` above.
 - Run the full gate set locally first.
 - Update `CHANGELOG.md` under `## [Unreleased]`.
-- Regenerate and commit `dist/avatara.cyr` if `src/` changed.
+- Regenerate and commit both bundles (`cyrius distlib --all --no-default-features`) if `src/` changed.
 
 ## License
 

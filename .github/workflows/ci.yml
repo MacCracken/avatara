@@ -60,7 +60,7 @@ jobs:
 
       - name: Unit tests
         run: |
-          cyrius test tests/avatara.tcyr 2>&1 | tee /tmp/test_output
+          cyrius test tests/avatara.tcyr tests/json.tcyr 2>&1 | tee /tmp/test_output
           tail -1 /tmp/test_output | grep "0 failed"
 
       - name: Benchmarks
@@ -69,11 +69,19 @@ jobs:
           CYRIUS_DCE=1 cyrius build tests/avatara.bcyr build/bench
           ./build/bench
 
-      - name: Verify dist bundle is current
-        # dist/avatara.cyr is committed for consumers; ensure it matches source.
+      - name: Verify dist bundles are current
+        # dist/avatara.cyr and dist/avatara-json.cyr are committed for consumers;
+        # ensure both (and their .deps sidecars) match source. --no-default-features
+        # keeps the optional bayan dep out of distlib's compile-verify: with bayan's
+        # leaves already in scope the verify under-reports both sidecars (ADR-011).
         run: |
-          cyrius distlib
-          git diff --exit-code dist/avatara.cyr || { echo "dist/avatara.cyr is stale — run 'cyrius distlib' and commit"; exit 1; }
+          cyrius distlib --all --no-default-features 2>&1 | tee /tmp/distlib_output
+          git diff --exit-code dist/ || { echo "dist/ is stale — run 'cyrius distlib --all --no-default-features' and commit"; exit 1; }
+          # The JSON bundle may leave only bayan's names for the consumer to supply. Any other
+          # undefined name means [lib.json] has fallen out of step with [lib].
+          other=$(grep -E '^[[:space:]]+[A-Za-z_][A-Za-z0-9_]* \(' /tmp/distlib_output | grep -vE '^[[:space:]]+bayan_' || true)
+          if [ -n "$other" ]; then echo "distlib: undefined names besides bayan's:"; echo "$other"; exit 1; fi
+          if grep -q 'bayan_' dist/avatara.cyr; then echo "dist/avatara.cyr calls bayan — JSON belongs in dist/avatara-json.cyr only"; exit 1; fi
 
   docs:
     name: Documentation

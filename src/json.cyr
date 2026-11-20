@@ -1,0 +1,844 @@
+# json.cyr -- JSON for ArchetypeProfile, in the Rust avatara 1.0.1 serde shape (ADR-011)
+#
+# The Rust crate derived Serialize / Deserialize on ArchetypeProfile, TraitWeights,
+# ModuleEmphasis and the five enums, with no #[serde(...)] attribute anywhere, so
+# serde's defaults fixed the shape: a struct is an object with its fields in
+# declaration order, a unit enum variant is its name as a string. The Cyrius port
+# carried no serializer at all; this file restores that shape, field for field:
+#
+#   {"name":..,"tradition":..,"description":..,
+#    "traits":{"warmth":..,..,"pedagogy":..},          15 f64, declaration order
+#    "emphasis":{"mood":..,..,"eq":..},                14 f64, declaration order
+#    "breath":"EarlyExhale","growth":"Differentiate","element":"Aether",
+#    "polarity":"Masculine","tier":"Master",
+#    "soul_text":..,"spirit_text":..,
+#    "domain":"Wisdom"}                                Cyrius-only, always last
+#
+# `domain` is the one field the Rust never had (Domain arrived in 2.5.2). It is
+# written last, and is optional on read: absent, it takes profile_new()'s
+# DOMAIN_UNSPECIFIED, so a Rust 1.0.1 document still decodes.
+#
+# Readers are as strict as serde's derive, and say so in serde's words: a missing
+# field, a duplicate field, a wrong JSON type, an unknown variant name. Unknown
+# keys are ignored, as serde ignores them. Fields decode in document order and the
+# first error wins, as serde's visitor does; missing fields are reported after the
+# walk, in declaration order. The messages stop where serde_json's would go on to
+# " at line L column C": bayan's value tree keeps no positions. Only
+# profile_from_json_text, which sees the text, reports one.
+#
+# Contract.
+#   profile_to_json_into(sb, p)  appends one JSON object to str_builder `sb` and
+#       returns 0; on -1 (sb or p NULL, or an enum field holding a value its enum
+#       does not name) NOTHING was written.
+#   profile_to_json(p)           the same object as a fresh Str, or 0 where the
+#       _into form returns -1.
+#   profile_from_json(node)      decodes a bayan value-tree node (bayan_json_v_*),
+#       so a consumer decodes inside its own parsed document. Returns the value-form
+#       Result: Ok(profile), a fresh profile_new() populated through Profile_set_*,
+#       or Err(msg), msg a Str (lib/str.cyr) in serde's wording, never 0.
+#   profile_from_json_text(buf, len)  parses `len` bytes of JSON text first, then
+#       decodes as above. Same Result shape.
+#
+# Cyrius-only decisions (ADR-011):
+#   - A NULL string field (profile_new() leaves all five NULL) is written as
+#     `null`, the way the stdlib's str_builder_add_json_cstr and #derive(Serialize)
+#     write a NULL `: cstring`, and `null` reads back as NULL. So every profile
+#     round-trips, including an unpopulated one. Rust never wrote null there.
+#   - A string holding U+0000 is refused, since a C string would stop there and
+#     hand back a different value. serde accepts it.
+#   - A string that is not valid UTF-8 is refused ("invalid unicode code point",
+#     serde_json's message), so a decoded profile always re-encodes to valid JSON.
+#   - A non-finite f64 is written as null (serde_json does the same) and null does
+#     not read back as f64 (nor does it in serde). Registered profiles carry none.
+#   - `-0` reads as +0.0 where serde_json reads -0.0: bayan's tree stores it as the
+#     integer 0. avatara itself writes -0.0 as "-0.0", which round-trips exactly.
+#   - Stricter than serde in two forms nobody writes, as sankhya's decoders are:
+#     a struct given as an array of its fields (serde's derive accepts one) is
+#     "invalid type: sequence, expected struct ...", and a unit variant given in
+#     map form ({"Unity":null}) is "invalid type: map, expected variant identifier".
+#   - A non-string enum value is "invalid type: ..., expected variant identifier".
+#     serde_json::from_str says only "expected value" there; sankhya's wording is kept.
+#
+# Checked against serde_json 1.0 on the Rust 1.0.1 types (ADR-011): serde decodes
+# every registered profile's JSON and re-encodes it byte-identical, less "domain".
+# Number TEXT can differ for values no profile holds: ryu writes 1e-6 and 1e+20
+# where Grisu2 writes 0.000001 and 100000000000000000000.0, the same bits either way.
+# Text-level refusals are bayan's and come first: a duplicate key ("duplicate key",
+# where serde says "duplicate field `name`"), an integer beyond i64, and syntax
+# errors in bayan's words. The decoder's own duplicate check covers trees built by
+# hand with bayan_json_v_obj_set, which can hold one.
+#
+# In dist/avatara-json.cyr only, the one bundle that calls bayan: cyrius.cyml
+# [lib.json]. dist/avatara.cyr never sees this file, and src/lib.cyr does not
+# include it.
+
+# --- the three structs and the six enums the codec knows -------------
+
+enum AvjStruct {
+    AVJ_TOP = 0;      # ArchetypeProfile
+    AVJ_TRAITS = 1;   # TraitWeights
+    AVJ_EMPH = 2;     # ModuleEmphasis
+}
+
+# ArchetypeProfile's keys by index, in the order they are written. The first
+# AVJ_TOP_REQUIRED are the Rust 1.0.1 fields; `domain` follows them.
+enum AvjTopField {
+    AVJ_F_NAME = 0;
+    AVJ_F_TRADITION = 1;
+    AVJ_F_DESC = 2;
+    AVJ_F_TRAITS = 3;
+    AVJ_F_EMPH = 4;
+    AVJ_F_BREATH = 5;
+    AVJ_F_GROWTH = 6;
+    AVJ_F_ELEMENT = 7;
+    AVJ_F_POLARITY = 8;
+    AVJ_F_TIER = 9;
+    AVJ_F_SOUL = 10;
+    AVJ_F_SPIRIT_TEXT = 11;
+    AVJ_F_DOMAIN = 12;
+    AVJ_TOP_REQUIRED = 12;
+    AVJ_TOP_COUNT = 13;
+}
+
+enum AvjEnum {
+    AVJ_E_BREATH = 0;
+    AVJ_E_GROWTH = 1;
+    AVJ_E_ELEMENT = 2;
+    AVJ_E_POLARITY = 3;
+    AVJ_E_TIER = 4;
+    AVJ_E_DOMAIN = 5;
+    AVJ_E_COUNT = 6;
+}
+
+# Key `i` of ArchetypeProfile (AvjTopField order), or 0 past the last.
+fn _avj_top_key(i) {
+    if (i == AVJ_F_NAME) { return "name"; }
+    if (i == AVJ_F_TRADITION) { return "tradition"; }
+    if (i == AVJ_F_DESC) { return "description"; }
+    if (i == AVJ_F_TRAITS) { return "traits"; }
+    if (i == AVJ_F_EMPH) { return "emphasis"; }
+    if (i == AVJ_F_BREATH) { return "breath"; }
+    if (i == AVJ_F_GROWTH) { return "growth"; }
+    if (i == AVJ_F_ELEMENT) { return "element"; }
+    if (i == AVJ_F_POLARITY) { return "polarity"; }
+    if (i == AVJ_F_TIER) { return "tier"; }
+    if (i == AVJ_F_SOUL) { return "soul_text"; }
+    if (i == AVJ_F_SPIRIT_TEXT) { return "spirit_text"; }
+    if (i == AVJ_F_DOMAIN) { return "domain"; }
+    return 0;
+}
+
+# Key `i` of TraitWeights: the f64 at TW_FIRST + 8*i, or 0 past the last.
+fn _avj_trait_key(i) {
+    if (i == 0) { return "warmth"; }
+    if (i == 1) { return "humor"; }
+    if (i == 2) { return "empathy"; }
+    if (i == 3) { return "patience"; }
+    if (i == 4) { return "confidence"; }
+    if (i == 5) { return "curiosity"; }
+    if (i == 6) { return "creativity"; }
+    if (i == 7) { return "directness"; }
+    if (i == 8) { return "formality"; }
+    if (i == 9) { return "verbosity"; }
+    if (i == 10) { return "courage"; }
+    if (i == 11) { return "precision"; }
+    if (i == 12) { return "skepticism"; }
+    if (i == 13) { return "autonomy"; }
+    if (i == 14) { return "pedagogy"; }
+    return 0;
+}
+
+# Key `i` of ModuleEmphasis: the f64 at ME_FIRST + 8*i, or 0 past the last.
+fn _avj_emph_key(i) {
+    if (i == 0) { return "mood"; }
+    if (i == 1) { return "energy"; }
+    if (i == 2) { return "stress"; }
+    if (i == 3) { return "growth"; }
+    if (i == 4) { return "spirit"; }
+    if (i == 5) { return "reasoning"; }
+    if (i == 6) { return "regulation"; }
+    if (i == 7) { return "relationship"; }
+    if (i == 8) { return "flow"; }
+    if (i == 9) { return "belief"; }
+    if (i == 10) { return "intuition"; }
+    if (i == 11) { return "salience"; }
+    if (i == 12) { return "appraisal"; }
+    if (i == 13) { return "eq"; }
+    return 0;
+}
+
+# Key `i` of struct `s` (AvjStruct). The writer and the reader both spell keys
+# through here, so they cannot disagree.
+fn _avj_key(s, i) {
+    if (s == AVJ_TOP) { return _avj_top_key(i); }
+    if (s == AVJ_TRAITS) { return _avj_trait_key(i); }
+    return _avj_emph_key(i);
+}
+
+# Number of keys struct `s` has.
+fn _avj_key_count(s) {
+    if (s == AVJ_TOP) { return AVJ_TOP_COUNT; }
+    if (s == AVJ_TRAITS) { return TW_COUNT; }
+    return ME_COUNT;
+}
+
+# serde's name for struct `s`, as its visitor's "expected" text.
+fn _avj_struct_name(s) {
+    if (s == AVJ_TOP) { return "struct ArchetypeProfile"; }
+    if (s == AVJ_TRAITS) { return "struct TraitWeights"; }
+    return "struct ModuleEmphasis";
+}
+
+# --- variant names: the Rust 1.0.1 identifiers ------------------------
+# Each `match` is exhaustive over its enum, so a variant added to src/types.cyr
+# without a name here is a compile error. Every enum's values run 0..N-1, so a
+# reader walks names from 0 until the first 0.
+
+# BreathAffinity variant `b` by its Rust name, or 0 for a value outside the enum.
+fn _avj_breath_name(b) {
+    var r = 0;
+    match b {
+        BREATH_UNITY        => { r = "Unity"; }
+        BREATH_EARLY_EXHALE => { r = "EarlyExhale"; }
+        BREATH_MID_EXHALE   => { r = "MidExhale"; }
+        BREATH_LATE_EXHALE  => { r = "LateExhale"; }
+        BREATH_EARLY_INHALE => { r = "EarlyInhale"; }
+        BREATH_MID_INHALE   => { r = "MidInhale"; }
+        BREATH_LATE_INHALE  => { r = "LateInhale"; }
+    }
+    return r;
+}
+
+# GrowthDirection variant `g` by its Rust name, or 0.
+fn _avj_growth_name(g) {
+    var r = 0;
+    match g {
+        GROWTH_DIFFERENTIATE => { r = "Differentiate"; }
+        GROWTH_INTEGRATE     => { r = "Integrate"; }
+        GROWTH_PRESERVE      => { r = "Preserve"; }
+        GROWTH_TRANSFORM     => { r = "Transform"; }
+        GROWTH_STILL         => { r = "Still"; }
+    }
+    return r;
+}
+
+# Element variant `e` by its Rust name, or 0.
+fn _avj_element_name(e) {
+    var r = 0;
+    match e {
+        ELEM_FIRE     => { r = "Fire"; }
+        ELEM_WATER    => { r = "Water"; }
+        ELEM_EARTH    => { r = "Earth"; }
+        ELEM_AIR      => { r = "Air"; }
+        ELEM_AETHER   => { r = "Aether"; }
+        ELEM_LIGHT    => { r = "Light"; }
+        ELEM_DARKNESS => { r = "Darkness"; }
+        ELEM_STORM    => { r = "Storm"; }
+        ELEM_MIXED    => { r = "Mixed"; }
+    }
+    return r;
+}
+
+# Polarity variant `p` by its Rust name, or 0.
+fn _avj_polarity_name(p) {
+    var r = 0;
+    match p {
+        POL_MASCULINE    => { r = "Masculine"; }
+        POL_FEMININE     => { r = "Feminine"; }
+        POL_ANDROGYNOUS  => { r = "Androgynous"; }
+        POL_TRANSCENDENT => { r = "Transcendent"; }
+    }
+    return r;
+}
+
+# CosmicTier variant `t` by its Rust name, or 0.
+fn _avj_tier_name(t) {
+    var r = 0;
+    match t {
+        TIER_SUPREME    => { r = "Supreme"; }
+        TIER_PRIMORDIAL => { r = "Primordial"; }
+        TIER_COSMIC     => { r = "Cosmic"; }
+        TIER_GREATER    => { r = "Greater"; }
+        TIER_LESSER     => { r = "Lesser"; }
+        TIER_DEMIGOD    => { r = "Demigod"; }
+        TIER_MASTER     => { r = "Master"; }
+    }
+    return r;
+}
+
+# Domain variant `d` by name, or 0. Rust had no Domain, so these names are
+# avatara's own: the constant's suffix in the UpperCamelCase a Rust variant would
+# take, matching the other five enums (DOMAIN_TRANSCENDENCE -> "Transcendence").
+# They are a wire contract like the Rust ones (ADR-011).
+fn _avj_domain_name(d) {
+    var r = 0;
+    match d {
+        DOMAIN_UNSPECIFIED   => { r = "Unspecified"; }
+        DOMAIN_CREATION      => { r = "Creation"; }
+        DOMAIN_WAR           => { r = "War"; }
+        DOMAIN_LOVE          => { r = "Love"; }
+        DOMAIN_DEATH         => { r = "Death"; }
+        DOMAIN_WISDOM        => { r = "Wisdom"; }
+        DOMAIN_ORDER         => { r = "Order"; }
+        DOMAIN_CHAOS         => { r = "Chaos"; }
+        DOMAIN_NATURE        => { r = "Nature"; }
+        DOMAIN_SKY           => { r = "Sky"; }
+        DOMAIN_SEA           => { r = "Sea"; }
+        DOMAIN_FIRE          => { r = "Fire"; }
+        DOMAIN_SUN           => { r = "Sun"; }
+        DOMAIN_MOON          => { r = "Moon"; }
+        DOMAIN_FATE          => { r = "Fate"; }
+        DOMAIN_TRICKERY      => { r = "Trickery"; }
+        DOMAIN_HEALING       => { r = "Healing"; }
+        DOMAIN_PROSPERITY    => { r = "Prosperity"; }
+        DOMAIN_HEARTH        => { r = "Hearth"; }
+        DOMAIN_TRANSCENDENCE => { r = "Transcendence"; }
+    }
+    return r;
+}
+
+# Value `v` of enum `e` (AvjEnum) by name, or 0 for a value the enum does not name.
+fn _avj_variant_name(e, v) {
+    if (e == AVJ_E_BREATH) { return _avj_breath_name(v); }
+    if (e == AVJ_E_GROWTH) { return _avj_growth_name(v); }
+    if (e == AVJ_E_ELEMENT) { return _avj_element_name(v); }
+    if (e == AVJ_E_POLARITY) { return _avj_polarity_name(v); }
+    if (e == AVJ_E_TIER) { return _avj_tier_name(v); }
+    if (e == AVJ_E_DOMAIN) { return _avj_domain_name(v); }
+    return 0;
+}
+
+# The value profile `p` holds for enum `e`.
+fn _avj_enum_get(p, e) {
+    if (e == AVJ_E_BREATH) { return Profile_breath(p); }
+    if (e == AVJ_E_GROWTH) { return Profile_growth_dir(p); }
+    if (e == AVJ_E_ELEMENT) { return Profile_element(p); }
+    if (e == AVJ_E_POLARITY) { return Profile_polarity(p); }
+    if (e == AVJ_E_TIER) { return Profile_tier(p); }
+    return Profile_domain(p);
+}
+
+# --- shared ------------------------------------------------------------
+
+# A fresh str_builder. Aborts on OOM, avatara's policy (xalloc, ADR-009): the
+# stdlib constructor returns 0, and every str_builder_add* would then write to it.
+fn _avj_sb_new() {
+    var sb = str_builder_new();
+    if (sb == 0) {
+        var msg = "avatara: fatal — heap allocation failed (out of memory)\n";
+        syscall(SYS_WRITE, 2, msg, strlen(msg));
+        syscall(SYS_EXIT, 134);
+    }
+    return sb;
+}
+
+# The builder's text as a fresh Str, under the same OOM policy.
+fn _avj_sb_build(sb) {
+    var s = str_builder_build(sb);
+    if (s == 0) {
+        var msg = "avatara: fatal — heap allocation failed (out of memory)\n";
+        syscall(SYS_WRITE, 2, msg, strlen(msg));
+        syscall(SYS_EXIT, 134);
+    }
+    return s;
+}
+
+# 1 when Str `key` spells exactly the C string `name`. Compares lengths through
+# the bytes, so a key holding U+0000 ("name\u0000x") never matches "name".
+fn _avj_key_is(key, name) {
+    if (key == 0) { return 0; }
+    var d = str_data(key);
+    var n = str_len(key);
+    var i = 0;
+    while (i < n) {
+        var c = load8(name + i);
+        if (c == 0) { return 0; }
+        if (c != load8(d + i)) { return 0; }
+        i += 1;
+    }
+    if (load8(name + n) != 0) { return 0; }
+    return 1;
+}
+
+# Length of the valid UTF-8 sequence at `p` with `rem` bytes left, or 0 for none.
+# RFC 3629's table: no overlong forms, no surrogates, nothing past U+10FFFF.
+fn _avj_utf8_len(p, rem) {
+    var b0 = load8(p);
+    if (b0 < 0x80) { return 1; }
+    var need = 0;
+    var lo = 0x80;
+    var hi = 0xBF;
+    if (b0 >= 0xC2 && b0 <= 0xDF) {
+        need = 1;
+    } elif (b0 == 0xE0) {
+        need = 2;
+        lo = 0xA0;
+    } elif (b0 == 0xED) {
+        need = 2;
+        hi = 0x9F;
+    } elif (b0 >= 0xE1 && b0 <= 0xEF) {
+        need = 2;
+    } elif (b0 == 0xF0) {
+        need = 3;
+        lo = 0x90;
+    } elif (b0 == 0xF4) {
+        need = 3;
+        hi = 0x8F;
+    } elif (b0 >= 0xF1 && b0 <= 0xF3) {
+        need = 3;
+    } else {
+        return 0;
+    }
+    if (need >= rem) { return 0; }
+    var b1 = load8(p + 1);
+    if (b1 < lo || b1 > hi) { return 0; }
+    var i = 2;
+    while (i <= need) {
+        var b = load8(p + i);
+        if (b < 0x80 || b > 0xBF) { return 0; }
+        i += 1;
+    }
+    return need + 1;
+}
+
+# --- errors, in serde's words --------------------------------------------
+
+# Err(the builder's text).
+fn _avj_fail(sb) {
+    return Err(_avj_sb_build(sb));
+}
+
+# Err(C string `msg` as a Str).
+fn _avj_fail_cstr(msg) {
+    var sb = _avj_sb_new();
+    str_builder_add_cstr(sb, msg);
+    return _avj_fail(sb);
+}
+
+# Append serde's description of an unexpected JSON value: null, boolean `true`,
+# integer `5`, floating point `1.5`, string "x", sequence, map. `v` == 0 reads as null.
+fn _avj_unexpected(sb, v) {
+    if (v == 0 || bayan_json_v_is_null(v) == 1) {
+        str_builder_add_cstr(sb, "null");
+    } elif (bayan_json_v_is_bool(v) == 1) {
+        if (bayan_json_v_bool(v) != 0) { str_builder_add_cstr(sb, "boolean `true`"); }
+        else { str_builder_add_cstr(sb, "boolean `false`"); }
+    } elif (bayan_json_v_is_int(v) == 1) {
+        str_builder_add_cstr(sb, "integer `");
+        str_builder_add_int(sb, bayan_json_v_int(v));
+        str_builder_putc(sb, '`');
+    } elif (bayan_json_v_is_float(v) == 1) {
+        str_builder_add_cstr(sb, "floating point `");
+        _avj_write_f64(sb, bayan_json_v_float(v));
+        str_builder_putc(sb, '`');
+    } elif (bayan_json_v_is_str(v) == 1) {
+        str_builder_add_cstr(sb, "string ");
+        str_builder_add_json_str(sb, bayan_json_v_str(v));
+    } elif (bayan_json_v_is_arr(v) == 1) {
+        str_builder_add_cstr(sb, "sequence");
+    } else {
+        str_builder_add_cstr(sb, "map");
+    }
+    return 0;
+}
+
+# Err "invalid type: <what v is>, expected <expected>".
+fn _avj_invalid_type(v, expected) {
+    var sb = _avj_sb_new();
+    str_builder_add_cstr(sb, "invalid type: ");
+    _avj_unexpected(sb, v);
+    str_builder_add_cstr(sb, ", expected ");
+    str_builder_add_cstr(sb, expected);
+    return _avj_fail(sb);
+}
+
+# Err "<what> field `<key i of struct s>`", what being "missing" or "duplicate".
+fn _avj_field_error(what, s, i) {
+    var sb = _avj_sb_new();
+    str_builder_add_cstr(sb, what);
+    str_builder_add_cstr(sb, " field `");
+    str_builder_add_cstr(sb, _avj_key(s, i));
+    str_builder_putc(sb, '`');
+    return _avj_fail(sb);
+}
+
+# Err "unknown variant `name`, expected one of `A`, `B`, ..." over enum `e`, in
+# serde's wording: "expected `A`" for one variant, "`A` or `B`" for two.
+fn _avj_unknown_variant(e, name) {
+    var n = 0;
+    while (_avj_variant_name(e, n) != 0) { n += 1; }
+    var sb = _avj_sb_new();
+    str_builder_add_cstr(sb, "unknown variant `");
+    str_builder_add(sb, name);
+    str_builder_add_cstr(sb, "`, expected ");
+    if (n > 2) { str_builder_add_cstr(sb, "one of "); }
+    var i = 0;
+    while (i < n) {
+        if (i > 0) {
+            if (n == 2) { str_builder_add_cstr(sb, " or "); }
+            else { str_builder_add_cstr(sb, ", "); }
+        }
+        str_builder_putc(sb, '`');
+        str_builder_add_cstr(sb, _avj_variant_name(e, i));
+        str_builder_putc(sb, '`');
+        i += 1;
+    }
+    return _avj_fail(sb);
+}
+
+# --- writer --------------------------------------------------------------
+
+# Append the f64 bit pattern `bits` as a JSON number through bayan's Grisu2
+# formatter, whose output reads back to the same bits. Non-finite is "null".
+fn _avj_write_f64(sb, bits) {
+    var buf[40];
+    var n = bayan_f64_to_json(bits, &buf);
+    store8(&buf + n, 0);
+    str_builder_add_cstr(sb, &buf);
+    return 0;
+}
+
+# Append `"<key i of struct s>":`, after a comma unless it is the object's first.
+fn _avj_write_key(sb, s, i) {
+    if (i > 0) { str_builder_putc(sb, ','); }
+    str_builder_putc(sb, '"');
+    str_builder_add_cstr(sb, _avj_key(s, i));
+    str_builder_add_cstr(sb, "\":");
+    return 0;
+}
+
+# Append TraitWeights (s == AVJ_TRAITS) or ModuleEmphasis (AVJ_EMPH) of profile `p`.
+fn _avj_write_weights(sb, p, s) {
+    var base = TW_FIRST;
+    if (s == AVJ_EMPH) { base = ME_FIRST; }
+    var n = _avj_key_count(s);
+    str_builder_putc(sb, '{');
+    var i = 0;
+    while (i < n) {
+        _avj_write_key(sb, s, i);
+        _avj_write_f64(sb, load64(p + base + i * 8));
+        i += 1;
+    }
+    str_builder_putc(sb, '}');
+    return 0;
+}
+
+# Append the name of enum `e`'s variant held by profile `p` as a JSON string.
+fn _avj_write_variant(sb, p, e) {
+    str_builder_putc(sb, '"');
+    str_builder_add_cstr(sb, _avj_variant_name(e, _avj_enum_get(p, e)));
+    str_builder_putc(sb, '"');
+    return 0;
+}
+
+# Append profile `p` to str_builder `sb` as one JSON object in the Rust 1.0.1 serde
+# shape, plus "domain" last. Returns 0, or -1 with NOTHING written when `sb` or `p`
+# is NULL or an enum field holds a value its enum does not name (corrupt profile).
+fn profile_to_json_into(sb, p) {
+    if (sb == 0) { return 0 - 1; }
+    if (p == 0) { return 0 - 1; }
+    var e = 0;
+    while (e < AVJ_E_COUNT) {
+        if (_avj_variant_name(e, _avj_enum_get(p, e)) == 0) { return 0 - 1; }
+        e += 1;
+    }
+    str_builder_putc(sb, '{');
+    _avj_write_key(sb, AVJ_TOP, AVJ_F_NAME);
+    str_builder_add_json_cstr(sb, Profile_name(p));
+    _avj_write_key(sb, AVJ_TOP, AVJ_F_TRADITION);
+    str_builder_add_json_cstr(sb, Profile_tradition(p));
+    _avj_write_key(sb, AVJ_TOP, AVJ_F_DESC);
+    str_builder_add_json_cstr(sb, Profile_desc(p));
+    _avj_write_key(sb, AVJ_TOP, AVJ_F_TRAITS);
+    _avj_write_weights(sb, p, AVJ_TRAITS);
+    _avj_write_key(sb, AVJ_TOP, AVJ_F_EMPH);
+    _avj_write_weights(sb, p, AVJ_EMPH);
+    _avj_write_key(sb, AVJ_TOP, AVJ_F_BREATH);
+    _avj_write_variant(sb, p, AVJ_E_BREATH);
+    _avj_write_key(sb, AVJ_TOP, AVJ_F_GROWTH);
+    _avj_write_variant(sb, p, AVJ_E_GROWTH);
+    _avj_write_key(sb, AVJ_TOP, AVJ_F_ELEMENT);
+    _avj_write_variant(sb, p, AVJ_E_ELEMENT);
+    _avj_write_key(sb, AVJ_TOP, AVJ_F_POLARITY);
+    _avj_write_variant(sb, p, AVJ_E_POLARITY);
+    _avj_write_key(sb, AVJ_TOP, AVJ_F_TIER);
+    _avj_write_variant(sb, p, AVJ_E_TIER);
+    _avj_write_key(sb, AVJ_TOP, AVJ_F_SOUL);
+    str_builder_add_json_cstr(sb, Profile_soul(p));
+    _avj_write_key(sb, AVJ_TOP, AVJ_F_SPIRIT_TEXT);
+    str_builder_add_json_cstr(sb, Profile_spirit_text(p));
+    _avj_write_key(sb, AVJ_TOP, AVJ_F_DOMAIN);
+    _avj_write_variant(sb, p, AVJ_E_DOMAIN);
+    str_builder_putc(sb, '}');
+    return 0;
+}
+
+# Profile `p` as a fresh Str of JSON (see profile_to_json_into), or 0 when the
+# _into form would return -1.
+fn profile_to_json(p) {
+    var sb = _avj_sb_new();
+    if (profile_to_json_into(sb, p) != 0) { return 0; }
+    return _avj_sb_build(sb);
+}
+
+# --- reader --------------------------------------------------------------
+
+# Index of the field Str `key` names in struct `s`, or -1 for a key the struct
+# does not have (ignored, as serde ignores it). `hint` is the key's position in its
+# object: what avatara wrote has key i at position i, so that is tried first.
+fn _avj_field(s, key, hint) {
+    var n = _avj_key_count(s);
+    if (hint < n) {
+        if (_avj_key_is(key, _avj_key(s, hint)) == 1) { return hint; }
+    }
+    var f = 0;
+    while (f < n) {
+        if (_avj_key_is(key, _avj_key(s, f)) == 1) { return f; }
+        f += 1;
+    }
+    return 0 - 1;
+}
+
+# Lowest field index below `n` whose bit is clear in `seen`, or -1 for none.
+fn _avj_first_missing(seen, n) {
+    var f = 0;
+    while (f < n) {
+        if (((seen >> f) & 1) == 0) { return f; }
+        f += 1;
+    }
+    return 0 - 1;
+}
+
+# Ok(f64 bits) for a JSON number (an integer converts, as serde accepts one), else
+# Err "invalid type: ..., expected f64". null is an Err, as in serde. A number
+# whose magnitude overflows f64 (1e400) is Err "number out of range", serde_json's
+# words: bayan reads it as +/-Inf, which the writer could only put back as null.
+fn _avj_read_f64(v) {
+    if (bayan_json_v_is_float(v) == 1) {
+        var bits = bayan_json_v_float(v);
+        if (((bits >> 52) & 0x7FF) == 0x7FF) { return _avj_fail_cstr("number out of range"); }
+        return Ok(bits);
+    }
+    if (bayan_json_v_is_int(v) == 1) { return Ok(f64_from(bayan_json_v_int(v))); }
+    return _avj_invalid_type(v, "f64");
+}
+
+# Ok(a fresh NUL-terminated copy) of a JSON string, Ok(0) for null (a NULL field,
+# as the writer writes one), else Err: "invalid type" for any other value, "invalid
+# value" for a string holding U+0000, "invalid unicode code point" for bytes that
+# are not UTF-8. The copy goes through xalloc.
+fn _avj_read_cstr(v) {
+    if (bayan_json_v_is_null(v) == 1) { return Ok(0); }
+    if (bayan_json_v_is_str(v) != 1) { return _avj_invalid_type(v, "a string"); }
+    var s = bayan_json_v_str(v);
+    var d = str_data(s);
+    var n = str_len(s);
+    var i = 0;
+    while (i < n) {
+        var c = load8(d + i);
+        if (c == 0) {
+            var sb = _avj_sb_new();
+            str_builder_add_cstr(sb, "invalid value: string ");
+            str_builder_add_json_str(sb, s);
+            str_builder_add_cstr(sb, ", expected a string without U+0000");
+            return _avj_fail(sb);
+        }
+        if (c < 0x80) {
+            i += 1;
+        } else {
+            var w = _avj_utf8_len(d + i, n - i);
+            if (w == 0) { return _avj_fail_cstr("invalid unicode code point"); }
+            i += w;
+        }
+    }
+    var out = xalloc(n + 1);
+    memcpy(out, d, n);
+    store8(out + n, 0);
+    return Ok(out);
+}
+
+# Ok(value) of enum `e` that the JSON string `v` names, else Err "unknown variant"
+# for an unknown name or "invalid type: ..., expected variant identifier" for a
+# value that is not a string.
+fn _avj_read_variant(v, e) {
+    if (bayan_json_v_is_str(v) != 1) { return _avj_invalid_type(v, "variant identifier"); }
+    var s = bayan_json_v_str(v);
+    var i = 0;
+    var name = _avj_variant_name(e, 0);
+    while (name != 0) {
+        if (_avj_key_is(s, name) == 1) { return Ok(i); }
+        i += 1;
+        name = _avj_variant_name(e, i);
+    }
+    return _avj_unknown_variant(e, s);
+}
+
+# Decode the TraitWeights (s == AVJ_TRAITS) or ModuleEmphasis (AVJ_EMPH) object
+# `v` into profile `p`. Ok(0), or Err as serde's derive for that struct would.
+fn _avj_read_weights(p, s, v) {
+    if (bayan_json_v_is_obj(v) != 1) { return _avj_invalid_type(v, _avj_struct_name(s)); }
+    var base = TW_FIRST;
+    if (s == AVJ_EMPH) { base = ME_FIRST; }
+    var seen = 0;
+    var n = bayan_json_v_obj_len(v);
+    var i = 0;
+    while (i < n) {
+        var f = _avj_field(s, bayan_json_v_obj_key(v, i), i);
+        if (f >= 0) {
+            if (((seen >> f) & 1) == 1) { return _avj_field_error("duplicate", s, f); }
+            seen = seen | (1 << f);
+            var bits = _avj_read_f64(bayan_json_v_obj_val(v, i))?;
+            store64(p + base + f * 8, bits);
+        }
+        i += 1;
+    }
+    var m = _avj_first_missing(seen, _avj_key_count(s));
+    if (m >= 0) { return _avj_field_error("missing", s, m); }
+    return Ok(0);
+}
+
+# Decode ArchetypeProfile field `f` (AvjTopField) from node `v` into profile `p`.
+fn _avj_read_top(p, f, v) {
+    if (f == AVJ_F_TRAITS) { return _avj_read_weights(p, AVJ_TRAITS, v); }
+    if (f == AVJ_F_EMPH) { return _avj_read_weights(p, AVJ_EMPH, v); }
+    if (f == AVJ_F_BREATH) {
+        var b = _avj_read_variant(v, AVJ_E_BREATH)?;
+        Profile_set_breath(p, b);
+    } elif (f == AVJ_F_GROWTH) {
+        var g = _avj_read_variant(v, AVJ_E_GROWTH)?;
+        Profile_set_growth_dir(p, g);
+    } elif (f == AVJ_F_ELEMENT) {
+        var el = _avj_read_variant(v, AVJ_E_ELEMENT)?;
+        Profile_set_element(p, el);
+    } elif (f == AVJ_F_POLARITY) {
+        var po = _avj_read_variant(v, AVJ_E_POLARITY)?;
+        Profile_set_polarity(p, po);
+    } elif (f == AVJ_F_TIER) {
+        var t = _avj_read_variant(v, AVJ_E_TIER)?;
+        Profile_set_tier(p, t);
+    } elif (f == AVJ_F_DOMAIN) {
+        var d = _avj_read_variant(v, AVJ_E_DOMAIN)?;
+        Profile_set_domain(p, d);
+    } else {
+        var s = _avj_read_cstr(v)?;
+        if (f == AVJ_F_NAME) { Profile_set_name(p, s); }
+        elif (f == AVJ_F_TRADITION) { Profile_set_tradition(p, s); }
+        elif (f == AVJ_F_DESC) { Profile_set_desc(p, s); }
+        elif (f == AVJ_F_SOUL) { Profile_set_soul(p, s); }
+        else { Profile_set_spirit_text(p, s); }
+    }
+    return Ok(0);
+}
+
+# Decode a bayan value-tree node holding one ArchetypeProfile object. Returns
+# Ok(profile), a fresh profile_new() populated through Profile_set_*, or Err(msg),
+# msg a Str in serde's wording ("missing field `traits`", "duplicate field `name`",
+# "unknown variant `Foo`, expected one of ...", "invalid type: ..., expected ...").
+# Unknown keys are ignored; "domain" may be absent (DOMAIN_UNSPECIFIED). Values are
+# not range-checked, as serde's derive does not: validate_profile() does that.
+fn profile_from_json(node) {
+    if (bayan_json_v_is_obj(node) != 1) { return _avj_invalid_type(node, _avj_struct_name(AVJ_TOP)); }
+    var p = profile_new();
+    var seen = 0;
+    var n = bayan_json_v_obj_len(node);
+    var i = 0;
+    while (i < n) {
+        var f = _avj_field(AVJ_TOP, bayan_json_v_obj_key(node, i), i);
+        if (f >= 0) {
+            if (((seen >> f) & 1) == 1) { return _avj_field_error("duplicate", AVJ_TOP, f); }
+            seen = seen | (1 << f);
+            _avj_read_top(p, f, bayan_json_v_obj_val(node, i))?;
+        }
+        i += 1;
+    }
+    var m = _avj_first_missing(seen, AVJ_TOP_REQUIRED);
+    if (m >= 0) { return _avj_field_error("missing", AVJ_TOP, m); }
+    return Ok(p);
+}
+
+# --- text --------------------------------------------------------------------
+
+# Scan `n` bytes of JSON text for what bayan's parser does not refuse and serde_json
+# does: bytes that are not UTF-8 (anywhere), and a raw control byte inside a string
+# (RFC 8259). Returns 0 when clean, else 1 (control byte) or 2 (not UTF-8) with the
+# offending byte's offset stored at `at`.
+fn _avj_text_check(text, n, at) {
+    var in_str = 0;
+    var i = 0;
+    while (i < n) {
+        var c = load8(text + i);
+        if (c >= 0x80) {
+            var w = _avj_utf8_len(text + i, n - i);
+            if (w == 0) {
+                store64(at, i);
+                return 2;
+            }
+            i += w;
+        } elif (in_str == 0) {
+            if (c == 34) { in_str = 1; }
+            i += 1;
+        } elif (c == 34) {
+            in_str = 0;
+            i += 1;
+        } elif (c == 92) {
+            # A backslash hides the next byte; a bad escape is the parser's to refuse.
+            i += 2;
+        } elif (c < 0x20) {
+            store64(at, i);
+            return 1;
+        } else {
+            i += 1;
+        }
+    }
+    return 0;
+}
+
+# Err "<msg> at line L column C" for the byte at offset `pos` of `text`: line
+# counts from 1, column is the 1-based byte column of that byte on its line.
+fn _avj_fail_at(msg, text, pos) {
+    var line = 1;
+    var col = 1;
+    var i = 0;
+    while (i < pos) {
+        if (load8(text + i) == 10) {
+            line += 1;
+            col = 1;
+        } else {
+            col += 1;
+        }
+        i += 1;
+    }
+    var sb = _avj_sb_new();
+    str_builder_add_cstr(sb, msg);
+    str_builder_add_cstr(sb, " at line ");
+    str_builder_add_int(sb, line);
+    str_builder_add_cstr(sb, " column ");
+    str_builder_add_int(sb, col);
+    return _avj_fail(sb);
+}
+
+# Parse `len` bytes of JSON text at `buf` and decode it as profile_from_json does.
+# Same Result shape. Text errors carry " at line L column C": bytes that are not
+# UTF-8 ("invalid unicode code point") and a raw control byte in a string
+# ("control character (\u0000-\u001F) found while parsing a string") in serde_json's
+# words, any other syntax error in bayan's. `buf` NULL reads as empty text.
+fn profile_from_json_text(buf, len) {
+    if (buf == 0 || len < 0) {
+        buf = "";
+        len = 0;
+    }
+    var at[8];
+    var k = _avj_text_check(buf, len, &at);
+    if (k == 1) {
+        return _avj_fail_at("control character (\\u0000-\\u001F) found while parsing a string", buf, load64(&at));
+    }
+    if (k == 2) { return _avj_fail_at("invalid unicode code point", buf, load64(&at)); }
+    # bayan's per-call parser state, so the error is this call's own (reentrant).
+    var ps[64];
+    if (bayan_json_parse_state_size() > 64) {
+        return _avj_fail_cstr("bayan parser state outgrew avatara's reservation");
+    }
+    var node = bayan_json_v_parse_ctx(&ps, buf, len);
+    if (node == 0) { return _avj_fail_at(bayan_json_state_error(&ps), buf, bayan_json_state_error_pos(&ps)); }
+    return profile_from_json(node);
+}

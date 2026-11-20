@@ -1,0 +1,646 @@
+# json.tcyr -- ArchetypeProfile JSON (src/json.cyr, ADR-011)
+#
+# The Rust avatara 1.0.1 serde shape, plus "domain" last. Every registered profile
+# (all 503, the seven incarnate_sage_* among them) round-trips: decode gives a
+# profile_eq copy and re-encoding is byte-identical. The exact wire text, every
+# variant name, Rust 1.0.1 documents (no "domain"), unknown keys, and each Err
+# message. The messages were checked against serde_json 1.0 on the Rust 1.0.1
+# types; they stop before serde_json's " at line L column C", which bayan's value
+# tree cannot supply (the text form reports one).
+
+# Stdlib, and bayan through cyrius.cyml [deps.bayan], auto-included via cyrius.cyml
+
+# The whole engine through src/lib.cyr, so this file is not another include root to
+# keep in step when a tradition is added (CONTRIBUTING "Adding a New Tradition").
+include "src/lib.cyr"
+include "src/json.cyr"
+
+# ---------------------------------------------------------------------------
+# helpers
+# ---------------------------------------------------------------------------
+
+# Str `s` with the first occurrence of C string `from` replaced by `to`. A missing
+# needle is a test failure, so a case cannot silently test the unmodified document.
+fn t_replace(s, from, to) {
+    var i = str_index_of_cstr(s, from);
+    if (i < 0) {
+        assert(0, "t_replace: needle not in document");
+        return s;
+    }
+    var fl = strlen(from);
+    var sb = str_builder_new();
+    str_builder_add(sb, str_new(str_data(s), i));
+    str_builder_add_cstr(sb, to);
+    str_builder_add(sb, str_new(str_data(s) + i + fl, str_len(s) - i - fl));
+    return str_builder_build(sb);
+}
+
+# Assert Str `got` equals C string `want`, printing both on a mismatch.
+fn t_str_is(got, want, label) {
+    if (got != 0 && str_eq_cstr(got, want) == 1) {
+        assert(1, label);
+        return 1;
+    }
+    syscall(SYS_WRITE, 2, "    want: ", 10);
+    syscall(SYS_WRITE, 2, want, strlen(want));
+    syscall(SYS_WRITE, 2, "\n    got:  ", 11);
+    if (got != 0) { syscall(SYS_WRITE, 2, str_data(got), str_len(got)); }
+    syscall(SYS_WRITE, 2, "\n", 1);
+    assert(0, label);
+    return 0;
+}
+
+# Decode Str `doc` through the text form and assert Err with exactly `want`.
+fn t_err(doc, want, label) {
+    var t, v = profile_from_json_text(str_data(doc), str_len(doc));
+    if (is_err_result(t) != 1) {
+        assert(0, label);
+        return 0;
+    }
+    return t_str_is(v, want, label);
+}
+
+# The same through the value-tree form: parse with bayan, decode the node.
+fn t_err_node(node, want, label) {
+    var t, v = profile_from_json(node);
+    if (is_err_result(t) != 1) {
+        assert(0, label);
+        return 0;
+    }
+    return t_str_is(v, want, label);
+}
+
+# Decode Str `doc` (text form), or 0 on Err.
+fn t_decode(doc) {
+    var t, v = profile_from_json_text(str_data(doc), str_len(doc));
+    if (is_ok(t) != 1) { return 0; }
+    return v;
+}
+
+# 1 when `p` round-trips: encode, parse, decode the node; the copy is profile_eq
+# and re-encodes byte-identical. The text form must agree.
+fn t_roundtrips(p) {
+    var s = profile_to_json(p);
+    if (s == 0) { return 0; }
+    var node = bayan_json_v_parse(s);
+    if (node == 0) { return 0; }
+    var t, q = profile_from_json(node);
+    if (is_ok(t) != 1) { return 0; }
+    if (profile_eq(p, q) != 1) { return 0; }
+    if (str_eq(s, profile_to_json(q)) != 1) { return 0; }
+    var t2, q2 = profile_from_json_text(str_data(s), str_len(s));
+    if (is_ok(t2) != 1) { return 0; }
+    if (profile_eq(p, q2) != 1) { return 0; }
+    return 1;
+}
+
+# A profile exercising every field kind and the awkward f64 spellings.
+fn t_mitra() {
+    var p = profile_new();
+    Profile_set_name(p, "Mitra");
+    Profile_set_tradition(p, "Vedic");
+    Profile_set_desc(p, "Keeper of \"vows\"\nand friendship");
+    Profile_set_warmth(p, 0.25);
+    Profile_set_humor(p, 0x8000000000000000);
+    Profile_set_empathy(p, 1.0);
+    Profile_set_patience(p, 0.0);
+    Profile_set_confidence(p, f64_div(1.0, 3.0));
+    Profile_set_mood(p, 0.1);
+    Profile_set_eq(p, f64_add(0.1, 0.2));
+    Profile_set_breath(p, BREATH_EARLY_EXHALE);
+    Profile_set_growth_dir(p, GROWTH_INTEGRATE);
+    Profile_set_element(p, ELEM_AETHER);
+    Profile_set_polarity(p, POL_MASCULINE);
+    Profile_set_tier(p, TIER_MASTER);
+    Profile_set_soul(p, "s");
+    Profile_set_spirit_text(p, "t");
+    Profile_set_domain(p, DOMAIN_ORDER);
+    return p;
+}
+
+# t_mitra()'s exact wire text. serde_json 1.0 writes this byte for byte from the
+# same values on the Rust 1.0.1 types, less the final "domain".
+var T_MITRA_JSON = "{\"name\":\"Mitra\",\"tradition\":\"Vedic\",\"description\":\"Keeper of \\\"vows\\\"\\nand friendship\",\"traits\":{\"warmth\":0.25,\"humor\":-0.0,\"empathy\":1.0,\"patience\":0.0,\"confidence\":0.3333333333333333,\"curiosity\":0.5,\"creativity\":0.5,\"directness\":0.5,\"formality\":0.5,\"verbosity\":0.5,\"courage\":0.5,\"precision\":0.5,\"skepticism\":0.5,\"autonomy\":0.5,\"pedagogy\":0.5},\"emphasis\":{\"mood\":0.1,\"energy\":0.5,\"stress\":0.5,\"growth\":0.5,\"spirit\":0.5,\"reasoning\":0.5,\"regulation\":0.5,\"relationship\":0.5,\"flow\":0.5,\"belief\":0.5,\"intuition\":0.5,\"salience\":0.5,\"appraisal\":0.5,\"eq\":0.30000000000000004},\"breath\":\"EarlyExhale\",\"growth\":\"Integrate\",\"element\":\"Aether\",\"polarity\":\"Masculine\",\"tier\":\"Master\",\"soul_text\":\"s\",\"spirit_text\":\"t\",\"domain\":\"Order\"}";
+
+# ---------------------------------------------------------------------------
+# writer
+# ---------------------------------------------------------------------------
+
+# The exact wire text, and _into appending inside a caller's tuple.
+fn test_wire_text() {
+    var p = t_mitra();
+    t_str_is(profile_to_json(p), T_MITRA_JSON, "wire: exact text, Rust 1.0.1 key order, domain last");
+    var sb = str_builder_new();
+    str_builder_putc(sb, '[');
+    str_builder_add_json_cstr(sb, "Mitra");
+    str_builder_putc(sb, ',');
+    assert_eq(profile_to_json_into(sb, p), 0, "wire: _into returns 0");
+    str_builder_putc(sb, ']');
+    var arr = bayan_json_v_parse(str_builder_build(sb));
+    assert_eq(bayan_json_v_arr_len(arr), 2, "wire: _into appends inside a caller's [name, profile] tuple");
+    var t, q = profile_from_json(bayan_json_v_arr_get(arr, 1));
+    assert_eq(is_ok(t), 1, "wire: the tuple's profile decodes from its node");
+    assert_eq(profile_eq(p, q), 1, "wire: and equals the original");
+    return 0;
+}
+
+# The writer refuses NULLs and corrupt enums without writing a byte.
+fn test_writer_refusals() {
+    var p = t_mitra();
+    assert_eq(profile_to_json(0), 0, "writer: NULL profile -> 0");
+    assert_eq(profile_to_json_into(0, p), 0 - 1, "writer: NULL builder -> -1");
+    var sb = str_builder_new();
+    assert_eq(profile_to_json_into(sb, 0), 0 - 1, "writer: NULL profile (_into) -> -1");
+    # An enum field holding a value its enum does not name: refused before any byte.
+    var c = t_mitra();
+    Profile_set_breath(c, 99);
+    assert_eq(profile_to_json_into(sb, c), 0 - 1, "writer: corrupt breath -> -1");
+    assert_eq(load64(sb + 8), 0, "writer: and nothing was written");
+    assert_eq(profile_to_json(c), 0, "writer: corrupt breath -> profile_to_json 0");
+    c = t_mitra();
+    Profile_set_domain(c, 20);
+    assert_eq(profile_to_json(c), 0, "writer: domain past DOMAIN_TRANSCENDENCE -> 0");
+    c = t_mitra();
+    Profile_set_tier(c, 0 - 1);
+    assert_eq(profile_to_json(c), 0, "writer: negative tier -> 0");
+    c = t_mitra();
+    Profile_set_growth_dir(c, 5);
+    assert_eq(profile_to_json(c), 0, "writer: growth past GROWTH_STILL -> 0");
+    c = t_mitra();
+    Profile_set_element(c, 9);
+    assert_eq(profile_to_json(c), 0, "writer: element past ELEM_MIXED -> 0");
+    c = t_mitra();
+    Profile_set_polarity(c, 4);
+    assert_eq(profile_to_json(c), 0, "writer: polarity past POL_TRANSCENDENT -> 0");
+    # Non-finite f64 is written as null (as serde_json writes it) and refused on read.
+    c = t_mitra();
+    Profile_set_warmth(c, f64_div(1.0, 0.0));
+    var s = profile_to_json(c);
+    assert_eq(str_contains_cstr(s, "\"warmth\":null,"), 1, "writer: +Inf warmth is written as null");
+    t_err(s, "invalid type: null, expected f64", "writer: and does not read back, as in serde");
+    return 0;
+}
+
+# ---------------------------------------------------------------------------
+# round trips
+# ---------------------------------------------------------------------------
+
+# Every registered profile round-trips: profile_eq copy, byte-identical re-encode.
+fn test_roundtrip_registry() {
+    var all = all_profiles();
+    var n = vec_len(all);
+    assert_eq(n, profile_count(), "registry: all_profiles() is the whole registry");
+    assert_eq(n, 503, "registry: 503 profiles");
+    var bad = 0;
+    var i = 0;
+    while (i < n) {
+        var p = vec_get(all, i);
+        if (t_roundtrips(p) != 1) {
+            bad += 1;
+            syscall(SYS_WRITE, 2, "    no round trip: ", 19);
+            syscall(SYS_WRITE, 2, prof_name(p), safe_strlen(prof_name(p)));
+            syscall(SYS_WRITE, 2, "\n", 1);
+        }
+        i += 1;
+    }
+    assert_eq(bad, 0, "registry: every profile round-trips (profile_eq, byte-identical re-encode)");
+    return 0;
+}
+
+# The seven Saptarishi sankhya carries round-trip, and decode to the right fields.
+fn test_roundtrip_sages() {
+    # sankhya's MultiCalendarDate carries exactly these seven.
+    assert_eq(incarnate_sage_count(), 7, "sages: seven Saptarishi");
+    assert_eq(t_roundtrips(incarnate_sage_kashyapa()), 1, "sages: Kashyapa round-trips");
+    assert_eq(t_roundtrips(incarnate_sage_atri()), 1, "sages: Atri round-trips");
+    assert_eq(t_roundtrips(incarnate_sage_vashishtha()), 1, "sages: Vashishtha round-trips");
+    assert_eq(t_roundtrips(incarnate_sage_vishvamitra()), 1, "sages: Vishvamitra round-trips");
+    assert_eq(t_roundtrips(incarnate_sage_gautama()), 1, "sages: Gautama round-trips");
+    assert_eq(t_roundtrips(incarnate_sage_jamadagni()), 1, "sages: Jamadagni round-trips");
+    assert_eq(t_roundtrips(incarnate_sage_bharadvaja()), 1, "sages: Bharadvaja round-trips");
+    var s = profile_to_json(incarnate_sage_kashyapa());
+    var q = t_decode(s);
+    assert_eq(streq(prof_name(q), "Kashyapa"), 1, "sages: decoded name");
+    assert_eq(prof_domain(q), DOMAIN_CREATION, "sages: decoded domain");
+    assert_eq(prof_tier(q), TIER_MASTER, "sages: decoded tier");
+    assert_eq(Profile_pedagogy(q), 0.8, "sages: decoded f64, bit-exact");
+    return 0;
+}
+
+# NULL strings go out as null and come back NULL; "" stays distinct.
+fn test_roundtrip_unpopulated() {
+    # profile_new() leaves all five strings NULL; they go out as null and come back NULL.
+    var p = profile_new();
+    var s = profile_to_json(p);
+    assert_eq(str_starts_with(s, str_from("{\"name\":null,\"tradition\":null,\"description\":null,")), 1,
+        "unpopulated: NULL strings are written as null");
+    assert_eq(str_contains_cstr(s, "\"soul_text\":null,\"spirit_text\":null,\"domain\":\"Unspecified\"}"), 1,
+        "unpopulated: soul/spirit null, domain Unspecified");
+    assert_eq(t_roundtrips(p), 1, "unpopulated: profile_new() round-trips");
+    var q = t_decode(s);
+    assert_eq(prof_name(q), 0, "unpopulated: null reads back as NULL, not \"\"");
+    var e = profile_new();
+    Profile_set_name(e, "");
+    assert_eq(t_roundtrips(e), 1, "unpopulated: an empty name round-trips");
+    assert_eq(profile_eq(e, p), 0, "unpopulated: and stays distinct from NULL");
+    return 0;
+}
+
+# f64 edge bit patterns survive bit for bit; integers and exponents read.
+fn test_roundtrip_f64_edges() {
+    # Bit patterns a decimal printer gets wrong first: signed zero, the smallest
+    # subnormal, the largest finite, the smallest normal, and values whose
+    # shortest text is long or exponent-form.
+    var p = t_mitra();
+    Profile_set_warmth(p, 0x0000000000000001);
+    Profile_set_humor(p, 0x7FEFFFFFFFFFFFFF);
+    Profile_set_empathy(p, 0x0010000000000000);
+    Profile_set_patience(p, 0x8000000000000001);
+    Profile_set_confidence(p, f64_div(1.0, 10000000.0));
+    Profile_set_curiosity(p, f64_mul(1000000000000000000000.0, 1.0));
+    Profile_set_creativity(p, 0.000001);
+    Profile_set_directness(p, 100000000000000000000.0);
+    Profile_set_formality(p, f64_div(2.0, 3.0));
+    Profile_set_verbosity(p, 0xFFEFFFFFFFFFFFFF);
+    Profile_set_courage(p, 0x3FF0000000000001);
+    assert_eq(t_roundtrips(p), 1, "f64: edge bit patterns survive, bit for bit");
+    var q = t_decode(profile_to_json(p));
+    assert_eq(Profile_warmth(q), 1, "f64: smallest subnormal");
+    assert_eq(Profile_humor(q), 0x7FEFFFFFFFFFFFFF, "f64: largest finite");
+    assert_eq(Profile_patience(q), 0x8000000000000001, "f64: negative subnormal");
+    assert_eq(Profile_courage(q), 0x3FF0000000000001, "f64: 1 + 1 ulp");
+    q = t_decode(str_from(T_MITRA_JSON));
+    assert_eq(Profile_humor(q), 0x8000000000000000, "f64: -0.0 keeps its sign");
+    # serde accepts a JSON integer for an f64 field.
+    var s = t_replace(str_from(T_MITRA_JSON), "\"warmth\":0.25", "\"warmth\":1");
+    q = t_decode(s);
+    assert_eq(q != 0, 1, "f64: an integer is accepted");
+    assert_eq(Profile_warmth(q), 1.0, "f64: and reads as its f64");
+    s = t_replace(str_from(T_MITRA_JSON), "\"warmth\":0.25", "\"warmth\":25e-2");
+    q = t_decode(s);
+    assert_eq(Profile_warmth(q), 0.25, "f64: exponent form reads to the same bits");
+    return 0;
+}
+
+# ---------------------------------------------------------------------------
+# reader acceptance
+# ---------------------------------------------------------------------------
+
+# A Rust 1.0.1 document (no "domain") decodes with the default domain.
+fn test_rust_v1_document() {
+    # A Rust avatara 1.0.1 document has no "domain": it decodes, and domain defaults.
+    var s = t_replace(str_from(T_MITRA_JSON), ",\"domain\":\"Order\"", "");
+    var q = t_decode(s);
+    assert_eq(q != 0, 1, "v1: a document without domain decodes");
+    assert_eq(prof_domain(q), DOMAIN_UNSPECIFIED, "v1: domain defaults to DOMAIN_UNSPECIFIED");
+    var p = t_mitra();
+    Profile_set_domain(p, DOMAIN_UNSPECIFIED);
+    assert_eq(profile_eq(p, q), 1, "v1: every other field as written");
+    return 0;
+}
+
+# Unknown keys are ignored, key order is free, ranges are not checked.
+fn test_unknown_keys_and_order() {
+    var s = t_replace(str_from(T_MITRA_JSON), "{\"name\"", "{\"zzz\":{\"deep\":[1,2,{\"a\":null}]},\"name\"");
+    s = t_replace(s, "\"humor\":", "\"note\":\"q\",\"humor\":");
+    s = t_replace(s, "\"eq\":", "\"extra\":[true],\"eq\":");
+    var q = t_decode(s);
+    assert_eq(q != 0, 1, "unknown keys: ignored at every level, as serde ignores them");
+    assert_eq(profile_eq(q, t_mitra()), 1, "unknown keys: and change nothing");
+    # serde reads fields in any order.
+    var r = "{\"domain\":\"Order\",\"spirit_text\":\"t\",\"soul_text\":\"s\",\"tier\":\"Master\",\"polarity\":\"Masculine\",\"element\":\"Aether\",\"growth\":\"Integrate\",\"breath\":\"EarlyExhale\",\"emphasis\":{\"eq\":0.30000000000000004,\"appraisal\":0.5,\"salience\":0.5,\"intuition\":0.5,\"belief\":0.5,\"flow\":0.5,\"relationship\":0.5,\"regulation\":0.5,\"reasoning\":0.5,\"spirit\":0.5,\"growth\":0.5,\"stress\":0.5,\"energy\":0.5,\"mood\":0.1},\"traits\":{\"pedagogy\":0.5,\"autonomy\":0.5,\"skepticism\":0.5,\"precision\":0.5,\"courage\":0.5,\"verbosity\":0.5,\"formality\":0.5,\"directness\":0.5,\"creativity\":0.5,\"curiosity\":0.5,\"confidence\":0.3333333333333333,\"patience\":0.0,\"empathy\":1.0,\"humor\":-0.0,\"warmth\":0.25},\"description\":\"Keeper of \\\"vows\\\"\\nand friendship\",\"tradition\":\"Vedic\",\"name\":\"Mitra\"}";
+    q = t_decode(str_from(r));
+    assert_eq(q != 0, 1, "order: every key reversed still decodes");
+    assert_eq(profile_eq(q, t_mitra()), 1, "order: to the same profile");
+    t_str_is(profile_to_json(q), T_MITRA_JSON, "order: and re-encodes in declaration order");
+    # Values are not range-checked on read (serde's derive does not); validate_profile does.
+    s = t_replace(str_from(T_MITRA_JSON), "\"warmth\":0.25", "\"warmth\":7");
+    q = t_decode(s);
+    assert_eq(q != 0, 1, "range: an out-of-range trait decodes");
+    var vt, vv = validate_profile(q);
+    assert_eq(err_code_of(vt, vv), ERR_OUT_OF_RANGE, "range: validate_profile() refuses it");
+    return 0;
+}
+
+# Every enum's variant names, pinned in order, and every value round-trips.
+fn test_variant_names() {
+    # Each enum's full name list, in value order, through the unknown-variant message.
+    var base = str_from(T_MITRA_JSON);
+    t_err(t_replace(base, "\"breath\":\"EarlyExhale\"", "\"breath\":\"Foo\""),
+        "unknown variant `Foo`, expected one of `Unity`, `EarlyExhale`, `MidExhale`, `LateExhale`, `EarlyInhale`, `MidInhale`, `LateInhale`",
+        "names: BreathAffinity");
+    t_err(t_replace(base, "\"growth\":\"Integrate\"", "\"growth\":\"Foo\""),
+        "unknown variant `Foo`, expected one of `Differentiate`, `Integrate`, `Preserve`, `Transform`, `Still`",
+        "names: GrowthDirection");
+    t_err(t_replace(base, "\"element\":\"Aether\"", "\"element\":\"Foo\""),
+        "unknown variant `Foo`, expected one of `Fire`, `Water`, `Earth`, `Air`, `Aether`, `Light`, `Darkness`, `Storm`, `Mixed`",
+        "names: Element");
+    t_err(t_replace(base, "\"polarity\":\"Masculine\"", "\"polarity\":\"Foo\""),
+        "unknown variant `Foo`, expected one of `Masculine`, `Feminine`, `Androgynous`, `Transcendent`",
+        "names: Polarity");
+    t_err(t_replace(base, "\"tier\":\"Master\"", "\"tier\":\"Foo\""),
+        "unknown variant `Foo`, expected one of `Supreme`, `Primordial`, `Cosmic`, `Greater`, `Lesser`, `Demigod`, `Master`",
+        "names: CosmicTier");
+    t_err(t_replace(base, "\"domain\":\"Order\"", "\"domain\":\"Foo\""),
+        "unknown variant `Foo`, expected one of `Unspecified`, `Creation`, `War`, `Love`, `Death`, `Wisdom`, `Order`, `Chaos`, `Nature`, `Sky`, `Sea`, `Fire`, `Sun`, `Moon`, `Fate`, `Trickery`, `Healing`, `Prosperity`, `Hearth`, `Transcendence`",
+        "names: Domain (avatara's own)");
+    # Names are case-sensitive and whole.
+    t_err(t_replace(base, "\"breath\":\"EarlyExhale\"", "\"breath\":\"earlyexhale\""),
+        "unknown variant `earlyexhale`, expected one of `Unity`, `EarlyExhale`, `MidExhale`, `LateExhale`, `EarlyInhale`, `MidInhale`, `LateInhale`",
+        "names: case-sensitive");
+    t_err(t_replace(base, "\"breath\":\"EarlyExhale\"", "\"breath\":\"\""),
+        "unknown variant ``, expected one of `Unity`, `EarlyExhale`, `MidExhale`, `LateExhale`, `EarlyInhale`, `MidInhale`, `LateInhale`",
+        "names: empty string");
+    # Every value of every enum round-trips by name.
+    var bad = 0;
+    var v = 0;
+    while (v < 20) {
+        var p = t_mitra();
+        Profile_set_domain(p, v);
+        if (v < 7) { Profile_set_breath(p, v); Profile_set_tier(p, v); }
+        if (v < 5) { Profile_set_growth_dir(p, v); }
+        if (v < 9) { Profile_set_element(p, v); }
+        if (v < 4) { Profile_set_polarity(p, v); }
+        if (t_roundtrips(p) != 1) { bad += 1; }
+        v += 1;
+    }
+    assert_eq(bad, 0, "names: every variant of all six enums round-trips");
+    return 0;
+}
+
+# ---------------------------------------------------------------------------
+# reader refusals, in serde's words
+# ---------------------------------------------------------------------------
+
+# Non-objects and missing fields, in serde's words.
+fn test_malformed_shape() {
+    t_err(str_from("null"), "invalid type: null, expected struct ArchetypeProfile", "shape: null");
+    t_err(str_from("5"), "invalid type: integer `5`, expected struct ArchetypeProfile", "shape: integer");
+    t_err(str_from("\"x\""), "invalid type: string \"x\", expected struct ArchetypeProfile", "shape: string");
+    # serde's derive would read an array as the fields in order; avatara refuses it.
+    t_err(str_from("[1]"), "invalid type: sequence, expected struct ArchetypeProfile", "shape: sequence");
+    t_err_node(0, "invalid type: null, expected struct ArchetypeProfile", "shape: no node");
+    t_err(str_from("{}"), "missing field `name`", "missing: {} names the first field");
+    t_err(str_from("{\"name\":\"x\"}"), "missing field `tradition`", "missing: the next field");
+    var base = str_from(T_MITRA_JSON);
+    t_err(t_replace(base, ",\"spirit_text\":\"t\"", ""), "missing field `spirit_text`", "missing: last required field");
+    var traits_obj = "\"traits\":{\"warmth\":0.25,\"humor\":-0.0,\"empathy\":1.0,\"patience\":0.0,\"confidence\":0.3333333333333333,\"curiosity\":0.5,\"creativity\":0.5,\"directness\":0.5,\"formality\":0.5,\"verbosity\":0.5,\"courage\":0.5,\"precision\":0.5,\"skepticism\":0.5,\"autonomy\":0.5,\"pedagogy\":0.5},";
+    t_err(t_replace(base, traits_obj, ""), "missing field `traits`", "missing: traits");
+    t_err(t_replace(base, "\"warmth\":", "\"warmthX\":"), "missing field `warmth`", "missing: nested trait");
+    t_err(t_replace(base, ",\"eq\":0.30000000000000004", ""), "missing field `eq`", "missing: last emphasis");
+    return 0;
+}
+
+# Wrong JSON types for every kind of field, in serde's words.
+fn test_malformed_types() {
+    var base = str_from(T_MITRA_JSON);
+    t_err(t_replace(base, "\"name\":\"Mitra\"", "\"name\":5"),
+        "invalid type: integer `5`, expected a string",
+        "type: name integer");
+    t_err(t_replace(base, "\"name\":\"Mitra\"", "\"name\":-7"),
+        "invalid type: integer `-7`, expected a string",
+        "type: name negative");
+    t_err(t_replace(base, "\"name\":\"Mitra\"", "\"name\":true"),
+        "invalid type: boolean `true`, expected a string",
+        "type: name bool");
+    t_err(t_replace(base, "\"name\":\"Mitra\"", "\"name\":[]"),
+        "invalid type: sequence, expected a string",
+        "type: name seq");
+    t_err(t_replace(base, "\"name\":\"Mitra\"", "\"name\":{}"),
+        "invalid type: map, expected a string",
+        "type: name map");
+    t_err(t_replace(base, "\"name\":\"Mitra\"", "\"name\":1.5"),
+        "invalid type: floating point `1.5`, expected a string",
+        "type: name float");
+    t_err(t_replace(base, "\"tradition\":\"Vedic\"", "\"tradition\":3"),
+        "invalid type: integer `3`, expected a string",
+        "type: tradition");
+    t_err(t_replace(base, "\"soul_text\":\"s\"", "\"soul_text\":false"),
+        "invalid type: boolean `false`, expected a string",
+        "type: soul_text");
+    t_err(t_replace(base, "\"traits\":{", "\"traits\":\"x\",\"_\":{"),
+        "invalid type: string \"x\", expected struct TraitWeights",
+        "type: traits string");
+    t_err(t_replace(base, "\"traits\":{", "\"traits\":1.5,\"_\":{"),
+        "invalid type: floating point `1.5`, expected struct TraitWeights",
+        "type: traits float");
+    t_err(t_replace(base, "\"traits\":{", "\"traits\":null,\"_\":{"),
+        "invalid type: null, expected struct TraitWeights",
+        "type: traits null");
+    t_err(t_replace(base, "\"traits\":{", "\"traits\":[],\"_\":{"),
+        "invalid type: sequence, expected struct TraitWeights",
+        "type: traits seq");
+    t_err(t_replace(base, "\"emphasis\":{", "\"emphasis\":false,\"_\":{"),
+        "invalid type: boolean `false`, expected struct ModuleEmphasis",
+        "type: emphasis bool");
+    t_err(t_replace(base, "\"warmth\":0.25", "\"warmth\":\"0.5\""),
+        "invalid type: string \"0.5\", expected f64",
+        "type: f64 string");
+    t_err(t_replace(base, "\"warmth\":0.25", "\"warmth\":null"), "invalid type: null, expected f64", "type: f64 null");
+    t_err(t_replace(base, "\"warmth\":0.25", "\"warmth\":{}"), "invalid type: map, expected f64", "type: f64 map");
+    t_err(t_replace(base, "\"warmth\":0.25", "\"warmth\":true"),
+        "invalid type: boolean `true`, expected f64",
+        "type: f64 bool");
+    t_err(t_replace(base, "\"warmth\":0.25", "\"warmth\":[1]"),
+        "invalid type: sequence, expected f64",
+        "type: f64 seq");
+    t_err(t_replace(base, "\"mood\":0.1", "\"mood\":\"m\""),
+        "invalid type: string \"m\", expected f64",
+        "type: emphasis f64");
+    t_err(t_replace(base, "\"warmth\":0.25", "\"warmth\":1e400"), "number out of range", "type: f64 overflow");
+    t_err(t_replace(base, "\"warmth\":0.25", "\"warmth\":-1e400"),
+        "number out of range",
+        "type: f64 negative overflow");
+    t_err(t_replace(base, "\"breath\":\"EarlyExhale\"", "\"breath\":3"),
+        "invalid type: integer `3`, expected variant identifier",
+        "type: enum integer");
+    t_err(t_replace(base, "\"breath\":\"EarlyExhale\"", "\"breath\":null"),
+        "invalid type: null, expected variant identifier",
+        "type: enum null");
+    t_err(t_replace(base, "\"breath\":\"EarlyExhale\"", "\"breath\":[\"Unity\"]"),
+        "invalid type: sequence, expected variant identifier",
+        "type: enum seq");
+    t_err(t_replace(base, "\"breath\":\"EarlyExhale\"", "\"breath\":{\"Unity\":null}"),
+        "invalid type: map, expected variant identifier",
+        "type: enum map form");
+    t_err(t_replace(base, "\"domain\":\"Order\"", "\"domain\":null"),
+        "invalid type: null, expected variant identifier",
+        "type: domain null (optional means absent)");
+    t_err(t_replace(base, "\"domain\":\"Order\"", "\"domain\":6"),
+        "invalid type: integer `6`, expected variant identifier",
+        "type: domain number");
+    return 0;
+}
+
+# U+0000 and non-UTF-8 strings are refused; escapes decode.
+fn test_malformed_strings() {
+    var base = str_from(T_MITRA_JSON);
+    # A C string would stop at U+0000 and hand back a different value.
+    t_err(t_replace(base, "\"name\":\"Mitra\"", "\"name\":\"Mi\\u0000tra\""),
+        "invalid value: string \"Mi\\u0000tra\", expected a string without U+0000", "string: U+0000 refused");
+    t_err(t_replace(base, "\"spirit_text\":\"t\"", "\"spirit_text\":\"\\u0000\""),
+        "invalid value: string \"\\u0000\", expected a string without U+0000", "string: lone U+0000 refused");
+    # A key holding U+0000 is not the key it prefixes: unknown, so ignored.
+    var s = t_replace(base, "{\"name\"", "{\"name\\u0000x\":5,\"name\"");
+    assert_eq(t_decode(s) != 0, 1, "string: \"name\\u0000x\" is not \"name\"");
+    # Escapes decode, and a decoded profile re-encodes with them.
+    s = t_replace(base, "\"name\":\"Mitra\"", "\"name\":\"\\u004Ditra \\u0928 \\ud83d\\ude00\"");
+    var q = t_decode(s);
+    assert_eq(q != 0, 1, "string: \\u escapes and a surrogate pair decode");
+    assert_eq(streq(prof_name(q), "Mitra न 😀"), 1, "string: to their UTF-8");
+    assert_eq(t_roundtrips(q), 1, "string: and round-trip as UTF-8");
+    # A tree built by hand can carry bytes that are not UTF-8; the decoder refuses them,
+    # so a decoded profile always re-encodes to valid JSON.
+    var node = bayan_json_v_parse(t_replace(base, "\"name\":\"Mitra\",", ""));
+    var badb = xalloc(4);
+    store8(badb, 0x61);
+    store8(badb + 1, 0xC3);
+    store8(badb + 2, 0x28);
+    store8(badb + 3, 0);
+    bayan_json_v_obj_set(node, str_from("name"), bayan_json_v_str_new(str_new(badb, 3)));
+    t_err_node(node, "invalid unicode code point", "string: invalid UTF-8 in a hand-built tree");
+    return 0;
+}
+
+# The first error in document order wins; duplicate fields are refused.
+fn test_error_order_and_duplicates() {
+    var base = str_from(T_MITRA_JSON);
+    # Fields decode in document order and the first error wins, as serde's visitor.
+    var s = t_replace(base, "\"name\":\"Mitra\"", "\"name\":5,\"breath\":\"Foo\"");
+    s = t_replace(s, ",\"breath\":\"EarlyExhale\"", "");
+    t_err(s, "invalid type: integer `5`, expected a string", "order: earlier field's error wins");
+    s = t_replace(base, "\"name\":\"Mitra\"", "\"breath\":\"Foo\",\"name\":5");
+    s = t_replace(s, ",\"breath\":\"EarlyExhale\"", "");
+    t_err(s,
+        "unknown variant `Foo`, expected one of `Unity`, `EarlyExhale`, `MidExhale`, `LateExhale`, `EarlyInhale`, `MidInhale`, `LateInhale`",
+        "order: whichever comes first in the document");
+    # A type error beats a missing field: missing fields are checked after the walk.
+    t_err(str_from("{\"tradition\":3}"),
+        "invalid type: integer `3`, expected a string",
+        "order: type error before missing");
+    # bayan's parser refuses a duplicate key in text; a hand-built tree can hold one.
+    var node = bayan_json_v_parse(base);
+    bayan_json_v_obj_set(node, str_from("name"), bayan_json_v_str_new(str_from("Varuna")));
+    t_err_node(node, "duplicate field `name`", "duplicate: top-level, hand-built tree");
+    node = bayan_json_v_parse(base);
+    bayan_json_v_obj_set(bayan_json_v_obj_get_by_cstr(node, "traits"), str_from("humor"), bayan_json_v_float_new(0.5));
+    t_err_node(node, "duplicate field `humor`", "duplicate: nested, hand-built tree");
+    node = bayan_json_v_parse(base);
+    bayan_json_v_obj_set(node, str_from("domain"), bayan_json_v_str_new(str_from("War")));
+    t_err_node(node, "duplicate field `domain`", "duplicate: the optional field too");
+    var dup = t_replace(base, "{\"name\"", "{\"name\":\"x\",\"name\"");
+    var t, v = profile_from_json_text(str_data(dup), str_len(dup));
+    assert_eq(is_err_result(t), 1, "duplicate: text is refused by bayan's parser");
+    assert_eq(str_starts_with(v, str_from("duplicate key at line 1 column ")), 1,
+        "duplicate: in bayan's words, with a position");
+    return 0;
+}
+
+# The text form's own refusals and their line/column positions.
+fn test_text_errors() {
+    # A raw control byte inside a string: serde_json's message and position.
+    t_err(str_from("{\"name\":\"a\tb\"}"),
+        "control character (\\u0000-\\u001F) found while parsing a string at line 1 column 11", "text: raw TAB in a string");
+    t_err(str_from("{\n  \"name\":\n\"a\nb\"}"),
+        "control character (\\u0000-\\u001F) found while parsing a string at line 3 column 3", "text: line and column count newlines");
+    # Bytes that are not UTF-8, inside a string or out.
+    var b = xalloc(16);
+    memcpy(b, "{\"name\":\"a", 10);
+    store8(b + 10, 0xFF);
+    memcpy(b + 11, "\"}", 3);
+    var t, v = profile_from_json_text(b, 13);
+    assert_eq(is_err_result(t), 1, "text: 0xFF refused");
+    t_str_is(v, "invalid unicode code point at line 1 column 11", "text: 0xFF in serde_json's words");
+    store8(b + 10, 0xE2);
+    store8(b + 11, 0x82);
+    var t2, v2 = profile_from_json_text(b, 12);
+    assert_eq(is_err_result(t2), 1, "text: a sequence cut by the end refused");
+    t_str_is(v2, "invalid unicode code point at line 1 column 11", "text: cut sequence position");
+    store8(b + 10, 0xED);
+    store8(b + 11, 0xA0);
+    store8(b + 12, 0x80);
+    var t3, v3 = profile_from_json_text(b, 13);
+    t_str_is(v3, "invalid unicode code point at line 1 column 11", "text: an encoded surrogate refused");
+    # Syntax errors are bayan's, each with a position.
+    var t4, v4 = profile_from_json_text("{\"name\":", 8);
+    assert_eq(is_err_result(t4), 1, "text: truncated document refused");
+    assert_eq(str_contains_cstr(v4, " at line 1 column "), 1, "text: with a position");
+    var t5, v5 = profile_from_json_text("{} x", 4);
+    assert_eq(str_starts_with(v5, str_from("trailing content")), 1, "text: trailing content refused");
+    var t6, v6 = profile_from_json_text(0, 5);
+    assert_eq(is_err_result(t6), 1, "text: NULL buffer reads as empty text, refused");
+    var t7, v7 = profile_from_json_text("{\"name\":\"\\udc00\"}", 17);
+    assert_eq(is_err_result(t7), 1, "text: a lone surrogate escape refused");
+    # Err payloads are Strs, never 0.
+    assert_eq(v6 != 0 && str_len(v6) > 0, 1, "text: Err carries a message");
+    return 0;
+}
+
+# ---------------------------------------------------------------------------
+# profile_eq
+# ---------------------------------------------------------------------------
+
+# profile_eq: every field, strings by content, f64 by bit pattern.
+fn test_profile_eq() {
+    var a = t_mitra();
+    var b = t_mitra();
+    assert_eq(profile_eq(a, b), 1, "eq: two builds of one profile");
+    assert_eq(profile_eq(a, a), 1, "eq: reflexive");
+    assert_eq(profile_eq(0, 0), 0, "eq: NULL equals nothing, itself included");
+    assert_eq(profile_eq(a, 0), 0, "eq: NULL on the right");
+    assert_eq(profile_eq(profile_new(), profile_new()), 1, "eq: unpopulated profiles (NULL strings) are equal");
+    Profile_set_spirit_text(b, "u");
+    assert_eq(profile_eq(a, b), 0, "eq: last string field differs");
+    b = t_mitra();
+    Profile_set_name(b, 0);
+    assert_eq(profile_eq(a, b), 0, "eq: NULL vs set name");
+    b = t_mitra();
+    Profile_set_patience(b, 0x8000000000000000);
+    assert_eq(profile_eq(a, b), 0, "eq: f64 by bits, -0.0 is not 0.0");
+    var nan = f64_div(0.0, 0.0);
+    Profile_set_patience(a, nan);
+    Profile_set_patience(b, nan);
+    assert_eq(profile_eq(a, b), 1, "eq: f64 by bits, the same NaN equals itself");
+    a = t_mitra();
+    b = t_mitra();
+    Profile_set_eq(b, 0.3);
+    assert_eq(profile_eq(a, b), 0, "eq: last emphasis differs by 1 ulp");
+    b = t_mitra();
+    Profile_set_domain(b, DOMAIN_WAR);
+    assert_eq(profile_eq(a, b), 0, "eq: domain differs");
+    b = t_mitra();
+    Profile_set_tier(b, TIER_GREATER);
+    assert_eq(profile_eq(a, b), 0, "eq: tier differs");
+    var c = profile_new();
+    var s1 = xalloc(6);
+    memcpy(s1, "Mitra", 6);
+    Profile_set_name(c, s1);
+    var d = profile_new();
+    Profile_set_name(d, "Mitra");
+    assert_eq(profile_eq(c, d), 1, "eq: strings by content, not pointer");
+    return 0;
+}
+
+# Run every group and report the pass/fail summary.
+fn main() {
+    alloc_init();
+    test_wire_text();
+    test_writer_refusals();
+    test_roundtrip_registry();
+    test_roundtrip_sages();
+    test_roundtrip_unpopulated();
+    test_roundtrip_f64_edges();
+    test_rust_v1_document();
+    test_unknown_keys_and_order();
+    test_variant_names();
+    test_malformed_shape();
+    test_malformed_types();
+    test_malformed_strings();
+    test_error_order_and_duplicates();
+    test_text_errors();
+    test_profile_eq();
+    return assert_summary();
+}
+
+var rc = main();
+syscall(60, rc);

@@ -7,3 +7,7 @@ echo ""
 echo "=== integration tests ==="
 cyrius test tests/avatara.tcyr
 echo "exit: $?"
+echo ""
+echo "=== JSON tests ==="
+cyrius test tests/json.tcyr
+echo "exit: $?"

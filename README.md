@@ -177,6 +177,31 @@ Traditions and typologies are therefore mutually exclusive, and a test enforces 
 only ever be an overlay — never a `tradition` string, never an archetype, never counted. The
 Enneagram will not become a tradition with nine archetypes.
 
+## JSON
+
+A profile serializes to the JSON the Rust crate's serde wrote, field for field, with `"domain"`
+added last ([ADR-011](docs/architecture/adr/011-json-profile-codec.md)). The codec lives in its own
+bundle, so `dist/avatara.cyr` stays free of dependencies beyond sakshi. Fold `dist/avatara-json.cyr`
+instead (it is a superset), and declare bayan yourself: either the `bayan` stdlib module or bayan's
+`dist/bayan-json.cyr`, but not both.
+
+```cyrius
+include "avatara/dist/avatara-json.cyr"
+
+alloc_init();
+
+var s = profile_to_json(incarnate_sage_vashishtha());
+# {"name":"Vashishtha","tradition":"Vedic",...,"tier":"Master",...,"domain":"Order"}
+
+# Decode a bayan value-tree node (or text, with profile_from_json_text(buf, len)).
+# Ok(profile), or Err(msg), where msg is a Str in serde's wording.
+var t, p = profile_from_json(bayan_json_v_parse(s));
+# profile_eq(p, incarnate_sage_vashishtha()) = 1
+
+var et, msg = profile_from_json(bayan_json_v_parse(str_from("{\"name\":\"x\"}")));
+# is_err_result(et) = 1, msg = "missing field `tradition`"
+```
+
 ## Relationship to AGNOS
 
 ```

@@ -102,7 +102,7 @@ The major bump banks the API cleanups deferred through 2.x:
 | joshua (NPC archetypes) | Planned | Direct `ArchetypeProfile` consumption |
 | kiran (game entities) | Planned | Via joshua |
 | agnosai (agent personalities) | Planned | Direct consumption |
-| sankhya (ancient sciences) | Planned | Shared `IncarnateSage` / Vedic bridge |
+| sankhya (ancient sciences) | JSON codec in 2.17.0 ([ADR-011](../architecture/adr/011-json-profile-codec.md)) | Shared `IncarnateSage` / Vedic bridge; `MultiCalendarDate` carries the seven Saptarishi as `[name, profile]` JSON tuples through `dist/avatara-json.cyr` |
 
 > Consumers upgrading across a breaking release should read that release's entry in
 > [CHANGELOG.md](../../CHANGELOG.md), which carries the consumer note. They are not duplicated here —

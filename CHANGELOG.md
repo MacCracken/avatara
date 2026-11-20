@@ -7,6 +7,96 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.17.0] — 2026-11-20
+
+JSON for the archetype profile, in the shape the Rust crate's serde wrote, delivered in a second
+bundle so that `dist/avatara.cyr` still never calls bayan ([ADR-011](docs/architecture/adr/011-json-profile-codec.md)).
+This unblocks sankhya's epoch-context decoding: its `MultiCalendarDate` carries the seven Saptarishi
+profiles, which it could only count until now. `profile_count()` is still **503** and the suite is
+**368/368**, plus **146/146** in the new `tests/json.tcyr`.
+
+### Added
+
+- **`profile_to_json(p)` / `profile_to_json_into(sb, p)`** (`src/json.cyr`) write the Rust avatara
+  1.0.1 serde shape of `ArchetypeProfile` (commit `5b5d93c`), field for field:
+  `name, tradition, description, traits{15 f64}, emphasis{14 f64}, breath, growth, element, polarity,
+  tier, soul_text, spirit_text`. Enums are written by their Rust variant names (`"EarlyExhale"`,
+  `"Master"`). Then comes `"domain"`, the one field the Rust never had, written last with avatara's
+  own names (`"Unspecified"` … `"Transcendence"`). f64 goes through bayan's Grisu2 formatter, so the
+  bits survive. The `_into` form appends to a caller's str_builder, which is how sankhya writes
+  `[name, profile]` tuples, and returns `-1` with nothing written for NULL input or an enum value its
+  enum does not name.
+- **`profile_from_json(node)`** decodes a bayan value-tree node, so a consumer can decode inside its
+  own parsed document. **`profile_from_json_text(buf, len)`** parses text first. Both return the 6.6
+  value-form Result: `Ok(profile)`, built with `profile_new()` and `Profile_set_*`, or `Err(msg)`,
+  where msg is a `Str`, never 0, in serde's wording: ``missing field `traits` ``,
+  ``duplicate field `name` ``, ``unknown variant `Foo`, expected one of `Unity`, … ``,
+  `invalid type: string "0.5", expected f64`, `number out of range`. Unknown keys are ignored.
+  `"domain"` is optional on read and defaults to `DOMAIN_UNSPECIFIED`, so a Rust 1.0.1 document
+  decodes. Three Cyrius-only rules, all in ADR-011 §4:
+  - a NULL string field is written as `null` and read back as NULL, so `profile_new()` round-trips;
+  - a string holding U+0000 is refused, since a C string would truncate it;
+  - a string that is not UTF-8 is refused.
+- **`profile_eq(a, b)`** (`src/types.cyr`, so it is in both bundles) compares every field: strings by
+  content, enums by value, and f64 by bit pattern.
+- **`dist/avatara-json.cyr`**, built from the new `cyrius.cyml` `[lib.json]`, is the engine plus
+  `src/json.cyr`, a superset of `dist/avatara.cyr`. A consumer folds one or the other, and the one
+  that folds this bundle declares bayan itself, either the stdlib monolith (as sankhya has) or
+  `dist/bayan-json.cyr` at tag 1.11.1, never both. A scratch consumer shaped like sankhya (the
+  monolith plus this bundle) builds clean and decodes all seven sages from inside its own
+  `[name, profile]` array.
+- **`tests/json.tcyr`**, 146 assertions. All 503 registered profiles round-trip, the seven
+  `incarnate_sage_*` by name among them: decoding gives a `profile_eq` copy, and re-encoding is
+  byte-identical. The file also pins the exact wire text, all six variant-name lists, f64 edge bit
+  patterns (signed zero, subnormals, the largest finite value, 1 + 1 ulp) and Rust 1.0.1 documents.
+  It checks every Err message for wrong shapes, missing and duplicate fields, wrong types,
+  overflow, U+0000, non-UTF-8 bytes and text-position errors.
+- **Benchmarks tier 8, JSON** (65 benches, up from 60), measured on one Saptarishi profile:
+
+  | Bench | Time |
+  |---|---|
+  | `json/to_json_sage` | 42.5 µs |
+  | `json/from_json_node_sage` | 6.3 µs |
+  | `json/from_json_text_sage` | 41.1 µs |
+  | `json/profile_eq_sage` | 1.8 µs |
+  | `json/to_json_all_503` | 21–28 ms |
+
+  bayan's Grisu2 takes about 750 ns per f64, so about half of the encode time goes to the 29 weights.
+
+### Changed
+
+- **`cyrius.cyml`** gains `[lib.json]`, an optional `[deps.bayan]` (`dist/bayan-json.cyr`, tag
+  1.11.1, the bayan that the 6.7.18 pin vendors) and `[features] default = ["bayan"]`. That is
+  varna 2.5.2's arrangement: avatara's own builds take bayan, and consumers never inherit it.
+  `cyrius.lock` gains the bayan commit pin and hashes for `lib/bayan-json.cyr` and `lib/slice.cyr`.
+  Commit them together.
+- **distlib now runs with `--all --no-default-features`**, in CI, in the release job and in
+  `scripts/version-bump.sh`. With bayan in scope, distlib's compile-verify under-reports both
+  sidecars: `dist/avatara.deps` drops from six leaves to `sakshi`. The local check is
+  `cyrius distlib --check --no-default-features`; a plain `--check` now reports the bundles STALE.
+- **CI** now runs `tests/json.tcyr`. It diffs all of `dist/` (both bundles and both sidecars), and it
+  fails in two further cases: if `dist/avatara.cyr` names any `bayan_` symbol, or if the JSON bundle
+  leaves any name undefined other than bayan's. The second case is a module missing from `[lib.json]`;
+  distlib only warns about it. The release job also ships `avatara-json-<tag>.cyr`.
+- **`dist/avatara.cyr`** gains only `profile_eq` (+41 lines). Its sidecar is unchanged.
+
+### Verified
+
+- The Rust 1.0.1 types were compiled in a scratch crate with serde_json 1.0, outside the repository.
+  **serde decodes all 503 avatara documents and re-encodes them byte-identical** to avatara's output,
+  less `"domain"`. Of 74 malformed and edge documents, 54 match serde exactly apart from serde's
+  ` at line L column C` suffix, which bayan's tree cannot supply. The other 20 are ADR-011's
+  deliberate choices, bayan parser refusals (duplicate keys, integers beyond i64, syntax wording),
+  and number *text* where ryu and Grisu2 spell the same bits differently.
+- **Release benchmark gate:** 65 rows in `bench-history.csv` under `2026-11-20,2.17.0`, recorded at
+  load 0.35 on 16 threads. The 60 rows shared with 2.16.1 total 270.2 µs against 290.7 µs (−7.0 %).
+  The 2.16.1 rows were recorded at load ~6.4, so the gain is the quieter host, not the code. No row
+  regressed on a path this release touches: the only µs-scale rows slower than 2.16.1 are
+  `history/query_civilization` +3.6 % and `history/traditions_for_civ` +10.5 %, and the latter ranged
+  5.5–19.2 µs across three runs of one binary. `traditions_for_era` −30 % is the 2.16.1 +24 % layout
+  swing reversing. New tier 8: `json/to_json_sage` 40.3 µs, `json/from_json_node_sage` 6.0 µs,
+  `json/from_json_text_sage` 38.8 µs, `json/profile_eq_sage` 1.8 µs, `json/to_json_all_503` 19.2 ms.
+
 ## [2.16.1] — 2026-11-04
 
 A toolchain-and-dependencies patch. Cyrius moves **6.7.9 → 6.7.18**, and the vendored libs move to the

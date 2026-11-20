@@ -386,3 +386,44 @@ fn prof_intuition(p)    { return Profile_intuition(p); }
 fn prof_salience(p)     { return Profile_salience(p); }
 fn prof_appraisal(p)    { return Profile_appraisal(p); }
 fn prof_eq(p)           { return Profile_eq(p); }
+
+# --- Equality ---
+
+# 1 when string fields `a` and `b` hold the same text, NULL equal only to NULL.
+# This is value equality, not identity: unlike safe_streq, two NULLs are equal
+# here, because profile_eq asks whether two profiles hold the same bytes (an
+# unpopulated profile_new() equals another), not whether two names denote one
+# archetype. NULL is never equal to "".
+fn _prof_text_eq(a, b) {
+    if (a == 0 || b == 0) { return a == b; }
+    return safe_streq(a, b);
+}
+
+# profile_eq(a, b): 1 when profiles `a` and `b` hold the same value in every one
+# of the 40 fields, else 0. The five strings compare by content (_prof_text_eq),
+# the six enums by value, and the 29 f64 weights BY BIT PATTERN: -0.0 is not 0.0
+# and a NaN equals the identical NaN, which is what a lossless round trip needs
+# (f64_eq would answer the IEEE question instead). A NULL profile equals nothing,
+# itself included, the safe_streq rule for "no value".
+fn profile_eq(a, b) {
+    if (a == 0 || b == 0) { return 0; }
+    if (a == b) { return 1; }
+    if (_prof_text_eq(Profile_name(a), Profile_name(b)) == 0) { return 0; }
+    if (_prof_text_eq(Profile_tradition(a), Profile_tradition(b)) == 0) { return 0; }
+    if (_prof_text_eq(Profile_desc(a), Profile_desc(b)) == 0) { return 0; }
+    if (_prof_text_eq(Profile_soul(a), Profile_soul(b)) == 0) { return 0; }
+    if (_prof_text_eq(Profile_spirit_text(a), Profile_spirit_text(b)) == 0) { return 0; }
+    # The 15 traits and 14 emphases are contiguous (TW_FIRST..ME_LAST, step 8).
+    var off = TW_FIRST;
+    while (off <= ME_LAST) {
+        if (load64(a + off) != load64(b + off)) { return 0; }
+        off += 8;
+    }
+    if (Profile_breath(a) != Profile_breath(b)) { return 0; }
+    if (Profile_growth_dir(a) != Profile_growth_dir(b)) { return 0; }
+    if (Profile_element(a) != Profile_element(b)) { return 0; }
+    if (Profile_polarity(a) != Profile_polarity(b)) { return 0; }
+    if (Profile_tier(a) != Profile_tier(b)) { return 0; }
+    if (Profile_domain(a) != Profile_domain(b)) { return 0; }
+    return 1;
+}
